@@ -3,6 +3,9 @@
 SRC=$1
 ARCH=$(uname -m)
 
+mkdir -p $ARCH/bin
+mkdir -p $ARCH/lib
+
 rsync -av --delete $SRC/generated/include/vnx/ generated/include/vnx/
 rsync -av --delete $SRC/include/vnx/ include/vnx/
 rsync -av --delete $SRC/interface/ interface/vnx/
