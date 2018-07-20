@@ -1,0 +1,19 @@
+package vnx;
+
+class PlayerStatus {
+	
+	string filename;
+	
+	long begin_time;
+	long end_time;
+	long current_time;
+	
+	double actual_speed;
+	
+	string message;
+	
+	TimeControl control;
+	
+	RecordHeader info;
+	
+}

@@ -1,0 +1,18 @@
+package vnx;
+
+class UnixEndpoint extends Endpoint {
+	
+	string domain_path;
+	
+	static UnixEndpoint* create(string domain_path);
+	static UnixEndpoint* from_url(string url);
+	
+	int open() const;
+	void bind(int socket) const;
+	void connect(int socket) const;
+	void listen(int socket) const;
+	int accept(int socket) const;
+	
+	string to_url() const;
+	
+}

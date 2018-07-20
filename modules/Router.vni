@@ -1,0 +1,14 @@
+package vnx;
+
+module Router {
+	
+	int port = 4444;
+	int max_queue_ms = 100;
+	
+	map<string, vector<string>> import_map;
+	
+	map<string, vector<string>> export_map;
+	
+	vector<string> export_list;
+	
+}

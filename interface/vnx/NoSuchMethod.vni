@@ -1,0 +1,7 @@
+package vnx;
+
+class NoSuchMethod extends Exception {
+	
+	string method;
+	
+}

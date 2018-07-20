@@ -1,0 +1,13 @@
+package vnx;
+
+class Return extends Message {
+	
+	ulong request_id;
+	
+	Hash64 src_mac;
+	
+	const Value* value;
+	
+	static Return* create_no_such_service_return(const Request* request);
+	
+}

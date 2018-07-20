@@ -1,0 +1,38 @@
+package vnx;
+
+module Player {
+	
+	vector<string> files;
+	
+	int interval_ms = 100;
+	int max_time_gap_ms = 5000;
+	double play_speed = 1;
+	
+	bool is_default_enable = true;
+	bool is_blocking = false;
+	bool is_repeat = false;
+	bool is_autostart = false;
+	bool is_autoclose = false;
+	bool is_autoshutdown = false;
+	
+	map<TopicPtr, TopicPtr> topic_map;
+	
+	RecordHeader get_info() const;
+	
+	void play();
+	
+	void pause();
+	
+	void toggle();
+	
+	void stop();
+	
+	void set_speed(double speed);
+	
+	void seek_by_count(long delta_count);
+	void seek_by_time(long delta_us);
+	
+	void seek_to_position(double position);
+	void seek_to_time(long time_us);
+	
+}

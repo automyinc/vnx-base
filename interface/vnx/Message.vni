@@ -1,0 +1,13 @@
+package vnx;
+
+class Message {
+	
+	static uint BLOCKING = 1;
+	static uint REPLAY = 2;
+	
+	Hash64 tunnel;		// tunnel address if any
+	
+	ushort flags;
+	ushort hop_count;
+	
+}

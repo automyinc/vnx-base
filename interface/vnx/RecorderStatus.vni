@@ -1,0 +1,11 @@
+package vnx;
+
+class RecorderStatus {
+	
+	string filename;
+	bool is_recording;
+	double load_factor;
+	
+	RecordHeader info;
+	
+}

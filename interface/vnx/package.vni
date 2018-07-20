@@ -1,0 +1,12 @@
+package vnx;
+
+topic shutdown;
+topic log_out;
+topic topic_info;
+topic module_info;
+topic time_control;
+topic time_sync;
+topic player_status;
+
+extern Hash64 = {4};
+extern TopicPtr = {12, 5};

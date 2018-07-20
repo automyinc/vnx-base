@@ -1,0 +1,13 @@
+package vnx;
+
+module Server {
+	
+	string address;						// URL to bind to
+	
+	vector<string> export_list;			// for topics
+	
+	int max_queue_ms = 100;
+	
+	bool json_output = false;
+	
+}

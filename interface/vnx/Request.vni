@@ -1,0 +1,12 @@
+package vnx;
+
+class Request extends Message {
+	
+	Hash64 src_mac;
+	Hash64 dst_mac;
+	
+	ulong request_id;
+	
+	const Value* arguments;
+	
+}

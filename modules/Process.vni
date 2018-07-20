@@ -1,0 +1,24 @@
+package vnx;
+
+module Process {
+	
+	int topic_info_interval_ms = 500;
+	
+	string get_name() const;
+	
+	TimeSync get_sync_time() const;
+	
+	TopicInfoList get_topic_info() const;
+	
+	void pause_log();
+	void resume_log();
+	
+	void set_debug(int level);
+	
+	void close();
+	
+	void handle(LogMsg sample);
+	void handle(TimeControl sample);
+	void handle(TimeSync sample);
+	
+}

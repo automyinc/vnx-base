@@ -1,0 +1,16 @@
+package vnx;
+
+module SpyTool {
+	
+	string proxy_name;		// proxy for the target process, if any
+	
+	string topic_expr;
+	
+	bool only_once = false;
+	bool header_only = false;
+	bool pretty_print = true;
+	int max_queue_ms = 100;
+	
+	Hash64 receive_tunnel;
+	
+}

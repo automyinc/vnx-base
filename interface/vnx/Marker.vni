@@ -1,0 +1,8 @@
+package vnx;
+
+class Marker {
+	
+	long time;
+	string message;
+	
+}

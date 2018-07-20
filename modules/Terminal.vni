@@ -1,0 +1,19 @@
+package vnx;
+
+module Terminal {
+	
+	int max_history = 50;
+	
+	void command(string cmd);
+	
+	void grep(string expr);
+	
+	void spy(string expr);
+	
+	void dump(string expr);
+	
+	void topic_info(string expr);
+	
+	void handle(LogMsg sample);
+	
+}
