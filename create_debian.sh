@@ -2,7 +2,7 @@
 
 VERSION=$(cat VERSION)
 ARCH=$(uname -m)
-DST=vnx-base-$VERSION-$ARCH
+DST=${PWD##*/}-$VERSION-$ARCH
 
 rm -rf $DST
 mkdir -p $DST/DEBIAN
