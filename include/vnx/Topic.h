@@ -22,6 +22,8 @@
 #include <vnx/Pipe.h>
 #include <vnx/TopicInfo.hxx>
 
+#include <unordered_map>
+
 
 namespace vnx {
 

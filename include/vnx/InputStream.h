@@ -19,6 +19,8 @@
 
 #include <vnx/Type.h>
 
+#include <unordered_map>
+
 
 namespace vnx {
 
@@ -93,7 +95,7 @@ private:
 
 class InputBuffer {
 public:
-	InputBuffer(InputStream* stream_);
+	InputBuffer(InputStream* stream_) : stream(stream_), pos(0), end(0) {}
 	
 	InputBuffer(const InputBuffer& other) = delete;
 	InputBuffer& operator=(const InputBuffer& other) = delete;
@@ -102,13 +104,56 @@ public:
 	 * Get a pointer to the next available data and advance the internal pointer by "len" bytes.
 	 * Reads new data from the stream if available bytes are less than "len".
 	 */
-	const char* read(size_t len);
+	const char* read(size_t len) {
+		if(len > VNX_BUFFER_SIZE) {
+			throw std::invalid_argument("read(): buffer too small");
+		}
+		while(end - pos < len) {
+			// move left over data to the beginning
+			::memmove(buffer, buffer + pos, end - pos);
+			end -= pos;
+			pos = 0;
+			// read new data into the buffer (after the left over data)
+			size_t num_bytes = stream->read(buffer + end, VNX_BUFFER_SIZE - end);
+			if(!num_bytes) {
+				throw std::underflow_error("read(): EOF");
+			}
+			end += num_bytes;
+		}
+		char* res = buffer + pos;
+		pos += len;
+		return res;
+	}
 	
 	/*
 	 * Read "len" bytes into memory given by "buf".
 	 * Used to read large chunks of data, potentially bypassing the buffer.
 	 */
-	void read(char* buf, size_t len);
+	void read(char* buf, size_t len) {
+		const size_t left = end - pos;
+		if(len < VNX_BUFFER_SIZE/2 || len < left) {
+			// for small chunks just take it from the buffer if enough bytes are available
+			::memcpy(buf, read(len), len);
+			return;
+		}
+		if(left) {
+			// first take whatever is left in the buffer
+			::memcpy(buf, buffer + pos, left);
+			buf += left;
+			len -= left;
+			pos = 0;
+			end = 0;
+		}
+		while(len > 0) {
+			// read remaining bytes directly from the stream
+			const size_t num_bytes = stream->read(buf, len);
+			if(!num_bytes) {
+				throw std::underflow_error("read(): EOF");
+			}
+			buf += num_bytes;
+			len -= num_bytes;
+		}
+	}
 	
 	/*
 	 * Resets the buffer. Discards any data left over.

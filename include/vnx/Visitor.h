@@ -30,7 +30,7 @@ public:
 	virtual ~Visitor() {}
 	
 	virtual void visit_null() {}
-	virtual void visit(const bool& value) {}
+	virtual void visit(const bool_t& value) {}
 	virtual void visit(const uint8_t& value) {}
 	virtual void visit(const uint16_t& value) {}
 	virtual void visit(const uint32_t& value) {}
@@ -62,7 +62,7 @@ public:
 };
 
 
-inline void accept(Visitor& vistor, const bool& value) { vistor.visit(value); }
+inline void accept(Visitor& vistor, const bool_t& value) { vistor.visit(value); }
 inline void accept(Visitor& vistor, const uint8_t& value) { vistor.visit(value); }
 inline void accept(Visitor& vistor, const uint16_t& value) { vistor.visit(value); }
 inline void accept(Visitor& vistor, const uint32_t& value) { vistor.visit(value); }
@@ -80,7 +80,7 @@ void accept(Visitor& vistor, const std::array<T, N>& array) {
 	vistor.list_begin(N);
 	for(size_t i = 0; i < N; ++i) {
 		vistor.list_element(i);
-		accept(vistor, array[i]);
+		vnx::type<T>().accept(vistor, array[i]);
 	}
 	vistor.list_end(N);
 }
@@ -90,7 +90,7 @@ void accept(Visitor& vistor, const std::vector<T>& vector) {
 	vistor.list_begin(vector.size());
 	for(size_t i = 0; i < vector.size(); ++i) {
 		vistor.list_element(i);
-		accept(vistor, vector[i]);
+		vnx::type<T>().accept(vistor, vector[i]);
 	}
 	vistor.list_end(vector.size());
 }
@@ -101,13 +101,31 @@ void accept(Visitor& vistor, const std::map<K, V>& map) {
 	size_t i = 0;
 	for(const auto& entry : map) {
 		vistor.map_entry_begin(i);
-		accept(vistor, entry.first);
+		vnx::type<K>().accept(vistor, entry.first);
 		vistor.map_entry_value(i);
-		accept(vistor, entry.second);
+		vnx::type<V>().accept(vistor, entry.second);
 		vistor.map_entry_end(i);
 		i++;
 	}
 	vistor.map_end(map.size());
+}
+
+void accept(Visitor& vistor, const Value& value);
+
+void accept(Visitor& visitor, TypeInput& in, const TypeCode* type_code = 0, const uint16_t* code = 0);
+
+template<typename T>
+void accept(Visitor& vistor, const std::shared_ptr<T>& value) {
+	if(value) {
+		accept(vistor, *value);
+	} else {
+		vistor.visit_null();
+	}
+}
+
+template<typename T>
+void type<T>::accept(Visitor& visitor, const T& value) {
+	vnx::accept(visitor, value);
 }
 
 

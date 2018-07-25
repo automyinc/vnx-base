@@ -19,6 +19,8 @@
 
 #include <vnx/Pipe.h>
 
+#include <list>
+
 
 namespace vnx {
 

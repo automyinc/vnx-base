@@ -23,6 +23,7 @@
 #include <vnx/LogMsg.hxx>
 
 #include <thread>
+#include <sstream>
 
 
 namespace vnx {

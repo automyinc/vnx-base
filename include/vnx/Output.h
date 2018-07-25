@@ -20,11 +20,12 @@
 #include <vnx/OutputStream.h>
 
 #include <cstdio>
+#include <sstream>
 
 
 namespace vnx {
 
-inline void write_value(void* buf, const bool& value) {
+inline void write_value(void* buf, const bool_t& value) {
 	*((uint8_t*)buf) = value;
 }
 inline void write_value(void* buf, const uint8_t& value) {
@@ -72,7 +73,7 @@ inline void write_value(char* buf, const std::array<bool, N>& array) {
 	}
 }
 
-inline void write(TypeOutput& out, const bool& value, const TypeCode* type_code = 0, const uint16_t* code = 0) {
+inline void write(TypeOutput& out, const bool_t& value, const TypeCode* type_code = 0, const uint16_t* code = 0) {
 	*((uint8_t*)out.write(sizeof(uint8_t))) = value;
 }
 inline void write(TypeOutput& out, const uint8_t& value, const TypeCode* type_code = 0, const uint16_t* code = 0) {
@@ -106,7 +107,7 @@ inline void write(TypeOutput& out, const float64_t& value, const TypeCode* type_
 	*((float64_t*)out.write(sizeof(float64_t))) = value;
 }
 
-void write_dynamic(TypeOutput& out, const bool& value);
+void write_dynamic(TypeOutput& out, const bool_t& value);
 void write_dynamic(TypeOutput& out, const uint8_t& value);
 void write_dynamic(TypeOutput& out, const uint16_t& value);
 void write_dynamic(TypeOutput& out, const uint32_t& value);
@@ -148,7 +149,7 @@ void write(TypeOutput& out, const std::map<K, V>& map, const TypeCode* type_code
 template<typename T, size_t N>
 void write(TypeOutput& out, const std::array<T, N>& array, const TypeCode* type_code, const uint16_t* code) {
 	for(size_t i = 0; i < N; ++i) {
-		write(out, array[i], type_code, code);
+		vnx::type<T>().write(out, array[i], type_code, code);
 	}
 }
 
@@ -181,7 +182,7 @@ void write(TypeOutput& out, const std::vector<T>& vector, const TypeCode* type_c
 	} else {
 		const uint16_t* value_code = code + 1;
 		for(const T& elem : vector) {
-			write(out, elem, type_code, value_code);
+			vnx::type<T>().write(out, elem, type_code, value_code);
 		}
 	}
 }
@@ -229,12 +230,13 @@ void write(TypeOutput& out, const std::map<K, V>& map, const TypeCode* type_code
 	const uint16_t* key_code = code + 2;
 	const uint16_t* value_code = code + (code ? code[1] : 0);
 	for(const std::pair<K, V>& elem : map) {
-		write(out, elem.first, type_code, key_code);
-		write(out, elem.second, type_code, value_code);
+		vnx::type<K>().write(out, elem.first, type_code, key_code);
+		vnx::type<V>().write(out, elem.second, type_code, value_code);
 	}
 }
 
 void write(TypeOutput& out, const Value& value);
+
 void write(TypeOutput& out, const Value* value);
 
 template<typename T>
@@ -244,6 +246,11 @@ void write(TypeOutput& out, const std::shared_ptr<T>& value, const TypeCode* typ
 	} else {
 		write(out, uint16_t(CODE_NULL));
 	}
+}
+
+template<typename T>
+void type<T>::write(TypeOutput& out, const T& value, const TypeCode* type_code, const uint16_t* code) {
+	vnx::write(out, value, type_code, code);
 }
 
 
@@ -274,7 +281,7 @@ template<typename T>
 void write(std::ostream& out, const std::shared_ptr<T>& value);
 
 template<class Iter>
-void write(std::ostream& out, Iter first, Iter last);
+void write_list(std::ostream& out, Iter first, Iter last);
 
 template<typename K, typename V>
 void write(std::ostream& out, const std::pair<K, V>& value);
@@ -285,37 +292,45 @@ void write(std::ostream& out, const std::array<T, N>& array);
 template<typename T>
 void write(std::ostream& out, const std::vector<T>& vector);
 
-template<typename K, typename V>
-void write(std::ostream& out, const std::map<K, V>& map) {
-	write(out, map.begin(), map.end());
-}
-
 template<typename T, size_t N>
 void write(std::ostream& out, const std::array<T, N>& array) {
-	write(out, array.begin(), array.end());
+	out << "[";
+	for(size_t i = 0; i < N; ++i) {
+		if(i > 0) {
+			out << ", ";
+		}
+		vnx::type<T>().write(out, array[i]);
+	}
+	out << "]";
 }
+
 template<typename T>
 void write(std::ostream& out, const std::vector<T>& vector) {
-	write(out, vector.begin(), vector.end());
+	write_list(out, vector.begin(), vector.end());
 }
 
 template<typename K, typename V>
 void write(std::ostream& out, const std::pair<K, V>& value) {
 	out << "[";
-	write(out, value.first);
+	vnx::type<K>().write(out, value.first);
 	out << ", ";
-	write(out, value.second);
+	vnx::type<V>().write(out, value.second);
 	out << "]";
 }
 
+template<typename K, typename V>
+void write(std::ostream& out, const std::map<K, V>& map) {
+	write_list(out, map.begin(), map.end());
+}
+
 template<class Iter>
-void write(std::ostream& out, Iter first, Iter last) {
+void write_list(std::ostream& out, Iter first, Iter last) {
 	out << "[";
 	for(Iter it = first; it != last; ++it) {
 		if(it != first) {
 			out << ", ";
 		}
-		write(out, *it);
+		vnx::type<typename Iter::value_type>().write(out, *it);
 	}
 	out << "]";
 }
@@ -330,9 +345,14 @@ void write(std::ostream& out, const std::shared_ptr<T>& value) {
 }
 
 template<typename T>
+void type<T>::write(std::ostream& out, const T& value) {
+	vnx::write(out, value);
+}
+
+template<typename T>
 std::string to_string(const T& value) {
 	std::ostringstream stream;
-	write(stream, value);
+	vnx::type<T>().write(stream, value);
 	return stream.str();
 }
 

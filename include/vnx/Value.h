@@ -78,19 +78,6 @@ std::shared_ptr<T> clone(const T& value) {
 	return std::dynamic_pointer_cast<T>(value.clone());
 }
 
-void accept(Visitor& vistor, const Value& value);
-
-void accept(Visitor& visitor, TypeInput& in, const TypeCode* type_code = 0, const uint16_t* code = 0);
-
-template<typename T>
-void accept(Visitor& vistor, const std::shared_ptr<T>& value) {
-	if(value) {
-		accept(vistor, *value);
-	} else {
-		vistor.visit_null();
-	}
-}
-
 void copy_bytes(TypeInput& in, TypeOutput* out, size_t num_bytes);
 
 void copy(TypeInput& in, TypeOutput* out);

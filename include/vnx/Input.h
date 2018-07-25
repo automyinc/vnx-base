@@ -20,6 +20,7 @@
 #include <vnx/InputStream.h>
 
 #include <cstdio>
+#include <sstream>
 
 
 namespace vnx {
@@ -61,7 +62,7 @@ inline void read_value(const char* buf, std::array<T, N>& array, const uint16_t*
 	}
 }
 
-inline void read(TypeInput& in, bool& value) { value = *((uint8_t*)in.read(sizeof(uint8_t))); }
+inline void read(TypeInput& in, bool_t& value) { value = *((uint8_t*)in.read(sizeof(uint8_t))); }
 inline void read(TypeInput& in, uint8_t& value) { value = *((uint8_t*)in.read(sizeof(uint8_t))); }
 inline void read(TypeInput& in, uint16_t& value) { value = *((uint16_t*)in.read(sizeof(uint16_t))); }
 inline void read(TypeInput& in, uint32_t& value) { value = *((uint32_t*)in.read(sizeof(uint32_t))); }
@@ -91,7 +92,7 @@ inline void read_value(TypeInput& in, T& value, const TypeCode* type_code, const
 	}
 }
 
-inline void read(TypeInput& in, bool& value, const TypeCode* type_code, const uint16_t* code) {
+inline void read(TypeInput& in, bool_t& value, const TypeCode* type_code, const uint16_t* code) {
 	read_value(in, value, type_code, code);
 }
 inline void read(TypeInput& in, uint8_t& value, const TypeCode* type_code, const uint16_t* code) {
@@ -151,7 +152,7 @@ void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, con
 	const size_t size = code[1];
 	for(size_t i = 0; i < size; ++i) {
 		if(i < N) {
-			read(in, array[i], type_code, code + 2);
+			vnx::type<T>().read(in, array[i], type_code, code + 2);
 		} else {
 			skip(in, type_code, code + 2);
 		}
@@ -255,7 +256,7 @@ void read(TypeInput& in, std::vector<T>& vector, const TypeCode* type_code, cons
 	} else {
 		const uint16_t* value_code = code + 1;
 		for(uint32_t i = 0; i < size; ++i) {
-			read(in, vector[i], type_code, value_code);
+			vnx::type<T>().read(in, vector[i], type_code, value_code);
 		}
 	}
 }
@@ -272,9 +273,9 @@ void read(TypeInput& in, std::map<K, V>& map, const TypeCode* type_code, const u
 	const uint16_t* value_code = code + code[1];
 	for(size_t i = 0; i < size; ++i) {
 		K key;
-		read(in, key, type_code, key_code);
+		vnx::type<K>().read(in, key, type_code, key_code);
 		V& value = map[key];
-		read(in, value, type_code, value_code);
+		vnx::type<V>().read(in, value, type_code, value_code);
 	}
 }
 
@@ -291,10 +292,15 @@ void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, c
 }
 
 template<typename T>
+void type<T>::read(TypeInput& in, T& value, const TypeCode* type_code, const uint16_t* code) {
+	vnx::read(in, value, type_code, code);
+}
+
+template<typename T>
 void read_dynamic(TypeInput& in, T& value) {
 	uint16_t code[VNX_MAX_BYTE_CODE_SIZE];
 	read_byte_code(in, code);
-	read(in, value, 0, code);
+	vnx::type<T>().read(in, value, 0, code);
 }
 
 template<typename T>
@@ -321,7 +327,7 @@ void read_dynamic(TypeInput& in, T*& data, size_t& size_) {
 	} else {
 		const uint16_t* value_code = code + 1;
 		for(uint32_t i = 0; i < size; ++i) {
-			read(in, data[i], 0, value_code);
+			vnx::type<T>().read(in, data[i], 0, value_code);
 		}
 	}
 	size_ = size;
@@ -511,10 +517,15 @@ void read(std::istream& in, std::map<std::string, V>& map) {
 }
 
 template<typename T>
+void type<T>::read(std::istream& in, T& value) {
+	vnx::read(in, value);
+}
+
+template<typename T>
 void from_string(const std::string& str, T& value) {
 	std::istringstream stream;
 	stream.str(str);
-	read(stream, value);
+	vnx::type<T>().read(stream, value);
 }
 
 template<typename T>

@@ -24,12 +24,9 @@
 
 #include <string>
 #include <vector>
-#include <list>
 #include <array>
 #include <map>
-#include <unordered_map>
 #include <iostream>
-#include <sstream>
 #include <functional>
 #include <stdexcept>
 #include <memory>
@@ -212,6 +209,16 @@ private:
 	 */
 	void match(const TypeCode* native);
 	
+};
+
+
+template<typename T>
+struct type {
+	void read(TypeInput& in, T& value, const TypeCode* type_code, const uint16_t* code);
+	void write(TypeOutput& out, const T& value, const TypeCode* type_code, const uint16_t* code);
+	void read(std::istream& in, T& value);
+	void write(std::ostream& out, const T& value);
+	void accept(Visitor& visitor, const T& value);
 };
 
 

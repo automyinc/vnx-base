@@ -19,6 +19,8 @@
 
 #include <vnx/Type.h>
 
+#include <unordered_map>
+
 
 namespace vnx {
 
@@ -108,7 +110,7 @@ private:
 
 class OutputBuffer {
 public:
-	OutputBuffer(OutputStream* stream_);
+	OutputBuffer(OutputStream* stream_) : stream(stream_), pos(0) {}
 	
 	OutputBuffer(const OutputBuffer& other) = delete;
 	OutputBuffer& operator=(const OutputBuffer& other) = delete;
@@ -117,19 +119,41 @@ public:
 	 * Get a pointer to at least "len" number of bytes in the buffer.
 	 * Will flush the buffer to the stream if not enough space available.
 	 */
-	char* write(size_t len);
+	char* write(size_t len) {
+		if(len > VNX_BUFFER_SIZE) {
+			throw std::invalid_argument("write(): buffer too small");
+		}
+		if(VNX_BUFFER_SIZE - pos < len) {
+			flush();
+		}
+		char* res = buffer + pos;
+		pos += len;
+		return res;
+	}
 	
 	/*
 	 * Write "len" number of bytes given by "data" to the stream.
 	 * Used to write large chunks of data, potentially bypassing the buffer.
 	 */
-	void write(const void* data, size_t len);
+	void write(const void* data, size_t len) {
+		if(len < VNX_BUFFER_SIZE/2) {
+			::memcpy(write(len), data, len);
+		} else {
+			flush();
+			stream->write(data, len);
+		}
+	}
 	
 	/*
 	 * Flush the buffer to the stream.
 	 * Used to make sure that all data is actually written to the stream.
 	 */
-	void flush();
+	void flush() {
+		if(pos > 0) {
+			stream->write(buffer, pos);
+			pos = 0;
+		}
+	}
 	
 	/*
 	 * Resets the buffer. Discards any data left over.
