@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 2.6)
 project(vnx-base)
 
+get_property(LIB64 GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS)
+
+if("${LIB64}" STREQUAL "TRUE")
+    set(LIBSUFFIX 64)
+else()
+    set(LIBSUFFIX "")
+endif()
+
 install(DIRECTORY
 	generated/include/vnx
 	include/vnx
@@ -14,7 +22,7 @@ install(DIRECTORY
 
 install(PROGRAMS
 	${ARCH}/${DIST}/lib/libvnx_base.so
-	DESTINATION lib
+	DESTINATION lib${LIBSUFFIX}
 )
 
 install(PROGRAMS
