@@ -2,7 +2,8 @@
 
 VERSION=$(cat VERSION)
 ARCH=$(uname -m)
-DST=${PWD##*/}-$VERSION-$ARCH
+DIST=$(cat ~/DIST)
+DST=${PWD##*/}-$VERSION-$ARCH-$DIST
 
 rm -rf $DST
 mkdir -p $DST/DEBIAN
