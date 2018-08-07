@@ -41,12 +41,12 @@ protected:
 	virtual void command(const ::std::string& cmd) = 0;
 	virtual void dump(const ::std::string& expr) = 0;
 	virtual void grep(const ::std::string& expr) = 0;
-	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
+	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value, std::shared_ptr<const ::vnx::Sample> _sample) { handle(_value); }
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value) {}
 	virtual void spy(const ::std::string& expr) = 0;
 	virtual void topic_info(const ::std::string& expr) = 0;
 	
-	void handle_switch(std::shared_ptr<const vnx::Sample> _sample);
+	void handle_switch(std::shared_ptr<const ::vnx::Sample> _sample);
 	bool call_switch(vnx::TypeInput& _in, vnx::TypeOutput& _out, const vnx::TypeCode* _call_type, const vnx::TypeCode* _return_type);
 	
 };

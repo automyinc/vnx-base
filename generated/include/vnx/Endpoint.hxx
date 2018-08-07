@@ -31,7 +31,7 @@ public:
 	virtual void listen(const ::int32_t& socket) const;
 	virtual ::int32_t accept(const ::int32_t& socket) const;
 	virtual ::std::string to_url() const;
-	static ::std::shared_ptr<::vnx::Endpoint> from_url(const ::std::string& url);
+	static ::std::shared_ptr<const ::vnx::Endpoint> from_url(const ::std::string& url);
 	
 	static std::shared_ptr<Endpoint> create();
 	std::shared_ptr<vnx::Value> clone() const;

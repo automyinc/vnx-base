@@ -6,8 +6,8 @@ class Return extends Message {
 	
 	Hash64 src_mac;
 	
-	const Value* value;
+	Value* value;
 	
-	static Return* create_no_such_service_return(const Request* request);
+	static Return* create_no_such_service_return(Request* request);
 	
 }

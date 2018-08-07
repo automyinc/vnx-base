@@ -46,9 +46,9 @@ public:
 	
 	void enable_import_async(const ::std::string& topic_name);
 	
-	void enable_tunnel(const ::vnx::Hash64& tunnel_addr, const ::std::string& serive_name, const ::int32_t& max_queue_ms);
+	void enable_tunnel(const ::vnx::Hash64& tunnel_addr, const ::std::string& service_name, const ::int32_t& max_queue_ms);
 	
-	void enable_tunnel_async(const ::vnx::Hash64& tunnel_addr, const ::std::string& serive_name, const ::int32_t& max_queue_ms);
+	void enable_tunnel_async(const ::vnx::Hash64& tunnel_addr, const ::std::string& service_name, const ::int32_t& max_queue_ms);
 	
 	void handle(const ::std::shared_ptr<const ::vnx::TopicInfoList>& sample);
 	

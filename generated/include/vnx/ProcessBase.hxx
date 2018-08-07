@@ -45,17 +45,17 @@ protected:
 	virtual ::std::string get_name() const = 0;
 	virtual ::vnx::TimeSync get_sync_time() const = 0;
 	virtual ::vnx::TopicInfoList get_topic_info() const = 0;
-	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
+	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value, std::shared_ptr<const ::vnx::Sample> _sample) { handle(_value); }
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value) {}
-	virtual void handle(std::shared_ptr<const ::vnx::TimeControl> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
+	virtual void handle(std::shared_ptr<const ::vnx::TimeControl> _value, std::shared_ptr<const ::vnx::Sample> _sample) { handle(_value); }
 	virtual void handle(std::shared_ptr<const ::vnx::TimeControl> _value) {}
-	virtual void handle(std::shared_ptr<const ::vnx::TimeSync> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
+	virtual void handle(std::shared_ptr<const ::vnx::TimeSync> _value, std::shared_ptr<const ::vnx::Sample> _sample) { handle(_value); }
 	virtual void handle(std::shared_ptr<const ::vnx::TimeSync> _value) {}
 	virtual void pause_log() = 0;
 	virtual void resume_log() = 0;
 	virtual void set_debug(const ::int32_t& level) = 0;
 	
-	void handle_switch(std::shared_ptr<const vnx::Sample> _sample);
+	void handle_switch(std::shared_ptr<const ::vnx::Sample> _sample);
 	bool call_switch(vnx::TypeInput& _in, vnx::TypeOutput& _out, const vnx::TypeCode* _call_type, const vnx::TypeCode* _return_type);
 	
 };

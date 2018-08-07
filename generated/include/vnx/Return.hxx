@@ -28,7 +28,7 @@ public:
 	vnx::Hash64 get_type_hash() const;
 	const char* get_type_name() const;
 	
-	static ::std::shared_ptr<::vnx::Return> create_no_such_service_return(const ::std::shared_ptr<const ::vnx::Request>& request);
+	static ::std::shared_ptr<const ::vnx::Return> create_no_such_service_return(const ::std::shared_ptr<const ::vnx::Request>& request);
 	
 	static std::shared_ptr<Return> create();
 	std::shared_ptr<vnx::Value> clone() const;

@@ -11,6 +11,6 @@ class Sample extends Message {
 	
 	TopicPtr topic;				// topic
 	
-	const Value* value;			// the actual data
+	Value* value;				// the actual data
 	
 }

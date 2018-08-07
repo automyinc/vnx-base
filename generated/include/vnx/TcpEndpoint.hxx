@@ -28,8 +28,8 @@ public:
 	vnx::Hash64 get_type_hash() const;
 	const char* get_type_name() const;
 	
-	static ::std::shared_ptr<::vnx::TcpEndpoint> create(const ::std::string& host_name, const ::int32_t& port);
-	static ::std::shared_ptr<::vnx::TcpEndpoint> from_url(const ::std::string& url);
+	static ::std::shared_ptr<const ::vnx::TcpEndpoint> create(const ::std::string& host_name, const ::int32_t& port);
+	static ::std::shared_ptr<const ::vnx::TcpEndpoint> from_url(const ::std::string& url);
 	virtual ::int32_t open() const;
 	virtual void bind(const ::int32_t& socket) const;
 	virtual void connect(const ::int32_t& socket) const;

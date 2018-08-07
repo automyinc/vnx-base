@@ -3,6 +3,9 @@ package vnx;
 module Router {
 	
 	int port = 4444;
+	
+	string unix_path = ".vnxrouter.sock";
+	
 	int max_queue_ms = 100;
 	
 	map<string, vector<string>> import_map;

@@ -46,7 +46,7 @@ public:
 	
 protected:
 	
-	void handle_switch(std::shared_ptr<const vnx::Sample> _sample);
+	void handle_switch(std::shared_ptr<const ::vnx::Sample> _sample);
 	bool call_switch(vnx::TypeInput& _in, vnx::TypeOutput& _out, const vnx::TypeCode* _call_type, const vnx::TypeCode* _return_type);
 	
 };

@@ -29,11 +29,11 @@ module Proxy {
 	void enable_forward(string service_name, int max_queue_ms);
 	void disable_forward(string service_name);
 	
-	void enable_tunnel(Hash64 tunnel_addr, string serive_name, int max_queue_ms);
+	void enable_tunnel(Hash64 tunnel_addr, string service_name, int max_queue_ms);
 	void disable_tunnel(Hash64 tunnel_addr);
 	
-	void on_connect();
-	void on_disconnect();
+	void on_connect();					// internal use only
+	void on_disconnect();				// internal use only
 	
 	void handle(TopicInfoList sample);
 	

@@ -23,8 +23,8 @@ public:
 	vnx::Hash64 get_type_hash() const;
 	const char* get_type_name() const;
 	
-	static ::std::shared_ptr<::vnx::UnixEndpoint> create(const ::std::string& domain_path);
-	static ::std::shared_ptr<::vnx::UnixEndpoint> from_url(const ::std::string& url);
+	static ::std::shared_ptr<const ::vnx::UnixEndpoint> create(const ::std::string& domain_path);
+	static ::std::shared_ptr<const ::vnx::UnixEndpoint> from_url(const ::std::string& url);
 	virtual ::int32_t open() const;
 	virtual void bind(const ::int32_t& socket) const;
 	virtual void connect(const ::int32_t& socket) const;

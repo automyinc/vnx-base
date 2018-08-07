@@ -7,6 +7,6 @@ class Request extends Message {
 	
 	ulong request_id;
 	
-	const Value* arguments;
+	Value* arguments;
 	
 }

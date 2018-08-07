@@ -14,6 +14,7 @@ class RouterBase : public ::vnx::Module {
 public:
 	
 	::int32_t port = 4444;
+	::std::string unix_path = ".vnxrouter.sock";
 	::int32_t max_queue_ms = 100;
 	::std::map<::std::string, ::std::vector<::std::string>> import_map;
 	::std::map<::std::string, ::std::vector<::std::string>> export_map;
@@ -42,7 +43,7 @@ public:
 	
 protected:
 	
-	void handle_switch(std::shared_ptr<const vnx::Sample> _sample);
+	void handle_switch(std::shared_ptr<const ::vnx::Sample> _sample);
 	bool call_switch(vnx::TypeInput& _in, vnx::TypeOutput& _out, const vnx::TypeCode* _call_type, const vnx::TypeCode* _return_type);
 	
 };
