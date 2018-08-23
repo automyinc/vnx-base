@@ -14,42 +14,46 @@
  * from Automy Incorporated.
  */
 
-#ifndef INCLUDE_VNX_TOPICPTR_H_
-#define INCLUDE_VNX_TOPICPTR_H_
+#ifndef INCLUDE_VNX_BINARYTOSTRING_H
+#define INCLUDE_VNX_BINARYTOSTRING_H
 
-#include <vnx/Topic.h>
+#include <vnx/DefaultPrinter.h>
+
+#include <sstream>
 
 
 namespace vnx {
 
-class TopicPtr : public std::shared_ptr<Topic> {
+class BinaryToString : public DefaultPrinter {
 public:
-	TopicPtr();
+	BinaryToString() : DefaultPrinter(stream) {}
 	
-	TopicPtr(const char* name_);
+	std::string str() const {
+		return stream.str();
+	}
 	
-	TopicPtr(const std::string& name_);
+	void visit(const std::string& value) override {
+		if(!stack) {
+			stream << value;
+		} else {
+			DefaultPrinter::visit(value);
+		}
+	}
 	
-	TopicPtr(const std::shared_ptr<Topic>& topic_);
+	void enum_value(uint32_t value, const std::string& name) override {
+		if(!stack) {
+			stream << name;
+		} else {
+			DefaultPrinter::enum_value(value, name);
+		}
+	}
 	
-	TopicPtr& operator=(const char* name_);
-	
-	TopicPtr& operator=(const std::string& name_);
-	
-	TopicPtr& operator=(const std::shared_ptr<Topic>& topic_);
+protected:
+	std::ostringstream stream;
 	
 };
 
 
 } // vnx
 
-
-namespace std {
-	template<> struct hash<vnx::TopicPtr> {
-		size_t operator()(const vnx::TopicPtr& x) const {
-			return std::hash<std::shared_ptr<vnx::Topic>>()((const std::shared_ptr<vnx::Topic>&)x);
-		}
-	};
-} // std
-
-#endif /* INCLUDE_VNX_TOPICPTR_H_ */
+#endif // INCLUDE_VNX_BINARYTOSTRING_H

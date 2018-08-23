@@ -18,7 +18,6 @@
 #define INCLUDE_VNX_CRC64_H_
 
 #include <stdint.h>
-#include <stddef.h>
 #include <string>
 
 
@@ -28,6 +27,10 @@ class CRC64 {
 public:
 	CRC64() {
 		crc = -1;
+	}
+	
+	CRC64(uint64_t init) {
+		crc = init;
 	}
 	
 	void update(uint64_t hash) {
@@ -55,6 +58,13 @@ private:
 	static const uint64_t table[256];
 	
 };
+
+
+uint64_t hash64(const char* str);
+
+uint64_t hash64(const std::string& str);
+
+uint64_t hash64(const char* buf, size_t len);
 
 
 } // vnx

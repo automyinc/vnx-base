@@ -9,6 +9,7 @@ module SpyTool {
 	bool only_once = false;
 	bool header_only = false;
 	bool pretty_print = true;
+	int max_list_size = 1000;			// max display size, 0 == unlimited
 	int max_queue_ms = 100;
 	
 	Hash64 receive_tunnel;

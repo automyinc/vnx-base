@@ -34,6 +34,8 @@ public:
 	
 	~Module();
 	
+	static const int BLOCKING = Message::BLOCKING;
+	
 	static const int ERROR = LogMsg::ERROR;
 	static const int WARN = LogMsg::WARN;
 	static const int INFO = LogMsg::INFO;
@@ -58,7 +60,7 @@ protected:
 	/*
 	 * Publish a copy of the value.
 	 */
-	void publish(const Value& value, std::shared_ptr<Topic> topic, uint16_t flags = 0) {
+	void publish(const Value& value, TopicPtr topic, uint16_t flags = 0) {
 		std::shared_ptr<Value> copy = value.clone();
 		publisher->publish(copy, topic, flags);
 	}
@@ -68,7 +70,7 @@ protected:
 	 * WARNING: "value" cannot be modified after this! Otherwise segfaults will be yours!
 	 */
 	template<typename T>
-	void publish(std::shared_ptr<T> value, std::shared_ptr<Topic> topic, uint16_t flags = 0) {
+	void publish(std::shared_ptr<T> value, TopicPtr topic, uint16_t flags = 0) {
 		publisher->publish(value, topic, flags);
 	}
 	
@@ -123,29 +125,14 @@ protected:
 	virtual bool call_switch(TypeInput& in, TypeOutput& out, const TypeCode* call_type, const TypeCode* return_type) = 0;
 	
 private:
-	/*
-	 * This is where the new thread will start and eventually call main().
-	 */
 	void entry();
 	
-	/*
-	 * Called exclusively by Handle::start().
-	 */
 	void start();
 	
-	/*
-	 * Called exclusively by Handle.
-	 */
 	bool is_running();
 	
-	/*
-	 * Called exclusively by Handle::wait().
-	 */
 	void wait();
 	
-	/*
-	 * Called exclusively by Handle::detach().
-	 */
 	void detach(std::shared_ptr<Module> self_ptr_);
 	
 private:

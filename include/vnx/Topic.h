@@ -66,17 +66,17 @@ public:
 	 * Get the domain name of this topic.
 	 * Exampe: returns "mydomain" for topic "mydomain.mytopic".
 	 */
-	std::string get_domain_name() const;
+	std::string get_domain_name() const { return domain_name; }
 	
 	/*
 	 * The the name of this topic.
 	 */
-	std::string get_name() const;
+	std::string get_name() const { return topic_name; }
 	
 	/*
 	 * Get the CRC64 hash of this topic.
 	 */
-	Hash64 get_hash() const;
+	Hash64 get_hash() const { return topic_hash; }
 	
 	/*
 	 * The the topic info for this topic.

@@ -16,9 +16,9 @@ public:
 	
 	::std::string host_name;
 	::int32_t port = 0;
-	::bool_t reuse_addr = true;
-	::bool_t tcp_no_delay = true;
-	::bool_t tcp_keepalive = true;
+	::vnx::bool_t reuse_addr = true;
+	::vnx::bool_t tcp_no_delay = true;
+	::vnx::bool_t tcp_keepalive = true;
 	
 	typedef ::vnx::Endpoint Super;
 	

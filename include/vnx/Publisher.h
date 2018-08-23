@@ -18,6 +18,7 @@
 #define INCLUDE_VNX_PUBLISHER_H_
 
 #include <vnx/Topic.h>
+#include <vnx/TopicPtr.h>
 #include <vnx/Time.h>
 #include <vnx/Util.h>
 #include <vnx/Sample.hxx>
@@ -36,35 +37,33 @@ namespace vnx {
  */
 class Publisher {
 public:
-	Publisher(const std::string& src_name, uint16_t default_flags = 0);
+	Publisher();
 	
 	Publisher(const Publisher& other) = delete;
 	Publisher& operator=(const Publisher& other) = delete;
 	
 	/*
-	 * Publish a copy of the value. (thread-safe)
+	 * Publish a copy of the value.
 	 */
-	void publish(const Value& value, std::shared_ptr<Topic> topic, uint16_t flags = 0);
+	void publish(const Value& value, TopicPtr topic, uint16_t flags = 0);
 	
 	/*
-	 * Publish the actual value directly. (zero-copy) (thread-safe)
+	 * Publish the actual value directly. (zero-copy)
 	 * WARNING: "value" cannot be modified after this! Otherwise segfaults will be yours!
 	 */
 	template<typename T>
-	void publish(std::shared_ptr<T> value, std::shared_ptr<Topic> topic, uint16_t flags = 0) {
+	void publish(std::shared_ptr<T> value, TopicPtr topic, uint16_t flags = 0) {
 		publish(std::shared_ptr<const Value>(value), topic, flags);
 	}
 	
 	/*
-	 * Same as above. (thread-safe)
+	 * Same as above.
 	 */
-	void publish(std::shared_ptr<const Value> value, std::shared_ptr<Topic> topic, uint16_t flags = 0);
+	void publish(std::shared_ptr<const Value> value, TopicPtr topic, uint16_t flags = 0);
 	
 private:
 	std::mutex mutex;
-	Hash64 src_mac;
-	std::string src_name;
-	uint16_t default_flags = 0;
+	const Hash64 src_mac;
 	std::unordered_map<Hash64, uint64_t> seq_map;
 	
 };

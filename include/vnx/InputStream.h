@@ -19,6 +19,7 @@
 
 #include <vnx/Type.h>
 
+#include <cstring>
 #include <unordered_map>
 
 
@@ -59,36 +60,10 @@ public:
 	
 	void reset(FILE* file_) {
 		file = file_;
-		num_read_since = 0;
 	}
-	
-	size_t read_ahead_count = 0;
 	
 private:
 	FILE* file = 0;
-	size_t num_read_since = 0;
-	
-};
-
-
-class MemoryInputStream : public InputStream {
-public:
-	MemoryInputStream() : buffer(0), size(0), pos(0) {}
-	
-	MemoryInputStream(const char* buffer_, size_t size_) : buffer(buffer_), size(size_), pos(0) {}
-	
-	size_t read(void* buf, size_t len);
-	
-	void reset(const char* buffer_, size_t size_) {
-		buffer = buffer_;
-		size = size_;
-		pos = 0;
-	}
-	
-private:
-	const char* buffer;
-	size_t size;
-	size_t pos;
 	
 };
 
@@ -171,8 +146,8 @@ public:
 	}
 	
 private:
-	InputStream* stream;
 	char buffer[VNX_BUFFER_SIZE];
+	InputStream* stream;
 	size_t pos;
 	size_t end;
 	

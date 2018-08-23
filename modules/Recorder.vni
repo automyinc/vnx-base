@@ -5,7 +5,7 @@ module Recorder {
 	string filename;			// use % as a placeholder for datetime
 	
 	int max_queue_ms = 1000;
-	int flush_interval_ms = 10000;
+	int flush_interval_ms = 1000;
 	
 	int header_size = 262144;
 	int block_size = 4096;

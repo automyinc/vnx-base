@@ -2,8 +2,8 @@ package vnx;
 
 class Message {
 	
-	static uint BLOCKING = 1;
-	static uint REPLAY = 2;
+	static const ushort BLOCKING = 1;
+	static const ushort REPLAY = 2;
 	
 	Hash64 tunnel;		// tunnel address if any
 	

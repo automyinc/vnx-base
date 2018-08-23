@@ -16,9 +16,9 @@ public:
 	::int64_t time = 0;
 	::int64_t time_start = 0;
 	::int64_t time_offset = 0;
-	::bool_t is_realtime = true;
-	::bool_t is_paused = false;
-	::float64_t time_speed = 1;
+	::vnx::bool_t is_realtime = true;
+	::vnx::bool_t is_paused = false;
+	::vnx::float64_t time_speed = 1;
 	
 	typedef ::vnx::Value Super;
 	

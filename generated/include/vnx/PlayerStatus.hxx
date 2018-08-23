@@ -19,7 +19,7 @@ public:
 	::int64_t begin_time = 0;
 	::int64_t end_time = 0;
 	::int64_t current_time = 0;
-	::float64_t actual_speed = 0;
+	::vnx::float64_t actual_speed = 0;
 	::std::string message;
 	::vnx::TimeControl control;
 	::vnx::RecordHeader info;

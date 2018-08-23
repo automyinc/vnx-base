@@ -4,6 +4,6 @@ struct record_index_entry_t {
 	
 	long pos = -1;
 	long time;
-	ulong topic;
+	Hash64 topic;
 	
 }

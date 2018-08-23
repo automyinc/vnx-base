@@ -18,9 +18,6 @@
 #define INCLUDE_VNX_TYPE_H_
 
 #include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 #include <string>
 #include <vector>
@@ -56,15 +53,16 @@
  */
 #define VNX_BUFFER_SIZE 16384
 
+
+namespace vnx {
+
 typedef bool bool_t;
 typedef float float32_t;
 typedef double float64_t;
 
-
-namespace vnx {
-
 class Visitor;
 class Value;
+class Variant;
 class Topic;
 class TypeCode;
 class TypeInput;
@@ -77,6 +75,8 @@ const TypeCode* register_type_code(Hash64 hash, std::shared_ptr<TypeCode> type_c
 const TypeCode* get_type_code(Hash64 hash);
 
 std::vector<const TypeCode*> get_all_type_codes();
+
+const uint16_t* validate_code(const uint16_t* code, const TypeCode* type_code = 0, size_t size = -1, size_t pos = 0);
 
 enum {
 	CODE_NULL = 0,
@@ -94,22 +94,32 @@ enum {
 	CODE_FLOAT = 9,
 	CODE_DOUBLE = 10,
 	
-	CODE_ARRAY = 11,			// static array (std::array)
-	CODE_LIST = 12,				// dynamic list (std::list or std::vector)
-	CODE_MAP = 13,				// dynamic map (std::map)
+	CODE_ARRAY = 11,			// static array (std::array), code = {11, <size>, <type code>}
+	CODE_LIST = 12,				// dynamic list (std::list or std::vector), code = {12, <type code>}, header = {UINT32 <size>}
+	CODE_MAP = 13,				// dynamic map (std::map), code = {13, <code offset for value type starting at 13>, <key type code>, <value type code>}, header = {UINT32 <size>}
 	
 	CODE_TYPE_CODE = 14,		// code for a vnx::TypeCode
-	CODE_CLASS = 15,			// code for a class (vnx::Value)
-	CODE_ANY = 16,				// code for anything (currently only CODE_TYPE_CODE, CODE_CLASS or CODE_PADDING allowed) 
-	CODE_DYNAMIC = 17,			// code for dynamic code (ie. the actual code is in the data)
-	CODE_PADDING = 18,			// code for zero padding (used by RecordWriter for example)
+	CODE_TYPE = 15,				// code for a type to follow, header = {15, UINT64 <code hash>}
+	CODE_ANY = 16,				// code for anything (currently only CODE_TYPE_CODE, CODE_TYPE, CODE_OBJECT, CODE_ANY or CODE_PADDING allowed) 
+	CODE_DYNAMIC = 17,			// code for dynamic code (ie. the actual code is in the data), header = {UINT16 <code size>}
+	CODE_PADDING = 18,			// code for zero padding (used by RecordWriter for example), header = {18, UINT32 <padding size>}
+	CODE_STRUCT = 19,			// code for nested struct, code = {19, <depends index>}
+	
+	CODE_MATRIX = 21,			// static ND array, code = {21, <number of dimensions>, <size of dim 0>, <size of dim 1>, ..., <type code>}
+	CODE_IMAGE = 22,			// dynamic ND array, code = {22, <number of dimensions>, <type code>}, header = {UINT32 <size of dim 0>, UINT32 <size of dim 1>, ...}
+	CODE_TUPLE = 23,			// array of different types, code = {23, <size>, <type code offset 0>, ..., <type code>, ...}
+	CODE_OBJECT = 24,			// same as CODE_MAP with {MAP, 4, LIST, INT8, DYNAMIC} but intended to be a dynamically defined type instead of a map
+	
+	CODE_MAGIC = 0x3713,		// magic number for VNX
+	CODE_NONE = 0xFFFF
 };
 
 template<typename T>
-inline uint16_t get_value_code() {
+uint16_t get_value_code() {
 	return CODE_NULL;
 }
 
+template<> inline uint16_t get_value_code<bool>() { return CODE_UINT8; }
 template<> inline uint16_t get_value_code<uint8_t>() { return CODE_UINT8; }
 template<> inline uint16_t get_value_code<uint16_t>() { return CODE_UINT16; }
 template<> inline uint16_t get_value_code<uint32_t>() { return CODE_UINT32; }
@@ -121,7 +131,7 @@ template<> inline uint16_t get_value_code<int64_t>() { return CODE_INT64; }
 template<> inline uint16_t get_value_code<float32_t>() { return CODE_FLOAT; }
 template<> inline uint16_t get_value_code<float64_t>() { return CODE_DOUBLE; }
 
-inline int get_value_size(uint16_t code) {
+inline size_t get_value_size(uint16_t code) {
 	switch(code) {
 		case CODE_UINT8: return 1;
 		case CODE_UINT16: return 2;
@@ -137,21 +147,59 @@ inline int get_value_size(uint16_t code) {
 	return 0;
 }
 
+inline void create_dynamic_code(std::vector<uint16_t>& code, const bool& value) { code.push_back(CODE_UINT8); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const uint8_t& value) { code.push_back(CODE_UINT8); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const uint16_t& value) { code.push_back(CODE_UINT16); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const uint32_t& value) { code.push_back(CODE_UINT32); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const uint64_t& value) { code.push_back(CODE_UINT64); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const int8_t& value) { code.push_back(CODE_INT8); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const int16_t& value) { code.push_back(CODE_INT16); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const int32_t& value) { code.push_back(CODE_INT32); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const int64_t& value) { code.push_back(CODE_INT64); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const float32_t& value) { code.push_back(CODE_FLOAT); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const float64_t& value) { code.push_back(CODE_DOUBLE); }
+
+inline void create_dynamic_code(std::vector<uint16_t>& code, const std::string& value) {
+	code.push_back(CODE_LIST);
+	code.push_back(CODE_INT8);
+}
+
+template<typename T, size_t N>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::array<T, N>& value);
+
+template<typename T>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::vector<T>& value);
+
+template<typename K, typename V>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V>& value);
+
+template<typename K, typename V>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::pair<K, V>& value);
+
+void create_dynamic_code(std::vector<uint16_t>& code, const Value& value);
+
+void create_dynamic_code(std::vector<uint16_t>& code, std::shared_ptr<const Value> value);
+
 
 class TypeField {
 public:
-	bool is_extended = false;
-	std::vector<uint16_t> code;
+	uint16_t version = 2;	// type field version
+	
 	std::string name;
 	std::string value;
+	std::vector<uint16_t> code;
+	bool is_extended = false;
 	
+	/*
+	 * The following fields are computed at runtime. They are not serialized.
+	 */
 	uint32_t index = 0;
 	uint32_t offset = 0;
 	uint32_t size = 0;
 	
 	int32_t native_index = -1;
 	
-	void compile();
+	void compile(const TypeCode* type_code);
 	
 };
 
@@ -159,6 +207,8 @@ public:
 class TypeCode {
 public:
 	TypeCode(bool is_native_ = false);
+	
+	uint16_t version = 2;	// type code version
 	
 	Hash64 type_hash;		// the identity of this type of _any_ version (ie. does not change ever)
 	Hash64 code_hash;		// the identity of this type of a _specific_ version (changes when fields are added/removed or changed)
@@ -172,6 +222,12 @@ public:
 	std::vector<TypeField> static_fields;		// ie. constants
 	std::vector<const TypeCode*> methods;
 	std::map<uint32_t, std::string> enum_map;	// map from enum values to their names (only for enum types)
+	std::map<std::string, std::string> alias_map;		// field forwarding (key == value)
+	
+	bool is_enum = false;			// if type is an enum
+	bool is_class = false;			// if type is a class (ie. inherits from vnx::Value)
+	bool is_method = false;			// if type is a method
+	bool is_return = false;			// if type is a method return type
 	
 	/*
 	 * The following fields are computed at runtime. They are not serialized.
@@ -219,7 +275,66 @@ struct type {
 	void read(std::istream& in, T& value);
 	void write(std::ostream& out, const T& value);
 	void accept(Visitor& visitor, const T& value);
+	void create_dynamic_code(std::vector<uint16_t>& code);
 };
+
+template<typename T>
+void type<T>::create_dynamic_code(std::vector<uint16_t>& code) {
+	vnx::create_dynamic_code(code, T());
+}
+
+template<typename T, size_t N>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::array<T, N>& value) {
+	if(N > VNX_MAX_STATIC_SIZE) {
+		throw std::invalid_argument("create_dynamic_code(std::array<T, N>): N > VNX_MAX_STATIC_SIZE");
+	}
+	code.push_back(CODE_ARRAY);
+	code.push_back(N);
+	vnx::type<T>().create_dynamic_code(code);
+}
+
+template<typename T>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::vector<T>& value) {
+	if(value.size() > VNX_MAX_SIZE) {
+		throw std::invalid_argument("create_dynamic_code(std::vector<T>): size > VNX_MAX_SIZE");
+	}
+	code.push_back(CODE_LIST);
+	vnx::type<T>().create_dynamic_code(code);
+}
+
+template<typename K, typename V>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V>& value) {
+	if(value.size() > VNX_MAX_SIZE) {
+		throw std::invalid_argument("create_dynamic_code(std::map<K, V>): size > VNX_MAX_SIZE");
+	}
+	const size_t begin = code.size();
+	code.push_back(CODE_MAP);
+	code.push_back(0);
+	vnx::type<K>().create_dynamic_code(code);
+	code[begin + 1] = code.size() - begin;
+	vnx::type<V>().create_dynamic_code(code);
+}
+
+template<typename K, typename V>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::pair<K, V>& value) {
+	const size_t begin = code.size();
+	code.push_back(CODE_TUPLE);
+	code.push_back(2);
+	code.push_back(0);
+	code.push_back(0);
+	vnx::type<K>().create_dynamic_code(code);
+	code[begin + 2] = code.size() - begin;
+	vnx::type<V>().create_dynamic_code(code);
+	code[begin + 3] = code.size() - begin;
+}
+
+inline void create_dynamic_code(std::vector<uint16_t>& code, const Value& value) {
+	code.push_back(CODE_ANY);
+}
+
+inline void create_dynamic_code(std::vector<uint16_t>& code, std::shared_ptr<const Value> value) {
+	code.push_back(CODE_ANY);
+}
 
 
 void read(TypeInput& in, TypeField& field, const TypeCode* type_code, const uint16_t* code);

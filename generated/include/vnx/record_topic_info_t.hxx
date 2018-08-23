@@ -24,6 +24,12 @@ struct record_topic_info_t {
 	vnx::Hash64 get_type_hash() const;
 	const char* get_type_name() const;
 	
+	static std::shared_ptr<record_topic_info_t> create();
+	std::shared_ptr<record_topic_info_t> clone() const;
+	
+	void read(vnx::TypeInput& _in, const vnx::TypeCode* _type_code, const uint16_t* _code);
+	void write(vnx::TypeOutput& _out, const vnx::TypeCode* _type_code, const uint16_t* _code) const;
+	
 	void read(std::istream& _in);
 	void write(std::ostream& _out) const;
 	

@@ -19,6 +19,7 @@
 
 #include <vnx/Type.h>
 
+#include <cstring>
 #include <unordered_map>
 
 
@@ -88,22 +89,6 @@ public:
 	
 private:
 	int fd;
-	
-};
-
-
-class MemoryOutputStream : public OutputStream {
-public:
-	MemoryOutputStream(char* buf, size_t size) : buffer(buf), size(size), pos(0) {}
-	
-	void write(const void* buf, size_t len);
-	
-	size_t get_output_pos() const { return pos; }
-	
-private:
-	char* buffer;
-	size_t size;
-	size_t pos;
 	
 };
 
@@ -184,8 +169,8 @@ public:
 	}
 	
 private:
-	OutputStream* stream;
 	char buffer[VNX_BUFFER_SIZE];
+	OutputStream* stream;
 	size_t pos;
 	
 };
@@ -204,10 +189,10 @@ public:
 	void clear();
 	
 	// to keep track of which type codes already have been written to the stream
-	std::unordered_map<uint64_t, const TypeCode*> type_map;
+	std::unordered_map<Hash64, const TypeCode*> type_map;
 	
 	// to keep track of where the type codes have been written
-	std::vector<uint64_t> type_code_positions;
+	std::vector<size_t> type_code_positions;
 	
 };
 

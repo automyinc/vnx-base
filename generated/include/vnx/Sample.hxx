@@ -16,11 +16,9 @@ namespace vnx {
 class Sample : public ::vnx::Message {
 public:
 	
-	::int64_t send_time = 0;
-	::int64_t recv_time = 0;
-	::uint64_t seq_num = 0;
 	::vnx::Hash64 src_mac;
-	::std::string src_name;
+	::uint64_t seq_num = 0;
+	::int64_t recv_time = 0;
 	::vnx::TopicPtr topic;
 	::std::shared_ptr<const ::vnx::Value> value;
 	

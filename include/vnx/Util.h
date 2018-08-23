@@ -17,8 +17,10 @@
 #ifndef INCLUDE_VNX_UTIL_H_
 #define INCLUDE_VNX_UTIL_H_
 
-#include <stdint.h>
 #include <string>
+#include <vector>
+
+#include <stdint.h>
 
 
 namespace vnx {
@@ -27,6 +29,11 @@ namespace vnx {
  * Substitudes any occurence of "from" with "to" and returns the resulting string.
  */
 std::string string_subs(std::string str, const std::string& from, const std::string& to);
+
+/*
+ * Split string into multiple parts based on special char "sep".
+ */
+std::vector<std::string> string_split(std::string str, char sep);
 
 /*
  * Returns a true 64 bit random number.

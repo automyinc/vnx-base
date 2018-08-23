@@ -2,7 +2,9 @@ package vnx;
 
 module Terminal {
 	
-	int max_history = 50;
+	int max_history = 50;				// max number of messages to hold in history
+	
+	int max_list_size = 1000;			// max display size, 0 == unlimited
 	
 	void command(string cmd);
 	

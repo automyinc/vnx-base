@@ -33,16 +33,16 @@ class Pipe;
 /*
  * Open a new pipe known as "service_name" to Node "node".
  */
-std::shared_ptr<Pipe> open_pipe(const std::string& service_name, Node* node, int max_queue_ms = 1);
+std::shared_ptr<Pipe> open_pipe(const std::string& service_name, Node* node, int max_queue_ms = 100);
 
 /*
  * Open a new pipe known by "mac_addr" to Node "node".
  */
-std::shared_ptr<Pipe> open_pipe(Hash64 mac_addr, Node* node, int max_queue_ms = 1);
+std::shared_ptr<Pipe> open_pipe(Hash64 mac_addr, Node* node, int max_queue_ms = 100);
 
 /*
  * Get a pipe to a service called "service_name".
- * Returns 0 if serivce does not exist.
+ * Returns 0 if service does not exist.
  */
 std::shared_ptr<Pipe> get_pipe(const std::string& service_name);
 
@@ -135,6 +135,16 @@ public:
 	std::shared_ptr<const Message> pop();
 	
 	/*
+	 * Temporarily prevent new messages from being pushed into the pipe.
+	 */
+	void pause();
+	
+	/*
+	 * Resume normal operation after pause() was called.
+	 */
+	void resume();
+	
+	/*
 	 * Close this pipe.
 	 */
 	void close();
@@ -144,6 +154,8 @@ public:
 	 * Use only for identification purposes. The node could be deleted at any point in time!
 	 */
 	Node* get_node();
+	
+	bool get_is_paused() const { return is_paused; }
 	
 private:
 	/*
@@ -173,6 +185,8 @@ private:
 	int64_t max_queue_us = 100000;
 	
 	std::queue<entry_t> queue;
+	
+	bool is_paused = false;
 	
 	friend class Node;
 	

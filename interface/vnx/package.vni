@@ -6,7 +6,10 @@ topic topic_info;
 topic module_info;
 topic time_control;
 topic time_sync;
-topic player_status;
 
-extern Hash64 = {4};
-extern TopicPtr = {12, 5};
+extern Hash64 = {4};				// {UINT64}
+extern Hash128 = {11, 2, 4};		// {ARRAY, 2, UINT64}
+extern TopicPtr = {12, 5};			// {LIST, INT8}
+extern Variant = {17};				// {DYNAMIC}
+extern Object = {24};				// {OBJECT}
+extern Buffer = {12, 1};			// {LIST, UINT8}

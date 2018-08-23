@@ -14,8 +14,8 @@
  * from Automy Incorporated.
  */
 
-#ifndef VNX_MULTIRECORDREADER_H_
-#define VNX_MULTIRECORDREADER_H_
+#ifndef INCLUDE_VNX_MULTIRECORDREADER_H_
+#define INCLUDE_VNX_MULTIRECORDREADER_H_
 
 #include <vnx/RecordReader.h>
 
@@ -102,4 +102,4 @@ private:
 
 } // vnx
 
-#endif /* VNX_MULTIRECORDREADER_H_ */
+#endif /* INCLUDE_VNX_MULTIRECORDREADER_H_ */

@@ -16,7 +16,7 @@ public:
 	
 	::std::string filename;
 	::int32_t max_queue_ms = 1000;
-	::int32_t flush_interval_ms = 10000;
+	::int32_t flush_interval_ms = 1000;
 	::int32_t header_size = 262144;
 	::int32_t block_size = 4096;
 	::std::vector<::std::string> topics;

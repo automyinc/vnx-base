@@ -45,11 +45,11 @@ public:
 	
 	~Subscriber();
 	
-	void subscribe(const std::string& domain, const std::string& topic, int max_queue_ms = 100);
+	std::shared_ptr<Pipe> subscribe(const std::string& domain, const std::string& topic, int max_queue_ms = 100);
 	
-	void subscribe(const std::string& full_topic_name, int max_queue_ms = 100);
+	std::shared_ptr<Pipe> subscribe(const std::string& full_topic_name, int max_queue_ms = 100);
 	
-	void subscribe(std::shared_ptr<Topic> topic, int max_queue_ms = 100);
+	std::shared_ptr<Pipe> subscribe(std::shared_ptr<Topic> topic, int max_queue_ms = 100);
 	
 	void unsubscribe(const std::string& domain, const std::string& topic);
 	

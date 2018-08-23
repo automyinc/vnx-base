@@ -2,12 +2,11 @@ package vnx;
 
 class Sample extends Message {
 	
-	long send_time;				// original send timestamp
-	long recv_time;				// timestmap when it was received in this process
+	Hash64 src_mac;				// source identity (unique for each publisher)
 	
 	ulong seq_num;				// first sequence number is at least 1
-	Hash64 src_mac;				// source identity (unique for each publisher)
-	string src_name;			// source name (usually the module name)
+	
+	long recv_time;				// timestmap when it was received in process
 	
 	TopicPtr topic;				// topic
 	

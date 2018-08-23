@@ -17,21 +17,31 @@
 #ifndef INCLUDE_VNX_HASH64_H_
 #define INCLUDE_VNX_HASH64_H_
 
-#include <vnx/CRC64.h>
-
-#include <string.h>
 #include <string>
+#include <stdint.h>
 
 
 namespace vnx {
 
+class Hash128;
+
 class Hash64 {
 public:
-	Hash64() : value(0) {}
+	uint64_t value = 0;
+	
+	Hash64() {}
+	
+	Hash64(const Hash64&) = default;
+	
+	explicit Hash64(uint64_t hash) : value(hash) {}
 	
 	explicit Hash64(const std::string& name);
 	
-	explicit Hash64(uint64_t hash) : value(hash) {}
+	explicit Hash64(const Hash128& hash);
+	
+	Hash64(const void* data, size_t length);
+	
+	Hash64(const Hash64& A, const Hash64& B);
 	
 	static Hash64 rand();
 	
@@ -39,42 +49,23 @@ public:
 		return value;
 	}
 	
-	bool operator==(const std::string& str) const;
+	Hash64& operator=(const Hash64&) = default;
 	
-	bool operator!=(const std::string& str) const;
+	bool operator==(const Hash64& other) const;
 	
-	uint64_t value;
+	bool operator!=(const Hash64& other) const;
+	
+	std::string to_string();
 	
 };
 
 
-inline Hash64 hash64(const char* str) {
-	CRC64 func;
-	func.update(str, strlen(str));
-	return Hash64(func.get());
+inline bool Hash64::operator==(const Hash64& other) const {
+	return value == other.value;
 }
 
-inline Hash64 hash64(const std::string& str) {
-	CRC64 func;
-	func.update(str.c_str(), str.size());
-	return Hash64(func.get());
-}
-
-inline Hash64 hash64(const char* buf, size_t len) {
-	CRC64 func;
-	func.update(buf, len);
-	return Hash64(func.get());
-}
-
-
-inline Hash64::Hash64(const std::string& name) : value(hash64(name)) {}
-
-inline bool Hash64::operator==(const std::string& str) const {
-	return value == hash64(str);
-}
-
-inline bool Hash64::operator!=(const std::string& str) const {
-	return value != hash64(str);
+inline bool Hash64::operator!=(const Hash64& other) const {
+	return value != other.value;
 }
 
 
@@ -88,6 +79,5 @@ namespace std {
 		}
 	};
 } // std
-
 
 #endif /* INCLUDE_VNX_HASH64_H_ */

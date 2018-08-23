@@ -15,8 +15,8 @@ class RecorderStatus : public ::vnx::Value {
 public:
 	
 	::std::string filename;
-	::bool_t is_recording = 0;
-	::float64_t load_factor = 0;
+	::vnx::bool_t is_recording = 0;
+	::vnx::float64_t load_factor = 0;
 	::vnx::RecordHeader info;
 	
 	typedef ::vnx::Value Super;

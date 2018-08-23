@@ -15,6 +15,7 @@ class TerminalBase : public ::vnx::Module {
 public:
 	
 	::int32_t max_history = 50;
+	::int32_t max_list_size = 1000;
 	
 	typedef ::vnx::Module Super;
 	

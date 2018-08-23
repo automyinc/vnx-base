@@ -19,14 +19,13 @@
 
 #include <vnx/OutputStream.h>
 
-#include <cstdio>
 #include <sstream>
 
 
 namespace vnx {
 
-inline void write_value(void* buf, const bool_t& value) {
-	*((uint8_t*)buf) = value;
+inline void write_value(void* buf, const bool& value) {
+	*((uint8_t*)buf) = uint8_t(value);
 }
 inline void write_value(void* buf, const uint8_t& value) {
 	*((uint8_t*)buf) = value;
@@ -66,15 +65,8 @@ inline void write_value(char* buf, const std::array<T, N>& array) {
 	}
 }
 
-template<bool, size_t N>
-inline void write_value(char* buf, const std::array<bool, N>& array) {
-	for(size_t i = 0; i < N; ++i) {
-		write_value(buf + i, array[i]);
-	}
-}
-
-inline void write(TypeOutput& out, const bool_t& value, const TypeCode* type_code = 0, const uint16_t* code = 0) {
-	*((uint8_t*)out.write(sizeof(uint8_t))) = value;
+inline void write(TypeOutput& out, const bool& value, const TypeCode* type_code = 0, const uint16_t* code = 0) {
+	*((uint8_t*)out.write(sizeof(uint8_t))) = uint8_t(value);
 }
 inline void write(TypeOutput& out, const uint8_t& value, const TypeCode* type_code = 0, const uint16_t* code = 0) {
 	*((uint8_t*)out.write(sizeof(uint8_t))) = value;
@@ -107,7 +99,7 @@ inline void write(TypeOutput& out, const float64_t& value, const TypeCode* type_
 	*((float64_t*)out.write(sizeof(float64_t))) = value;
 }
 
-void write_dynamic(TypeOutput& out, const bool_t& value);
+void write_dynamic(TypeOutput& out, const bool& value);
 void write_dynamic(TypeOutput& out, const uint8_t& value);
 void write_dynamic(TypeOutput& out, const uint16_t& value);
 void write_dynamic(TypeOutput& out, const uint32_t& value);
@@ -123,19 +115,15 @@ inline void write_null(TypeOutput& out) {
 	write(out, uint16_t(CODE_NULL));
 }
 
-void write_padding(TypeOutput& out, uint32_t size);
+void write_dynamic_null(TypeOutput& out);
 
-void write_byte_code(TypeOutput& out, const uint16_t* code, uint16_t code_size);
+void write_padding(TypeOutput& out, size_t size);
+
+void write_byte_code(TypeOutput& out, const uint16_t* code);
+
+void write_byte_code(TypeOutput& out, const uint16_t* code, size_t code_size);
 
 void write(TypeOutput& out, const std::string& string, const TypeCode* type_code, const uint16_t* code);
-
-void write_dynamic(TypeOutput& out, const std::string& string);
-
-template<typename T>
-void write(TypeOutput& out, const std::shared_ptr<T>& value, const TypeCode* type_code = 0, const uint16_t* code = 0);
-
-template<typename T>
-void write(std::ostream& out, const std::shared_ptr<T>& value);
 
 template<typename T, size_t N>
 void write(TypeOutput& out, const std::array<T, N>& array, const TypeCode* type_code, const uint16_t* code);
@@ -146,28 +134,27 @@ void write(TypeOutput& out, const std::vector<T>& vector, const TypeCode* type_c
 template<typename K, typename V>
 void write(TypeOutput& out, const std::map<K, V>& map, const TypeCode* type_code, const uint16_t* code);
 
+void write(TypeOutput& out, const Value& value, const TypeCode* type_code, const uint16_t* code);
+
+void write(TypeOutput& out, std::shared_ptr<const Value> value, const TypeCode* type_code, const uint16_t* code);
+
+template<typename T>
+void write(TypeOutput& out, std::shared_ptr<T> value, const TypeCode* type_code, const uint16_t* code);
+
+void write(TypeOutput& out, const Value& value);
+
+void write(TypeOutput& out, std::shared_ptr<const Value> value);
+
+template<typename T>
+void write(TypeOutput& out, std::shared_ptr<T> value);
+
+void write_dynamic(TypeOutput& out, const std::string& string);
+
 template<typename T, size_t N>
 void write(TypeOutput& out, const std::array<T, N>& array, const TypeCode* type_code, const uint16_t* code) {
 	for(size_t i = 0; i < N; ++i) {
 		vnx::type<T>().write(out, array[i], type_code, code);
 	}
-}
-
-template<typename T, size_t N>
-void write_dynamic(TypeOutput& out, const std::array<T, N>& array) {
-	if(N > VNX_MAX_STATIC_SIZE) {
-		throw std::invalid_argument("write_dynamic(std::array<T, N>): N > VNX_MAX_STATIC_SIZE");
-	}
-	const uint16_t value_code = vnx::get_value_code<T>();
-	if(value_code == CODE_NULL) {
-		throw std::invalid_argument("write_dynamic(std::array<T, N>): unsupported typename T");
-	}
-	char* buf = out.write(8);
-	write_value(buf, (uint16_t)3);
-	write_value(buf + 2, (uint16_t)CODE_ARRAY);
-	write_value(buf + 4, (uint16_t)N);
-	write_value(buf + 6, (uint16_t)value_code);
-	out.write(array.data(), N * sizeof(T));
 }
 
 template<typename T>
@@ -176,49 +163,14 @@ void write(TypeOutput& out, const std::vector<T>& vector, const TypeCode* type_c
 		throw std::invalid_argument("write(std::vector<T>): size > VNX_MAX_SIZE");
 	}
 	write(out, (uint32_t)vector.size());
-	const size_t value_size = code ? get_value_size(code[1]) : 0;
-	if(sizeof(T) == value_size) {
-		out.write(vector.data(), vector.size() * value_size);
+	if(sizeof(T) == get_value_size(get_value_code<T>())) {
+		out.write(vector.data(), vector.size() * sizeof(T));
 	} else {
-		const uint16_t* value_code = code + 1;
+		const uint16_t* value_code = code ? code + 1 : 0;
 		for(const T& elem : vector) {
 			vnx::type<T>().write(out, elem, type_code, value_code);
 		}
 	}
-}
-
-template<typename T>
-void write_dynamic(TypeOutput& out, const std::vector<T>& vector) {
-	if(vector.size() > VNX_MAX_SIZE) {
-		throw std::invalid_argument("write_dynamic(std::vector<T>): size > VNX_MAX_SIZE");
-	}
-	const uint16_t value_code = vnx::get_value_code<T>();
-	if(value_code == CODE_NULL) {
-		throw std::invalid_argument("write_dynamic(std::vector<T>): unsupported typename T");
-	}
-	char* buf = out.write(10);
-	write_value(buf, (uint16_t)2);
-	write_value(buf + 2, (uint16_t)CODE_LIST);
-	write_value(buf + 4, (uint16_t)value_code);
-	write_value(buf + 6, (uint32_t)vector.size());
-	out.write(vector.data(), vector.size() * sizeof(T));
-}
-
-template<typename T>
-void write_dynamic(TypeOutput& out, const T* data, const size_t size) {
-	if(size > VNX_MAX_SIZE) {
-		throw std::invalid_argument("write_dynamic(T*): size > VNX_MAX_SIZE");
-	}
-	const uint16_t value_code = vnx::get_value_code<T>();
-	if(value_code == CODE_NULL) {
-		throw std::invalid_argument("write_dynamic(T*): unsupported typename T");
-	}
-	char* buf = out.write(10);
-	write_value(buf, (uint16_t)2);
-	write_value(buf + 2, (uint16_t)CODE_LIST);
-	write_value(buf + 4, (uint16_t)value_code);
-	write_value(buf + 6, (uint32_t)size);
-	out.write(data, size * sizeof(T));
 }
 
 template<typename K, typename V>
@@ -227,25 +179,94 @@ void write(TypeOutput& out, const std::map<K, V>& map, const TypeCode* type_code
 		throw std::invalid_argument("write(std::map<K, V>): size > VNX_MAX_SIZE");
 	}
 	write(out, (uint32_t)map.size());
-	const uint16_t* key_code = code + 2;
-	const uint16_t* value_code = code + (code ? code[1] : 0);
+	const uint16_t* key_code = code ? code + 2 : 0;
+	const uint16_t* value_code = code ? code + code[1] : 0;
 	for(const std::pair<K, V>& elem : map) {
 		vnx::type<K>().write(out, elem.first, type_code, key_code);
 		vnx::type<V>().write(out, elem.second, type_code, value_code);
 	}
 }
 
-void write(TypeOutput& out, const Value& value);
-
-void write(TypeOutput& out, const Value* value);
+template<typename K, typename V>
+void write(TypeOutput& out, const std::pair<K, V>& value, const TypeCode* type_code, const uint16_t* code) {
+	vnx::type<K>().write(out, value.first, type_code, code ? code + code[2] : 0);
+	vnx::type<V>().write(out, value.second, type_code, code ? code + code[3] : 0);
+}
 
 template<typename T>
-void write(TypeOutput& out, const std::shared_ptr<T>& value, const TypeCode* type_code, const uint16_t* code) {
-	if(value) {
-		value->write(out, 0, 0);
-	} else {
-		write(out, uint16_t(CODE_NULL));
+void write_dynamic_list(TypeOutput& out, const T* data, const size_t size) {
+	if(size > VNX_MAX_SIZE) {
+		throw std::invalid_argument("write_dynamic_list(T*): size > VNX_MAX_SIZE");
 	}
+	std::vector<uint16_t> code;
+	vnx::type<std::vector<T>>().create_dynamic_code(code);
+	write_byte_code(out, code.data(), code.size());
+	write(out, (uint32_t)size);
+	if(sizeof(T) == get_value_size(get_value_code<T>())) {
+		out.write(data, size * sizeof(T));
+	} else {
+		for(size_t i = 0; i < size; ++i) {
+			write(out, data[i], 0, code.data());
+		}
+	}
+}
+
+template<typename T>
+void write_dynamic(TypeOutput& out, const T& value) {
+	std::vector<uint16_t> code;
+	vnx::type<T>().create_dynamic_code(code);
+	write_byte_code(out, code.data(), code.size());
+	vnx::type<T>().write(out, value, 0, code.data());
+}
+
+template<typename T, size_t N>
+void write_matrix(TypeOutput& out, const T* data, const std::array<size_t, N>& size, const uint16_t* code) {
+	size_t total_size = 1;
+	for(size_t i = 0; i < N; ++i) {
+		total_size *= size[i];
+		if(size[i] > VNX_MAX_STATIC_SIZE) {
+			throw std::invalid_argument("write_matrix(T*): size[" + std::to_string(i) + "] > VNX_MAX_STATIC_SIZE");
+		}
+	}
+	if(sizeof(T) == get_value_size(get_value_code<T>())) {
+		out.write(data, total_size * sizeof(T));
+	} else {
+		for(size_t i = 0; i < total_size; ++i) {
+			vnx::type<T>().write(out, data[i], 0, code);
+		}
+	}
+}
+
+template<typename T, size_t N>
+void write_image(TypeOutput& out, const T* data, const std::array<size_t, N>& size, const uint16_t* code) {
+	size_t total_size = 1;
+	for(size_t i = 0; i < N; ++i) {
+		total_size *= size[i];
+		if(size[i] > VNX_MAX_SIZE) {
+			throw std::invalid_argument("write_image(T*): size[" + std::to_string(i) + "] > VNX_MAX_SIZE");
+		}
+	}
+	char* buf = out.write(4 * N);
+	for(size_t i = 0; i < N; ++i) {
+		write_value(buf + 4 * i, (uint32_t)size[i]);
+	}
+	if(sizeof(T) == get_value_size(get_value_code<T>())) {
+		out.write(data, total_size * sizeof(T));
+	} else {
+		for(size_t i = 0; i < total_size; ++i) {
+			vnx::type<T>().write(out, data[i], 0, code);
+		}
+	}
+}
+
+template<typename T>
+void write(TypeOutput& out, std::shared_ptr<T> value) {
+	write(out, value, 0, 0);
+}
+
+template<typename T>
+void write(TypeOutput& out, std::shared_ptr<T> value, const TypeCode* type_code, const uint16_t* code) {
+	write(out, std::dynamic_pointer_cast<const Value>(value), type_code, code);
 }
 
 template<typename T>
@@ -254,11 +275,12 @@ void type<T>::write(TypeOutput& out, const T& value, const TypeCode* type_code, 
 }
 
 
-inline void write(std::ostream& out, const uint8_t& value) { out << size_t(value); }
+inline void write(std::ostream& out, const bool& value) { out << int(value); }
+inline void write(std::ostream& out, const uint8_t& value) { out << int(value); }
 inline void write(std::ostream& out, const uint16_t& value) { out << value; }
 inline void write(std::ostream& out, const uint32_t& value) { out << value; }
 inline void write(std::ostream& out, const uint64_t& value) { out << value; }
-inline void write(std::ostream& out, const int8_t& value) { out << ssize_t(value); }
+inline void write(std::ostream& out, const int8_t& value) { out << int(value); }
 inline void write(std::ostream& out, const int16_t& value) { out << value; }
 inline void write(std::ostream& out, const int32_t& value) { out << value; }
 inline void write(std::ostream& out, const int64_t& value) { out << value; }
@@ -278,7 +300,7 @@ inline void write(std::ostream& out, const float64_t& value) {
 void write(std::ostream& out, const std::string& value);
 
 template<typename T>
-void write(std::ostream& out, const std::shared_ptr<T>& value);
+void write(std::ostream& out, std::shared_ptr<T> value);
 
 template<class Iter>
 void write_list(std::ostream& out, Iter first, Iter last);
@@ -336,12 +358,50 @@ void write_list(std::ostream& out, Iter first, Iter last) {
 }
 
 template<typename T>
-void write(std::ostream& out, const std::shared_ptr<T>& value) {
+void write(std::ostream& out, std::shared_ptr<T> value) {
 	if(value) {
 		value->write(out);
 	} else {
 		out << "{}";
 	}
+}
+
+template<typename T>
+void write(std::ostream& out, const T* data, const size_t size) {
+	out << "[";
+	for(size_t i = 0; i < size; ++i) {
+		if(i > 0) {
+			out << ", ";
+		}
+		out << data[i];
+	}
+	out << "]";
+}
+
+template<typename T, size_t N>
+void write_matrix(std::ostream& out, const T* data, const std::array<size_t, N>& size) {
+	size_t total_size = 1;
+	bool is_array = true;
+	for(size_t i = 0; i < N; ++i) {
+		total_size *= size[i];
+		if(i > 0 && size[i] != 1) {
+			is_array = false;
+		}
+	}
+	if(is_array) {
+		write(out, data, total_size);
+	} else {
+		out << "{\"size\": ";
+		write(out, size);
+		out << ", \"data\": ";
+		write(out, data, total_size);
+		out << "}";
+	}
+}
+
+template<typename T, size_t N>
+void write_image(std::ostream& out, const T* data, const std::array<size_t, N>& size) {
+	write_matrix(out, data, size);
 }
 
 template<typename T>
@@ -376,31 +436,15 @@ const TypeCode* write_type_code(TypeOutput& out) {
 template<typename T>
 void write_class_header(TypeOutput& out) {
 	char* const buf = out.write(10);
-	write_value(buf, uint16_t(CODE_CLASS));
-	write_value(buf + 2, T::VNX_CODE_HASH);
+	write_value(buf, uint16_t(CODE_TYPE));
+	write_value(buf + 2, uint64_t(T::VNX_CODE_HASH));
 }
 
 void write_class_header(TypeOutput& out, const TypeCode* type_code);
 
-template<typename T>
-void write_to_file(const std::string& file_name, const T& value) {
-	::FILE* file = ::fopen(file_name.c_str(), "wb");
-	if(!file) {
-		throw std::runtime_error("fopen('" + file_name + "') failed!");
-	}
-	FileOutputStream stream(file);
-	TypeOutput out(&stream);
-	vnx::write(out, value);
-	out.flush();
-	::fclose(file);
-}
+void write_to_file(const std::string& file_name, const Value& value);
 
-template<typename T>
-void write_to_file(const std::string& file_name, std::shared_ptr<const T> value) {
-	if(value) {
-		write_to_file(file_name, *value);
-	}
-}
+void write_to_file(const std::string& file_name, std::shared_ptr<const Value> value);
 
 
 } // vnx

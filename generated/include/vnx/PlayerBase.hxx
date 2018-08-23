@@ -18,13 +18,13 @@ public:
 	::std::vector<::std::string> files;
 	::int32_t interval_ms = 100;
 	::int32_t max_time_gap_ms = 5000;
-	::float64_t play_speed = 1;
-	::bool_t is_default_enable = true;
-	::bool_t is_blocking = false;
-	::bool_t is_repeat = false;
-	::bool_t is_autostart = false;
-	::bool_t is_autoclose = false;
-	::bool_t is_autoshutdown = false;
+	::vnx::float64_t play_speed = 1;
+	::vnx::bool_t is_default_enable = true;
+	::vnx::bool_t is_blocking = false;
+	::vnx::bool_t is_repeat = false;
+	::vnx::bool_t is_autostart = false;
+	::vnx::bool_t is_autoclose = false;
+	::vnx::bool_t is_autoshutdown = false;
 	::std::map<::vnx::TopicPtr, ::vnx::TopicPtr> topic_map;
 	
 	typedef ::vnx::Module Super;
@@ -54,9 +54,9 @@ protected:
 	virtual void play() = 0;
 	virtual void seek_by_count(const ::int64_t& delta_count) = 0;
 	virtual void seek_by_time(const ::int64_t& delta_us) = 0;
-	virtual void seek_to_position(const ::float64_t& position) = 0;
+	virtual void seek_to_position(const ::vnx::float64_t& position) = 0;
 	virtual void seek_to_time(const ::int64_t& time_us) = 0;
-	virtual void set_speed(const ::float64_t& speed) = 0;
+	virtual void set_speed(const ::vnx::float64_t& speed) = 0;
 	virtual void stop() = 0;
 	virtual void toggle() = 0;
 	

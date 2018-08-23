@@ -16,9 +16,10 @@ public:
 	
 	::std::string proxy_name;
 	::std::string topic_expr;
-	::bool_t only_once = false;
-	::bool_t header_only = false;
-	::bool_t pretty_print = true;
+	::vnx::bool_t only_once = false;
+	::vnx::bool_t header_only = false;
+	::vnx::bool_t pretty_print = true;
+	::int32_t max_list_size = 1000;
 	::int32_t max_queue_ms = 100;
 	::vnx::Hash64 receive_tunnel;
 	

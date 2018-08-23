@@ -16,7 +16,7 @@ public:
 	::std::string address;
 	::std::vector<::std::string> export_list;
 	::int32_t max_queue_ms = 100;
-	::bool_t json_output = false;
+	::vnx::bool_t json_output = false;
 	
 	typedef ::vnx::Module Super;
 	

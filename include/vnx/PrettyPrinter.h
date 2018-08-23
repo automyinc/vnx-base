@@ -25,10 +25,11 @@ namespace vnx {
 
 class PrettyPrinter : public Visitor {
 public:
-	PrettyPrinter(std::ostream& out) : out(out) {}
+	size_t max_size = 0;		// max display size of list and map, 0 = unlimited
+	
+	PrettyPrinter(std::ostream& out) : out(&out) {}
 	
 	void visit_null();
-	void visit(const bool& value);
 	void visit(const uint8_t& value);
 	void visit(const uint16_t& value);
 	void visit(const uint32_t& value);
@@ -51,18 +52,17 @@ public:
 	void map_entry_end(size_t index);
 	void map_end(size_t size);
 	
-	void type_begin(const TypeCode& type);
-	void type_field(const TypeField& field, size_t index);
-	void type_end(const TypeCode& type);
-	
-	void enum_value(uint32_t value, const std::string& name);
-	
-private:
+	void type_begin(size_t num_fields);
+	void type_field(const std::string& field, size_t index);
+	void type_end(size_t num_fields);
+
+protected:
 	void add_indentation();
 	
-private:
-	std::ostream& out;
+	std::ostream* out;
+	std::ostream* tmp = 0;
 	size_t stack = 0;
+	size_t resume = 0;
 	
 };
 
