@@ -4,8 +4,8 @@ class RecordHeader {
 	
 	string filename;
 	
-	int header_size;
-	int block_size;
+	uint header_size;
+	uint block_size;
 	
 	long begin_time;
 	long end_time;
@@ -14,10 +14,13 @@ class RecordHeader {
 	long num_samples;
 	long num_samples_lost;
 	
-	vector<ulong> type_codes;
+	vector<ulong> type_code_positions;
 	
 	vector<record_topic_info_t> topics;
 	
 	vector<Marker> markers;
+	
+	
+	alias type_codes type_code_positions;
 	
 }

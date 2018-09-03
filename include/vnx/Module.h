@@ -61,8 +61,7 @@ protected:
 	 * Publish a copy of the value.
 	 */
 	void publish(const Value& value, TopicPtr topic, uint16_t flags = 0) {
-		std::shared_ptr<Value> copy = value.clone();
-		publisher->publish(copy, topic, flags);
+		publisher->publish(value.clone(), topic, flags);
 	}
 	
 	/*
@@ -105,7 +104,7 @@ protected:
 	
 	/*
 	 * Main function, just like the real int main().
-	 * User can override it, just make sure to call Super::main() at some point.
+	 * Make sure to call Super::main() at some point when over-riding it.
 	 */
 	virtual void main();
 	
@@ -142,8 +141,6 @@ private:
 	std::unordered_map<uint64_t, uint64_t> seq_map;
 	std::vector<std::shared_ptr<Timer>> timers;
 	
-	// all below protected by mutex
-	std::mutex mutex;
 	std::thread thread;
 	std::shared_ptr<Module> self_ptr;
 	

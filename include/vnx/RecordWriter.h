@@ -30,11 +30,11 @@ public:
 	/*
 	 * Creates a new record writer, writing to a file given by "filename".
 	 * Will truncate an already existing file.
-	 * "header_size" is the maximum size of the header that is reserved at the beginning of the file.
+	 * "header_size" is the maximum size in bytes of the header that is reserved at the beginning of the file.
 	 * "block_size" is the size of each block in terms of number of samples.
-	 * Bigger blocks increase read performance at the expense of increased write overhead (caused by repeated calls to flush()).
+	 * Bigger blocks increase seek performance during playback at the expense of increased write overhead.
 	 */
-	RecordWriter(const std::string& filename, int32_t header_size = 262144, int32_t block_size = 4096);
+	RecordWriter(const std::string& filename, uint32_t header_size = 262144, uint32_t block_size = 4096);
 	
 	~RecordWriter();
 	

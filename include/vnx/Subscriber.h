@@ -20,6 +20,8 @@
 #include <vnx/Node.h>
 #include <vnx/Topic.h>
 
+#include <unordered_map>
+
 
 namespace vnx {
 
@@ -33,18 +35,12 @@ namespace vnx {
  * The Subscriber keeps track of subscriptions. It automatically unsubscribes all topics upon exit. 
  */
 class Subscriber : public Node {
-private:
-	struct subscription_t {
-		int count = 0;
-		std::shared_ptr<Pipe> pipe;
-		std::shared_ptr<Topic> topic;
-	};
-	
 public:
 	Subscriber();
 	
 	~Subscriber();
 	
+protected:
 	std::shared_ptr<Pipe> subscribe(const std::string& domain, const std::string& topic, int max_queue_ms = 100);
 	
 	std::shared_ptr<Pipe> subscribe(const std::string& full_topic_name, int max_queue_ms = 100);
@@ -59,10 +55,16 @@ public:
 	
 	void unsubscribe_all();
 	
-	void close();
+	void close() override;
 	
 private:
-	std::map<Hash64, subscription_t> topic_map;
+	struct subscription_t {
+		int count = 0;
+		std::shared_ptr<Pipe> pipe;
+		std::shared_ptr<Topic> topic;
+	};
+	
+	std::unordered_map<Hash64, subscription_t> topic_map;
 	
 };
 

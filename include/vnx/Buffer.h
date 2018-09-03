@@ -18,6 +18,7 @@
 #define INCLUDE_VNX_BUFFER_H
 
 #include <vnx/package.hxx>
+#include <vnx/InputStream.h>
 
 #include <cstring>
  
@@ -28,50 +29,21 @@ class Buffer {
 public:
 	Buffer() = default;
 	
-	explicit Buffer(size_t init_capacity) {
-		reserve(init_capacity);
-	}
+	explicit Buffer(size_t init_capacity);
 	
-	Buffer(const Buffer& other) {
-		*this = other;
-	}
+	Buffer(const Buffer& other);
 	
-	~Buffer() {
-		if(data_) {
-			::free(data_);
-		}
-	}
+	Buffer(const std::string& other);
 	
-	Buffer& operator=(const Buffer& other) {
-		reserve(other.capacity_);
-		::memcpy(data_, other.data_, other.size_);
-		set_size(other.size_);
-		return *this;
-	}
+	~Buffer();
 	
-	Buffer& operator=(const std::string& other) {
-		reserve(other.size());
-		::memcpy(data_, other.data(), capacity_);
-		set_size(capacity_);
-		return *this;
-	}
+	Buffer& operator=(const Buffer& other);
 	
-	void reserve(size_t new_capacity) {
-		if(new_capacity > capacity_) {
-			if(data_) {
-				::free(data_);
-			}
-			data_ = ::malloc(new_capacity);
-			capacity_ = new_capacity;
-		}
-	}
+	Buffer& operator=(const std::string& other);
 	
-	void set_size(size_t new_size) {
-		if(new_size > capacity_) {
-			throw std::logic_error("Buffer::set_size(): new_size > capacity_");
-		}
-		size_ = new_size;
-	}
+	void reserve(size_t new_capacity);
+	
+	void set_size(size_t new_size);
 	
 	size_t size() const {
 		return size_;
@@ -97,20 +69,31 @@ public:
 		return ((const char*)data_ + offset);
 	}
 	
-	void release() {
-		data_ = 0;
-		size_ = 0;
-		capacity_ = 0;
-	}
+	void release();
 	
 	void clear() {
 		size_ = 0;
 	}
 	
+	std::string as_string() const;
+	
 private:
 	void* data_ = 0;
 	size_t size_ = 0;
 	size_t capacity_ = 0;
+	
+};
+
+
+class BufferInputStream : public InputStream {
+public:
+	BufferInputStream(const Buffer* data_) : data(data_) {}
+	
+	size_t read(void* buf, size_t len) override;
+
+private:
+	const Buffer* data = 0;
+	size_t pos = 0;
 	
 };
 

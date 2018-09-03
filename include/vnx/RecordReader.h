@@ -124,7 +124,7 @@ private:
 	std::shared_ptr<RecordHeader> header;
 	std::shared_ptr<RecordIndex> curr_block;
 	std::shared_ptr<Sample> curr_sample;
-	int32_t index_pos = -1;
+	int64_t index_pos = -1;
 	
 	bool is_begin_of_file = false;
 	bool is_end_of_file = false;

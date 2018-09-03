@@ -65,6 +65,22 @@ bool send_msg(const std::string& service_name, std::shared_ptr<const Message> ms
 bool send_msg(Hash64 mac_addr, std::shared_ptr<const Message> msg);
 
 /*
+ * Send a message through a pipe.
+ */
+bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<const Message> msg);
+
+/*
+ * Send a message through a pipe.
+ * Applies given flags before sending: msg->flags |= flags;
+ */
+bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<Message> msg, uint16_t flags);
+
+/*
+ * Connect a pipe to a node.
+ */
+void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms = 100);
+
+/*
  * Unregister a service known by "service_name".
  */
 void remove_pipe(const std::string& service_name);
@@ -119,42 +135,47 @@ public:
 	Pipe(const Pipe& other) = delete;
 	Pipe& operator=(const Pipe& other) = delete;
 	
-	/*
-	 * Connect a Pipe to a Node.
-	 */
-	friend void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms = 100);
+	static std::shared_ptr<Pipe> create();
 	
 	/*
-	 * Send a message through a Pipe.
+	 * Connect a Pipe to a Node. (thread-safe)
+	 */
+	friend void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms);
+	
+	/*
+	 * Send a message through a Pipe. (thread-safe)
 	 */
 	friend bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<const Message> msg);
 	
 	/*
-	 * Get the next available message. Returns 0 if no message available.
+	 * Get the next available message. Returns 0 if no message available. (thread-safe)
 	 */
 	std::shared_ptr<const Message> pop();
 	
 	/*
-	 * Temporarily prevent new messages from being pushed into the pipe.
+	 * Temporarily prevent new messages from being pushed into the pipe. (thread-safe)
 	 */
 	void pause();
 	
 	/*
-	 * Resume normal operation after pause() was called.
+	 * Resume normal operation after pause() was called. (thread-safe)
 	 */
 	void resume();
 	
 	/*
-	 * Close this pipe.
+	 * Close this pipe. (thread-safe)
 	 */
 	void close();
 	
 	/*
 	 * Get a pointer to the node which is connected to this pipe.
-	 * Use only for identification purposes. The node could be deleted at any point in time!
+	 * Only for identification purposes, the node could be deleted at any point in time!
 	 */
 	Node* get_node();
 	
+	/*
+	 * Returns if pipe is currently paused.
+	 */
 	bool get_is_paused() const { return is_paused; }
 	
 private:

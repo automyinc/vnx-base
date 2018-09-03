@@ -32,6 +32,7 @@ std::string string_subs(std::string str, const std::string& from, const std::str
 
 /*
  * Split string into multiple parts based on special char "sep".
+ * An empty input string results in a vector of size 1 with an empty string as the only element.
  */
 std::vector<std::string> string_split(std::string str, char sep);
 
@@ -39,6 +40,22 @@ std::vector<std::string> string_split(std::string str, char sep);
  * Returns a true 64 bit random number.
  */
 uint64_t rand64();
+
+/*
+ * Converts integers to hex strings efficiently.
+ */
+template<typename T>
+std::string to_hex_string(const T& value) {
+	static const char map[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+	std::string str;
+	str.resize(sizeof(T) * 2);
+	auto p_value = (const uint8_t*)(&value);
+	for(size_t i = 0; i < sizeof(T); ++i) {
+		str[(sizeof(T) - i - 1) * 2] = map[(p_value[i] & 0xF0) >> 4];
+		str[(sizeof(T) - i - 1) * 2 + 1] = map[p_value[i] & 0x0F];
+	}
+	return str;
+}
 
 
 } // vnx

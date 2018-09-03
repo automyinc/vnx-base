@@ -30,11 +30,26 @@ void skip(TypeInput& in, const TypeCode* type_code, const uint16_t* code);
 
 uint16_t read_byte_code(TypeInput& in, uint16_t* code);
 
+inline bool flip_bytes(const bool& value) { return (value != 0); }
+inline uint8_t flip_bytes(const uint8_t& value) { return value; }
+inline uint16_t flip_bytes(const uint16_t& value) { return (value >> 8) | (value << 8); }
+inline uint32_t flip_bytes(const uint32_t& value) { return uint32_t(flip_bytes(uint16_t(value >> 16))) | (uint32_t(flip_bytes(uint16_t(value))) << 16); }
+inline uint64_t flip_bytes(const uint64_t& value) { return uint64_t(flip_bytes(uint32_t(value >> 32))) | (uint64_t(flip_bytes(uint32_t(value))) << 32); }
+inline char flip_bytes(const char& value) { return value; }
+inline int8_t flip_bytes(const int8_t& value) { return value; }
+inline int16_t flip_bytes(const int16_t& value) { return int16_t(flip_bytes(uint16_t(value))); }
+inline int32_t flip_bytes(const int32_t& value) { return int32_t(flip_bytes(uint32_t(value))); }
+inline int64_t flip_bytes(const int64_t& value) { return int64_t(flip_bytes(uint64_t(value))); }
+inline float32_t flip_bytes(const float32_t& value) { const uint32_t tmp = flip_bytes(reinterpret_cast<const uint32_t&>(value)); return reinterpret_cast<const float32_t&>(tmp); }
+inline float64_t flip_bytes(const float64_t& value) { const uint64_t tmp = flip_bytes(reinterpret_cast<const uint64_t&>(value)); return reinterpret_cast<const float64_t&>(tmp); }
+inline Hash64 flip_bytes(const Hash64& value) { return Hash64(flip_bytes(uint64_t(value))); }
+
 inline void read(TypeInput& in, bool& value) { value = *((uint8_t*)in.read(sizeof(uint8_t))); }
 inline void read(TypeInput& in, uint8_t& value) { value = *((uint8_t*)in.read(sizeof(uint8_t))); }
 inline void read(TypeInput& in, uint16_t& value) { value = *((uint16_t*)in.read(sizeof(uint16_t))); }
 inline void read(TypeInput& in, uint32_t& value) { value = *((uint32_t*)in.read(sizeof(uint32_t))); }
 inline void read(TypeInput& in, uint64_t& value) { value = *((uint64_t*)in.read(sizeof(uint64_t))); }
+inline void read(TypeInput& in, char& value) { value = *((int8_t*)in.read(sizeof(int8_t))); }
 inline void read(TypeInput& in, int8_t& value) { value = *((int8_t*)in.read(sizeof(int8_t))); }
 inline void read(TypeInput& in, int16_t& value) { value = *((int16_t*)in.read(sizeof(int16_t))); }
 inline void read(TypeInput& in, int32_t& value) { value = *((int32_t*)in.read(sizeof(int32_t))); }
@@ -48,6 +63,7 @@ inline void read_value(const void* buf, uint8_t& value) { value = *((uint8_t*)bu
 inline void read_value(const void* buf, uint16_t& value) { value = *((uint16_t*)buf); }
 inline void read_value(const void* buf, uint32_t& value) { value = *((uint32_t*)buf); }
 inline void read_value(const void* buf, uint64_t& value) { value = *((uint64_t*)buf); }
+inline void read_value(const void* buf, char& value) { value = *((int8_t*)buf); }
 inline void read_value(const void* buf, int8_t& value) { value = *((int8_t*)buf); }
 inline void read_value(const void* buf, int16_t& value) { value = *((int16_t*)buf); }
 inline void read_value(const void* buf, int32_t& value) { value = *((int32_t*)buf); }
@@ -57,7 +73,7 @@ inline void read_value(const void* buf, float64_t& value) { value = *((float64_t
 inline void read_value(const void* buf, Hash64& value) { value = Hash64(*((uint64_t*)buf)); }
 
 template<typename T>
-inline void read_value(const void* buf, T& value, const uint16_t* code) {
+void read_value(const void* buf, T& value, const uint16_t* code) {
 	switch(code[0]) {
 		case CODE_NULL: value = T(); return;
 		case CODE_UINT8: value = *((const uint8_t*)buf); return;
@@ -70,17 +86,28 @@ inline void read_value(const void* buf, T& value, const uint16_t* code) {
 		case CODE_INT64: value = *((const int64_t*)buf); return;
 		case CODE_FLOAT: value = *((const float32_t*)buf); return;
 		case CODE_DOUBLE: value = *((const float64_t*)buf); return;
+		case CODE_ALT_UINT8: value = flip_bytes(*((const uint8_t*)buf)); return;
+		case CODE_ALT_UINT16: value = flip_bytes(*((const uint16_t*)buf)); return;
+		case CODE_ALT_UINT32: value = flip_bytes(*((const uint32_t*)buf)); return;
+		case CODE_ALT_UINT64: value = flip_bytes(*((const uint64_t*)buf)); return;
+		case CODE_ALT_INT8: value = flip_bytes(*((const int8_t*)buf)); return;
+		case CODE_ALT_INT16: value = flip_bytes(*((const int16_t*)buf)); return;
+		case CODE_ALT_INT32: value = flip_bytes(*((const int32_t*)buf)); return;
+		case CODE_ALT_INT64: value = flip_bytes(*((const int64_t*)buf)); return;
+		case CODE_ALT_FLOAT: value = flip_bytes(*((const float32_t*)buf)); return;
+		case CODE_ALT_DOUBLE: value = flip_bytes(*((const float64_t*)buf)); return;
 		default: value = T();
 	}
 }
 
 template<typename T, size_t N>
-inline void read_value(const char* buf, std::array<T, N>& array, const uint16_t* code) {
-	if(!code || code[0] != CODE_ARRAY) {
-		array = {};
-		return;
+void read_value(const char* buf, std::array<T, N>& array, const uint16_t* code) {
+	size_t size = 0;
+	switch(code[0]) {
+		case CODE_ARRAY: size = code[1]; break;
+		case CODE_ALT_ARRAY: size = flip_bytes(code[1]); break;
 	}
-	const size_t size = code[1] <= N ? code[1] : N;
+	size = size <= N ? size : N;
 	const size_t value_size = get_value_size(code[2]);
 	for(size_t i = 0; i < size; ++i) {
 		read_value(buf + i * value_size, array[i], code + 2);
@@ -94,7 +121,7 @@ template<typename T>
 void read_dynamic_value(TypeInput& in, T& value);
 
 template<typename T>
-inline void read_value(TypeInput& in, T& value, const TypeCode* type_code, const uint16_t* code) {
+void read_value(TypeInput& in, T& value, const TypeCode* type_code, const uint16_t* code) {
 	switch(code[0]) {
 		case CODE_NULL: value = T(); return;
 		case CODE_UINT8: value = *((const uint8_t*)in.read(sizeof(uint8_t))); return;
@@ -107,7 +134,18 @@ inline void read_value(TypeInput& in, T& value, const TypeCode* type_code, const
 		case CODE_INT64: value = *((const int64_t*)in.read(sizeof(int64_t))); return;
 		case CODE_FLOAT: value = *((const float32_t*)in.read(sizeof(float32_t))); return;
 		case CODE_DOUBLE: value = *((const float64_t*)in.read(sizeof(float64_t))); return;
-		case CODE_DYNAMIC: read_dynamic_value(in, value); return;
+		case CODE_ALT_UINT8: value = flip_bytes(*((const uint8_t*)in.read(sizeof(uint8_t)))); return;
+		case CODE_ALT_UINT16: value = flip_bytes(*((const uint16_t*)in.read(sizeof(uint16_t)))); return;
+		case CODE_ALT_UINT32: value = flip_bytes(*((const uint32_t*)in.read(sizeof(uint32_t)))); return;
+		case CODE_ALT_UINT64: value = flip_bytes(*((const uint64_t*)in.read(sizeof(uint64_t)))); return;
+		case CODE_ALT_INT8: value = flip_bytes(*((const int8_t*)in.read(sizeof(int8_t)))); return;
+		case CODE_ALT_INT16: value = flip_bytes(*((const int16_t*)in.read(sizeof(int16_t)))); return;
+		case CODE_ALT_INT32: value = flip_bytes(*((const int32_t*)in.read(sizeof(int32_t)))); return;
+		case CODE_ALT_INT64: value = flip_bytes(*((const int64_t*)in.read(sizeof(int64_t)))); return;
+		case CODE_ALT_FLOAT: value = flip_bytes(*((const float32_t*)in.read(sizeof(float32_t)))); return;
+		case CODE_ALT_DOUBLE: value = flip_bytes(*((const float64_t*)in.read(sizeof(float64_t)))); return;
+		case CODE_DYNAMIC:
+		case CODE_ALT_DYNAMIC: read_dynamic_value(in, value); return;
 		default:
 			value = T();
 			skip(in, type_code, code);
@@ -136,6 +174,9 @@ inline void read(TypeInput& in, uint32_t& value, const TypeCode* type_code, cons
 inline void read(TypeInput& in, uint64_t& value, const TypeCode* type_code, const uint16_t* code) {
 	read_value(in, value, type_code, code);
 }
+inline void read(TypeInput& in, char& value, const TypeCode* type_code, const uint16_t* code) {
+	read_value(in, value, type_code, code);
+}
 inline void read(TypeInput& in, int8_t& value, const TypeCode* type_code, const uint16_t* code) {
 	read_value(in, value, type_code, code);
 }
@@ -155,10 +196,15 @@ inline void read(TypeInput& in, float64_t& value, const TypeCode* type_code, con
 	read_value(in, value, type_code, code);
 }
 
+/** \brief Reads a dynamically allocated string from the input stream.
+ * 
+ * Directly compatible with {CODE_LIST, CODE_INT8}.
+ * Indirectly compatible with everything by converting the data to a JSON string.
+ * For example if the input data is of type CODE_INT32 the integer will be converted to a string.
+ * Or if the input is of type CODE_ARRAY it will be converted to: [..., ...] (without quotes)
+ * Enum names will be converted to a JSON string: "ENUM_VALUE" (with quotes)
+ */
 void read(TypeInput& in, std::string& string, const TypeCode* type_code, const uint16_t* code);
-
-template<typename T>
-void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, const uint16_t* code);
 
 template<typename T, size_t N>
 void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, const uint16_t* code);
@@ -166,96 +212,313 @@ void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, con
 template<typename T>
 void read(TypeInput& in, std::vector<T>& vector, const TypeCode* type_code, const uint16_t* code);
 
+template<typename T>
+void read(TypeInput& in, std::list<T>& list, const TypeCode* type_code, const uint16_t* code);
+
+template<typename T>
+void read(TypeInput& in, std::set<T>& set, const TypeCode* type_code, const uint16_t* code);
+
+template<typename T, typename C>
+void read(TypeInput& in, std::set<T, C>& set, const TypeCode* type_code, const uint16_t* code);
+
+template<typename T>
+void read(TypeInput& in, std::unordered_set<T>& set, const TypeCode* type_code, const uint16_t* code);
+
+template<typename T, typename C>
+void read(TypeInput& in, std::unordered_set<T, C>& set, const TypeCode* type_code, const uint16_t* code);
+
 template<typename K, typename V>
 void read(TypeInput& in, std::map<K, V>& map, const TypeCode* type_code, const uint16_t* code);
 
-template<typename T, size_t N>
-void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, const uint16_t* code) {
-	if(!code || code[0] != CODE_ARRAY) {
-		array = {};
-		skip(in, type_code, code);
-		return;
+template<typename K, typename V, typename C>
+void read(TypeInput& in, std::map<K, V, C>& map, const TypeCode* type_code, const uint16_t* code);
+
+template<typename K, typename V>
+void read(TypeInput& in, std::unordered_map<K, V>& map, const TypeCode* type_code, const uint16_t* code);
+
+template<typename K, typename V, typename C>
+void read(TypeInput& in, std::unordered_map<K, V, C>& map, const TypeCode* type_code, const uint16_t* code);
+
+template<typename T>
+void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, const uint16_t* code);
+
+/**
+ * \brief Reads a statically allocated array (ContiguousContainer) from the input stream.
+ * 
+ * If there is less elements in the data the remaining elements in \p array will be default assigned.
+ * Compatible with CODE_ARRAY data. Works for std::array and pre-allocated std::vector.
+ */
+template<typename T>
+void read_array(TypeInput& in, T& array, const TypeCode* type_code, const uint16_t* code) {
+	size_t size = 0;
+	switch(code[0]) {
+		case CODE_ARRAY: size = code[1]; break;
+		case CODE_ALT_ARRAY: size = flip_bytes(code[1]); break;
+		default: skip(in, type_code, code);
 	}
-	const size_t size = code[1];
-	const uint16_t* value_code = code + 2;
-	const size_t value_size = get_value_size(value_code[0]);
-	if(get_value_code<T>() == value_code[0] && sizeof(T) == value_size && size <= N) {
-		in.read((char*)array.data(), size * sizeof(T));
-	} else {
-		for(size_t i = 0; i < size; ++i) {
-			if(i < N) {
-				vnx::type<T>().read(in, array[i], type_code, value_code);
-			} else {
-				skip(in, type_code, value_code);
+	if(size) {
+		const uint16_t* value_code = code + 2;
+		if(is_equivalent<typename T::value_type>(value_code[0]) && size <= array.size()) {
+			in.read((char*)array.data(), size * sizeof(typename T::value_type));
+		} else {
+			for(size_t i = 0; i < size; ++i) {
+				if(i < array.size()) {
+					vnx::type<typename T::value_type>().read(in, array[i], type_code, value_code);
+				} else {
+					skip(in, type_code, value_code);
+				}
 			}
 		}
 	}
-	for(size_t i = size; i < N; ++i) {
-		array[i] = T();
+	for(size_t i = size; i < array.size(); ++i) {
+		array[i] = typename T::value_type();
 	}
 }
 
+/// Same as read_array<T>() with T = std::array<T, N>
+template<typename T, size_t N>
+void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, const uint16_t* code) {
+	read_array(in, array, type_code, code);
+}
+
+/**
+ * \brief Reads a dynamically allocated array (ContiguousContainer) from the input stream.
+ * 
+ * Compatible with CODE_LIST.
+ */
 template<typename T>
-void read(TypeInput& in, std::vector<T>& vector, const TypeCode* type_code, const uint16_t* code) {
-	if(!code || code[0] != CODE_LIST) {
+void read_vector(TypeInput& in, T& vector, const TypeCode* type_code, const uint16_t* code) {
+	if(code[0] != CODE_LIST) {
 		vector.clear();
 		skip(in, type_code, code);
 		return;
 	}
-	uint32_t size;
-	read(in, size);
+	uint32_t size = 0;
+	switch(code[0]) {
+		case CODE_LIST:
+			read(in, size);
+			break;
+		case CODE_ALT_LIST:
+			read(in, size);
+			size = flip_bytes(size);
+			break;
+		default:
+			vector.clear();
+			skip(in, type_code, code);
+			return;
+	}
 	vector.resize(size);
 	const uint16_t* value_code = code + 1;
-	const size_t value_size = get_value_size(value_code[0]);
-	if(get_value_code<T>() == value_code[0] && sizeof(T) == value_size) {
-		in.read((char*)vector.data(), size * sizeof(T));
+	if(is_equivalent<typename T::value_type>(value_code[0])) {
+		in.read((char*)vector.data(), size * sizeof(typename T::value_type));
 	} else {
 		for(uint32_t i = 0; i < size; ++i) {
-			vnx::type<T>().read(in, vector[i], type_code, value_code);
+			vnx::type<typename T::value_type>().read(in, vector[i], type_code, value_code);
 		}
 	}
 }
 
+/// Same as read_vector<T>() with T = std::vector<T>
+template<typename T>
+void read(TypeInput& in, std::vector<T>& vector, const TypeCode* type_code, const uint16_t* code) {
+	read_vector(in, vector, type_code, code);
+}
+
+/**
+ * \brief Reads a dynamically allocated list (SequenceContainer) from the input stream.
+ * 
+ * Compatible with CODE_LIST.
+ */
+template<typename T>
+void read_list(TypeInput& in, T& list, const TypeCode* type_code, const uint16_t* code) {
+	list.clear();
+	if(code[0] != CODE_LIST) {
+		skip(in, type_code, code);
+		return;
+	}
+	uint32_t size = 0;
+	switch(code[0]) {
+		case CODE_LIST:
+			read(in, size);
+			break;
+		case CODE_ALT_LIST:
+			read(in, size);
+			size = flip_bytes(size);
+			break;
+		default:
+			skip(in, type_code, code);
+			return;
+	}
+	const uint16_t* value_code = code + 1;
+	for(uint32_t i = 0; i < size; ++i) {
+		list.emplace_back();
+		vnx::type<typename T::value_type>().read(in, list.back(), type_code, value_code);
+	}
+}
+
+/// Same as read_list<T>() with T = std::list<T>
+template<typename T>
+void read(TypeInput& in, std::list<T>& list, const TypeCode* type_code, const uint16_t* code) {
+	read_list(in, list, type_code, code);
+}
+
+/**
+ * \brief Reads a dynamically allocated set (AssociativeContainer) from the input stream.
+ * 
+ * Compatible with CODE_LIST.
+ */
+template<typename T>
+void read_set(TypeInput& in, T& set, const TypeCode* type_code, const uint16_t* code) {
+	set.clear();
+	if(code[0] != CODE_LIST) {
+		skip(in, type_code, code);
+		return;
+	}
+	uint32_t size = 0;
+	switch(code[0]) {
+		case CODE_LIST:
+			read(in, size);
+			break;
+		case CODE_ALT_LIST:
+			read(in, size);
+			size = flip_bytes(size);
+			break;
+		default:
+			skip(in, type_code, code);
+			return;
+	}
+	const uint16_t* value_code = code + 1;
+	for(uint32_t i = 0; i < size; ++i) {
+		typename T::value_type key;
+		vnx::type<typename T::value_type>().read(in, key, type_code, value_code);
+		set.insert(key);
+	}
+}
+
+/// Same as read_set<T>() with T = std::set<T>
+template<typename T>
+void read(TypeInput& in, std::set<T>& set, const TypeCode* type_code, const uint16_t* code) {
+	read_set(in, set, type_code, code);
+}
+
+/// Same as read_set<T>() with T = std::set<T, C>
+template<typename T, typename C>
+void read(TypeInput& in, std::set<T, C>& set, const TypeCode* type_code, const uint16_t* code) {
+	read_set(in, set, type_code, code);
+}
+
+/// Same as read_set<T>() with T = std::unordered_set<T>
+template<typename T>
+void read(TypeInput& in, std::unordered_set<T>& set, const TypeCode* type_code, const uint16_t* code) {
+	read_set(in, set, type_code, code);
+}
+
+/// Same as read_set<T>() with T = std::unordered_set<T, C>
+template<typename T, typename C>
+void read(TypeInput& in, std::unordered_set<T, C>& set, const TypeCode* type_code, const uint16_t* code) {
+	read_set(in, set, type_code, code);
+}
+
+/** \brief Reads a dynamically allocated map (AssociativeContainer) from the input stream.
+ * 
+ * Compatible with CODE_MAP.
+ */
+template<typename T>
+void read_map(TypeInput& in, T& map, const TypeCode* type_code, const uint16_t* code) {
+	map.clear();
+	uint32_t size = 0;
+	const uint16_t* key_code = code + 2;
+	const uint16_t* value_code = 0;
+	switch(code[0]) {
+		case CODE_MAP:
+			read(in, size);
+			value_code = code + code[1];
+			break;
+		case CODE_ALT_MAP:
+			read(in, size);
+			size = flip_bytes(size);
+			value_code = code + flip_bytes(code[1]);
+			break;
+		default:
+			skip(in, type_code, code);
+			return;
+	}
+	for(size_t i = 0; i < size; ++i) {
+		typename T::key_type key;
+		vnx::type<typename T::key_type>().read(in, key, type_code, key_code);
+		typename T::mapped_type& value = map[key];
+		vnx::type<typename T::mapped_type>().read(in, value, type_code, value_code);
+	}
+}
+
+/// Same as read_map<T>() with T = std::map<K, V>
 template<typename K, typename V>
 void read(TypeInput& in, std::map<K, V>& map, const TypeCode* type_code, const uint16_t* code) {
-	map.clear();
-	if(!code || code[0] != CODE_MAP) {
-		skip(in, type_code, code);
-		return;
-	}
-	uint32_t size;
-	read(in, size);
-	const uint16_t* key_code = code + 2;
-	const uint16_t* value_code = code + code[1];
-	for(size_t i = 0; i < size; ++i) {
-		K key;
-		vnx::type<K>().read(in, key, type_code, key_code);
-		V& value = map[key];
-		vnx::type<V>().read(in, value, type_code, value_code);
-	}
+	read_map(in, map, type_code, code);
 }
 
+/// Same as read_map<T>() with T = std::map<K, V, C>
+template<typename K, typename V, typename C>
+void read(TypeInput& in, std::map<K, V, C>& map, const TypeCode* type_code, const uint16_t* code) {
+	read_map(in, map, type_code, code);
+}
+
+/// Same as read_map<T>() with T = std::unordered_map<K, V>
+template<typename K, typename V>
+void read(TypeInput& in, std::unordered_map<K, V>& map, const TypeCode* type_code, const uint16_t* code) {
+	read_map(in, map, type_code, code);
+}
+
+/// Same as read_map<T>() with T = std::unordered_map<K, V, C>
+template<typename K, typename V, typename C>
+void read(TypeInput& in, std::unordered_map<K, V, C>& map, const TypeCode* type_code, const uint16_t* code) {
+	read_map(in, map, type_code, code);
+}
+
+/** \brief Reads a std::pair from the input stream.
+ * 
+ * Compatible with CODE_TUPLE.
+ */
 template<typename K, typename V>
 void read(TypeInput& in, std::pair<K, V>& value, const TypeCode* type_code, const uint16_t* code) {
-	if(!code || code[0] != CODE_TUPLE || code[1] != 2) {
+	if((code[0] == CODE_TUPLE && code[1] == 2)
+		|| (code[0] == CODE_ALT_TUPLE && flip_bytes(code[1]) == 2))
+	{
+		vnx::type<K>().read(in, value.first, type_code, code + code[2]);
+		vnx::type<V>().read(in, value.second, type_code, code + code[3]);
+	} else {
 		value = std::pair<K, V>();
 		skip(in, type_code, code);
-		return;
 	}
-	vnx::type<K>().read(in, value.first, type_code, code + code[2]);
-	vnx::type<V>().read(in, value.second, type_code, code + code[3]);
 }
 
+/** \brief Reads a statically allocated N-dimensional matrix from the input stream.
+ * 
+ * The matrix in the data needs to match the exact size requested with \p size,
+ * if it does not the output \p data will be default initialized.
+ * Compatible with CODE_MATRIX.
+ * 
+ * @param data Pointer to pre-allocated array of size \p size.
+ * @param size Size of the pre-allocated matrix.
+ */
 template<typename T, size_t N>
 void read_matrix(TypeInput& in, T* data, const std::array<size_t, N>& size, const uint16_t* code) {
 	size_t total_size = 1;
 	for(size_t i = 0; i < N; ++i) {
 		total_size *= size[i];
 	}
-	if(code && code[0] == CODE_MATRIX && code[1] == N) {
+	if((code[0] == CODE_MATRIX && code[1] == N)
+		|| (code[0] == CODE_ALT_MATRIX && flip_bytes(code[1]) == N))
+	{
 		bool is_same = true;
-		for(size_t i = 0; i < N; ++i) {
-			is_same = is_same && code[2 + i] == size[i];
+		if(code[0] == CODE_MATRIX) {
+			for(size_t i = 0; i < N; ++i) {
+				is_same = is_same && code[2 + i] == size[i];
+			}
+		} else {
+			for(size_t i = 0; i < N; ++i) {
+				is_same = is_same && flip_bytes(code[2 + i]) == size[i];
+			}
 		}
 		if(is_same) {
 			const uint16_t* value_code = code + 2 + N;
@@ -269,13 +532,12 @@ void read_matrix(TypeInput& in, T* data, const std::array<size_t, N>& size, cons
 						read_value(buf + i * value_size, data[i], value_code);
 					}
 				}
-				return;
 			} else {
 				for(size_t i = 0; i < total_size; ++i) {
 					vnx::type<T>().read(in, data[i], 0, value_code);
 				}
-				return;
 			}
+			return;
 		}
 	}
 	for(size_t i = 0; i < total_size; ++i) {
@@ -284,14 +546,28 @@ void read_matrix(TypeInput& in, T* data, const std::array<size_t, N>& size, cons
 	skip(in, 0, code);
 }
 
+/** \brief Reads the size of a N-dimensional image from the input stream.
+ * 
+ * The image in the data needs to match the requested number of dimensions \p N,
+ * if it does not a size of all zero is returned.
+ * Compatible with CODE_IMAGE.
+ * 
+ * @param size Size of the image in the following data.
+ */
 template<size_t N>
 void read_image_size(TypeInput& in, std::array<size_t, N>& size, const uint16_t* code) {
-	if(code && code[0] == CODE_IMAGE && code[1] == N) {
+	if(	(code[0] == CODE_IMAGE && code[1] == N)
+		|| (code[0] == CODE_ALT_IMAGE && flip_bytes(code[1]) == N))
+	{
 		const char* buf = in.read(4 * N);
 		for(size_t i = 0; i < N; ++i) {
 			uint32_t size_ = 0;
 			read_value(buf + 4 * i, size_);
-			size[i] = size_;
+			if(code[0] == CODE_IMAGE) {
+				size[i] = size_;
+			} else {
+				size[i] = flip_bytes(size_);
+			}
 		}
 	} else {
 		for(size_t i = 0; i < N; ++i) {
@@ -300,9 +576,22 @@ void read_image_size(TypeInput& in, std::array<size_t, N>& size, const uint16_t*
 	}
 }
 
+/** \brief Reads the data of a N-dimensional image from the input stream.
+ * 
+ * The image in the data needs to match the requested number of dimensions \p N,
+ * if it does not the data is skipped and the output \p data is left untouched.
+ * Compatible with CODE_IMAGE.
+ * 
+ * @param data Pointer to pre-allocated array of size \p size.
+ * 			Can be a nullptr, in which case the data is skipped.
+ * @param size Size of the image previously read by read_image_size().
+ */
 template<typename T, size_t N>
 void read_image_data(TypeInput& in, T* data, const std::array<size_t, N>& size, const uint16_t* code) {
-	if(code && code[0] == CODE_IMAGE && code[1] == N && data) {
+	if(	((code[0] == CODE_IMAGE && code[1] == N)
+		|| (code[0] == CODE_ALT_IMAGE && flip_bytes(code[1]) == N))
+		&& data)
+	{
 		size_t total_size = 1;
 		for(size_t i = 0; i < N; ++i) {
 			total_size *= size[i];
@@ -321,40 +610,39 @@ void read_image_data(TypeInput& in, T* data, const std::array<size_t, N>& size, 
 	}
 }
 
+/** \brief Reads a Value from the input stream at top level.
+ * 
+ * Since this function does not have a \p type_code and \p code argument it assumes that the input stream
+ * is at the top level (ie. the beginning of a file or a new socket, implicit CODE_ANY).
+ * If the input contains CODE_NULL a nullptr will be returned, otherwise a Value will be returned or an
+ * exception is thrown. The function will skip over CODE_PADDING, CODE_ANY, CODE_NONE and CODE_MAGIC.
+ * The function will consume any type codes (ie. CODE_TYPE_CODE) encountered until reaching an actual value.
+ * 
+ * @return The value read from the stream, nullptr in case of CODE_NULL, any derived type in case of CODE_TYPE,
+ * 			Object in case of CODE_OBJECT, Generic in case of CODE_DYNAMIC, Struct in case of a struct and
+ * 			Binary in case of a non-native (ie. not compiled in or linked in) type.
+ */
 std::shared_ptr<Value> read(TypeInput& in);
 
-template<typename T>
-void read(TypeInput& in, T& value) {
-	std::shared_ptr<T> tmp = std::dynamic_pointer_cast<T>(read(in));
-	if(tmp) {
-		value = *tmp;
-	} else {
-		value = T();
-	}
-}
-
-template<typename T>
-void read(TypeInput& in, T& value, const TypeCode* type_code, const uint16_t* code) {
-	if(code && code[0] != CODE_ANY) {
-		skip(in, type_code, code);
-		value = T();
-	} else {
-		read(in, value);
-	}
-}
-
+/// Same as read(TypeInput& in) but with a dynamic_pointer_cast on the result.
 template<typename T>
 void read(TypeInput& in, std::shared_ptr<T>& value) {
 	value = std::dynamic_pointer_cast<T>(read(in));
 }
 
+/** \brief Reads a Value from the input stream.
+ * 
+ * Same as read(TypeInput& in) but not at top level, ie. this function expects a code.
+ * In case of incompatible data a nullptr will be returned.
+ * Compatible with CODE_ANY.
+ */
 template<typename T>
 void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, const uint16_t* code) {
-	if(code && code[0] != CODE_ANY) {
-		skip(in, type_code, code);
-		value = 0;
+	if(code[0] == CODE_ANY || code[0] == CODE_ALT_ANY) {
+		value = std::dynamic_pointer_cast<T>(read(in));
 	} else {
-		read(in, value);
+		value = 0;
+		skip(in, type_code, code);
 	}
 }
 
@@ -363,15 +651,18 @@ void type<T>::read(TypeInput& in, T& value, const TypeCode* type_code, const uin
 	vnx::read(in, value, type_code, code);
 }
 
+/** \brief Reads a value of type T from the input stream.
+ * 
+ * This function assumes an implicit CODE_DYNAMIC, ie. it expects dynamic code to be in the data.
+ * Used primarily by Variant, otherwise in special use cases.
+ */
 template<typename T>
 void read_dynamic(TypeInput& in, T& value) {
 	uint16_t code[VNX_MAX_BYTE_CODE_SIZE];
 	read_byte_code(in, code);
 	switch(code[0]) {
-		case CODE_ANY:
-			read(in, value);
-			break;
 		case CODE_DYNAMIC:
+		case CODE_ALT_DYNAMIC:
 			read_dynamic(in, value);
 			break;
 		default:
@@ -381,19 +672,18 @@ void read_dynamic(TypeInput& in, T& value) {
 
 template<typename T>
 void read_dynamic_list_size(TypeInput& in, uint16_t* code_, size_t& size_) {
+	uint32_t size = 0;
 	read_byte_code(in, code_);
-	if(code_[0] == CODE_LIST) {
-		uint32_t size;
-		read(in, size);
-		size_ = size;
-	} else {
-		size_ = 0;
+	switch(code_[0]) {
+		case CODE_LIST: read(in, size); break;
+		case CODE_ALT_LIST: read(in, size); size = flip_bytes(size); break;
 	}
+	size_ = size;
 }
 
 template<typename T>
 void read_dynamic_list_data(TypeInput& in, T* data_, const uint16_t* code_, const size_t& size_) {
-	if(code_[0] == CODE_LIST && data_) {
+	if((code_[0] == CODE_LIST || code_[0] == CODE_ALT_LIST) && data_) {
 		const size_t value_size = get_value_size(code_[1]);
 		if(get_value_code<T>() == code_[1] && sizeof(T) == value_size) {
 			in.read((char*)data_, size_ * sizeof(T));
@@ -414,18 +704,22 @@ void from_string(const std::string& str, T& value);
 void from_string(const std::string& str, std::map<std::string, std::string>& value);
 
 template<typename T>
+void from_string(const std::string& str, std::shared_ptr<T>& value);
+
+template<typename T>
 void from_string(const std::string& str, std::shared_ptr<const T>& value);
 
 bool read_value(std::istream& in, std::string& out, bool want_string = false, char stop_char = 0);
 
 bool read_object(std::istream& in, std::map<std::string, std::string>& object);
 
-inline void read(std::istream& in, bool& value) { int tmp; in >> tmp; value = tmp; }
-inline void read(std::istream& in, uint8_t& value) { int tmp; in >> tmp; value = tmp; }
+inline void read(std::istream& in, bool& value) { int tmp; in >> tmp; value = bool(tmp); }
+inline void read(std::istream& in, uint8_t& value) { int tmp; in >> tmp; value = uint8_t(tmp); }
 inline void read(std::istream& in, uint16_t& value) { in >> value; }
 inline void read(std::istream& in, uint32_t& value) { in >> value; }
 inline void read(std::istream& in, uint64_t& value) { in >> value; }
-inline void read(std::istream& in, int8_t& value) { int tmp; in >> tmp; value = tmp; }
+inline void read(std::istream& in, char& value) { in >> value; }
+inline void read(std::istream& in, int8_t& value) { int tmp; in >> tmp; value = int8_t(tmp); }
 inline void read(std::istream& in, int16_t& value) { in >> value; }
 inline void read(std::istream& in, int32_t& value) { in >> value; }
 inline void read(std::istream& in, int64_t& value) { in >> value; }
@@ -434,6 +728,11 @@ inline void read(std::istream& in, float64_t& value) { in >> value; }
 
 void read(std::istream& in, std::string& value);
 
+/** \brief Reads a JSON value from the input stream.
+ * 
+ * Depending on the input a value is either an integral number, a string (ie. std::string),
+ * an array (ie. std::vector) or an object (ie. vnx::Object).
+ */
 std::shared_ptr<Variant> read(std::istream& in);
 
 template<typename T, size_t N>
@@ -647,16 +946,14 @@ void from_string(const std::string& str, std::shared_ptr<const T>& value) {
 
 void read_type_code(TypeInput& in);
 
+/// Reads a value from the file given by \p file_name
 std::shared_ptr<Value> read_from_file(const std::string& file_name);
 
+/// Same as read_from_file() but will try to dynamic cast to T
 template<typename T>
 std::shared_ptr<T> read_from_file(const std::string& file_name) {
 	return std::dynamic_pointer_cast<T>(read_from_file(file_name));
 }
-
-std::string to_string(TypeInput& in);
-
-std::string to_string(TypeInput& in, const TypeCode* type_code, const uint16_t* code);
 
 
 } // vnx

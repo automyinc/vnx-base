@@ -19,6 +19,7 @@
 
 #include <stdint.h>
 #include <string>
+#include <cstring>
 
 
 namespace vnx {
@@ -33,8 +34,13 @@ public:
 		crc = init;
 	}
 	
-	void update(uint64_t hash) {
-		update((const char*)&hash, sizeof(hash));
+	template<typename T>
+	void update(const T& value) {
+		update((const char*)&value, sizeof(value));
+	}
+	
+	void update(const char* str) {
+		update(str, ::strlen(str));
 	}
 	
 	void update(const std::string& str) {

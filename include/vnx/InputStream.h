@@ -28,35 +28,41 @@ namespace vnx {
 class InputStream {
 public:
 	virtual ~InputStream() {}
+	
 	virtual size_t read(void* buf, size_t len) = 0;
+	
+	virtual size_t get_input_pos() const { return 0; }
+	
 };
 
 
 class BasicInputStream : public InputStream {
 public:
-	BasicInputStream() : fd(-1) {}
+	BasicInputStream() = default;
 	
 	BasicInputStream(int fd_) : fd(fd_) {}
 	
-	size_t read(void* buf, size_t len);
+	size_t read(void* buf, size_t len) override;
 	
 	void reset(int fd_) {
 		fd = fd_;
 	}
 	
 private:
-	int fd;
+	int fd = -1;
 	
 };
 
 
 class FileInputStream : public InputStream {
 public:
-	FileInputStream() : file(0) {}
+	FileInputStream() = default;
 	
 	FileInputStream(FILE* file_) : file(file_) {}
 	
-	size_t read(void* buf, size_t len);
+	size_t read(void* buf, size_t len) override;
+	
+	size_t get_input_pos() const override;
 	
 	void reset(FILE* file_) {
 		file = file_;
@@ -70,12 +76,12 @@ private:
 
 class InputBuffer {
 public:
-	InputBuffer(InputStream* stream_) : stream(stream_), pos(0), end(0) {}
+	InputBuffer(InputStream* stream_) : stream(stream_) {}
 	
 	InputBuffer(const InputBuffer& other) = delete;
 	InputBuffer& operator=(const InputBuffer& other) = delete;
 	
-	/*
+	/**
 	 * Get a pointer to the next available data and advance the internal pointer by "len" bytes.
 	 * Reads new data from the stream if available bytes are less than "len".
 	 */
@@ -89,7 +95,7 @@ public:
 			end -= pos;
 			pos = 0;
 			// read new data into the buffer (after the left over data)
-			size_t num_bytes = stream->read(buffer + end, VNX_BUFFER_SIZE - end);
+			const size_t num_bytes = stream->read(buffer + end, VNX_BUFFER_SIZE - end);
 			if(!num_bytes) {
 				throw std::underflow_error("read(): EOF");
 			}
@@ -100,7 +106,7 @@ public:
 		return res;
 	}
 	
-	/*
+	/**
 	 * Read "len" bytes into memory given by "buf".
 	 * Used to read large chunks of data, potentially bypassing the buffer.
 	 */
@@ -130,7 +136,20 @@ public:
 		}
 	}
 	
-	/*
+	/**
+	 * Try to have num_bytes ready in the buffer for reading.
+	 */
+	void fetch(size_t num_bytes) {
+		if(num_bytes > VNX_BUFFER_SIZE) {
+			num_bytes = VNX_BUFFER_SIZE;
+		}
+		if(num_bytes > end) {
+			num_bytes = stream->read(buffer + end, num_bytes - end);
+			end += num_bytes;
+		}
+	}
+	
+	/**
 	 * Resets the buffer. Discards any data left over.
 	 */
 	void reset() {
@@ -138,18 +157,25 @@ public:
 		end = 0;
 	}
 	
-	/*
+	/**
 	 * Get the number of bytes available in the buffer.
 	 */
 	size_t get_num_avail() const {
 		return end - pos;
 	}
 	
+	/**
+	 * Returns the number of bytes that have been read from the stream already, minus what is left in the buffer.
+	 */
+	size_t get_input_pos() const {
+		return stream->get_input_pos() - get_num_avail();
+	}
+	
 private:
 	char buffer[VNX_BUFFER_SIZE];
-	InputStream* stream;
-	size_t pos;
-	size_t end;
+	InputStream* stream = 0;
+	size_t pos = 0;
+	size_t end = 0;
 	
 };
 
@@ -160,13 +186,13 @@ public:
 	
 	const TypeCode* get_type_code(Hash64 code_hash) const;
 	
-	/*
+	/**
 	 * Resets the buffer and clears the type map.
 	 * Used as a way of creating a new TypeInput in-place.
 	 */
 	void clear();
 	
-	std::unordered_map<Hash64, const TypeCode*> type_map;		// for faster lock-free lookup
+	std::unordered_map<Hash64, const TypeCode*> type_map;		/// for faster lock-free lookup
 	
 };
 

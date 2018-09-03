@@ -70,6 +70,8 @@ public:
 	virtual void exit();
 	
 protected:
+	std::mutex vnx_mutex;
+	
 	volatile bool vnx_do_run = true;
 	
 	virtual void close();				// clean up should happen here
@@ -80,7 +82,6 @@ private:
 	void remove_pipe(Pipe* pipe);					// remove a pipe from this node
 	
 private:
-	std::mutex mutex;
 	std::condition_variable condition;
 	
 	std::queue<std::shared_ptr<Pipe>> notify_queue;		// list of pipes that have messages available

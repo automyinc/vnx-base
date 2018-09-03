@@ -23,6 +23,8 @@
 #include <vnx/Util.h>
 #include <vnx/Sample.hxx>
 
+#include <sstream>
+
 
 namespace vnx {
 
@@ -62,7 +64,6 @@ public:
 	void publish(std::shared_ptr<const Value> value, TopicPtr topic, uint16_t flags = 0);
 	
 private:
-	std::mutex mutex;
 	const Hash64 src_mac;
 	std::unordered_map<Hash64, uint64_t> seq_map;
 	

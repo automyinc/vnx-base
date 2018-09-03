@@ -40,6 +40,10 @@ public:
 		return Variant();
 	}
 	
+	bool empty() const {
+		return field.empty();
+	}
+	
 	void clear() {
 		field.clear();
 	}
@@ -91,6 +95,7 @@ public:
 	}
 	
 	static const uint16_t CODE[];
+	static const uint16_t ALT_CODE[];
 	
 };
 

@@ -90,10 +90,10 @@ public:
 	
 private:
 	std::vector<std::string> filenames;
-	std::vector<RecordReader*> readers;
+	std::vector<std::shared_ptr<RecordReader>> readers;
 	
 	std::shared_ptr<RecordHeader> header;
-	RecordReader* curr_file = 0;
+	std::shared_ptr<RecordReader> curr_file = 0;
 	std::shared_ptr<Sample> curr_sample;
 	int64_t curr_time = 0;
 	

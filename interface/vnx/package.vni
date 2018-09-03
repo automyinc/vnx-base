@@ -13,3 +13,4 @@ extern TopicPtr = {12, 5};			// {LIST, INT8}
 extern Variant = {17};				// {DYNAMIC}
 extern Object = {24};				// {OBJECT}
 extern Buffer = {12, 1};			// {LIST, UINT8}
+extern Memory = {12, 1};			// {LIST, UINT8}

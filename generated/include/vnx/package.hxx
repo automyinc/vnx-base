@@ -19,11 +19,13 @@ extern std::shared_ptr<vnx::Topic> topic_info;
 class Buffer;
 class Endpoint;
 class Exception;
+class Generic;
 class Hash128;
 class Hash64;
 class InternalError;
 class LogMsg;
 class Marker;
+class Memory;
 class Message;
 class NoSuchMethod;
 class NoSuchService;
@@ -63,11 +65,13 @@ namespace vnx {
 void read(TypeInput& in, ::vnx::Buffer& value, const TypeCode* type_code, const uint16_t* code);
 void read(TypeInput& in, ::vnx::Endpoint& value, const TypeCode* type_code, const uint16_t* code);
 void read(TypeInput& in, ::vnx::Exception& value, const TypeCode* type_code, const uint16_t* code);
+void read(TypeInput& in, ::vnx::Generic& value, const TypeCode* type_code, const uint16_t* code);
 void read(TypeInput& in, ::vnx::Hash128& value, const TypeCode* type_code, const uint16_t* code);
 void read(TypeInput& in, ::vnx::Hash64& value, const TypeCode* type_code, const uint16_t* code);
 void read(TypeInput& in, ::vnx::InternalError& value, const TypeCode* type_code, const uint16_t* code);
 void read(TypeInput& in, ::vnx::LogMsg& value, const TypeCode* type_code, const uint16_t* code);
 void read(TypeInput& in, ::vnx::Marker& value, const TypeCode* type_code, const uint16_t* code);
+void read(TypeInput& in, ::vnx::Memory& value, const TypeCode* type_code, const uint16_t* code);
 void read(TypeInput& in, ::vnx::Message& value, const TypeCode* type_code, const uint16_t* code);
 void read(TypeInput& in, ::vnx::NoSuchMethod& value, const TypeCode* type_code, const uint16_t* code);
 void read(TypeInput& in, ::vnx::NoSuchService& value, const TypeCode* type_code, const uint16_t* code);
@@ -102,11 +106,13 @@ void read(TypeInput& in, ::vnx::record_topic_info_t& value, const TypeCode* type
 void write(TypeOutput& out, const ::vnx::Buffer& value, const TypeCode* type_code, const uint16_t* code);
 void write(TypeOutput& out, const ::vnx::Endpoint& value, const TypeCode* type_code, const uint16_t* code);
 void write(TypeOutput& out, const ::vnx::Exception& value, const TypeCode* type_code, const uint16_t* code);
+void write(TypeOutput& out, const ::vnx::Generic& value, const TypeCode* type_code, const uint16_t* code);
 void write(TypeOutput& out, const ::vnx::Hash128& value, const TypeCode* type_code, const uint16_t* code);
 void write(TypeOutput& out, const ::vnx::Hash64& value, const TypeCode* type_code, const uint16_t* code);
 void write(TypeOutput& out, const ::vnx::InternalError& value, const TypeCode* type_code, const uint16_t* code);
 void write(TypeOutput& out, const ::vnx::LogMsg& value, const TypeCode* type_code, const uint16_t* code);
 void write(TypeOutput& out, const ::vnx::Marker& value, const TypeCode* type_code, const uint16_t* code);
+void write(TypeOutput& out, const ::vnx::Memory& value, const TypeCode* type_code, const uint16_t* code);
 void write(TypeOutput& out, const ::vnx::Message& value, const TypeCode* type_code, const uint16_t* code);
 void write(TypeOutput& out, const ::vnx::NoSuchMethod& value, const TypeCode* type_code, const uint16_t* code);
 void write(TypeOutput& out, const ::vnx::NoSuchService& value, const TypeCode* type_code, const uint16_t* code);
@@ -141,11 +147,13 @@ void write(TypeOutput& out, const ::vnx::record_topic_info_t& value, const TypeC
 void read(std::istream& in, ::vnx::Buffer& value);
 void read(std::istream& in, ::vnx::Endpoint& value);
 void read(std::istream& in, ::vnx::Exception& value);
+void read(std::istream& in, ::vnx::Generic& value);
 void read(std::istream& in, ::vnx::Hash128& value);
 void read(std::istream& in, ::vnx::Hash64& value);
 void read(std::istream& in, ::vnx::InternalError& value);
 void read(std::istream& in, ::vnx::LogMsg& value);
 void read(std::istream& in, ::vnx::Marker& value);
+void read(std::istream& in, ::vnx::Memory& value);
 void read(std::istream& in, ::vnx::Message& value);
 void read(std::istream& in, ::vnx::NoSuchMethod& value);
 void read(std::istream& in, ::vnx::NoSuchService& value);
@@ -180,11 +188,13 @@ void read(std::istream& in, ::vnx::record_topic_info_t& value);
 void write(std::ostream& out, const ::vnx::Buffer& value);
 void write(std::ostream& out, const ::vnx::Endpoint& value);
 void write(std::ostream& out, const ::vnx::Exception& value);
+void write(std::ostream& out, const ::vnx::Generic& value);
 void write(std::ostream& out, const ::vnx::Hash128& value);
 void write(std::ostream& out, const ::vnx::Hash64& value);
 void write(std::ostream& out, const ::vnx::InternalError& value);
 void write(std::ostream& out, const ::vnx::LogMsg& value);
 void write(std::ostream& out, const ::vnx::Marker& value);
+void write(std::ostream& out, const ::vnx::Memory& value);
 void write(std::ostream& out, const ::vnx::Message& value);
 void write(std::ostream& out, const ::vnx::NoSuchMethod& value);
 void write(std::ostream& out, const ::vnx::NoSuchService& value);
@@ -219,11 +229,13 @@ void write(std::ostream& out, const ::vnx::record_topic_info_t& value);
 void accept(Visitor& visitor, const ::vnx::Buffer& value);
 void accept(Visitor& visitor, const ::vnx::Endpoint& value);
 void accept(Visitor& visitor, const ::vnx::Exception& value);
+void accept(Visitor& visitor, const ::vnx::Generic& value);
 void accept(Visitor& visitor, const ::vnx::Hash128& value);
 void accept(Visitor& visitor, const ::vnx::Hash64& value);
 void accept(Visitor& visitor, const ::vnx::InternalError& value);
 void accept(Visitor& visitor, const ::vnx::LogMsg& value);
 void accept(Visitor& visitor, const ::vnx::Marker& value);
+void accept(Visitor& visitor, const ::vnx::Memory& value);
 void accept(Visitor& visitor, const ::vnx::Message& value);
 void accept(Visitor& visitor, const ::vnx::NoSuchMethod& value);
 void accept(Visitor& visitor, const ::vnx::NoSuchService& value);
@@ -315,6 +327,28 @@ struct type<::vnx::Exception> {
 		vnx::write(out, value);
 	}
 	void accept(Visitor& visitor, const ::vnx::Exception& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+template<>
+struct type<::vnx::Generic> {
+	void read(TypeInput& in, ::vnx::Generic& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Generic& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Generic& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Generic& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Generic& value) {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code) {
@@ -431,6 +465,29 @@ struct type<::vnx::Marker> {
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code) {
 		code.push_back(CODE_ANY);
+	}
+};
+
+template<>
+struct type<::vnx::Memory> {
+	void read(TypeInput& in, ::vnx::Memory& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Memory& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Memory& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Memory& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Memory& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		const std::vector<int> tmp = {12, 1};
+		code.insert(code.end(), tmp.begin(), tmp.end());
 	}
 };
 

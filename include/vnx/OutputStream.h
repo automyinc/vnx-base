@@ -27,75 +27,74 @@ namespace vnx {
 
 class OutputStream {
 public:
-	virtual ~OutputStream() {}
+	virtual ~OutputStream() = default;
+	
 	virtual void write(const void* buf, size_t len) = 0;
-	virtual size_t get_output_pos() const = 0;
+	
+	virtual size_t get_output_pos() const { return 0; }
+	
 };
 
 
 class BasicOutputStream : public OutputStream {
 public:
-	BasicOutputStream() : fd(-1) {}
+	BasicOutputStream() = default;
 	
 	BasicOutputStream(int fd_) : fd(fd_) {}
 	
-	void write(const void* buf, size_t len);
-	
-	size_t get_output_pos() const { return 0; }
+	void write(const void* buf, size_t len) override;
 	
 	void reset(int fd_) {
 		fd = fd_;
 	}
 	
 private:
-	int fd;
+	int fd = -1;
 	
 };
 
 
 class FileOutputStream : public OutputStream {
 public:
-	FileOutputStream() : file(0) {}
+	FileOutputStream() = default;
 	
 	FileOutputStream(FILE* file_) : file(file_) {}
 	
-	void write(const void* buf, size_t len);
+	void write(const void* buf, size_t len) override;
 	
-	size_t get_output_pos() const { return ::ftell(file); }
+	size_t get_output_pos() const override;
 	
 	void reset(FILE* file_) {
 		file = file_;
 	}
 	
 private:
-	FILE* file;
+	FILE* file = 0;
 	
 };
 
 
 class SocketOutputStream : public OutputStream {
 public:
-	SocketOutputStream() : fd(-1) {}
+	SocketOutputStream() = default;
 	
 	SocketOutputStream(int fd_) : fd(fd_) {}
 	
-	void write(const void* buf, size_t len);
-	
-	size_t get_output_pos() const { return 0; }
+	void write(const void* buf, size_t len) override;
 	
 	void reset(int fd_) {
 		fd = fd_;
 	}
 	
 private:
-	int fd;
+	int fd = -1;
 	
 };
 
 
 class OutputBuffer {
 public:
-	OutputBuffer(OutputStream* stream_) : stream(stream_), pos(0) {}
+	OutputBuffer(OutputStream* stream_) : stream(stream_) {}
 	
 	OutputBuffer(const OutputBuffer& other) = delete;
 	OutputBuffer& operator=(const OutputBuffer& other) = delete;
@@ -170,8 +169,8 @@ public:
 	
 private:
 	char buffer[VNX_BUFFER_SIZE];
-	OutputStream* stream;
-	size_t pos;
+	OutputStream* stream = 0;
+	size_t pos = 0;
 	
 };
 
@@ -188,7 +187,7 @@ public:
 	 */
 	void clear();
 	
-	// to keep track of which type codes already have been written to the stream
+	// to keep track of which type codes have already been written to the stream
 	std::unordered_map<Hash64, const TypeCode*> type_map;
 	
 	// to keep track of where the type codes have been written
