@@ -68,6 +68,7 @@ typedef double float64_t;
 
 class Visitor;
 class Value;
+class Object;
 class Variant;
 class Topic;
 class TypeCode;

@@ -18,6 +18,7 @@
 #define INCLUDE_VNX_STRUCT_H
 
 #include <vnx/Value.h>
+#include <vnx/Object.h>
 
 
 namespace vnx {
@@ -61,6 +62,14 @@ public:
 	
 	void accept(Visitor& visitor) const override {
 		data.accept(visitor);
+	}
+	
+	Object to_object() const override {
+		return data.to_object();
+	}
+	
+	void from_object(const Object& object) override {
+		data.from_object(object);
 	}
 	
 	friend std::ostream& operator<<(std::ostream& _out, const Struct& _value) {

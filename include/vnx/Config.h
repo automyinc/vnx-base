@@ -27,7 +27,7 @@ std::shared_ptr<std::string> get_config(const std::string& key);
 
 void set_config(const std::string& key, const std::string& value);
 
-void read_config_tree(std::string config_path);
+void read_config_tree(const std::string& root_path);
 
 template<typename T>
 bool read_config(const std::string& key, T& value) {

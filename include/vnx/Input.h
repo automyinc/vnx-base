@@ -199,10 +199,7 @@ inline void read(TypeInput& in, float64_t& value, const TypeCode* type_code, con
 /** \brief Reads a dynamically allocated string from the input stream.
  * 
  * Directly compatible with {CODE_LIST, CODE_INT8}.
- * Indirectly compatible with everything by converting the data to a JSON string.
- * For example if the input data is of type CODE_INT32 the integer will be converted to a string.
- * Or if the input is of type CODE_ARRAY it will be converted to: [..., ...] (without quotes)
- * Enum names will be converted to a JSON string: "ENUM_VALUE" (with quotes)
+ * Indirectly compatible with everything by converting to a string via to_string_value().
  */
 void read(TypeInput& in, std::string& string, const TypeCode* type_code, const uint16_t* code);
 
@@ -524,7 +521,7 @@ void read_matrix(TypeInput& in, T* data, const std::array<size_t, N>& size, cons
 			const uint16_t* value_code = code + 2 + N;
 			const size_t value_size = get_value_size(value_code[0]);
 			if(value_size) {
-				if(get_value_code<T>() == value_code[0] && sizeof(T) == value_size) {
+				if(is_equivalent<T>(value_code[0])) {
 					in.read((char*)data, total_size * sizeof(T));
 				} else {
 					const char* buf = in.read(total_size * value_size);

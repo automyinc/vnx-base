@@ -18,6 +18,7 @@
 #define INCLUDE_VNX_BINARY_H_
 
 #include <vnx/Value.h>
+#include <vnx/Object.h>
 #include <vnx/Memory.h>
 #include <vnx/InputStream.h>
 #include <vnx/OutputStream.h>
@@ -36,21 +37,25 @@ public:
 	static const Hash64 VNX_CODE_HASH;
 	
 	Binary();
-	~Binary();
+	~Binary() override;
 	
-	Hash64 get_type_hash() const;
-	const char* get_type_name() const;
+	Hash64 get_type_hash() const override;
+	const char* get_type_name() const override;
 	
 	static std::shared_ptr<Binary> create();
-	std::shared_ptr<Value> clone() const;
+	std::shared_ptr<Value> clone() const override;
 	
-	void read(TypeInput& in, const TypeCode* type_code, const uint16_t* code);
-	void write(TypeOutput& out, const TypeCode* type_code, const uint16_t* code) const;
+	void read(TypeInput& in, const TypeCode* type_code, const uint16_t* code) override;
+	void write(TypeOutput& out, const TypeCode* type_code, const uint16_t* code) const override;
 	
-	void read(std::istream& in);
-	void write(std::ostream& out) const;
+	void read(std::istream& in) override;
+	void write(std::ostream& out) const override;
 	
-	void accept(Visitor& visitor) const;
+	void accept(Visitor& visitor) const override;
+	
+	Object to_object() const override;
+	
+	void from_object(const Object& object) override;
 	
 	void clear();
 	

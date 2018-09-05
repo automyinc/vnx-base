@@ -58,7 +58,11 @@ public:
 	
 	bool operator!=(const Hash128& other) const;
 	
+	Hash128 operator^(const Hash128& other) const;
+	
 	std::string to_string();
+	
+	std::string to_hex_string();
 	
 	friend std::ostream& operator<<(std::ostream& out, const Hash128& value);
 	
@@ -77,6 +81,10 @@ inline bool Hash128::operator==(const Hash128& other) const {
 
 inline bool Hash128::operator!=(const Hash128& other) const {
 	return A() != other.A() || B() != other.B();
+}
+
+inline Hash128 Hash128::operator^(const Hash128& other) const {
+	return Hash128(A() xor other.A(), B() xor other.B());
 }
 
 

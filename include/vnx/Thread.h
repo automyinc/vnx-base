@@ -25,47 +25,34 @@
 
 namespace vnx {
 
-/*
- * Thread is a base class for worker threads that live inside
- * a normal module.
+/**
+ * Thread is a base class for light weight worker threads.
  */
 class Thread : protected Subscriber, protected Publisher {
 public:
-	Thread(const std::string& vnx_name_) : vnx_name(vnx_name_) {}
+	Thread(const std::string& vnx_name_);
 	
-	~Thread() {
-		stop();
-	}
+	~Thread();
 	
-	void start() {
-		if(!thread.joinable()) {
-			init();
-			thread = std::thread(&Thread::entry, this);
-		}
-	}
+	/// Start thread in background. Safe to call multiple times.
+	void start();
 	
-	void join() {
-		if(thread.joinable()) {
-			thread.join();
-		}
-	}
+	/// Wait for thread to finish and join, if thread is still running. (thread-safe)
+	void join();
 	
-	void stop() {
-		exit();
-		notify(nullptr);
-		join();
-	}
+	/// Trigger thread to exit and then join it, if thread is still running. (thread-safe)
+	void stop();
 	
 protected:
 	std::string vnx_name;
 	
-	/*
-	 * Will be called before starting this thread to ensure initialization
-	 * is done before starting another thread.
+	/**
+	 * Will be called from inside start() to ensure initialization is done before
+	 * calling thread continues.
 	 */
 	virtual void init() {}
 	
-	/*
+	/**
 	 * Main thread function.
 	 */
 	virtual void main() = 0;

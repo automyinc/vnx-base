@@ -64,6 +64,8 @@ class ToStringValue : public DefaultPrinter {
 public:
 	ToStringValue(std::ostream& out);
 	
+	void visit_null() override;
+	
 	void visit(const std::string& value) override;
 	
 	void enum_value(uint32_t value, const std::string& name) override;

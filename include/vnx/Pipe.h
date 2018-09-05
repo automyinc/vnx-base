@@ -30,84 +30,84 @@ namespace vnx {
 class Node;
 class Pipe;
 
-/*
+/**
  * Open a new pipe known as "service_name" to Node "node".
  */
 std::shared_ptr<Pipe> open_pipe(const std::string& service_name, Node* node, int max_queue_ms = 100);
 
-/*
+/**
  * Open a new pipe known by "mac_addr" to Node "node".
  */
 std::shared_ptr<Pipe> open_pipe(Hash64 mac_addr, Node* node, int max_queue_ms = 100);
 
-/*
+/**
  * Get a pipe to a service called "service_name".
  * Returns 0 if service does not exist.
  */
 std::shared_ptr<Pipe> get_pipe(const std::string& service_name);
 
-/*
+/**
  * Get a pipe to a node known by "mac_addr".
  * Returns 0 if node does not exist.
  */
 std::shared_ptr<Pipe> get_pipe(Hash64 mac_addr);
 
-/*
+/**
  * Send a message to service "service_name".
  * Will drop the message if service does not exist.
  */
 bool send_msg(const std::string& service_name, std::shared_ptr<const Message> msg);
 
-/*
+/**
  * Send a message to a node known by "mac_addr".
  * Will drop the message if node does not exist.
  */
 bool send_msg(Hash64 mac_addr, std::shared_ptr<const Message> msg);
 
-/*
+/**
  * Send a message through a pipe.
  */
 bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<const Message> msg);
 
-/*
+/**
  * Send a message through a pipe.
  * Applies given flags before sending: msg->flags |= flags;
  */
 bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<Message> msg, uint16_t flags);
 
-/*
+/**
  * Connect a pipe to a node.
  */
 void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms = 100);
 
-/*
+/**
  * Unregister a service known by "service_name".
  */
 void remove_pipe(const std::string& service_name);
 
-/*
+/**
  * Unregister a node known by "mac_addr".
  */
 void remove_pipe(Hash64 mac_addr);
 
-/*
+/**
  * Close the pipe going to service "service_name".
  */
 void close_pipe(const std::string& service_name);
 
-/*
+/**
  * Close the pipe going to node known by "mac_addr".
  */
 void close_pipe(Hash64 mac_addr);
 
-/*
+/**
  * Trigger all nodes listening to any public pipe to exit.
  * Used by the shutdown procedure.
  */
 void shutdown_pipes();
 
 
-/*
+/**
  * vnx::Pipe is a basic means of delivering messages to a vnx::Node.
  * The Pipe is one-directional and maintains a queue of messages internally.
  * The maximum queue size is specified in terms of maximum latency in milli-seconds.
@@ -119,12 +119,12 @@ void shutdown_pipes();
  */
 class Pipe {
 public:
-	/*
+	/**
 	 * Create a private no-name pipe.
 	 */
 	Pipe();
 	
-	/*
+	/**
 	 * Create a public pipe which is known inside this process by "mac_addr".
 	 * Used for services and tunnels to receive requests and messages.
 	 */
@@ -137,61 +137,61 @@ public:
 	
 	static std::shared_ptr<Pipe> create();
 	
-	/*
+	/**
 	 * Connect a Pipe to a Node. (thread-safe)
 	 */
 	friend void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms);
 	
-	/*
+	/**
 	 * Send a message through a Pipe. (thread-safe)
 	 */
 	friend bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<const Message> msg);
 	
-	/*
+	/**
 	 * Get the next available message. Returns 0 if no message available. (thread-safe)
 	 */
 	std::shared_ptr<const Message> pop();
 	
-	/*
+	/**
 	 * Temporarily prevent new messages from being pushed into the pipe. (thread-safe)
 	 */
 	void pause();
 	
-	/*
+	/**
 	 * Resume normal operation after pause() was called. (thread-safe)
 	 */
 	void resume();
 	
-	/*
+	/**
 	 * Close this pipe. (thread-safe)
 	 */
 	void close();
 	
-	/*
+	/**
 	 * Get a pointer to the node which is connected to this pipe.
 	 * Only for identification purposes, the node could be deleted at any point in time!
 	 */
 	Node* get_node();
 	
-	/*
+	/**
 	 * Returns if pipe is currently paused.
 	 */
 	bool get_is_paused() const { return is_paused; }
 	
 private:
-	/*
+	/**
 	 * Queue entry type that combines the message and timestamp when it was put into the queue.
 	 */
 	struct entry_t {
 		std::shared_ptr<const Message> msg;
 		int64_t time = 0;
-		entry_t() {}
-		explicit entry_t(const std::shared_ptr<const Message>& msg) : msg(msg), time(get_wall_time_micros()) {}
+		entry_t() = default;
+		explicit entry_t(std::shared_ptr<const Message> msg) : msg(std::move(msg)), time(get_wall_time_micros()) {}
 	};
 	
 	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms = 100);
 	
-	/*
+	/**
 	 * Push a new message onto the queue. Used exclusively by send_msg().
 	 */
 	bool push(std::shared_ptr<Pipe> self, std::shared_ptr<const Message> msg);

@@ -30,37 +30,38 @@
 
 namespace vnx {
 
-/*
- * Initialize the process. Needs to be done first before creating any Modules.
+/**
+ * Initialize the process and parse command line arguments.
+ * Needs to be called first before creating any Modules.
  */
 void init(const std::string& process_name, int argc, char** argv, std::map<std::string, std::string> options = {});
 
-/*
+/**
  * Returns true if the process should continue to run.
  */
 bool do_run();
 
-/*
+/**
  * Wait for the the whole process and all modules to finish and shutdown.
  */
 void wait();
 
-/*
+/**
  * Trigger shutdown and wait for the the whole process and all modules to finish and shutdown.
  */
 void close();
 
-/*
+/**
  * Get the local process name.
  */
 std::string get_process_name();
 
-/*
+/**
  * Triggers all modules to shut down. Returns immediately.
  */
 void trigger_shutdown();
 
-/*
+/**
  * Force the process to exit, without waiting for modules to shut down. Returns immediately.
  */
 void force_shutdown();
@@ -68,34 +69,34 @@ void force_shutdown();
 
 class Process : public ProcessBase {
 public:
-	Process(const std::string& name);
+	explicit Process(const std::string& name);
 	
-	~Process();
+	~Process() override;
 	
 protected:
-	std::string get_name() const;
+	std::string get_name() const override;
 	
-	TimeSync get_sync_time() const;
+	TimeSync get_sync_time() const override;
 	
-	TopicInfoList get_topic_info() const;
+	TopicInfoList get_topic_info() const override;
 	
-	void pause_log();
+	void pause_log() override;
 	
-	void resume_log();
+	void resume_log() override;
 	
-	void set_debug(const int32_t& level);
+	void set_debug(const int32_t& level) override;
 	
-	void close();
+	void close() override;
 	
-	void init();
+	void init() override;
 	
-	void main();
+	void main() override;
 	
-	void handle(std::shared_ptr<const vnx::LogMsg> value);
+	void handle(std::shared_ptr<const vnx::LogMsg> value) override;
 	
-	void handle(std::shared_ptr<const TimeControl> value);
+	void handle(std::shared_ptr<const TimeControl> value) override;
 	
-	void handle(std::shared_ptr<const TimeSync> value);
+	void handle(std::shared_ptr<const TimeSync> value) override;
 	
 	void update_topic_info();
 	

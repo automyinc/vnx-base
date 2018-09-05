@@ -55,7 +55,11 @@ public:
 	
 	bool operator!=(const Hash64& other) const;
 	
+	Hash64 operator^(const Hash64& other) const;
+	
 	std::string to_string();
+	
+	std::string to_hex_string();
 	
 };
 
@@ -66,6 +70,10 @@ inline bool Hash64::operator==(const Hash64& other) const {
 
 inline bool Hash64::operator!=(const Hash64& other) const {
 	return value != other.value;
+}
+
+inline Hash64 Hash64::operator^(const Hash64& other) const {
+	return Hash64(value xor other.value);
 }
 
 

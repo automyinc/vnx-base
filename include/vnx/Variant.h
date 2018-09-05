@@ -87,6 +87,17 @@ public:
 		return value;
 	}
 	
+	template<typename T>
+	void to(T& value) const {
+		if(empty()) {
+			value = T();
+			return;
+		}
+		MemoryInputStream stream(&data);
+		TypeInput in(&stream);
+		vnx::read_dynamic(in, value);
+	}
+	
 	/** \brief Computes a semantic 64-bit content hash
 	 * 
 	 * This hash is invariant against different byte order, different integer size and type,

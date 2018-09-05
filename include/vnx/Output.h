@@ -391,18 +391,8 @@ inline void write(std::ostream& out, const int8_t& value) { out << int(value); }
 inline void write(std::ostream& out, const int16_t& value) { out << value; }
 inline void write(std::ostream& out, const int32_t& value) { out << value; }
 inline void write(std::ostream& out, const int64_t& value) { out << value; }
-
-inline void write(std::ostream& out, const float32_t& value) {
-	char buf[128];
-	snprintf(buf, sizeof(buf), "%.*f", 4, value);
-	out << std::string(buf);
-}
-
-inline void write(std::ostream& out, const float64_t& value) {
-	char buf[128];
-	snprintf(buf, sizeof(buf), "%.*f", 8, value);
-	out << std::string(buf);
-}
+inline void write(std::ostream& out, const float32_t& value) { out << value; }
+inline void write(std::ostream& out, const float64_t& value) { out << value; }
 
 void write(std::ostream& out, const std::string& value);
 
@@ -538,6 +528,7 @@ std::string to_string(TypeInput& in, const TypeCode* type_code, const uint16_t* 
 /** \brief Converts value to regular string
  * 
  * Same as to_string<T>() except strings and enum values are without quotes.
+ * In addition null values result in an empty string instead of "{}".
  */
 template<typename T>
 std::string to_string_value(const T& value) {

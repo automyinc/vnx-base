@@ -44,6 +44,9 @@ public:
 	
 	virtual void accept(Visitor& visitor) const = 0;
 	
+	virtual Object to_object() const = 0;
+	virtual void from_object(const Object& object) = 0;
+	
 	std::string to_string() const;
 	void from_string(const std::string& str);
 	

@@ -84,6 +84,14 @@ public:
 		vnx::accept(visitor, *this);
 	}
 	
+	Object to_object() const override {
+		return *this;
+	}
+	
+	void from_object(const Object& object) override {
+		*this = object;
+	}
+	
 	friend std::ostream& operator<<(std::ostream& out, const Object& value) {
 		vnx::write(out, value);
 		return out;

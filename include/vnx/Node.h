@@ -24,11 +24,10 @@
 
 namespace vnx {
 
-/*
+/**
  * vnx::Node is a base class for anything that wants to communicate via vnx::Pipe.
  * It gives an interface to read messages from a number of pipes.
  * It also keeps track of and automatically closes all connected pipes on shutdown.
- * Forgetting to close a pipe would normally lead to a segfault.
  */
 class Node {
 public:
@@ -39,33 +38,15 @@ public:
 	Node(const Node& other) = delete;
 	Node& operator=(const Node& other) = delete;
 	
-	/*
-	 * Read the next message if one is available. Does not wait.
-	 * Returns 0 if no message is available.
-	 */
-	std::shared_ptr<const Message> read();
-	
-	/*
-	 * Read the next message. Waits indefinitely for one to arrive.
-	 * Returns 0 if shutdown is triggered.
-	 */
-	std::shared_ptr<const Message> read_blocking();
-	
-	/*
-	 * Read the next message. Waits timeout_us for one to arrive.
-	 * Returns 0 in case of timeout or shutdown is triggered.
-	 */
-	std::shared_ptr<const Message> read_blocking(int64_t timeout_us);
-	
-	/*
+	/**
 	 * Notify this node that a new message is available on pipe "pipe".
-	 * Needs to be thread safe !!!
+	 * Needs to be thread safe!
 	 */
 	virtual void notify(std::shared_ptr<Pipe> pipe);
 	
-	/*
+	/**
 	 * Trigger this node to shut down.
-	 * Needs to be thread safe !!!
+	 * Needs to be thread safe!
 	 */
 	virtual void exit();
 	
@@ -74,12 +55,34 @@ protected:
 	
 	volatile bool vnx_do_run = true;
 	
-	virtual void close();				// clean up should happen here
+	/**
+	 * Read the next message if one is available. Does not wait.
+	 * Returns 0 if no message is available.
+	 */
+	std::shared_ptr<const Message> read();
+	
+	/**
+	 * Read the next message. Waits indefinitely for one to arrive.
+	 * Returns 0 if shutdown is triggered.
+	 */
+	std::shared_ptr<const Message> read_blocking();
+	
+	/**
+	 * Read the next message. Waits timeout_us for one to arrive.
+	 * Returns 0 in case of timeout or shutdown is triggered.
+	 */
+	std::shared_ptr<const Message> read_blocking(int64_t timeout_us);
+	
+	/**
+	 * Close all pipes and clean up.
+	 * Can be overridden by derived classes but make sure to call this base version also.
+	 */
+	virtual void close();
 	
 private:
-	bool add_pipe(std::shared_ptr<Pipe> pipe);		// attach a new pipe to this node
+	bool add_pipe(std::shared_ptr<Pipe> pipe);		/// attach a new pipe to this node
 	
-	void remove_pipe(Pipe* pipe);					// remove a pipe from this node
+	void remove_pipe(Pipe* pipe);					/// remove a pipe from this node
 	
 private:
 	std::condition_variable condition;

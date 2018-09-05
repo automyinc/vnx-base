@@ -34,7 +34,7 @@ std::string string_subs(std::string str, const std::string& from, const std::str
  * Split string into multiple parts based on special char "sep".
  * An empty input string results in a vector of size 1 with an empty string as the only element.
  */
-std::vector<std::string> string_split(std::string str, char sep);
+std::vector<std::string> string_split(const std::string& str, char sep);
 
 /*
  * Returns a true 64 bit random number.

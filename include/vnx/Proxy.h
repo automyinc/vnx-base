@@ -32,37 +32,37 @@ public:
 	Proxy(const std::string& name_, std::shared_ptr<const Endpoint> endpoint_ = 0, int socket_ = -1);
 	
 protected:
-	void init();
+	void init() override;
 	
-	void main();
+	void main() override;
 	
-	void handle(std::shared_ptr<const Message> msg);
+	void handle(std::shared_ptr<const Message> msg) override;
 	
-	void handle(std::shared_ptr<const Sample> sample);
+	void handle(std::shared_ptr<const Sample> sample) override;
 	
-	std::shared_ptr<const Return> handle(std::shared_ptr<const Request> request);
+	std::shared_ptr<const Return> handle(std::shared_ptr<const Request> request) override;
 	
-	void enable_import(const std::string& topic_name);
+	void enable_import(const std::string& topic_name) override;
 	
-	void disable_import(const std::string& topic_name);
+	void disable_import(const std::string& topic_name) override;
 	
-	void enable_export(const std::string& topic_name);
+	void enable_export(const std::string& topic_name) override;
 	
-	void disable_export(const std::string& topic_name);
+	void disable_export(const std::string& topic_name) override;
 	
-	void enable_forward(const std::string& service_name, const int32_t& max_queue_ms);
+	void enable_forward(const std::string& service_name, const int32_t& max_queue_ms) override;
 	
-	void disable_forward(const std::string& service_name);
+	void disable_forward(const std::string& service_name) override;
 	
-	void enable_tunnel(const Hash64& tunnel_addr, const std::string& serive_name, const int32_t& max_queue_ms);
+	void enable_tunnel(const Hash64& tunnel_addr, const std::string& serive_name, const int32_t& max_queue_ms) override;
 	
-	void disable_tunnel(const Hash64& tunnel_addr);
+	void disable_tunnel(const Hash64& tunnel_addr) override;
 	
-	void on_connect();
+	void on_connect() override;
 	
-	void on_disconnect();
+	void on_disconnect() override;
 	
-	void handle(std::shared_ptr<const TopicInfoList> value, std::shared_ptr<const Sample> sample);
+	void handle(std::shared_ptr<const TopicInfoList> value, std::shared_ptr<const Sample> sample) override;
 	
 private:
 	void enable_forward(const Hash64& serive_addr, const int32_t& max_queue_ms);
@@ -83,11 +83,13 @@ private:
 	std::unordered_map<std::string, uint64_t> import_table;
 	std::unordered_map<Hash64, uint64_t> forward_table;
 	std::unordered_map<Hash64, Hash64> tunnel_hash_map;
+	std::vector<std::shared_ptr<Pipe>> resume_list;
 	
 	std::shared_ptr<ProxyClient> remote;
 	std::shared_ptr<const TopicInfoList> topic_info;
 	Handle<TimeServer> time_server;
 	
+	bool is_connected = false;
 	SocketOutputStream stream_out;
 	std::ostringstream str_stream_out;
 	TypeOutput out;
