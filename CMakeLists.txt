@@ -21,17 +21,17 @@ install(DIRECTORY
 )
 
 install(PROGRAMS
-	${ARCH}/${DIST}/lib/libvnx_base.so
+	lib/libvnx_base.so
 	DESTINATION lib${LIBSUFFIX}
 )
 
 install(PROGRAMS
-	${ARCH}/${DIST}/bin/vnxrouter
-	${ARCH}/${DIST}/bin/vnxclose
-	${ARCH}/${DIST}/bin/vnxdump
-	${ARCH}/${DIST}/bin/vnxread
-	${ARCH}/${DIST}/bin/vnxtimeserver
-	${ARCH}/${DIST}/bin/vnxtopic
+	bin/vnxrouter
+	bin/vnxclose
+	bin/vnxdump
+	bin/vnxread
+	bin/vnxtimeserver
+	bin/vnxtopic
 	DESTINATION bin
 )
 
