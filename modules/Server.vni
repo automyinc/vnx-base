@@ -8,6 +8,4 @@ module Server {
 	
 	int max_queue_ms = 100;
 	
-	bool json_output = false;
-	
 }

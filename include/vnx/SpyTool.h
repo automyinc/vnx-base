@@ -31,11 +31,11 @@ public:
 	SpyTool(const std::string& vnx_name_ = "SpyTool");
 	
 protected:
-	void main();
+	void main() override;
 	
-	void handle(std::shared_ptr<const Sample> sample);
+	void handle(std::shared_ptr<const Sample> sample) override;
 	
-	void update();
+	void update(const TopicInfoList& info);
 	
 private:
 	std::shared_ptr<ProcessClient> process;

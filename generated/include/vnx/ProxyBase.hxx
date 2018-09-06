@@ -24,7 +24,6 @@ public:
 	::vnx::Hash64 request_tunnel;
 	::vnx::bool_t auto_import = false;
 	::vnx::bool_t time_sync = false;
-	::vnx::bool_t json_output = false;
 	::int32_t max_queue_ms = 100;
 	::int32_t max_hop_count = 10;
 	

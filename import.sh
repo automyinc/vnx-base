@@ -21,4 +21,5 @@ cp $SRC/build/tools/vnxdump $ARCH/$DIST/bin/
 cp $SRC/build/tools/vnxread $ARCH/$DIST/bin/
 cp $SRC/build/tools/vnxrouter $ARCH/$DIST/bin/
 cp $SRC/build/tools/vnxtimeserver $ARCH/$DIST/bin/
+cp $SRC/build/tools/vnxtopic $ARCH/$DIST/bin/
 

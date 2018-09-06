@@ -89,13 +89,7 @@ public:
 	
 	template<typename T>
 	void to(T& value) const {
-		if(empty()) {
-			value = T();
-			return;
-		}
-		MemoryInputStream stream(&data);
-		TypeInput in(&stream);
-		vnx::read_dynamic(in, value);
+		value = to<T>();
 	}
 	
 	/** \brief Computes a semantic 64-bit content hash
@@ -136,6 +130,10 @@ public:
 	
 	operator uint64_t() const {
 		return to<uint64_t>();
+	}
+	
+	operator char() const {
+		return to<char>();
 	}
 	
 	operator int8_t() const {

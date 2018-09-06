@@ -15,7 +15,6 @@ module Proxy {
 	
 	bool auto_import = false;			// import all topics that are currently subscribed
 	bool time_sync = false;				// if to sync time with remote process
-	bool json_output = false;			// if to communicate via json
 	
 	int max_queue_ms = 100;
 	int max_hop_count = 10;

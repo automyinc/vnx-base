@@ -31,6 +31,7 @@ install(PROGRAMS
 	${ARCH}/${DIST}/bin/vnxdump
 	${ARCH}/${DIST}/bin/vnxread
 	${ARCH}/${DIST}/bin/vnxtimeserver
+	${ARCH}/${DIST}/bin/vnxtopic
 	DESTINATION bin
 )
 
