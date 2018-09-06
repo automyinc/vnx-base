@@ -2,6 +2,9 @@
 
 SRC=$1
 
+git checkout master
+git pull
+
 mkdir -p lib/
 mkdir -p bin/
 
