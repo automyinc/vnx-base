@@ -58,6 +58,8 @@ public:
 
 std::shared_ptr<Value> create(Hash64 hash);
 
+std::shared_ptr<Value> create(const std::string& type_name);
+
 void read(std::istream& in, Value& value);
 
 template<typename T>
