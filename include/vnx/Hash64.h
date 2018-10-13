@@ -25,6 +25,7 @@ namespace vnx {
 
 class Hash128;
 
+/// Class to hold and compute a 64-bit hash
 class Hash64 {
 public:
 	uint64_t value = 0;
@@ -55,11 +56,11 @@ public:
 	
 	bool operator!=(const Hash64& other) const;
 	
-	Hash64 operator^(const Hash64& other) const;
+	Hash64 operator^(const Hash64& other) const;		///< Computes bit-wise xor
 	
-	std::string to_string();
+	std::string to_string();	///< Returns decimal hash number
 	
-	std::string to_hex_string();
+	std::string to_hex_string();	///< Returns hexadecimal hash number
 	
 };
 

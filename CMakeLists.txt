@@ -32,6 +32,8 @@ install(PROGRAMS
 	bin/vnxread
 	bin/vnxtimeserver
 	bin/vnxtopic
+	bin/vnxrecord
+	bin/vnxplay
 	DESTINATION bin
 )
 

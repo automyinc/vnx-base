@@ -24,12 +24,21 @@
 
 namespace vnx {
 
+/// Skips the next value in the stream
 void skip(TypeInput& in);
 
+/// Skips the current value in the stream
 void skip(TypeInput& in, const TypeCode* type_code, const uint16_t* code);
 
+/** \brief Reads dynamic code from the stream.
+ * 
+ * @param code Pointer to at least VNX_MAX_BYTE_CODE_SIZE uint16_t elements.
+ * @return Size of the code read, in elements of uint16_t.
+ */
 uint16_t read_byte_code(TypeInput& in, uint16_t* code);
 
+/// Converts little-endian to big-endian and big-endian to little-endian.
+/// @{
 inline bool flip_bytes(const bool& value) { return (value != 0); }
 inline uint8_t flip_bytes(const uint8_t& value) { return value; }
 inline uint16_t flip_bytes(const uint16_t& value) { return (value >> 8) | (value << 8); }
@@ -43,7 +52,13 @@ inline int64_t flip_bytes(const int64_t& value) { return int64_t(flip_bytes(uint
 inline float32_t flip_bytes(const float32_t& value) { const uint32_t tmp = flip_bytes(reinterpret_cast<const uint32_t&>(value)); return reinterpret_cast<const float32_t&>(tmp); }
 inline float64_t flip_bytes(const float64_t& value) { const uint64_t tmp = flip_bytes(reinterpret_cast<const uint64_t&>(value)); return reinterpret_cast<const float64_t&>(tmp); }
 inline Hash64 flip_bytes(const Hash64& value) { return Hash64(flip_bytes(uint64_t(value))); }
+/// @}
 
+/** \brief Reads a value directly from the stream.
+ * 
+ * Used when it's known that a value of said type is to follow.
+ */
+/// @{
 inline void read(TypeInput& in, bool& value) { value = *((uint8_t*)in.read(sizeof(uint8_t))); }
 inline void read(TypeInput& in, uint8_t& value) { value = *((uint8_t*)in.read(sizeof(uint8_t))); }
 inline void read(TypeInput& in, uint16_t& value) { value = *((uint16_t*)in.read(sizeof(uint16_t))); }
@@ -57,7 +72,13 @@ inline void read(TypeInput& in, int64_t& value) { value = *((int64_t*)in.read(si
 inline void read(TypeInput& in, float32_t& value) { value = *((float32_t*)in.read(sizeof(float32_t))); }
 inline void read(TypeInput& in, float64_t& value) { value = *((float64_t*)in.read(sizeof(float64_t))); }
 inline void read(TypeInput& in, Hash64& value) { value = Hash64(*((uint64_t*)in.read(sizeof(uint64_t)))); }
+/// @}
 
+/** \brief Reads a value directly from the buffer.
+ * 
+ * Used when it's known that a value of said type is in the buffer.
+ */
+/// @{
 inline void read_value(const void* buf, bool& value) { value = *((uint8_t*)buf); }
 inline void read_value(const void* buf, uint8_t& value) { value = *((uint8_t*)buf); }
 inline void read_value(const void* buf, uint16_t& value) { value = *((uint16_t*)buf); }
@@ -71,7 +92,13 @@ inline void read_value(const void* buf, int64_t& value) { value = *((int64_t*)bu
 inline void read_value(const void* buf, float32_t& value) { value = *((float32_t*)buf); }
 inline void read_value(const void* buf, float64_t& value) { value = *((float64_t*)buf); }
 inline void read_value(const void* buf, Hash64& value) { value = Hash64(*((uint64_t*)buf)); }
+/// @}
 
+/** \brief Reads a value of type \p code from the buffer.
+ * 
+ * Will try to convert value in case type != T.
+ * If no conversion is possible \p value is default initialized.
+ */
 template<typename T>
 void read_value(const void* buf, T& value, const uint16_t* code) {
 	switch(code[0]) {
@@ -100,6 +127,10 @@ void read_value(const void* buf, T& value, const uint16_t* code) {
 	}
 }
 
+/** \brief Reads a static array from the buffer.
+ * 
+ * Directly compatible with CODE_ARRAY.
+ */
 template<typename T, size_t N>
 void read_value(const char* buf, std::array<T, N>& array, const uint16_t* code) {
 	size_t size = 0;
@@ -120,6 +151,11 @@ void read_value(const char* buf, std::array<T, N>& array, const uint16_t* code) 
 template<typename T>
 void read_dynamic_value(TypeInput& in, T& value);
 
+/** \brief Reads a value of type \p code from the stream.
+ * 
+ * Will try to convert value in case type != T.
+ * In case no conversion is possible \p value is default initialized and the data skipped.
+ */
 template<typename T>
 void read_value(TypeInput& in, T& value, const TypeCode* type_code, const uint16_t* code) {
 	switch(code[0]) {
@@ -152,6 +188,10 @@ void read_value(TypeInput& in, T& value, const TypeCode* type_code, const uint16
 	}
 }
 
+/** \brief Reads a dynamic value from the stream.
+ * 
+ * Directly compatible with CODE_DYNAMIC.
+ */
 template<typename T>
 void read_dynamic_value(TypeInput& in, T& value) {
 	uint16_t code[VNX_MAX_BYTE_CODE_SIZE];
@@ -159,6 +199,8 @@ void read_dynamic_value(TypeInput& in, T& value) {
 	read_value(in, value, 0, code);
 }
 
+/// Reads a value of type \p code from the stream.
+/// @{
 inline void read(TypeInput& in, bool& value, const TypeCode* type_code, const uint16_t* code) {
 	read_value(in, value, type_code, code);
 }
@@ -195,6 +237,7 @@ inline void read(TypeInput& in, float32_t& value, const TypeCode* type_code, con
 inline void read(TypeInput& in, float64_t& value, const TypeCode* type_code, const uint16_t* code) {
 	read_value(in, value, type_code, code);
 }
+/// @}
 
 /** \brief Reads a dynamically allocated string from the input stream.
  * 
@@ -278,8 +321,7 @@ void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, con
 	read_array(in, array, type_code, code);
 }
 
-/**
- * \brief Reads a dynamically allocated array (ContiguousContainer) from the input stream.
+/** \brief Reads a dynamically allocated array (ContiguousContainer) from the input stream.
  * 
  * Compatible with CODE_LIST.
  */
@@ -321,8 +363,7 @@ void read(TypeInput& in, std::vector<T>& vector, const TypeCode* type_code, cons
 	read_vector(in, vector, type_code, code);
 }
 
-/**
- * \brief Reads a dynamically allocated list (SequenceContainer) from the input stream.
+/** \brief Reads a dynamically allocated list (SequenceContainer) from the input stream.
  * 
  * Compatible with CODE_LIST.
  */
@@ -359,8 +400,7 @@ void read(TypeInput& in, std::list<T>& list, const TypeCode* type_code, const ui
 	read_list(in, list, type_code, code);
 }
 
-/**
- * \brief Reads a dynamically allocated set (AssociativeContainer) from the input stream.
+/** \brief Reads a dynamically allocated set (AssociativeContainer) from the input stream.
  * 
  * Compatible with CODE_LIST.
  */
@@ -648,10 +688,10 @@ void type<T>::read(TypeInput& in, T& value, const TypeCode* type_code, const uin
 	vnx::read(in, value, type_code, code);
 }
 
-/** \brief Reads a value of type T from the input stream.
+/** \brief Reads a value of type T from the stream.
  * 
  * This function assumes an implicit CODE_DYNAMIC, ie. it expects dynamic code to be in the data.
- * Used primarily by Variant, otherwise in special use cases.
+ * Used primarily by Variant, otherwise in special cases.
  */
 template<typename T>
 void read_dynamic(TypeInput& in, T& value) {
@@ -698,6 +738,7 @@ void read_dynamic_list_data(TypeInput& in, T* data_, const uint16_t* code_, cons
 template<typename T>
 void from_string(const std::string& str, T& value);
 
+/// Reads an object from the JSON string
 void from_string(const std::string& str, std::map<std::string, std::string>& value);
 
 template<typename T>
@@ -706,10 +747,30 @@ void from_string(const std::string& str, std::shared_ptr<T>& value);
 template<typename T>
 void from_string(const std::string& str, std::shared_ptr<const T>& value);
 
+/** \brief Copies a value from the JSON stream into \p out.
+ * 
+ * A value is either a:
+ * - number: 123 or 123.456
+ * - string: "string with quotes"
+ * - array: [1, 2, 3]
+ * - object: {"key": 123, "foo": "bar"}
+ * 
+ * @param in JSON stream to read from
+ * @param out Output string to copy into, will be cleared beforehand.
+ * @param want_string Can be set to true if a string is expected to follow. If true will also read a string without quotes
+ * 			until \p stop_char or any whitespace is encountered. Any whitespace at the beginning is ignored.
+ * @param stop_char Where to additionally stop reading a string in case \p want_string == true.
+ */
 bool read_value(std::istream& in, std::string& out, bool want_string = false, char stop_char = 0);
 
+/** \brief Reads an object from the JSON stream.
+ * 
+ * Example: {"key": 123, "foo": "bar"}
+ */
 bool read_object(std::istream& in, std::map<std::string, std::string>& object);
 
+/// Reads a value directly from the JSON stream
+/// @{
 inline void read(std::istream& in, bool& value) { int tmp; in >> tmp; value = bool(tmp); }
 inline void read(std::istream& in, uint8_t& value) { int tmp; in >> tmp; value = uint8_t(tmp); }
 inline void read(std::istream& in, uint16_t& value) { in >> value; }
@@ -722,16 +783,32 @@ inline void read(std::istream& in, int32_t& value) { in >> value; }
 inline void read(std::istream& in, int64_t& value) { in >> value; }
 inline void read(std::istream& in, float32_t& value) { in >> value; }
 inline void read(std::istream& in, float64_t& value) { in >> value; }
+/// @}
 
+/** \brief Reads a string from the JSON stream.
+ * 
+ * Example: "string with whitespace inside double quotes" \n 
+ * Example: string_without_quotes_and_no_whitespace
+ */
 void read(std::istream& in, std::string& value);
 
 /** \brief Reads a JSON value from the input stream.
  * 
- * Depending on the input a value is either an integral number, a string (ie. std::string),
- * an array (ie. std::vector) or an object (ie. vnx::Object).
+ * Depending on the input the returned value (wrapped in a Variant) is either a:
+ * - unsigned integer (CODE_UINT64)
+ * - signed integer (CODE_INT64)
+ * - floating-point value (CODE_DOUBLE)
+ * - string (CODE_LIST, CODE_INT8)
+ * - array (CODE_LIST)
+ * - vnx::Object (CODE_OBJECT)
  */
 std::shared_ptr<Variant> read(std::istream& in);
 
+/** \brief Reads a static array from the JSON stream
+ * 
+ * Example: [1, 2, 3] \n 
+ * If the input array is smaller than \p array the left-over elements are default initialized.
+ */
 template<typename T, size_t N>
 void read(std::istream& in, std::array<T, N>& array) {
 	int stack = 0;
@@ -764,6 +841,10 @@ void read(std::istream& in, std::array<T, N>& array) {
 	}
 }
 
+/** \brief Reads a dynamic array from the JSON stream
+ * 
+ * Example: [1, 2, 3]
+ */
 template<typename T>
 void read(std::istream& in, std::vector<T>& vector) {
 	vector.clear();
@@ -793,6 +874,11 @@ void read(std::istream& in, std::vector<T>& vector) {
 	}
 }
 
+/** \brief Reads a pair from the JSON stream
+ * 
+ * Example: ["key", "value"] \n 
+ * Example: {"key": "value"}
+ */
 template<typename K, typename V>
 void read(std::istream& in, std::pair<K, V>& pair) {
 	pair = std::pair<K, V>();
@@ -830,6 +916,11 @@ void read(std::istream& in, std::pair<K, V>& pair) {
 	}
 }
 
+/** \brief Reads a map from the JSON stream
+ * 
+ * Example: [[1, 1.234], [123, 5.678]] \n 
+ * Example: {"foo": 1, "bar": 123}
+ */
 template<typename K, typename V>
 void read(std::istream& in, std::map<K, V>& map) {
 	map.clear();
@@ -866,6 +957,11 @@ void read(std::istream& in, std::map<K, V>& map) {
 	}
 }
 
+/** \brief Reads a matrix from the JSON stream.
+ * 
+ * Example: [1, 2, 3, 4]	// column vector \n 
+ * Example: {"size": [2, 2], "data": [1, 2, 3, 4]}		// general N-by-M matrix \n 
+ */
 template<typename T, size_t N>
 void read_matrix(std::istream& in, T* data, const std::array<size_t, N>& size) {
 	size_t total_size = 1;
@@ -911,6 +1007,7 @@ void type<T>::read(std::istream& in, T& value) {
 	vnx::read(in, value);
 }
 
+/// Reads a value of type T from the JSON string
 template<typename T>
 void from_string(const std::string& str, T& value) {
 	std::istringstream stream;
@@ -918,6 +1015,7 @@ void from_string(const std::string& str, T& value) {
 	vnx::type<T>().read(stream, value);
 }
 
+/// Reads a Value of type T from the JSON stream
 template<typename T>
 void from_string(const std::string& str, std::shared_ptr<T>& value) {
 	if(!value) {
@@ -930,6 +1028,7 @@ void from_string(const std::string& str, std::shared_ptr<T>& value) {
 	}
 }
 
+/// Reads a Value of type T from the JSON stream
 template<typename T>
 void from_string(const std::string& str, std::shared_ptr<const T>& value) {
 	std::shared_ptr<T> tmp = T::create();
@@ -941,6 +1040,7 @@ void from_string(const std::string& str, std::shared_ptr<const T>& value) {
 	value = tmp;
 }
 
+/// Reads a TypeCode from the stream
 void read_type_code(TypeInput& in);
 
 /// Reads a value from the file given by \p file_name

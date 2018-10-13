@@ -26,10 +26,11 @@
 
 namespace vnx {
 
+/// Wrapper class to handle a file-system file.
 class File {
 public:
-	TypeInput in;
-	TypeOutput out;
+	TypeInput in;		///< Can be used to read from the file
+	TypeOutput out;		///< Can be used to write to the file
 	
 	/// Creates empty file object
 	File();
@@ -120,6 +121,7 @@ public:
 	/// Flushes output buffer and then closes file. Safe to call multiple times or on an empty object.
 	void close();
 	
+	/// Returns internal file pointer
 	::FILE* get_handle() const {
 		return p_file;
 	}

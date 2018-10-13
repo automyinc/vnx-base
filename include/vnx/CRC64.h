@@ -24,6 +24,7 @@
 
 namespace vnx {
 
+/// Class to compute 64-bit CRC
 class CRC64 {
 public:
 	CRC64() {
@@ -66,10 +67,13 @@ private:
 };
 
 
+/// Computes CRC64 of null-terminated string
 uint64_t hash64(const char* str);
 
+/// Computes CRC64 of string
 uint64_t hash64(const std::string& str);
 
+/// Computes CRC64 of binary data given by \p buf of size \p len bytes
 uint64_t hash64(const char* buf, size_t len);
 
 

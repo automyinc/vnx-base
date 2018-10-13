@@ -25,17 +25,30 @@
 
 namespace vnx {
 
+/// Base class for input streams
 class InputStream {
 public:
 	virtual ~InputStream() {}
 	
+	/** \brief Reads up to \p len bytes into \p buf, returns number of bytes read.
+	 * 
+	 * @param buf Pointer to a buffer of \p len bytes.
+	 * @param len Maximum number of bytes to read into \p buf.
+	 * @return Number of bytes read into \p buf.
+	 */
 	virtual size_t read(void* buf, size_t len) = 0;
 	
+	/** \brief Returns total number of bytes read so far from stream.
+	 * 
+	 * In case of a file it returns the current read position, ie. seeking
+	 * should be correctly handled.
+	 */
 	virtual size_t get_input_pos() const { return 0; }
 	
 };
 
 
+/// Input stream for file descriptors
 class BasicInputStream : public InputStream {
 public:
 	BasicInputStream() = default;
@@ -54,6 +67,7 @@ private:
 };
 
 
+/// Input stream for files
 class FileInputStream : public InputStream {
 public:
 	FileInputStream() = default;
@@ -74,6 +88,11 @@ private:
 };
 
 
+/** \brief Input buffer for reading from a InputStream.
+ * 
+ * Used to speed up reading of small amounts of data, while also allowing
+ * efficient reading of large amounts of data by bypassing the buffer.
+ */
 class InputBuffer {
 public:
 	InputBuffer(InputStream* stream_) : stream(stream_) {}
@@ -81,9 +100,11 @@ public:
 	InputBuffer(const InputBuffer& other) = delete;
 	InputBuffer& operator=(const InputBuffer& other) = delete;
 	
-	/**
-	 * Get a pointer to the next available data and advance the internal pointer by "len" bytes.
-	 * Reads new data from the stream if available bytes are less than "len".
+	/** \brief Reads \p len bytes and returns a pointer to the data.
+	 * 
+	 * Returns a pointer to the next available data and advances the internal pointer by \p len bytes.
+	 * Reads new data from the stream if available bytes are less than \p len.
+	 * Argument \p len cannot be larger than the buffer size, which is VNX_BUFFER_SIZE.
 	 */
 	const char* read(size_t len) {
 		if(len > VNX_BUFFER_SIZE) {
@@ -106,8 +127,9 @@ public:
 		return res;
 	}
 	
-	/**
-	 * Read "len" bytes into memory given by "buf".
+	/** \brief Reads \p len bytes into buffer given by \p buf.
+	 * 
+	 * This function blocks until all \p len bytes are read into the buffer \p buf.
 	 * Used to read large chunks of data, potentially bypassing the buffer.
 	 */
 	void read(char* buf, size_t len) {
@@ -136,9 +158,7 @@ public:
 		}
 	}
 	
-	/**
-	 * Try to have num_bytes ready in the buffer for reading.
-	 */
+	/// Tries to have \p num_bytes ready in the buffer for reading
 	void fetch(size_t num_bytes) {
 		if(num_bytes > VNX_BUFFER_SIZE) {
 			num_bytes = VNX_BUFFER_SIZE;
@@ -149,24 +169,18 @@ public:
 		}
 	}
 	
-	/**
-	 * Resets the buffer. Discards any data left over.
-	 */
+	/// Resets the buffer, discarding any data left over
 	void reset() {
 		pos = 0;
 		end = 0;
 	}
 	
-	/**
-	 * Get the number of bytes available in the buffer.
-	 */
+	/// Returns number of bytes available in the buffer
 	size_t get_num_avail() const {
 		return end - pos;
 	}
 	
-	/**
-	 * Returns the number of bytes that have been read from the stream already, minus what is left in the buffer.
-	 */
+	/// Returns stream read position, while taking buffered data into account.
 	size_t get_input_pos() const {
 		return stream->get_input_pos() - get_num_avail();
 	}
@@ -180,15 +194,20 @@ private:
 };
 
 
+/** \brief Input buffer to read typed data from a InputStream.
+ * 
+ * Used to read from a serialized data stream which was written by TypeOutput.
+ */
 class TypeInput : public InputBuffer {
 public:
 	TypeInput(InputStream* stream_) : InputBuffer::InputBuffer(stream_) {}
 	
+	/// Same as vnx::get_type_code()
 	const TypeCode* get_type_code(Hash64 code_hash) const;
 	
-	/**
-	 * Resets the buffer and clears the type map.
-	 * Used as a way of creating a new TypeInput in-place.
+	/** \brief Resets the buffer and clears the type map.
+	 * 
+	 * Used as a way of creating a new TypeInput for the same stream in-place.
 	 */
 	void clear();
 	

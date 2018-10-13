@@ -26,6 +26,11 @@
 
 namespace vnx {
 
+/** \brief Represents a Value in binary serialized form.
+ * 
+ * Binary is used when reading or receiving a non-native value, for which the current process
+ * does not have a native C++ type compiled in.
+ */
 class Binary : public Value {
 public:
 	Memory data;
@@ -54,19 +59,20 @@ public:
 	void accept(Visitor& visitor) const override;
 	
 	Object to_object() const override;
-	
 	void from_object(const Object& object) override;
 	
-	void clear();
+	void clear();		///< Creates a new object in place
 	
 };
 
 
+/// Used to read from a Binary
 class BinaryInputStream : public MemoryInputStream {
 public:
 	BinaryInputStream(const Binary* binary) : MemoryInputStream(&binary->data) {}
 };
 
+/// Used to write to a Binary
 class BinaryOutputStream : public MemoryOutputStream {
 public:
 	BinaryOutputStream(Binary* binary) : MemoryOutputStream(&binary->data) {}

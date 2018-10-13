@@ -25,6 +25,7 @@
 
 namespace vnx {
 
+/// Wrapper class to handle a file-system directory.
 class Directory {
 public:
 	/// Creates empty directory object

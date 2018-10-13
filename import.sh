@@ -22,4 +22,6 @@ cp $SRC/build/tools/vnxread bin/
 cp $SRC/build/tools/vnxrouter bin/
 cp $SRC/build/tools/vnxtimeserver bin/
 cp $SRC/build/tools/vnxtopic bin/
+cp $SRC/build/tools/vnxrecord bin/
+cp $SRC/build/tools/vnxplay bin/
 

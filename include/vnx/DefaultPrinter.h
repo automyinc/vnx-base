@@ -22,6 +22,10 @@
 
 namespace vnx {
 
+/** \brief A Visitor that generates JSON string output.
+ * 
+ * The DefaultPrinter does not generate any newlines.
+ */
 class DefaultPrinter : public Visitor {
 public:
 	DefaultPrinter(std::ostream& out) : out(out) {}
@@ -60,6 +64,15 @@ protected:
 };
 
 
+/** \brief A Visitor that generates JSON string output with some exceptions.
+ * 
+ * Same as DefaultPrinter except:
+ *  - null is an empty string (instead of "{}")
+ *  - strings are without quotes
+ *  - enum values are without quotes
+ * 
+ * This Visitor is used when the desired output is a value.
+ */
 class ToStringValue : public DefaultPrinter {
 public:
 	ToStringValue(std::ostream& out);

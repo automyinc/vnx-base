@@ -23,19 +23,26 @@
 
 namespace vnx {
 
+/** \brief Base class for clients to perform remote procedure calls.
+ * 
+ * This is the base class which is inherited from in the generated code for
+ * each of the specific clients.
+ */
 class Client : protected Node {
 public:
+	/// Creates a client for the specified service address.
 	Client(Hash64 service_addr);
 	
 	~Client();
 	
 protected:
+	/// Performs the actual request, blocks in case vnx_is_async == false.
 	void vnx_request(std::shared_ptr<const Binary> arguments);
 	
 protected:
-	std::shared_ptr<const Binary> vnx_return_data;
+	std::shared_ptr<const Binary> vnx_return_data;		///< The returned data from the last request
 	
-	bool vnx_is_async = false;
+	bool vnx_is_async = false;		///< Flag to indicate if next request should be performed asynchronously
 	
 private:
 	Hash64 vnx_src_mac;

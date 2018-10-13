@@ -23,12 +23,19 @@
 
 namespace vnx {
 
+/// Returns config value for key \p key, returns null in case no such key.
 std::shared_ptr<std::string> get_config(const std::string& key);
 
+/// Set config value (in-memory)
 void set_config(const std::string& key, const std::string& value);
 
+/// Read config file system tree starting at \p root_path
 void read_config_tree(const std::string& root_path);
 
+/** \brief Reads config value for key \p key.
+ * 
+ * Returns true if config is available, otherwise returns false and leaves \p value untouched.
+ */
 template<typename T>
 bool read_config(const std::string& key, T& value) {
 	std::shared_ptr<std::string> result = get_config(key);
@@ -39,6 +46,7 @@ bool read_config(const std::string& key, T& value) {
 	return false;
 }
 
+/// Set config value (in-memory)
 template<typename T>
 void write_config(const std::string& key, const T& value) {
 	set_config(key, to_string(value));

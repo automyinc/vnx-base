@@ -24,6 +24,7 @@
 
 namespace vnx {
 
+/// Class to hold and compute a 128-bit hash
 class Hash128 : public std::array<Hash64, 2> {
 public:
 	Hash128() : Hash128(Hash64(), Hash64()) {}
@@ -58,11 +59,11 @@ public:
 	
 	bool operator!=(const Hash128& other) const;
 	
-	Hash128 operator^(const Hash128& other) const;
+	Hash128 operator^(const Hash128& other) const;		///< Computes bit-wise xor
 	
-	std::string to_string();
+	std::string to_string();	///< Returns decimal hash number
 	
-	std::string to_hex_string();
+	std::string to_hex_string();	///< Returns hexadecimal hash number
 	
 	friend std::ostream& operator<<(std::ostream& out, const Hash128& value);
 	
