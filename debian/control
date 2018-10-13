@@ -2,5 +2,5 @@ Package: vnx-base
 Section: base
 Priority: optional
 Depends:
-Maintainer: Max Wittal <automyinc@gmail.com>
+Maintainer: Max Wittal <max.wittal@automyinc.com>
 Description: VNX framework base package
