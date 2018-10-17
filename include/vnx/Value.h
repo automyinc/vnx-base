@@ -23,8 +23,9 @@
 
 namespace vnx {
 
-/*
- * This is the base class for any interface class.
+/** \brief Base class for any VNI interface class.
+ * 
+ * Value provides a polymorph interface to the type system.
  */
 class Value {
 public:
@@ -56,10 +57,13 @@ public:
 };
 
 
+/// Creates new Value with given type hash
 std::shared_ptr<Value> create(Hash64 hash);
 
+/// Creates new Value with given type time
 std::shared_ptr<Value> create(const std::string& type_name);
 
+/// Reads a Value from the stream
 void read(std::istream& in, Value& value);
 
 template<typename T>

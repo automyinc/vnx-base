@@ -25,43 +25,39 @@
 
 namespace vnx {
 
+/** \brief Class to write a recording file.
+ * 
+ * Used by Recorder.
+ */
 class RecordWriter {
 public:
-	/*
-	 * Creates a new record writer, writing to a file given by "filename".
+	/** \brief Create a new writer.
+	 * 
 	 * Will truncate an already existing file.
-	 * "header_size" is the maximum size in bytes of the header that is reserved at the beginning of the file.
-	 * "block_size" is the size of each block in terms of number of samples.
-	 * Bigger blocks increase seek performance during playback at the expense of increased write overhead.
+	 * 
+	 * @param header_size Maximum size in bytes of the header that is reserved at the beginning of the file.
+	 * @block_size Size of each block in terms of number of samples.
 	 */
 	RecordWriter(const std::string& filename, uint32_t header_size = 262144, uint32_t block_size = 4096);
 	
 	~RecordWriter();
 	
-	/*
-	 * Write a new sample to the file.
-	 */
+	/// Write sample to file
 	void write(std::shared_ptr<const Sample> sample);
 	
-	/*
-	 * Rewrite the header and the current index and then flush the file.
+	/** \brief Rewrite the header and the current index and then flush the file.
+	 * 
 	 * Used to limit data loss in case of a crash.
 	 */
 	void flush();
 	
-	/*
-	 * Close the file.
-	 */
+	/// Close the file.
 	void close();
 	
-	/*
-	 * Get the record header.
-	 */
+	/// Get the record header.
 	const RecordHeader& get_header() const;
 	
-	/*
-	 * Get the current byte position.
-	 */
+	/// Get the current byte position.
 	size_t get_output_pos() const;
 	
 protected:

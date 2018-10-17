@@ -65,9 +65,9 @@
 /// VNX namespace
 namespace vnx {
 
-typedef bool bool_t;
-typedef float float32_t;
-typedef double float64_t;
+typedef bool bool_t;			///< bool type
+typedef float float32_t;		///< 32-bit IEEE float type
+typedef double float64_t;		///< 64-bit IEEE float type
 
 class Visitor;
 class Value;
@@ -375,21 +375,21 @@ void create_dynamic_code(std::vector<uint16_t>& code, std::shared_ptr<const Valu
 /// Class for a field in a TypeCode.
 class TypeField {
 public:
-	uint16_t version = 2;			/// type field version
+	uint16_t version = 2;			///< Version number
 	
-	std::string name;				/// field name
-	std::string value;				/// default value in JSON format
-	std::vector<uint16_t> code;		/// field code
-	bool is_extended = false;		/// extended means dynamic size
+	std::string name;				///< Field name
+	std::string value;				///< Default value in JSON format
+	std::vector<uint16_t> code;		///< Field code
+	bool is_extended = false;		///< Extended means dynamic size
 	
-	/**
+	/*
 	 * The following fields are computed at runtime. They are not serialized.
 	 */
-	size_t index = 0;				/// field index in the original TypeCode::fields array
-	size_t offset = 0;				/// byte offset in the original static data section
-	size_t size = 0;				/// size in bytes
+	size_t index = 0;				///< Field index in the original TypeCode::fields array
+	size_t offset = 0;				///< Byte offset in the original static data section
+	size_t size = 0;				///< Size in bytes
 	
-	int32_t native_index = -1;		/// field index in the native TypeCode::fields array
+	int32_t native_index = -1;		///< Field index in the native TypeCode::fields array
 	
 	void compile(const TypeCode* type_code);
 	
@@ -404,28 +404,28 @@ class TypeCode {
 public:
 	TypeCode(bool is_native_ = false);
 	
-	uint16_t version = 2;	/// type code version
+	uint16_t version = 2;	///< Version number
 	
-	Hash64 type_hash;		/// the identity of this type of _any_ version (ie. only depends on the full type name)
-	Hash64 code_hash;		/// the identity of this type of a _specific_ version (changes when fields are added/removed or changed)
+	Hash64 type_hash;		///< The identity of this type of _any_ version (ie. only depends on the full type name)
+	Hash64 code_hash;		///< The identity of this type of a _specific_ version (changes when fields are added/removed or changed)
 	
-	std::vector<const TypeCode*> parents;		/// the inheritance line (used by instanceof())
-	std::vector<const TypeCode*> depends;		/// the types which are used by this type's fields
-	const vnx::TypeCode* return_type = 0;		/// in case of a method type this is the return type
+	std::vector<const TypeCode*> parents;		///< The inheritance line (used by instanceof())
+	std::vector<const TypeCode*> depends;		///< The types which are used by this type's fields
+	const vnx::TypeCode* return_type = 0;		///< In case of a method type this is the return type
 	
-	std::string name;							/// full unique name of the type (including the namespace)
+	std::string name;							///< Full unique name of the type (including the namespace)
 	std::vector<TypeField> fields;
-	std::vector<TypeField> static_fields;		/// ie. constants
+	std::vector<TypeField> static_fields;		///< ie. constants
 	std::vector<const TypeCode*> methods;
-	std::map<uint32_t, std::string> enum_map;			/// map from enum values to their names (only for enum types)
-	std::map<std::string, std::string> alias_map;		/// map for field matching in case of changed field names
+	std::map<uint32_t, std::string> enum_map;			///< Map from enum values to their names (only for enum types)
+	std::map<std::string, std::string> alias_map;		///< Map for field matching in case of changed field names
 	
-	bool is_enum = false;			/// if type is an enum
-	bool is_class = false;			/// if type is a class (ie. inherits from Value)
-	bool is_method = false;			/// if type is a method
-	bool is_return = false;			/// if type is a method return type
+	bool is_enum = false;			///< If type is an enum
+	bool is_class = false;			///< If type is a class (ie. inherits from Value)
+	bool is_method = false;			///< If type is a method
+	bool is_return = false;			///< If type is a method return type
 	
-	/**
+	/*
 	 * The following fields are computed at runtime. They are not serialized.
 	 */
 	bool is_native = false;
@@ -434,7 +434,7 @@ public:
 	std::vector<TypeField*> ext_fields;
 	std::map<std::string, uint32_t> inv_enum_map;
 	
-	std::function<std::shared_ptr<Value>(void)> create_value;		/// function that creates a new value of this type
+	std::function<std::shared_ptr<Value>(void)> create_value;		///< Function that creates a new value of this type
 	
 	/**
 	 * Must be called after de-serializing a TypeCode.

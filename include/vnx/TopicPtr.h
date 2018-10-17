@@ -22,6 +22,7 @@
 
 namespace vnx {
 
+/// Wrapper around std::shared_ptr<Topic>
 class TopicPtr : public std::shared_ptr<Topic> {
 public:
 	TopicPtr();

@@ -25,10 +25,16 @@
 
 namespace vnx {
 
+/// Base class for output streams
 class OutputStream {
 public:
 	virtual ~OutputStream() = default;
 	
+	/** \brief Writes \p len bytes to the stream
+	 * 
+	 * @param buf Pointer to data
+	 * @param len Number of bytes to write
+	 */
 	virtual void write(const void* buf, size_t len) = 0;
 	
 	virtual size_t get_output_pos() const { return 0; }
@@ -36,6 +42,7 @@ public:
 };
 
 
+/// Output stream for POSIX file descriptors
 class BasicOutputStream : public OutputStream {
 public:
 	BasicOutputStream() = default;
@@ -54,6 +61,7 @@ private:
 };
 
 
+/// Output stream for files
 class FileOutputStream : public OutputStream {
 public:
 	FileOutputStream() = default;
@@ -74,6 +82,7 @@ private:
 };
 
 
+/// Output stream for sockets
 class SocketOutputStream : public OutputStream {
 public:
 	SocketOutputStream() = default;
@@ -92,6 +101,11 @@ private:
 };
 
 
+/** \brief Output buffer for writing to a OutputStream.
+ * 
+ * Used to speed up writing of small amounts of data, while also allowing
+ * efficient writing of large amounts of data by bypassing the buffer.
+ */
 class OutputBuffer {
 public:
 	OutputBuffer(OutputStream* stream_) : stream(stream_) {}
@@ -99,8 +113,8 @@ public:
 	OutputBuffer(const OutputBuffer& other) = delete;
 	OutputBuffer& operator=(const OutputBuffer& other) = delete;
 	
-	/*
-	 * Get a pointer to at least "len" number of bytes in the buffer.
+	/**
+	 * Get a pointer to at least \p len number of bytes in the buffer.
 	 * Will flush the buffer to the stream if not enough space available.
 	 */
 	char* write(size_t len) {
@@ -115,8 +129,8 @@ public:
 		return res;
 	}
 	
-	/*
-	 * Write "len" number of bytes given by "data" to the stream.
+	/** \brief Write \p len number of bytes given by \p data to the stream.
+	 * 
 	 * Used to write large chunks of data, potentially bypassing the buffer.
 	 */
 	void write(const void* data, size_t len) {
@@ -128,8 +142,8 @@ public:
 		}
 	}
 	
-	/*
-	 * Flush the buffer to the stream.
+	/** \brief Flush the buffer to the stream.
+	 * 
 	 * Used to make sure that all data is actually written to the stream.
 	 */
 	void flush() {
@@ -139,30 +153,22 @@ public:
 		}
 	}
 	
-	/*
-	 * Resets the buffer. Discards any data left over.
-	 */
+	/// Resets the buffer. Discards any data left over.
 	void reset() {
 		pos = 0;
 	}
 	
-	/*
-	 * Returns the buffer size.
-	 */
+	/// Returns the buffer size.
 	size_t get_buffer_size() const {
 		return VNX_BUFFER_SIZE;
 	}
 	
-	/*
-	 * Returns the number of bytes currently left in the buffer.
-	 */
+	/// Returns the number of bytes currently left in the buffer.
 	size_t get_buffer_pos() const {
 		return pos;
 	}
 	
-	/*
-	 * Returns the number of bytes that have been written to the stream already, plus what is left in the buffer.
-	 */
+	/// Returns the number of bytes that have been written to the stream already, plus what is left in the buffer.
 	size_t get_output_pos() const {
 		return stream->get_output_pos() + pos;
 	}
@@ -175,22 +181,27 @@ private:
 };
 
 
+/** \brief Output buffer to write typed data to a OutputStream.
+ * 
+ * Used to write to a serialized data stream which will be read by a TypeInput.
+ */
 class TypeOutput : public OutputBuffer {
 public:
 	TypeOutput(OutputStream* stream_) : OutputBuffer::OutputBuffer(stream_) {}
 	
+	/// Writes given type code to the stream if not already done so
 	void write_type_code(const TypeCode* type_code);
 	
-	/*
-	 * Resets the buffer and clears the type map.
+	/** \brief Resets the buffer and clears the type map.
+	 * 
 	 * Used as a way of creating a new TypeOutput in-place.
 	 */
 	void clear();
 	
-	// to keep track of which type codes have already been written to the stream
+	/// To keep track of which type codes have already been written to the stream
 	std::unordered_map<Hash64, const TypeCode*> type_map;
 	
-	// to keep track of where the type codes have been written
+	/// To keep track of where the type codes have been written
 	std::vector<size_t> type_code_positions;
 	
 };

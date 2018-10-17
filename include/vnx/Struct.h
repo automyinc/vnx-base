@@ -23,6 +23,10 @@
 
 namespace vnx {
 
+/** \brief Wrapper class to hold a struct as a Value.
+ * 
+ * Used to pass structs as a Value.
+ */
 template<typename T>
 class Struct : public Value {
 public:

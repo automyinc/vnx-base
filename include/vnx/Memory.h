@@ -25,6 +25,11 @@
 
 namespace vnx {
 
+/** \brief Class to handle a list of memory chunks as one blob.
+ * 
+ * Memory is used as a buffer to serialize into and de-serialize from if needed.
+ * Internally it holds a list of memory chunks to avoid re-allocation during serialization.
+ */
 class Memory {
 public:
 	struct chunk_t {
@@ -64,10 +69,12 @@ public:
 		clear();
 	}
 	
+	/// Performs deep-copy
 	Memory(const Memory& other) {
 		*this = other;
 	}
 	
+	/// Performs deep-copy
 	Memory& operator=(const Memory& other);
 	
 	bool operator==(const Memory& other) const;
@@ -82,20 +89,27 @@ public:
 		return front_ == 0;
 	}
 	
+	/// Returns pointer to first chunk
 	const chunk_t* front() const {
 		return front_;
 	}
 	
+	/// Computes CRC64 hash of memory content
 	Hash64 get_hash() const;
 	
+	/// Adds a chunk of \p len bytes and returns pointer to chunk data
 	char* add_chunk(size_t len);
 	
+	/// Returns total size in bytes
 	size_t get_size() const;
 	
+	/// Writes memory content to \p out
 	void write(OutputBuffer& out) const;
 	
+	/// Frees all memory
 	void clear();
 	
+	/// Returns a string representation of the memory content
 	std::string as_string() const;
 	
 private:
@@ -109,6 +123,7 @@ private:
 };
 
 
+/// Used to write to a Memory object
 class MemoryOutputStream : public OutputStream {
 public:
 	MemoryOutputStream(Memory* data_) : data(data_) {
@@ -131,6 +146,7 @@ private:
 };
 
 
+/// Used to read from a Memory object
 class MemoryInputStream : public InputStream {
 public:
 	MemoryInputStream(const Memory* data_) {

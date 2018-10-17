@@ -25,16 +25,23 @@
 
 namespace vnx {
 
+/** \brief Class to hold any possible value in serialized form.
+ * 
+ * Used as a generic variable, field or parameter.
+ */
 class Variant {
 public:
-	Memory data;
+	Memory data;		///< The serialized data
 	
+	/// Creates empty Variant
 	Variant() = default;
 	
+	/// Performs deep-copy
 	Variant(const Variant& other) {
 		*this = other;
 	}
 	
+	/// Create Variant with given value
 	template<typename T>
 	Variant(const T& value) {
 		assign(value);
@@ -48,8 +55,10 @@ public:
 		return std::make_shared<Variant>(other);
 	}
 	
+	/// Performs deep-copy
 	Variant& operator=(const Variant& other) = default;
 	
+	/// Assign new value
 	template<typename T>
 	Variant& assign(const T& value) {
 		clear();
@@ -60,21 +69,26 @@ public:
 		return *this;
 	}
 	
+	/// Assign new value
 	Variant& assign(const Variant& value) {
 		*this = value;
 		return *this;
 	}
 	
+	/// Assign new null terminated string
 	Variant& assign(const char* str);
 	
+	/// Assign new string with given length
 	Variant& assign(const char* str, size_t len);
 	
+	/// Assign new value
 	template<typename T>
 	Variant& operator=(const T& value) {
 		assign(value);
 		return *this;
 	}
 	
+	/// Convert value to type T
 	template<typename T>
 	T to() const {
 		if(empty()) {
@@ -87,6 +101,7 @@ public:
 		return value;
 	}
 	
+	/// Convert value to type T
 	template<typename T>
 	void to(T& value) const {
 		value = to<T>();
@@ -100,6 +115,7 @@ public:
 	 */
 	Hash64 get_hash() const;
 	
+	/// Returns type code of current value
 	const uint16_t* get_code() const;
 	
 	bool operator==(const Variant& other) const;
@@ -114,6 +130,10 @@ public:
 	
 	bool operator>=(const Variant& other) const;
 	
+	/** \brief Converts value to a bool.
+	 * 
+	 * CODE_NULL == false, otherwise normal C++ conversion applies.
+	 */
 	operator bool() const;
 	
 	operator uint8_t() const {
@@ -164,28 +184,43 @@ public:
 		return data.empty();
 	}
 	
+	/** \brief Returns true if value is null, ie. CODE_NULL.
+	 * 
+	 * Note: Returns false for empty Variant also.
+	 */
 	bool is_null() const;
 	
+	/// Returns true if value is a signed or unsigned integer.
 	bool is_long() const;
 	
+	/// Returns true if value is a unsigned integer.
 	bool is_ulong() const;
 	
+	/// Returns true if value is a float or double.
 	bool is_double() const;
 	
+	/// Returns true if value is an integer or a float/double.
 	bool is_integral() const;
 	
+	/// Returns true if value is a string.
 	bool is_string() const;
 	
+	/// Returns true if value is a static array. (CODE_ARRAY)
 	bool is_array() const;
 	
+	/// Returns true if value is a dynamic array/list. (CODE_LIST)
 	bool is_list() const;
 	
+	/// Returns true if value is a map. (CODE_MAP)
 	bool is_map() const;
 	
+	/// Returns true if value is an Object. (CODE_OBJECT)
 	bool is_object() const;
 	
+	/// Returns true if value is a Value. (CODE_ANY)
 	bool is_value() const;
 	
+	/// Clear value, ie. make Variant empty.
 	void clear() {
 		data.clear();
 	}
@@ -208,9 +243,18 @@ public:
 		return in;
 	}
 	
+	/// Returns reference to an empty Variant
+	static const Variant& get_empty() {
+		return empty_instance;
+	}
+	
+private:
+	static const Variant empty_instance;
+	
 };
 
 
+/// See bool()
 template<>
 bool Variant::to<bool>() const;
 

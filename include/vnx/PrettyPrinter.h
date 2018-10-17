@@ -23,9 +23,13 @@
 
 namespace vnx {
 
+/** \brief Visitor to print in pretty JSON format.
+ * 
+ * Will insert newlines for objects and fields.
+ */
 class PrettyPrinter : public Visitor {
 public:
-	size_t max_size = 0;		// max display size of list and map, 0 = unlimited
+	size_t max_size = 0;		///< Max display size of list and map, 0 = unlimited
 	
 	PrettyPrinter(std::ostream& out) : out(&out) {}
 	

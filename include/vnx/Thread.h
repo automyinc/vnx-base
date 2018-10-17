@@ -25,11 +25,13 @@
 
 namespace vnx {
 
-/**
- * Thread is a base class for light weight worker threads.
+/** \brief A base class for light-weight worker threads.
+ * 
+ * Used in cases where a Module is too much.
  */
 class Thread : protected Subscriber, protected Publisher {
 public:
+	/// Creates new thread with given name
 	Thread(const std::string& vnx_name_);
 	
 	~Thread();

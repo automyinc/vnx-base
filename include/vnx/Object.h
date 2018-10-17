@@ -24,20 +24,27 @@
 
 namespace vnx {
 
+/** \brief A dynamically typed object consisting of a map of Variant fields.
+ * 
+ * Object can be used to hold dynamically typed data when creating a VNI definition
+ * and generating code is not possible or when performance is not an issue.
+ */
 class Object : public Value {
 public:
-	std::map<std::string, Variant> field;
+	std::map<std::string, Variant> field;		///< Data fields (name => value)
 	
+	/// Returns reference to field value
 	Variant& operator[](const std::string& name) {
 		return field[name];
 	}
 	
-	Variant operator[](const std::string& name) const {
+	/// Returns reference to field value
+	const Variant& operator[](const std::string& name) const {
 		auto iter = field.find(name);
 		if(iter != field.end()) {
 			return iter->second;
 		}
-		return Variant();
+		return Variant::get_empty();
 	}
 	
 	bool empty() const {

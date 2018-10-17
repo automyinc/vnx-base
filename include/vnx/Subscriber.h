@@ -25,8 +25,7 @@
 
 namespace vnx {
 
-/*
- * A Subscriber is a Node that wants to receive samples.
+/** \brief A Node that can receive Sample%s.
  * 
  * Repeated calls to subscribe() are counted and
  * an equal number of calls to unsubscribe() are needed to actually unsubscribe.
@@ -41,6 +40,7 @@ public:
 	~Subscriber();
 	
 protected:
+	/// Subscribe to topic "domain.topic".
 	std::shared_ptr<Pipe> subscribe(const std::string& domain, const std::string& topic, int max_queue_ms = 100);
 	
 	std::shared_ptr<Pipe> subscribe(const std::string& full_topic_name, int max_queue_ms = 100);

@@ -22,8 +22,9 @@
 
 namespace vnx {
 
-/*
- * A Visitor is used to traverse any type in a generic manner.
+/** \brief A Visitor is used to traverse any type in a generic manner.
+ * 
+ * See DefaultPrinter or PrettyPrinter for an example.
  */
 class Visitor {
 public:
@@ -56,11 +57,15 @@ public:
 	virtual void type_field(const std::string& field, size_t index) = 0;
 	virtual void type_end(size_t num_fields) = 0;
 	
+	/** \brief Called for enum values.
+	 * 
+	 * By default calls visit(const std::string& value), or visit(const uint32_t& value) in case of unknown string.
+	 */
 	virtual void enum_value(uint32_t value, const std::string& name);
 	
-	void type_begin(const TypeCode& type);
-	void type_field(const TypeField& field, size_t index);
-	void type_end(const TypeCode& type);
+	void type_begin(const TypeCode& type);						///< By default calls type_begin(size_t num_fields)
+	void type_field(const TypeField& field, size_t index);		///< By default calls type_field(const std::string& field, size_t index)
+	void type_end(const TypeCode& type);						///< By default calls type_end(size_t num_fields)
 	
 };
 

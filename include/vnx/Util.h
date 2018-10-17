@@ -25,25 +25,19 @@
 
 namespace vnx {
 
-/*
- * Substitudes any occurence of "from" with "to" and returns the resulting string.
- */
+/// Substitudes any occurrence of \p from with \p to and returns the resulting string.
 std::string string_subs(std::string str, const std::string& from, const std::string& to);
 
-/*
- * Split string into multiple parts based on special char "sep".
+/** \brief Split string into multiple parts based on special char \p sep.
+ * 
  * An empty input string results in a vector of size 1 with an empty string as the only element.
  */
 std::vector<std::string> string_split(const std::string& str, char sep);
 
-/*
- * Returns a true 64 bit random number.
- */
+/// Returns a very good 64-bit random number. (Initialized with nano-second timestamp)
 uint64_t rand64();
 
-/*
- * Converts integers to hex strings efficiently.
- */
+/// Converts an integer to a hex string efficiently. (Without leading "0x")
 template<typename T>
 std::string to_hex_string(const T& value) {
 	static const char map[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};

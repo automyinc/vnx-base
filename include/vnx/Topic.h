@@ -29,29 +29,35 @@ namespace vnx {
 
 class Topic;
 
-/*
- * Get topic known by "topic_name". Creates a new topic if it does not exist already.
+/** \brief Get topic instance for \p topic_name.
+ * 
+ * Creates a new topic instance if it does not already exist.
  */
 std::shared_ptr<Topic> get_topic(const std::string& topic_name);
 
-/*
- * Get topic known by "<domain>.<topic>". Creates a new topic if it does not exist already.
+/** \brief Get topic instance for "<domain>.<topic>".
+ * 
+ * Creates a new topic if it does not exist already.
  */
 std::shared_ptr<Topic> get_topic(const std::string& domain, const std::string& topic);
 
-/*
- * Get a list of all topics. Does not include domains (ie. only topics which have no children).
+/** \brief Get a list of all topics.
+ * 
+ * Does not include domains (ie. only topics which have no children).
  */
 std::vector<std::shared_ptr<Topic>> get_all_topics();
 
-/*
- * Get a list of all topics in domain "domain". Does not include sub-domains (ie. only topics which have no children).
+/** \brief Get a list of all topics in domain.
+ * 
+ * Does not include sub-domains (ie. only topics which have no children).
+ * Does include sub-topics of sub-domains though.
  */
 std::vector<std::shared_ptr<Topic>> get_all_topics(std::shared_ptr<Topic> domain);
 
 
-/*
- * A Topic is used to distribute (ie. publish) samples to a number of subscribers.
+/** \brief Topic is used to distribute (ie. publish) samples to a number of subscribers.
+ * 
+ * A topic can also have sub-topics (ie. children), in which case a Sample is published on the entire sub-tree.
  */
 class Topic {
 public:
@@ -62,71 +68,50 @@ public:
 	Topic(const Topic& other) = delete;
 	Topic& operator=(const Topic& other) = delete;
 	
-	/*
-	 * Get the domain name of this topic.
-	 * Exampe: returns "mydomain" for topic "mydomain.mytopic".
+	/** \brief Returns domain name of this topic. (thread-safe)
+	 * 
+	 * Exampe: Returns "mydomain" for topic "mydomain.mytopic".
 	 */
 	std::string get_domain_name() const { return domain_name; }
 	
-	/*
-	 * The the name of this topic.
-	 */
+	/// Returns the full name of this topic. (thread-safe)
 	std::string get_name() const { return topic_name; }
 	
-	/*
-	 * Get the CRC64 hash of this topic.
-	 */
+	/// Returns the CRC64 hash of this topic. (thread-safe)
 	Hash64 get_hash() const { return topic_hash; }
 	
-	/*
-	 * The the topic info for this topic.
-	 */
+	/// Returns the the topic info for this topic. (thread-safe)
 	TopicInfo get_info();
 	
-	/*
-	 * Get a pointer to the parent of this topic (ie. its domain).
-	 */
+	/// Returns a pointer to the parent of this topic (ie. its domain). (thread-safe)
 	std::shared_ptr<Topic> get_parent();
 	
-	/*
-	 * Get a list of all direct child topics.
-	 */
+	/// Returns a list of all direct child topics. (thread-safe)
 	std::vector<std::shared_ptr<Topic>> get_children();
 	
-	/*
-	 * Add a subscriber to this topic.
-	 */
+	/// Add a subscriber to this topic. (thread-safe)
 	void subscribe(std::shared_ptr<Pipe> pipe);
 	
-	/*
-	 * Remove a subscriber from this topic.
-	 */
+	/// Remove a subscriber from this topic. (thread-safe)
 	void unsubscribe(std::shared_ptr<Pipe> pipe);
 	
-	/*
-	 * Publish a sample on this topic.
-	 */
+	/// Publish a sample on this topic. (thread-safe)
 	void publish(std::shared_ptr<Sample> sample);
 	
-	/*
-	 * Add a child to this topic. Used internally only.
-	 */
+	/// Add a child to this topic. Used internally only. (thread-safe)
 	void add_child(std::shared_ptr<Topic> child);
 	
-	/*
-	 * Remove a child from this topic. Used internally only.
-	 */
+	/// Remove a child from this topic. Used internally only. (thread-safe)
 	void remove_child(Topic* child);
 	
-	/*
-	 * Close this topic and all its children.
+	/** \brief Close this topic and all its children. (thread-safe)
+	 * 
+	 * Cannot be undone, used only for process shutdown.
 	 */
 	void close();
 	
 private:
-	/*
-	 * Forwards the sample to all subscribers.
-	 */
+	/// Forwards the Sample to all subscribers.
 	void forward(std::shared_ptr<const Sample> sample);
 	
 private:

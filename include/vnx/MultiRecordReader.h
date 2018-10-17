@@ -22,69 +22,76 @@
 
 namespace vnx {
 
+/** \brief A wrapper around multiple RecordReaders.
+ * 
+ * MultiRecordReader is used to read from multiple record files as one virtual file.
+ */
 class MultiRecordReader {
 public:
+	/**
+	 * Creates new reader for given set of files.
+	 */
 	MultiRecordReader(const std::vector<std::string>& filenames_);
 	
 	~MultiRecordReader();
 	
-	/*
+	/**
 	 * Reset to the beginning.
 	 */
 	void reset();
 	
-	/*
+	/**
 	 * Close all files. Cannot be undone.
 	 */
 	void close();
 	
-	/*
+	/**
 	 * Read the next sample and return it.
 	 */
 	std::shared_ptr<const Sample> read_next();
 	
-	/*
+	/**
 	 * Read the previous sample and return it.
 	 */
 	std::shared_ptr<const Sample> read_prev();
 	
-	/*
+	/**
 	 * Seek by a relative number of samples.
 	 */
 	void seek_by_count(int64_t num_samples);
 	
-	/*
+	/**
 	 * Seek by a relative amount of time in micro-seconds.
 	 */
 	void seek_by_time(int64_t num_micros);
 	
-	/*
+	/**
 	 * Seek to an absolute point in time given as a micro-second timestamp.
 	 */
 	void seek_to_time(int64_t time_micros);
 	
-	/*
+	/**
 	 * Seek to an absolute position, from 0.0 (beginning) to 1.0 (end).
 	 */
 	void seek_to_position(double position);
 	
-	/*
+	/**
 	 * Get the timestamp of the current sample.
 	 */
 	int64_t get_time_micros() const;
 	
-	/*
+	/**
 	 * The the current byte position.
 	 */
 	int64_t get_input_pos() const;
 	
-	/*
+	/**
 	 * Get the current sample.
 	 */
 	std::shared_ptr<Sample> get_sample() const;
 	
-	/*
-	 * Get the record header containing statistics, etc.
+	/**
+	 * Get the virtual record header containing statistics, etc.
 	 */
 	std::shared_ptr<const RecordHeader> get_header() const;
 	

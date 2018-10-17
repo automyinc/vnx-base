@@ -26,6 +26,10 @@
 
 namespace vnx {
 
+/** \brief Module to inspect topics at run-time.
+ * 
+ * Used by Terminal and vnxdump.
+ */
 class SpyTool : public SpyToolBase {
 public:
 	SpyTool(const std::string& vnx_name_ = "SpyTool");

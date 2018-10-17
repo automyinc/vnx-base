@@ -30,85 +30,69 @@ namespace vnx {
 class Node;
 class Pipe;
 
-/**
- * Open a new pipe known as "service_name" to Node "node".
- */
+/// Open a new pipe known as \p service_name to Node \p node.
 std::shared_ptr<Pipe> open_pipe(const std::string& service_name, Node* node, int max_queue_ms = 100);
 
-/**
- * Open a new pipe known by "mac_addr" to Node "node".
- */
+/// Open a new pipe known by \p mac_addr to Node \p node.
 std::shared_ptr<Pipe> open_pipe(Hash64 mac_addr, Node* node, int max_queue_ms = 100);
 
-/**
- * Get a pipe to a service called "service_name".
- * Returns 0 if service does not exist.
+/** \brief Get a pipe to a service called \p service_name.
+ * 
+ * Returns null if service does not exist.
  */
 std::shared_ptr<Pipe> get_pipe(const std::string& service_name);
 
-/**
- * Get a pipe to a node known by "mac_addr".
+/** \brief Get a pipe to a node known by \p mac_addr.
+ * 
  * Returns 0 if node does not exist.
  */
 std::shared_ptr<Pipe> get_pipe(Hash64 mac_addr);
 
-/**
- * Send a message to service "service_name".
+/** \brief Send a message to service \p service_name.
+ * 
  * Will drop the message if service does not exist.
  */
 bool send_msg(const std::string& service_name, std::shared_ptr<const Message> msg);
 
-/**
- * Send a message to a node known by "mac_addr".
+/** \brief Send a message to a node known by \p mac_addr.
+ * 
  * Will drop the message if node does not exist.
  */
 bool send_msg(Hash64 mac_addr, std::shared_ptr<const Message> msg);
 
-/**
- * Send a message through a pipe.
- */
+/// Send a message through a pipe.
 bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<const Message> msg);
 
-/**
- * Send a message through a pipe.
+/** \brief Send a message through a pipe.
+ * 
  * Applies given flags before sending: msg->flags |= flags;
  */
 bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<Message> msg, uint16_t flags);
 
-/**
- * Connect a pipe to a node.
- */
+/// Connect a pipe to a node.
 void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms = 100);
 
-/**
- * Unregister a service known by "service_name".
- */
+/// Unregister service known by \p service_name.
 void remove_pipe(const std::string& service_name);
 
-/**
- * Unregister a node known by "mac_addr".
- */
+/// Unregister node known by \p mac_addr.
 void remove_pipe(Hash64 mac_addr);
 
-/**
- * Close the pipe going to service "service_name".
- */
+/// Close the pipe going to service \p service_name.
 void close_pipe(const std::string& service_name);
 
-/**
- * Close the pipe going to node known by "mac_addr".
- */
+/// Close the pipe going to node known by \p mac_addr.
 void close_pipe(Hash64 mac_addr);
 
-/**
- * Trigger all nodes listening to any public pipe to exit.
+/** \brief Trigger all nodes listening to any public pipe to exit.
+ * 
  * Used by the shutdown procedure.
  */
 void shutdown_pipes();
 
 
-/**
- * vnx::Pipe is a basic means of delivering messages to a vnx::Node.
+/** \brief Pipe is used to deliver messages to a Node.
+ * 
  * The Pipe is one-directional and maintains a queue of messages internally.
  * The maximum queue size is specified in terms of maximum latency in milli-seconds.
  * A maximum queue length of 0 means unlimited.
@@ -119,13 +103,11 @@ void shutdown_pipes();
  */
 class Pipe {
 public:
-	/**
-	 * Create a private no-name pipe.
-	 */
+	/// Create a private no-name pipe.
 	Pipe();
 	
-	/**
-	 * Create a public pipe which is known inside this process by "mac_addr".
+	/** \brief Create a public pipe which is known inside this process by \p mac_addr.
+	 * 
 	 * Used for services and tunnels to receive requests and messages.
 	 */
 	Pipe(Hash64 mac_addr);
@@ -137,45 +119,34 @@ public:
 	
 	static std::shared_ptr<Pipe> create();
 	
-	/**
-	 * Connect a Pipe to a Node. (thread-safe)
-	 */
+	/// Connect a Pipe to a Node. (thread-safe)
 	friend void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms);
 	
-	/**
-	 * Send a message through a Pipe. (thread-safe)
-	 */
+	/// Send a message through a Pipe. (thread-safe)
 	friend bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<const Message> msg);
 	
-	/**
-	 * Get the next available message. Returns 0 if no message available. (thread-safe)
+	/** \brief Get the next available message.
+	 * 
+	 * Returns 0 if no message available. (thread-safe)
 	 */
 	std::shared_ptr<const Message> pop();
 	
-	/**
-	 * Temporarily prevent new messages from being pushed into the pipe. (thread-safe)
-	 */
+	/// Temporarily prevent new messages from being pushed into the pipe. (thread-safe)
 	void pause();
 	
-	/**
-	 * Resume normal operation after pause() was called. (thread-safe)
-	 */
+	/// Resume normal operation after pause() was called. (thread-safe)
 	void resume();
 	
-	/**
-	 * Close this pipe. (thread-safe)
-	 */
+	/// Close this pipe. (thread-safe)
 	void close();
 	
-	/**
-	 * Get a pointer to the node which is connected to this pipe.
+	/** \brief Get a pointer to the node which is connected to this pipe.
+	 * 
 	 * Only for identification purposes, the node could be deleted at any point in time!
 	 */
 	Node* get_node();
 	
-	/**
-	 * Returns if pipe is currently paused.
-	 */
+	/// Returns if pipe is currently paused.
 	bool get_is_paused() const { return is_paused; }
 	
 private:
@@ -191,9 +162,7 @@ private:
 	
 	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms = 100);
 	
-	/**
-	 * Push a new message onto the queue. Used exclusively by send_msg().
-	 */
+	/// Push a new message onto the queue. Used exclusively by send_msg().
 	bool push(std::shared_ptr<Pipe> self, std::shared_ptr<const Message> msg);
 	
 private:

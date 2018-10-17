@@ -23,6 +23,10 @@
 
 namespace vnx {
 
+/** \brief Module that performs time synchronization.
+ * 
+ * Used by Proxy to sync time with another process.
+ */
 class TimeServer : public TimeServerBase {
 public:
 	TimeServer(const std::string& _vnx_name);

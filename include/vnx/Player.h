@@ -25,6 +25,10 @@
 
 namespace vnx {
 
+/** \brief Module to play back a or multiple recording file/s.
+ * 
+ * Used by vnxplay.
+ */
 class Player : public PlayerBase {
 public:
 	Player(const std::string& _vnx_name = "Player");

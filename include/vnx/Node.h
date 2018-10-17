@@ -24,8 +24,8 @@
 
 namespace vnx {
 
-/**
- * vnx::Node is a base class for anything that wants to communicate via vnx::Pipe.
+/** \brief A base class for anything that wants to communicate via Pipe.
+ * 
  * It gives an interface to read messages from a number of pipes.
  * It also keeps track of and automatically closes all connected pipes on shutdown.
  */
@@ -80,16 +80,16 @@ protected:
 	virtual void close();
 	
 private:
-	bool add_pipe(std::shared_ptr<Pipe> pipe);		/// attach a new pipe to this node
+	bool add_pipe(std::shared_ptr<Pipe> pipe);		///< attach a new pipe to this node
 	
-	void remove_pipe(Pipe* pipe);					/// remove a pipe from this node
+	void remove_pipe(Pipe* pipe);					///< remove a pipe from this node
 	
 private:
 	std::condition_variable condition;
 	
-	std::queue<std::shared_ptr<Pipe>> notify_queue;		// list of pipes that have messages available
+	std::queue<std::shared_ptr<Pipe>> notify_queue;		///< list of pipes that have messages available
 	
-	std::list<std::shared_ptr<Pipe>> pipe_list;			// list of pipes that are attached to this node
+	std::list<std::shared_ptr<Pipe>> pipe_list;			///< list of pipes that are attached to this node
 	
 	friend class Pipe;
 	

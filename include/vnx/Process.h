@@ -30,43 +30,49 @@
 
 namespace vnx {
 
-/**
- * Initialize the process and parse command line arguments.
+/** \brief Initialize the process and parse command line arguments.
+ * 
  * Needs to be called first before creating any Modules.
+ * 
+ * There are two different formats for \p option:
+ * - A mapping from short option to long option, like "n" => "node".
+ * - Providing a description for a long option, like "node" => "server address".
+ * 
+ * The following options are already internally used:
+ * - "h" => "help" (prints help and exits)
+ * - "c" => "config" (root directory, multiple possible, left to right)
+ * - "d" => "debug" (flag)
+ * 
+ * @param Name for this process
+ * @param options List of options, see above for info.
  */
 void init(const std::string& process_name, int argc, char** argv, std::map<std::string, std::string> options = {});
 
-/**
- * Returns true if the process should continue to run.
- */
+/// Returns true if the process should continue to run.
 bool do_run();
 
-/**
- * Wait for the the whole process and all modules to finish and shutdown.
- */
+/// Wait for the the whole process and all modules to finish and shutdown.
 void wait();
 
-/**
- * Trigger shutdown and wait for the the whole process and all modules to finish and shutdown.
- */
+/// Trigger shutdown and wait for the the whole process and all modules to finish and shutdown.
 void close();
 
-/**
- * Get the local process name.
- */
+/// Get the local process name.
 std::string get_process_name();
 
-/**
- * Triggers all modules to shut down. Returns immediately.
- */
+/// Triggers all modules to shut down. Returns immediately.
 void trigger_shutdown();
 
-/**
- * Force the process to exit, without waiting for modules to shut down. Returns immediately.
- */
+/// Force the process to exit, without waiting for modules to shut down. Returns immediately.
 void force_shutdown();
 
 
+/** \brief Module to handle process specific tasks.
+ * 
+ * Will be created and started in the background during init().
+ * 
+ * Displays log messages, handles time control and synchronization, etc.
+ */
 class Process : public ProcessBase {
 public:
 	explicit Process(const std::string& name);

@@ -24,6 +24,20 @@
 
 namespace vnx {
 
+/** \brief Module that provides an interactive terminal. 
+ * 
+ * Press enter to activate the command prompt (will pause logging output).
+ * 
+ * Possible commands are:
+ * - \p q or \p quit Will shutdown process.
+ * - \p d or \p debug [level] Sets logging level, or sets DEBUG level if no level given, (4=DEBUG, 3=INFO, ...)
+ * - \p e or \p errors Shows list of last error messages.
+ * - \p t or \p topic [expr] Shows list of topic statistics, shows all in case no \p expr, otherwise only topics containing \p expr.
+ * - \p grep <expr> Grep logging output, just like normal UNIX grep.
+ * - \p spy [expr] Shows sample info for matching topics, or all topics in case no \p expr. Same as vnxdump -i.
+ * - \p dump [expr] Dumps samples for matching topics, or all topics in case no \p expr. Same as vnxdump.
+ * 
+ */
 class Terminal : public TerminalBase {
 public:
 	Terminal(const std::string& vnx_name_ = "Terminal");

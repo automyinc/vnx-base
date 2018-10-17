@@ -28,13 +28,27 @@
 
 namespace vnx {
 
+/** \brief Module is the base class for all user Modules.
+ * 
+ * A Module has it's own thread and main() function, just like a normal process.
+ * The user's implementation will inherit from the generated base class which in turn
+ * inherits from this class.
+ * 
+ * The Module class handles timer callbacks, receiving of Sample%s as well as processing
+ * of Request%s inside it's main() function. The user can override main() to implement
+ * initialization and cleanup functionality, but must call Module::main() at some point.
+ */
 class Module : protected Subscriber {
 public:
+	/** \brief Creates a new Module with given name.
+	 * 
+	 * @param name_ Module name (does not have to be unique)
+	 */
 	Module(const std::string& name_);
 	
 	~Module();
 	
-	static const int BLOCKING = Message::BLOCKING;
+	static const int BLOCKING = Message::BLOCKING;		///< Flag to send blocking messages
 	
 	static const int ERROR = LogMsg::ERROR;
 	static const int WARN = LogMsg::WARN;
@@ -52,34 +66,37 @@ public:
 	friend std::ostream& operator<<(std::ostream& _out, const Module& _value);
 	friend std::istream& operator>>(std::istream& _in, Module& _value);
 	
-	int vnx_log_level;				// the log level of this module
+	int vnx_log_level;				///< The log level of this module
 	
 protected:
-	std::string vnx_name;			// name of the module
+	std::string vnx_name;			///< Name of the module
 	
-	/*
-	 * Publish a copy of the value.
+	/** \brief Publish a copy of the value.
+	 * 
+	 * @param flags List of or'ed flags for Message, for example Message::BLOCKING
 	 */
 	void publish(const Value& value, TopicPtr topic, uint16_t flags = 0) {
 		publisher->publish(value.clone(), topic, flags);
 	}
 	
-	/*
-	 * Publish the actual value directly. (zero-copy)
-	 * WARNING: "value" cannot be modified after this! Otherwise segfaults will be yours!
+	/** \brief Publish the actual value directly. (zero-copy)
+	 * 
+	 * @param flags List of or'ed flags for Message, for example Message::BLOCKING
+	 * 
+	 * WARNING: \p value may not be modified anymore after this call, since other threads have a pointer now.
 	 */
 	template<typename T>
 	void publish(std::shared_ptr<T> value, TopicPtr topic, uint16_t flags = 0) {
 		publisher->publish(value, topic, flags);
 	}
 	
-	/*
+	/**
 	 * Publishes log output. Use ERROR, WARN, INFO, DEBUG or custom level.
 	 * Usage: log(?).out << "..."; 		// no std::endl needed at the ned
 	 */
 	LogPublisher log(int level);
 	
-	/*
+	/**
 	 * Create a new timer.
 	 * Can be started manually using Timer::reset().
 	 * Can be turned into a repeating timer by setting Timer::is_repeat = true;
@@ -87,7 +104,7 @@ protected:
 	 */
 	Timer* add_timer(const std::function<void()>& func);
 	
-	/*
+	/**
 	 * Create and start a repeating timer.
 	 * Can be stopped using Timer::stop().
 	 * Can be restarted using Timer::reset().
@@ -96,31 +113,36 @@ protected:
 	Timer* set_timer_micros(int64_t interval_us, const std::function<void()>& func);
 	Timer* set_timer_millis(int64_t interval_ms, const std::function<void()>& func);
 	
-	/*
+	/**
 	 * Called before main() from the thread starting the module.
 	 * Used to make sure that the module is initialized after Handle::start() returns.
 	 */
 	virtual void init() {}
 	
-	/*
+	/**
 	 * Main function, just like the real int main().
 	 * Make sure to call Super::main() at some point when over-riding it.
 	 */
 	virtual void main();
 	
-	/*
+	/**
 	 * Shuts down the module. (thread safe)
 	 */
 	void exit();
 	
-	/*
-	 * These are internal functions that can be overridden in special cases.
-	 */
+	/// %Process a Message (internal use and special cases only)
 	virtual void handle(std::shared_ptr<const Message> msg);
+	
+	/// %Process a Sample (internal use and special cases only)
 	virtual void handle(std::shared_ptr<const Sample> sample);
+	
+	/// Call handle() function for a Sample (internal use and special cases only)
 	virtual void handle_switch(std::shared_ptr<const Sample> sample) = 0;
 	
+	/// %Process a Request (internal use and special cases only)
 	virtual std::shared_ptr<const Return> handle(std::shared_ptr<const Request> value);
+	
+	/// Call service function for a Request (internal use and special cases only)
 	virtual bool call_switch(TypeInput& in, TypeOutput& out, const TypeCode* call_type, const TypeCode* return_type) = 0;
 	
 private:
@@ -150,6 +172,11 @@ private:
 };
 
 
+/** \brief Smart pointer class for Modules.
+ * 
+ * Handle is wrapper around std::shared_ptr<T> for Modules.
+ * It will automatically stop and delete a Module unless it has been detached.
+ */
 template<typename T>
 class Handle {
 public:
@@ -174,7 +201,7 @@ public:
 		return bool(module);
 	}
 	
-	/*
+	/**
 	 * Access the module. Makes sure it is not already running.
 	 */
 	T& operator*() {
@@ -184,7 +211,7 @@ public:
 		return *module;
 	}
 	
-	/*
+	/**
 	 * Access the module. Makes sure it is not already running.
 	 */
 	T* operator->() {
@@ -194,7 +221,7 @@ public:
 		return module.get();
 	}
 	
-	/*
+	/**
 	 * Starts the module in a new thread. Returns after Module::init() is done.
 	 */
 	void start() {
@@ -203,7 +230,7 @@ public:
 		}
 	}
 	
-	/*
+	/**
 	 * Starts the module and detaches the handle. Module will self destruct upon exit.
 	 */
 	void start_detached() {
@@ -211,7 +238,7 @@ public:
 		detach();
 	}
 	
-	/*
+	/**
 	 * Detaches the module. Module will self destruct upon exit.
 	 */
 	void detach() {
@@ -221,7 +248,7 @@ public:
 		}
 	}
 	
-	/*
+	/**
 	 * Wait for the module to exit.
 	 */
 	void wait() {
@@ -231,7 +258,7 @@ public:
 		}
 	}
 	
-	/*
+	/**
 	 * Trigger the module to exit.
 	 */
 	void exit() {
@@ -240,7 +267,7 @@ public:
 		}
 	}
 	
-	/*
+	/**
 	 * Trigger the module to exit and wait for it to finish.
 	 */
 	void close() {

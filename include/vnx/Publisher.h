@@ -28,10 +28,9 @@
 
 namespace vnx {
 
-/*
- * A Publisher is used to publish samples.
+/** \brief Class used to publish Sample%s.
  * 
- * Each publisher has its own unique and randomly created "src_mac".
+ * Each Publisher has its own unique and randomly created "src_mac" (ie. identity).
  * Together with the sequence number a sample can be uniquely identified.
  * 
  * The Publisher automatically attaches a sequence number to each sample published.
@@ -44,22 +43,28 @@ public:
 	Publisher(const Publisher& other) = delete;
 	Publisher& operator=(const Publisher& other) = delete;
 	
-	/*
-	 * Publish a copy of the value.
+	/** \brief Publish a copy of the value.
+	 * 
+	 * @param flags List of or'ed flags for Message, for example Message::BLOCKING
 	 */
 	void publish(const Value& value, TopicPtr topic, uint16_t flags = 0);
 	
-	/*
-	 * Publish the actual value directly. (zero-copy)
-	 * WARNING: "value" cannot be modified after this! Otherwise segfaults will be yours!
+	/** \brief Publish the actual value directly. (zero-copy)
+	 * 
+	 * @param flags List of or'ed flags for Message, for example Message::BLOCKING
+	 * 
+	 * WARNING: \p value may not be modified anymore after this call, since other threads have a pointer now.
 	 */
 	template<typename T>
 	void publish(std::shared_ptr<T> value, TopicPtr topic, uint16_t flags = 0) {
 		publish(std::shared_ptr<const Value>(value), topic, flags);
 	}
 	
-	/*
-	 * Same as above.
+	/** \brief Publish the actual value directly. (zero-copy)
+	 * 
+	 * @param flags List of or'ed flags for Message, for example Message::BLOCKING
+	 * 
+	 * WARNING: \p value may not be modified anymore after this call, since other threads have a pointer now.
 	 */
 	void publish(std::shared_ptr<const Value> value, TopicPtr topic, uint16_t flags = 0);
 	
@@ -70,9 +75,9 @@ private:
 };
 
 
-/*
+/** \brief Will publish a LogMsg upon destruction of the object.
+ * 
  * Used internally by log() functions.
- * Will publish a LogMsg upon destruction of the object.
  */
 class LogPublisher {
 public:
@@ -90,10 +95,10 @@ private:
 	
 };
 
-LogPublisher log_error();
-LogPublisher log_warn();
-LogPublisher log_info();
-LogPublisher log_debug();
+LogPublisher log_error();		///< Log a ERROR message
+LogPublisher log_warn();		///< Log a WARN message
+LogPublisher log_info();		///< Log a INFO message
+LogPublisher log_debug();		///< Log a DEBUG message
 
 
 } // vnx

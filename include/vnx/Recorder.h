@@ -25,6 +25,20 @@
 
 namespace vnx {
 
+/** \brief Module to record samples to a record file.
+ * 
+ * Configuration options:
+ * - \p filename Recording filename, use "%" as a placeholder for a date string.
+ * - \p max_queue_ms Input queue lengths.
+ * - \p flush_interval_ms How often to flush file.
+ * - \p header_size Size of the record header in bytes, should be increased if recording a large number of topics (ie. more than 100).
+ * - \p block_size Size of a block in samples.
+ * - \p topics List of topics to record.
+ * - \p proxy_name Name of a Proxy instance to subscribe through, optional.
+ * - \p receive_tunnel A Pipe address to receive samples through, optional, used in conjunction with a Proxy.
+ * 
+ * Used by vnxrecord.
+ */
 class Recorder : public RecorderBase {
 public:
 	Recorder(const std::string& _vnx_name = "Recorder");

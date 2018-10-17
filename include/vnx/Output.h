@@ -25,6 +25,8 @@
 
 namespace vnx {
 
+/// Directly writes a value to the buffer address \p buf.
+/// @{
 inline void write_value(void* buf, const bool& value) {
 	*((uint8_t*)buf) = uint8_t(value);
 }
@@ -61,7 +63,9 @@ inline void write_value(void* buf, const float32_t& value) {
 inline void write_value(void* buf, const float64_t& value) {
 	*((float64_t*)buf) = value;
 }
+/// @}
 
+/// Directly writes a static array to the buffer address \p buf.
 template<typename T, size_t N>
 inline void write_value(char* buf, const std::array<T, N>& array) {
 	for(size_t i = 0; i < N; ++i) {
@@ -69,6 +73,8 @@ inline void write_value(char* buf, const std::array<T, N>& array) {
 	}
 }
 
+/// Directly writes a value to the stream.
+/// @{
 inline void write(TypeOutput& out, const bool& value, const TypeCode* type_code = 0, const uint16_t* code = 0) {
 	*((uint8_t*)out.write(sizeof(uint8_t))) = uint8_t(value);
 }
@@ -105,7 +111,10 @@ inline void write(TypeOutput& out, const float32_t& value, const TypeCode* type_
 inline void write(TypeOutput& out, const float64_t& value, const TypeCode* type_code = 0, const uint16_t* code = 0) {
 	*((float64_t*)out.write(sizeof(float64_t))) = value;
 }
+/// @}
 
+/// Writes a value dynamically to the stream.
+/// @{
 void write_dynamic(TypeOutput& out, const bool& value);
 void write_dynamic(TypeOutput& out, const uint8_t& value);
 void write_dynamic(TypeOutput& out, const uint16_t& value);
@@ -118,19 +127,29 @@ void write_dynamic(TypeOutput& out, const int32_t& value);
 void write_dynamic(TypeOutput& out, const int64_t& value);
 void write_dynamic(TypeOutput& out, const float32_t& value);
 void write_dynamic(TypeOutput& out, const float64_t& value);
+/// @}
 
+/// Writes a string dynamically to the stream.
 void write_dynamic(TypeOutput& out, const std::string& string);
 
+/// Writes CODE_NULL to the stream
 inline void write_null(TypeOutput& out) {
 	write(out, uint16_t(CODE_NULL));
 }
 
+/// Writes CODE_NULL dynamically to the stream
 void write_dynamic_null(TypeOutput& out);
 
+/** \brief Writes \p size number of bytes of padding to the stream.
+ * 
+ * Includes CODE_PADDING and size information, thus the minimum padding size is 6 bytes.
+ */
 void write_padding(TypeOutput& out, size_t size);
 
+/// Writes the given byte code to the stream.
 void write_byte_code(TypeOutput& out, const uint16_t* code);
 
+/// Writes the given byte code to the stream
 void write_byte_code(TypeOutput& out, const uint16_t* code, size_t code_size);
 
 void write(TypeOutput& out, const std::string& string, const TypeCode* type_code, const uint16_t* code);
@@ -184,6 +203,7 @@ void write(TypeOutput& out, std::shared_ptr<const Value> value);
 template<typename T>
 void write(TypeOutput& out, std::shared_ptr<T> value);
 
+/// Writes a static array (ContiguousContainer) to the stream
 template<typename T>
 void write_array(TypeOutput& out, const T& array, const TypeCode* type_code, const uint16_t* code) {
 	if(array.size() > VNX_MAX_STATIC_SIZE) {
@@ -199,6 +219,7 @@ void write(TypeOutput& out, const std::array<T, N>& array, const TypeCode* type_
 	write_array(out, array, type_code, code);
 }
 
+/// Writes a dynamic vector (ContiguousContainer) to the stream
 template<typename T>
 void write_vector(TypeOutput& out, const T& vector, const TypeCode* type_code, const uint16_t* code) {
 	if(vector.size() > VNX_MAX_SIZE) {
@@ -220,6 +241,7 @@ void write(TypeOutput& out, const std::vector<T>& vector, const TypeCode* type_c
 	write_vector(out, vector, type_code, code);
 }
 
+/// Writes a dynamic list (SequenceContainer) to the stream
 template<typename T>
 void write_list(TypeOutput& out, const T& list, const TypeCode* type_code, const uint16_t* code) {
 	if(list.size() > VNX_MAX_SIZE) {
@@ -257,6 +279,7 @@ void write(TypeOutput& out, const std::unordered_set<T, C>& set, const TypeCode*
 	write_list(out, set, type_code, code);
 }
 
+/// Writes a dynamic map (AssociativeContainer) to the stream
 template<typename T>
 void write_map(TypeOutput& out, const T& map, const TypeCode* type_code, const uint16_t* code) {
 	if(map.size() > VNX_MAX_SIZE) {
@@ -297,6 +320,7 @@ void write(TypeOutput& out, const std::pair<K, V>& value, const TypeCode* type_c
 	vnx::type<V>().write(out, value.second, type_code, code ? code + code[3] : 0);
 }
 
+/// Writes a plain array dynamically (ContiguousContainer) to the stream using CODE_LIST
 template<typename T>
 void write_dynamic_list(TypeOutput& out, const T* data, const size_t size) {
 	if(size > VNX_MAX_SIZE) {
@@ -317,6 +341,7 @@ void write_dynamic_list(TypeOutput& out, const T* data, const size_t size) {
 	}
 }
 
+/// Writes a value dynamically to the stream
 template<typename T>
 void write_dynamic(TypeOutput& out, const T& value) {
 	std::vector<uint16_t> code;
@@ -325,6 +350,12 @@ void write_dynamic(TypeOutput& out, const T& value) {
 	vnx::type<T>().write(out, value, 0, code.data());
 }
 
+/** \brief Writes a matrix to the stream
+ * 
+ * @param data Pointer to array of elements
+ * @param size Dimensionality of the matrix
+ * @param code Matrix type code
+ */
 template<typename T, size_t N>
 void write_matrix(TypeOutput& out, const T* data, const std::array<size_t, N>& size, const uint16_t* code) {
 	size_t total_size = 1;
@@ -343,6 +374,12 @@ void write_matrix(TypeOutput& out, const T* data, const std::array<size_t, N>& s
 	}
 }
 
+/** \brief Writes an image to the stream
+ * 
+ * @param data Pointer to array of pixels
+ * @param size Dimensionality of the image
+ * @param code Image type code
+ */
 template<typename T, size_t N>
 void write_image(TypeOutput& out, const T* data, const std::array<size_t, N>& size, const uint16_t* code) {
 	size_t total_size = 1;
