@@ -8,6 +8,7 @@ git pull
 mkdir -p lib/
 mkdir -p bin/
 
+rsync -av --delete $SRC/doc/tutorials/ doc/tutorials/
 rsync -av --delete $SRC/generated/include/vnx/ generated/include/vnx/
 rsync -av --delete $SRC/include/vnx/ include/vnx/
 rsync -av --delete $SRC/interface/ interface/vnx/
@@ -15,6 +16,7 @@ rsync -av --delete $SRC/modules/ modules/
 
 cp $SRC/VERSION VERSION
 cp $SRC/doxygen.cfg ./
+cp $SRC/doc/mainpage.h doc/
 cp $SRC/build/libvnx_base* lib/
 cp $SRC/build/tools/vnxclose bin/
 cp $SRC/build/tools/vnxdump bin/
