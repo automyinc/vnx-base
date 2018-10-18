@@ -2,20 +2,20 @@ package vnx;
 
 module Process {
 	
-	int topic_info_interval_ms = 500;
+	int topic_info_interval_ms = 500;			// publish interval for vnx.topic_info
 	
-	string get_name() const;
+	string get_name() const;					// get process name
 	
 	TimeSync get_sync_time() const;
 	
 	TopicInfoList get_topic_info() const;
 	
-	void pause_log();
-	void resume_log();
+	void pause_log();							// pause terminal logging output
+	void resume_log();							// resume terminal logging output
 	
-	void set_debug(int level);
+	void set_debug(int level);					// set terminal logging output level
 	
-	void close();
+	void close();								// shutdown whole process
 	
 	void handle(LogMsg sample);
 	void handle(TimeControl sample);

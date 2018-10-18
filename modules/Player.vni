@@ -2,20 +2,21 @@ package vnx;
 
 module Player {
 	
-	vector<string> files;
+	vector<string> files;						// list of record files to play back
 	
-	int interval_ms = 100;
-	int max_time_gap_ms = 5000;
-	double play_speed = 1;
+	int interval_ms = 100;						// info publish interval
+	int max_time_gap_ms = 5000;					// maximum gap between two files (will skip any bigger gap)
+	double play_speed = 1;						// initial play speed
 	
-	bool is_default_enable = true;
-	bool is_blocking = false;
-	bool is_repeat = false;
-	bool is_autostart = false;
-	bool is_autoclose = false;
-	bool is_autoshutdown = false;
+	bool is_default_enable = true;				// if to publish all topics by default
+	bool is_blocking = false;					// if to publish in blocking mode
+	bool is_repeat = false;						// if to play in a loop
+	bool is_autostart = false;					// if to start playing automatically
+	bool is_autoclose = false;					// if to exit player when reaching end of file
+	bool is_autoshutdown = false;				// if to shutdown whole process when reaching end of file
 	
-	map<TopicPtr, TopicPtr> topic_map;
+	map<TopicPtr, TopicPtr> topic_map;			// map for topic re-mapping (old => new)
+	
 	
 	RecordHeader get_info() const;
 	

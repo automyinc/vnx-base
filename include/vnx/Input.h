@@ -1043,7 +1043,13 @@ void from_string(const std::string& str, std::shared_ptr<const T>& value) {
 /// Reads a TypeCode from the stream
 void read_type_code(TypeInput& in);
 
-/// Reads a value from the file given by \p file_name
+/** \brief Reads a value from the file given by \p file_name.
+ * 
+ * Will read the first value in the file in case of multiple values.
+ * 
+ * @return Returns null in case of failure, returns a Binary in case the value type is not naive,
+ * 			otherwise returns the actual value.
+ */
 std::shared_ptr<Value> read_from_file(const std::string& file_name);
 
 /// Same as read_from_file() but will try to dynamic cast to T

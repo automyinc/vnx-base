@@ -118,8 +118,10 @@ public:
 	/// Returns type code of current value
 	const uint16_t* get_code() const;
 	
+	/// Checks for equality using ToBinaryString
 	bool operator==(const Variant& other) const;
 	
+	/// Checks for inequality using ToBinaryString
 	bool operator!=(const Variant& other) const;
 	
 	bool operator<(const Variant& other) const;

@@ -2,7 +2,8 @@ package vnx;
 
 class Marker {
 	
-	long time;
+	long time;				// time stamp [usec]
+	
 	string message;
 	
 }

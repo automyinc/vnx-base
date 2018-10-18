@@ -2,16 +2,16 @@ package vnx;
 
 module Router {
 	
-	int port = 4444;
+	int port = 4444;							// TCP port
 	
-	string unix_path = ".vnxrouter.sock";
+	string unix_path = ".vnxrouter.sock";		// UNIX domain socket
 	
 	int max_queue_ms = 100;
 	
-	map<string, vector<string>> import_map;
+	map<string, vector<string>> import_map;		// map of topics to import (URL => topic list)
 	
-	map<string, vector<string>> export_map;
+	map<string, vector<string>> export_map;		// map of topics to export (URL => topic list)
 	
-	vector<string> export_list;
+	vector<string> export_list;					// list of topics to export to all TCP and UNIX domain clients
 	
 }

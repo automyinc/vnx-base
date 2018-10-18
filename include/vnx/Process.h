@@ -40,10 +40,10 @@ namespace vnx {
  * 
  * The following options are already internally used:
  * - "h" => "help" (prints help and exits)
- * - "c" => "config" (root directory, multiple possible, left to right)
+ * - "c" => "config" (a config root directory, multiple possible, loaded left to right)
  * - "d" => "debug" (flag)
  * 
- * @param Name for this process
+ * @param process_name Name for this process
  * @param options List of options, see above for info.
  */
 void init(const std::string& process_name, int argc, char** argv, std::map<std::string, std::string> options = {});
@@ -67,9 +67,9 @@ void trigger_shutdown();
 void force_shutdown();
 
 
-/** \brief Module to handle process specific tasks.
+/** \brief A Module that handles process specific tasks.
  * 
- * Will be created and started in the background during init().
+ * Will be created and started in the background during vnx::init().
  * 
  * Displays log messages, handles time control and synchronization, etc.
  */
