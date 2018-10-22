@@ -8,6 +8,7 @@ git pull
 mkdir -p lib/
 mkdir -p bin/
 
+rsync -av --delete $SRC/doc/tools/ doc/tools/
 rsync -av --delete $SRC/doc/tutorials/ doc/tutorials/
 rsync -av --delete $SRC/generated/include/vnx/ generated/include/vnx/
 rsync -av --delete $SRC/include/vnx/ include/vnx/
