@@ -7,7 +7,6 @@
 #include <vnx/package.hxx>
 #include <vnx/Hash64.h>
 #include <vnx/Module.h>
-#include <vnx/TopicInfoList.hxx>
 
 
 namespace vnx {
@@ -60,10 +59,9 @@ protected:
 	virtual void enable_forward(const ::std::string& service_name, const ::int32_t& max_queue_ms) = 0;
 	virtual void enable_import(const ::std::string& topic_name) = 0;
 	virtual void enable_tunnel(const ::vnx::Hash64& tunnel_addr, const ::std::string& service_name, const ::int32_t& max_queue_ms) = 0;
-	virtual void handle(std::shared_ptr<const ::vnx::TopicInfoList> _value, std::shared_ptr<const ::vnx::Sample> _sample) { handle(_value); }
-	virtual void handle(std::shared_ptr<const ::vnx::TopicInfoList> _value) {}
 	virtual void on_connect() = 0;
 	virtual void on_disconnect() = 0;
+	virtual void on_remote_connect(const ::vnx::Hash64& process_id) = 0;
 	
 	void handle_switch(std::shared_ptr<const ::vnx::Sample> _sample);
 	bool call_switch(vnx::TypeInput& _in, vnx::TypeOutput& _out, const vnx::TypeCode* _call_type, const vnx::TypeCode* _return_type);

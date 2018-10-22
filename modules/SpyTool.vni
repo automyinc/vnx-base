@@ -4,14 +4,16 @@ module SpyTool {
 	
 	string proxy_name;		// proxy for the target process, if any
 	
-	string topic_expr;
+	string topic_expr;		// topic expression to search for
 	
-	bool only_once = false;
-	bool header_only = false;
+	bool only_once = false;				// if to print only one sample
+	bool header_only = false;			// if to print only header info
 	bool pretty_print = true;
 	int max_list_size = 1000;			// max display size, 0 == unlimited
 	int max_queue_ms = 100;
 	
-	Hash64 receive_tunnel;
+	Hash64 receive_tunnel;				// optional tunnel for receiving samples
+	
+	void handle(TopicInfoList sample);
 	
 }

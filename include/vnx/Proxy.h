@@ -30,20 +30,20 @@ namespace vnx {
 /** \brief Module to connect to other processes.
  * 
  * Configuration options:
- * - \p address URL to connect to, in case given \p endpoint_ == null.
- * 		For example: "hostname" (on default port 4444), "hostname:1234", or "domain.sock".
- * - \p import_list Topics to import (ie. subscribe to) from other process.
- * - \p export_list Topics to forward to other process without them asking for it.
- * - \p forward_list Services to import (ie. forward requests to) from other process.
- * - \p tunnel_map Service tunnel map, similar to forward_list, except with a local alias (the key).
+ * - \b address URL to connect to, in case given \p endpoint_ == null.
+ * 		For example: "hostname" (on default port 4444), "hostname:1234" or "domain.sock".
+ * - \b import_list Topics to import (ie. subscribe to) from other process.
+ * - \b export_list Topics to forward to other process without them asking for it.
+ * - \b forward_list Services to import (ie. forward requests to) from other process.
+ * - \b tunnel_map Service tunnel map, similar to forward_list, except with a local alias (the key).
  * 		For example Hash64("other.vnx.process") => "vnx.process".
- * - \p receive_tunnel Optional tunnel pipe to forward all received samples to, instead of the local process.
- * - \p request_tunnel Optional tunnel pipe to forward all received requests to, instead of the local process.
- * - \p auto_import Flag if to automatically import all topics which are subscribed to in the local process.
+ * - \b receive_tunnel Optional tunnel pipe to forward all received samples to, instead of the local process.
+ * - \b request_tunnel Optional tunnel pipe to forward all received requests to, instead of the local process.
+ * - \b auto_import Flag if to automatically import all topics which are subscribed to in the local process.
  * 		(dangerous, can easily cause loops, use only if local process does not export any topics)
- * - \p time_sync Flag if to synchronize our time with the other process.
- * - \p max_queue_ms Maximum default queue length when not otherwise specified.
- * - \p max_hop_count Maximum hop count for received messages, used to defuse loops.
+ * - \b time_sync Flag if to synchronize our time with the other process.
+ * - \b max_queue_ms Maximum default queue length when not otherwise specified.
+ * - \b max_hop_count Maximum hop count for received messages, used to defuse loops.
  */
 class Proxy : public ProxyBase {
 public:
@@ -86,7 +86,7 @@ protected:
 	
 	void on_disconnect() override;
 	
-	void handle(std::shared_ptr<const TopicInfoList> value, std::shared_ptr<const Sample> sample) override;
+	void on_remote_connect(const Hash64& process_id) override;
 	
 private:
 	void enable_forward(const Hash64& serive_addr, const int32_t& max_queue_ms);
@@ -100,7 +100,6 @@ private:
 	void read_loop(std::shared_ptr<const Endpoint> endpoint);
 	
 private:
-	Hash64 internal_addr;
 	Hash64 service_addr;
 	std::shared_ptr<const Endpoint> endpoint;
 	

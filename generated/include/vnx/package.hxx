@@ -27,12 +27,14 @@ class LogMsg;
 class Marker;
 class Memory;
 class Message;
+class ModuleInfo;
 class NoSuchMethod;
 class NoSuchService;
 class Object;
 class PlayerBase;
 class PlayerStatus;
 class ProcessBase;
+class ProcessInfo;
 class ProxyBase;
 class RecordHeader;
 class RecordIndex;
@@ -73,12 +75,14 @@ void read(TypeInput& in, ::vnx::LogMsg& value, const TypeCode* type_code, const 
 void read(TypeInput& in, ::vnx::Marker& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Memory& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Message& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::ModuleInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::NoSuchMethod& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::NoSuchService& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Object& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::PlayerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::PlayerStatus& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ProcessBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::ProcessInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ProxyBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::RecordHeader& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::RecordIndex& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -114,12 +118,14 @@ void write(TypeOutput& out, const ::vnx::LogMsg& value, const TypeCode* type_cod
 void write(TypeOutput& out, const ::vnx::Marker& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Memory& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Message& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::ModuleInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::NoSuchMethod& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::NoSuchService& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Object& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::PlayerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::PlayerStatus& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ProcessBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::ProcessInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ProxyBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::RecordHeader& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::RecordIndex& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -155,12 +161,14 @@ void read(std::istream& in, ::vnx::LogMsg& value); ///< \private
 void read(std::istream& in, ::vnx::Marker& value); ///< \private
 void read(std::istream& in, ::vnx::Memory& value); ///< \private
 void read(std::istream& in, ::vnx::Message& value); ///< \private
+void read(std::istream& in, ::vnx::ModuleInfo& value); ///< \private
 void read(std::istream& in, ::vnx::NoSuchMethod& value); ///< \private
 void read(std::istream& in, ::vnx::NoSuchService& value); ///< \private
 void read(std::istream& in, ::vnx::Object& value); ///< \private
 void read(std::istream& in, ::vnx::PlayerBase& value); ///< \private
 void read(std::istream& in, ::vnx::PlayerStatus& value); ///< \private
 void read(std::istream& in, ::vnx::ProcessBase& value); ///< \private
+void read(std::istream& in, ::vnx::ProcessInfo& value); ///< \private
 void read(std::istream& in, ::vnx::ProxyBase& value); ///< \private
 void read(std::istream& in, ::vnx::RecordHeader& value); ///< \private
 void read(std::istream& in, ::vnx::RecordIndex& value); ///< \private
@@ -196,12 +204,14 @@ void write(std::ostream& out, const ::vnx::LogMsg& value); ///< \private
 void write(std::ostream& out, const ::vnx::Marker& value); ///< \private
 void write(std::ostream& out, const ::vnx::Memory& value); ///< \private
 void write(std::ostream& out, const ::vnx::Message& value); ///< \private
+void write(std::ostream& out, const ::vnx::ModuleInfo& value); ///< \private
 void write(std::ostream& out, const ::vnx::NoSuchMethod& value); ///< \private
 void write(std::ostream& out, const ::vnx::NoSuchService& value); ///< \private
 void write(std::ostream& out, const ::vnx::Object& value); ///< \private
 void write(std::ostream& out, const ::vnx::PlayerBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::PlayerStatus& value); ///< \private
 void write(std::ostream& out, const ::vnx::ProcessBase& value); ///< \private
+void write(std::ostream& out, const ::vnx::ProcessInfo& value); ///< \private
 void write(std::ostream& out, const ::vnx::ProxyBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::RecordHeader& value); ///< \private
 void write(std::ostream& out, const ::vnx::RecordIndex& value); ///< \private
@@ -237,12 +247,14 @@ void accept(Visitor& visitor, const ::vnx::LogMsg& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Marker& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Memory& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Message& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::ModuleInfo& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::NoSuchMethod& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::NoSuchService& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Object& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::PlayerBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::PlayerStatus& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ProcessBase& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::ProcessInfo& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ProxyBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::RecordHeader& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::RecordIndex& value); ///< \private
@@ -526,6 +538,29 @@ struct type<::vnx::Message> {
 
 /// \private
 template<>
+struct type<::vnx::ModuleInfo> {
+	void read(TypeInput& in, ::vnx::ModuleInfo& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::ModuleInfo& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::ModuleInfo& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::ModuleInfo& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::ModuleInfo& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
 struct type<::vnx::NoSuchMethod> {
 	void read(TypeInput& in, ::vnx::NoSuchMethod& value, const TypeCode* type_code, const uint16_t* code) {
 		vnx::read(in, value, type_code, code);
@@ -656,6 +691,29 @@ struct type<::vnx::ProcessBase> {
 		vnx::write(out, value);
 	}
 	void accept(Visitor& visitor, const ::vnx::ProcessBase& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::ProcessInfo> {
+	void read(TypeInput& in, ::vnx::ProcessInfo& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::ProcessInfo& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::ProcessInfo& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::ProcessInfo& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::ProcessInfo& value) {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code) {

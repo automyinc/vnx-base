@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
 	vnx::init("first_process", argc, argv);        // Initialize
 	
 	std::shared_ptr<vnx::Marker> value = vnx::Marker::create();
-	value->time = vnx::get_time_millis();
+	value->time = vnx::get_time_micros();
 	value->message = "Hello World!";
 	
 	vnx::write_to_file("test.dat", value);

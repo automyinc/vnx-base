@@ -27,12 +27,12 @@ namespace vnx {
  * The Router employs a TCP Server, a UNIX domain Server as well as a number of Proxy modules.
  * 
  * Configuration options:
- * - \p port TCP port for the TCP Server.
- * - \p unix_path Unix domain socket path for the UNIX domain Server.
- * - \p max_queue_ms Maximum queue length when subscribing.
- * - \p import_map Map of which topics to import from which processes. (node url => list of topics)
- * - \p export_map Map of which topics to export to which processes. (node url => list of topics)
- * - \p export_list List of topics to export to every process that connects to the TCP or UNIX domain Server.
+ * - \b port TCP port for the TCP Server.
+ * - \b unix_path Unix domain socket path for the UNIX domain Server.
+ * - \b max_queue_ms Maximum queue length when subscribing.
+ * - \b import_map Map of which topics to import from which processes. (node url => list of topics)
+ * - \b export_map Map of which topics to export to which processes. (node url => list of topics)
+ * - \b export_list List of topics to export to every process that connects to the TCP or UNIX domain Server.
  * 
  * Used by vnxrouter.
  */

@@ -19,6 +19,7 @@
 
 #include <vnx/Node.h>
 #include <vnx/Topic.h>
+#include <vnx/TopicPtr.h>
 
 #include <unordered_map>
 
@@ -45,26 +46,30 @@ protected:
 	
 	std::shared_ptr<Pipe> subscribe(const std::string& full_topic_name, int max_queue_ms = 100);
 	
-	std::shared_ptr<Pipe> subscribe(std::shared_ptr<Topic> topic, int max_queue_ms = 100);
+	std::shared_ptr<Pipe> subscribe(TopicPtr topic, int max_queue_ms = 100);
 	
+	/// Unsubscribe from topic "domain.topic".
 	void unsubscribe(const std::string& domain, const std::string& topic);
 	
 	void unsubscribe(const std::string& full_topic_name);
 	
-	void unsubscribe(std::shared_ptr<Topic> topic);
+	void unsubscribe(TopicPtr topic);
 	
 	void unsubscribe_all();
 	
+	/// Returns list of topics that are subscribed
+	std::vector<TopicPtr> get_topics() const;
+	
+	/// Unsubscribe from all topics and close Node
 	void close() override;
 	
 private:
 	struct subscription_t {
 		int count = 0;
 		std::shared_ptr<Pipe> pipe;
-		std::shared_ptr<Topic> topic;
 	};
 	
-	std::unordered_map<Hash64, subscription_t> topic_map;
+	std::unordered_map<std::shared_ptr<Topic>, subscription_t> topic_map;
 	
 };
 

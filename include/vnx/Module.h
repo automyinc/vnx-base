@@ -18,6 +18,7 @@
 #define INCLUDE_VNX_MODULE_H_
 
 #include <vnx/Time.h>
+#include <vnx/Hash128.h>
 #include <vnx/Publisher.h>
 #include <vnx/Subscriber.h>
 #include <vnx/LogMsg.hxx>
@@ -66,10 +67,16 @@ public:
 	friend std::ostream& operator<<(std::ostream& _out, const Module& _value);
 	friend std::istream& operator>>(std::istream& _in, Module& _value);
 	
-	int vnx_log_level;				///< The log level of this module
+	bool vnx_virtual_time = true;		///< If to use virtual time for timers
+	
+	int vnx_log_level = INFO;			///< The display log level of this module (see LogMsg)
+	
+	int64_t vnx_heartbeat_interval_ms = 1000;	///< Interval at which to publish ModuleInfo on vnx.module_info [ms]
 	
 protected:
 	std::string vnx_name;			///< Name of the module
+	
+	std::map<Hash64, std::shared_ptr<const Endpoint>> vnx_remotes;		///< Map of connected processes (process id => endpoint)
 	
 	/** \brief Publish a copy of the value.
 	 * 
@@ -90,45 +97,52 @@ protected:
 		publisher->publish(value, topic, flags);
 	}
 	
-	/**
-	 * Publishes log output. Use ERROR, WARN, INFO, DEBUG or custom level.
-	 * Usage: log(?).out << "..."; 		// no std::endl needed at the ned
+	/** \brief Publishes log output.
+	 * 
+	 * Use ERROR, WARN, INFO, DEBUG or custom level.
+	 * Usage: log(level).out << "..."; 		// no std::endl needed at the ned
 	 */
 	LogPublisher log(int level);
 	
-	/**
-	 * Create a new timer.
+	/** \brief Create a new timer.
+	 * 
 	 * Can be started manually using Timer::reset().
 	 * Can be turned into a repeating timer by setting Timer::is_repeat = true;
-	 * Usage: add_timer(std::bind(?, this));
+	 * Usage: add_timer(std::bind(&Class::function, this));
 	 */
 	Timer* add_timer(const std::function<void()>& func);
 	
-	/**
-	 * Create and start a repeating timer.
-	 * Can be stopped using Timer::stop().
-	 * Can be restarted using Timer::reset().
-	 * Usage: set_timer_?(?, std::bind(?, this));
+	/** \brief Create and start a repeating timer.
+	 * 
+	 * Can be stopped using Timer::stop(). Can be restarted using Timer::reset().
+	 * Usage: set_timer_micros(interval_us, std::bind(&Class::function, this));
 	 */
 	Timer* set_timer_micros(int64_t interval_us, const std::function<void()>& func);
+	
+	/** \brief Create and start a repeating timer.
+	 * 
+	 * Can be stopped using Timer::stop(). Can be restarted using Timer::reset().
+	 * Usage: set_timer_millis(interval_ms, std::bind(&Class::function, this));
+	 */
 	Timer* set_timer_millis(int64_t interval_ms, const std::function<void()>& func);
 	
-	/**
-	 * Called before main() from the thread starting the module.
+	/** \brief Called before main() from the thread starting the module.
+	 * 
 	 * Used to make sure that the module is initialized after Handle::start() returns.
+	 * For example, open_pipe() calls should be done in init() such that a client connecting after
+	 * Handle::start() is guaranteed to succeed, which would not be the case if open_pipe() was called in
+	 * main() since that is a different thread that was just spawned in the background and it is undefined when
+	 * it will actually start to execute.
 	 */
 	virtual void init() {}
 	
-	/**
-	 * Main function, just like the real int main().
-	 * Make sure to call Super::main() at some point when over-riding it.
+	/** \brief Main function, just like the real int main().
+	 * 
+	 * Called from within a new thread that is spawned when starting the Module.
+	 * Make sure to call Super::main() (ie. Module::main()) at some point when over-riding it,
+	 * since all the processing is done in Module::main().
 	 */
 	virtual void main();
-	
-	/**
-	 * Shuts down the module. (thread safe)
-	 */
-	void exit();
 	
 	/// %Process a Message (internal use and special cases only)
 	virtual void handle(std::shared_ptr<const Message> msg);
@@ -146,6 +160,8 @@ protected:
 	virtual bool call_switch(TypeInput& in, TypeOutput& out, const TypeCode* call_type, const TypeCode* return_type) = 0;
 	
 private:
+	void heartbeat();
+	
 	void entry();
 	
 	void start();
@@ -157,10 +173,11 @@ private:
 	void detach(std::shared_ptr<Module> self_ptr_);
 	
 private:
-	std::shared_ptr<Publisher> publisher;
+	Hash64 module_id;
 	TimeControl time_state;
+	std::shared_ptr<Publisher> publisher;
 	std::ostringstream log_stream;
-	std::unordered_map<uint64_t, uint64_t> seq_map;
+	std::unordered_map<Hash128, uint64_t> seq_map;
 	std::vector<std::shared_ptr<Timer>> timers;
 	
 	std::thread thread;

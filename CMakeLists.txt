@@ -34,6 +34,7 @@ install(PROGRAMS
 	bin/vnxtopic
 	bin/vnxrecord
 	bin/vnxplay
+	bin/vnxgraph
 	DESTINATION bin
 )
 

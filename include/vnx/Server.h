@@ -29,14 +29,14 @@ namespace vnx {
  * Will spawn a Proxy for every new client connection.
  * 
  * Configuration options:
- * - \p address Address to listen on, when given \p endpoint_ == 0. For example: "0.0.0.0" (default port 4444), "0.0.0.0:1234" or "domain.sock".
- * - \p export_list List of topics to export to every client without them asking for it.
- * - \p max_queue_ms Maximum queue length when subscribing.
+ * - \b address Address to listen on, when given \p endpoint_ == 0. For example: "0.0.0.0" (default port 4444), "0.0.0.0:1234" or "domain.sock".
+ * - \b export_list List of topics to export to every client without them asking for it.
+ * - \b max_queue_ms Maximum queue length when subscribing.
  * 
  */
 class Server : public ServerBase {
 public:
-	/// Create a Server listening on endpoint \p endpoint_, or if null, on \p address
+	/// Create a Server listening on \p endpoint_, or if null, on \b address
 	Server(const std::string& name_, std::shared_ptr<const Endpoint> endpoint_ = 0);
 	
 protected:

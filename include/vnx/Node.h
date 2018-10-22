@@ -39,7 +39,7 @@ public:
 	Node& operator=(const Node& other) = delete;
 	
 	/**
-	 * Notify this node that a new message is available on pipe "pipe".
+	 * Notify this node that a new message is available on \p pipe.
 	 * Needs to be thread safe!
 	 */
 	virtual void notify(std::shared_ptr<Pipe> pipe);

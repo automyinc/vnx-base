@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
 	
 	auto marker = std::dynamic_pointer_cast<vnx::Marker>(value);      // Let's see if it's what we expect it to be
 	if(marker) {
-		std::cout << marker->message << " (" << (vnx::get_time_millis() - marker->time) << " ms ago)" << std::endl;
+		std::cout << marker->message << " (" << (vnx::get_time_micros() - marker->time)/1000 << " ms ago)" << std::endl;
 	}
 	
 	vnx::close();     // Shutdown (ensures clean exit)

@@ -7,6 +7,7 @@
 #include <vnx/package.hxx>
 #include <vnx/Hash64.h>
 #include <vnx/Module.h>
+#include <vnx/TopicInfoList.hxx>
 
 
 namespace vnx {
@@ -48,6 +49,8 @@ public:
 	static std::shared_ptr<vnx::TypeCode> create_type_code();
 	
 protected:
+	virtual void handle(std::shared_ptr<const ::vnx::TopicInfoList> _value, std::shared_ptr<const ::vnx::Sample> _sample) { handle(_value); }
+	virtual void handle(std::shared_ptr<const ::vnx::TopicInfoList> _value) {}
 	
 	void handle_switch(std::shared_ptr<const ::vnx::Sample> _sample);
 	bool call_switch(vnx::TypeInput& _in, vnx::TypeOutput& _out, const vnx::TypeCode* _call_type, const vnx::TypeCode* _return_type);

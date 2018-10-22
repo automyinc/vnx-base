@@ -7,6 +7,8 @@
 #include <vnx/Client.h>
 #include <vnx/LogMsg.hxx>
 #include <vnx/Module.h>
+#include <vnx/ModuleInfo.hxx>
+#include <vnx/ProcessInfo.hxx>
 #include <vnx/TimeControl.hxx>
 #include <vnx/TimeSync.hxx>
 #include <vnx/TopicInfoList.hxx>
@@ -26,6 +28,8 @@ public:
 	
 	::std::string get_name();
 	
+	::vnx::ProcessInfo get_process_info();
+	
 	::vnx::TimeSync get_sync_time();
 	
 	::vnx::TopicInfoList get_topic_info();
@@ -33,6 +37,10 @@ public:
 	void handle(const ::std::shared_ptr<const ::vnx::LogMsg>& sample);
 	
 	void handle_async(const ::std::shared_ptr<const ::vnx::LogMsg>& sample);
+	
+	void handle(const ::std::shared_ptr<const ::vnx::ModuleInfo>& sample);
+	
+	void handle_async(const ::std::shared_ptr<const ::vnx::ModuleInfo>& sample);
 	
 	void handle(const ::std::shared_ptr<const ::vnx::TimeControl>& sample);
 	

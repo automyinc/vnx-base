@@ -58,9 +58,9 @@ public:
 	
 	Hash64 operator^(const Hash64& other) const;		///< Computes bit-wise xor
 	
-	std::string to_string();	///< Returns decimal hash number
+	std::string to_string() const;			///< Returns decimal hash number
 	
-	std::string to_hex_string();	///< Returns hexadecimal hash number
+	std::string to_hex_string() const;		///< Returns hexadecimal hash number
 	
 };
 

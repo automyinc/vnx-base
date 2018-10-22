@@ -1,0 +1,21 @@
+package vnx;
+
+class ModuleInfo {
+	
+	long time;				// time stamp (virtual time) [usec]
+	
+	Hash64 id;				// unique module id
+	
+	Hash64 src_mac;			// source mac for publishing
+	
+	string name;			// module name
+	
+	string type;			// type name
+	
+	vector<string> sub_topics;		// topic subscriptions
+	
+	vector<string> pub_topics;		// topic publishers
+	
+	map<Hash64, Endpoint*> remotes;		// map of connected processes (process id => endpoint)
+	
+}

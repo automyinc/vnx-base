@@ -10,6 +10,8 @@ module Process {
 	
 	TopicInfoList get_topic_info() const;
 	
+	ProcessInfo get_process_info() const;
+	
 	void pause_log();							// pause terminal logging output
 	void resume_log();							// resume terminal logging output
 	
@@ -20,5 +22,6 @@ module Process {
 	void handle(LogMsg sample);
 	void handle(TimeControl sample);
 	void handle(TimeSync sample);
+	void handle(ModuleInfo sample);
 	
 }

@@ -68,9 +68,17 @@ public:
 	 */
 	void publish(std::shared_ptr<const Value> value, TopicPtr topic, uint16_t flags = 0);
 	
+	/// Returns source identity
+	Hash64 get_src_mac() const {
+		return src_mac;
+	}
+	
+	/// Returns list of topics that have been published so far
+	std::vector<TopicPtr> get_topics() const;
+	
 private:
 	const Hash64 src_mac;
-	std::unordered_map<Hash64, uint64_t> seq_map;
+	std::unordered_map<std::shared_ptr<Topic>, uint64_t> topic_map;
 	
 };
 

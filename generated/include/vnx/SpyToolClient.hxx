@@ -7,6 +7,7 @@
 #include <vnx/Client.h>
 #include <vnx/Hash64.h>
 #include <vnx/Module.h>
+#include <vnx/TopicInfoList.hxx>
 
 
 namespace vnx {
@@ -16,6 +17,10 @@ public:
 	SpyToolClient(const std::string& service_name);
 	
 	SpyToolClient(vnx::Hash64 service_addr);
+	
+	void handle(const ::std::shared_ptr<const ::vnx::TopicInfoList>& sample);
+	
+	void handle_async(const ::std::shared_ptr<const ::vnx::TopicInfoList>& sample);
 	
 };
 

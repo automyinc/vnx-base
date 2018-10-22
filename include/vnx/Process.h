@@ -60,6 +60,9 @@ void close();
 /// Get the local process name.
 std::string get_process_name();
 
+/// Get the local process id.
+Hash64 get_process_id();
+
 /// Triggers all modules to shut down. Returns immediately.
 void trigger_shutdown();
 
@@ -86,6 +89,8 @@ protected:
 	
 	TopicInfoList get_topic_info() const override;
 	
+	ProcessInfo get_process_info() const override;
+	
 	void pause_log() override;
 	
 	void resume_log() override;
@@ -98,16 +103,20 @@ protected:
 	
 	void main() override;
 	
-	void handle(std::shared_ptr<const vnx::LogMsg> value) override;
+	void handle(std::shared_ptr<const LogMsg> value) override;
 	
 	void handle(std::shared_ptr<const TimeControl> value) override;
 	
 	void handle(std::shared_ptr<const TimeSync> value) override;
 	
+	void handle(std::shared_ptr<const ModuleInfo> value) override;
+	
 	void update_topic_info();
 	
 private:
 	int is_log_paused = 0;
+	
+	std::map<Hash64, std::shared_ptr<const ModuleInfo>> module_info_map;
 	
 };
 

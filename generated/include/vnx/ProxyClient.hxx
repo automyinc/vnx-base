@@ -7,7 +7,6 @@
 #include <vnx/Client.h>
 #include <vnx/Hash64.h>
 #include <vnx/Module.h>
-#include <vnx/TopicInfoList.hxx>
 
 
 namespace vnx {
@@ -50,10 +49,6 @@ public:
 	
 	void enable_tunnel_async(const ::vnx::Hash64& tunnel_addr, const ::std::string& service_name, const ::int32_t& max_queue_ms);
 	
-	void handle(const ::std::shared_ptr<const ::vnx::TopicInfoList>& sample);
-	
-	void handle_async(const ::std::shared_ptr<const ::vnx::TopicInfoList>& sample);
-	
 	void on_connect();
 	
 	void on_connect_async();
@@ -61,6 +56,10 @@ public:
 	void on_disconnect();
 	
 	void on_disconnect_async();
+	
+	void on_remote_connect(const ::vnx::Hash64& process_id);
+	
+	void on_remote_connect_async(const ::vnx::Hash64& process_id);
 	
 };
 

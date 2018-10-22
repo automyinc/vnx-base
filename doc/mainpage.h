@@ -1,6 +1,11 @@
 
 /** \mainpage
  * 
+ * \section tools Tools
+ * 
+ * - \ref vnxtopic
+ * - \ref vnxdump
+ * 
  * \section tutorials Tutorials
  * 
  * 1. \ref tutorial_first_process

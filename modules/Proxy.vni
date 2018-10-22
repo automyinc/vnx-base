@@ -33,7 +33,6 @@ module Proxy {
 	
 	void on_connect();					// internal use only
 	void on_disconnect();				// internal use only
-	
-	void handle(TopicInfoList sample);
+	void on_remote_connect(Hash64 process_id);		// internal use only, called from other end
 	
 }

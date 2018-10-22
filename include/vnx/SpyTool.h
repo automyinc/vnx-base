@@ -39,6 +39,9 @@ protected:
 	
 	void handle(std::shared_ptr<const Sample> sample) override;
 	
+	void handle(std::shared_ptr<const ::vnx::TopicInfoList> value) override;
+	
+private:
 	void update(const TopicInfoList& info);
 	
 private:
