@@ -1,10 +1,16 @@
 
 /** \mainpage
  * 
+ * \section index Index
+ * 
+ * - \ref vni_interface
+ * - \ref topic
+ * 
  * \section tools Tools
  * 
  * - \ref vnxtopic
  * - \ref vnxdump
+ * - \ref vnxcppcodegen
  * 
  * \section tutorials Tutorials
  * 
