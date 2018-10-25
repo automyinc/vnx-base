@@ -27,7 +27,7 @@ namespace vnx {
 
 /** \brief Module to play back a or multiple recording file/s.
  * 
- * Used by vnxplay.
+ * Used by \ref vnxplay.
  */
 class Player : public PlayerBase {
 public:

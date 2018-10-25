@@ -5,7 +5,7 @@
  * vnxdump [-1 | --one] [-i | --info] [-s | --source <url>] [-t | --topic <expr>] [-x | --compact] [--max-list-size <size, 0=unlimited>]
  * \endcode
  * 
- * vnxdump shows samples which are published in a process.
+ * vnxdump prints the content of samples which are published in a process.
  * 
  * By default it connects to localhost:4444 and dumps the content of all samples in pretty printed JSON format.
  * 

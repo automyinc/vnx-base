@@ -17,6 +17,7 @@ rsync -av --delete $SRC/interface/ interface/vnx/
 rsync -av --delete $SRC/modules/ modules/
 
 cp $SRC/VERSION VERSION
+cp $SRC/CHANGELOG.md ./
 cp $SRC/doxygen.cfg ./
 cp $SRC/doc/mainpage.h doc/
 cp $SRC/build/libvnx_base* lib/

@@ -14,6 +14,12 @@
  * from Automy Incorporated.
  */
 
+/** \file vnx/Type.h
+ * 
+ * Type.h is the top-most header for VNX and is included almost everywhere.
+ * 
+ */
+
 #ifndef INCLUDE_VNX_TYPE_H_
 #define INCLUDE_VNX_TYPE_H_
 
@@ -34,7 +40,6 @@
 
 #include <vnx/Hash64.h>
 #include <vnx/Util.h>
-
 
 /** \brief The maximum size of dynamic containers
  * 
@@ -355,14 +360,26 @@ void create_dynamic_code(std::vector<uint16_t>& code, const std::list<T>& value)
 template<typename T>
 void create_dynamic_code(std::vector<uint16_t>& code, const std::set<T>& value);
 
+template<typename T, typename C>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::set<T, C>& value);
+
 template<typename T>
 void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_set<T>& value);
+
+template<typename T, typename C>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_set<T, C>& value);
 
 template<typename K, typename V>
 void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V>& value);
 
+template<typename K, typename V, typename C>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V, C>& value);
+
 template<typename K, typename V>
 void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K, V>& value);
+
+template<typename K, typename V, typename C>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K, V, C>& value);
 
 template<typename K, typename V>
 void create_dynamic_code(std::vector<uint16_t>& code, const std::pair<K, V>& value);
@@ -428,11 +445,11 @@ public:
 	/*
 	 * The following fields are computed at runtime. They are not serialized.
 	 */
-	bool is_native = false;
-	size_t total_field_size = 0;
-	std::vector<TypeField*> field_map;
-	std::vector<TypeField*> ext_fields;
-	std::map<std::string, uint32_t> inv_enum_map;
+	bool is_native = false;								///< If type is native, ie. corresponds to a C++ class
+	size_t total_field_size = 0;						///< Total size of all primitive fields [bytes]
+	std::vector<TypeField*> field_map;					///< Map from primitive field in data to field in native type
+	std::vector<TypeField*> ext_fields;					///< Map from extended field in data to field in native type
+	std::map<std::string, uint32_t> inv_enum_map;		///< Inverse enum map, name to value
 	
 	std::function<std::shared_ptr<Value>(void)> create_value;		///< Function that creates a new value of this type
 	
@@ -507,19 +524,31 @@ void create_dynamic_code(std::vector<uint16_t>& code, const std::vector<T>& valu
 /// \private
 template<typename T>
 void create_dynamic_code(std::vector<uint16_t>& code, const std::list<T>& value) {
-	create_dynamic_code<T>(code, std::vector<T>());
+	create_dynamic_code(code, std::vector<T>());
 }
 
 /// \private
 template<typename T>
 void create_dynamic_code(std::vector<uint16_t>& code, const std::set<T>& value) {
-	create_dynamic_code<T>(code, std::vector<T>());
+	create_dynamic_code(code, std::vector<T>());
+}
+
+/// \private
+template<typename T, typename C>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::set<T, C>& value) {
+	create_dynamic_code(code, std::vector<T>());
 }
 
 /// \private
 template<typename T>
 void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_set<T>& value) {
-	create_dynamic_code<T>(code, std::vector<T>());
+	create_dynamic_code(code, std::vector<T>());
+}
+
+/// \private
+template<typename T, typename C>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_set<T, C>& value) {
+	create_dynamic_code(code, std::vector<T>());
 }
 
 /// \private
@@ -534,9 +563,21 @@ void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V>& valu
 }
 
 /// \private
+template<typename K, typename V, typename C>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V, C>& value) {
+	create_dynamic_code(code, std::map<K, V>());
+}
+
+/// \private
 template<typename K, typename V>
 void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K, V>& value) {
-	create_dynamic_code<K, V>(code, std::map<K, V>());
+	create_dynamic_code(code, std::map<K, V>());
+}
+
+/// \private
+template<typename K, typename V, typename C>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K, V>& value) {
+	create_dynamic_code(code, std::map<K, V>());
 }
 
 /// \private

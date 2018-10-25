@@ -203,7 +203,7 @@ typedef NewType OldType;		// just like in C++, only for VNI classes
  * This allows the usage of old recordings with new code or running different versions of software components at the same time.
  * 
  * Transparent compatibility covers the following use-cases:
- * - A field is added or removed to/from a class or struct. If data for a field is missing it will be left as default initialized. Any extra fields in the data are ignored.
+ * - Adding, removing or re-ordering fields in a class or struct. If data for a field is missing it will be left as default initialized. Any extra fields in the data are ignored.
  * - Changing a field of integral type to any other integral type, such as float to double or int to float. The conversion is done as specified in the C++ standard.
  * - Changing the size of a static array. Too many elements are ignored and missing elements are left as default initialized.
  * - Changing the type of a static array, vector or map. The behavior is the same as when changing the type of a field.
@@ -220,9 +220,9 @@ typedef NewType OldType;		// just like in C++, only for VNI classes
  * 
  * \section limitations Limitations
  * 
- * - The maximum size of a static array is: VNX_MAX_STATIC_SIZE = 0xFFFF elements
- * - The maximum size of dynamic containers is: VNX_MAX_SIZE = 0xFFFFFFFF elements
- * - The maximum combined size of all primitive fields (including static arrays of integral type) inside a struct or class is: VNX_BUFFER_SIZE = 16384 bytes
+ * - The maximum size of a static array is: #VNX_MAX_STATIC_SIZE = 0xFFFF elements
+ * - The maximum size of dynamic containers is: #VNX_MAX_SIZE = 0xFFFFFFFF elements
+ * - The maximum combined size of all primitive fields (including static arrays of integral type) inside a struct or class is: #VNX_BUFFER_SIZE = 16384 bytes
  * 
  */
 
