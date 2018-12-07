@@ -76,7 +76,7 @@ INFO: AnotherModule.some_option = '1234'
  * Example with "config" folder and command line options:
  * \code
 $ configuration_example -c config/ --some_option 5 6 7 8 --SomeModule.some_option 4321 --AnotherModule.some_option
-INFO: some_option = '8'
+INFO: some_option = '[5,6,7,8]'
 INFO: SomeModule.some_option = '4321'
 INFO: AnotherModule.some_option = '1'
  * \endcode
