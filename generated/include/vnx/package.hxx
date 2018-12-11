@@ -7,6 +7,7 @@
 #include <vnx/Type.h>
 
 
+
 namespace vnx {
 
 extern std::shared_ptr<vnx::Topic> log_out;
