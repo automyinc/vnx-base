@@ -1,4 +1,13 @@
 
+## [v1.4.2]
+
+- vnxcppcodegen fix for missing inter-package dependency includes in package.hxx
+
+## [v1.4.1]
+
+- Fix for command line parsing of array arguments
+- Added dynamic read/write support for custom comparison templates of std::set, std::unordered_set, std::map and std::unorderd_map
+
 ## [v1.4.0]
 
 - vnxread fix for -t option, now resolves actual type name
