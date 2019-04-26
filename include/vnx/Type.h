@@ -86,14 +86,17 @@ class TypeOutput;
 /// Register new TypeCode for given type and code hash
 const TypeCode* register_type_code(std::shared_ptr<TypeCode> type_code);
 
-/// Register new TypeCode for code hash \p hash
+/// Register new TypeCode for \p hash
 const TypeCode* register_type_code(Hash64 hash, std::shared_ptr<TypeCode> type_code);
 
-/** \brief Returns pointer to global TypeCode instance for the given type or code hash.
- * 
- * Use Hash64("type.name") to obtain the type hash for a type name.
- */
+/// Register an alias (typedef) for type hash \p type_hash with given \p new_type_hash
+const TypeCode* register_type_alias(Hash64 type_hash, Hash64 new_type_hash);
+
+/// Returns pointer to global TypeCode instance for the given type or code hash.
 const TypeCode* get_type_code(Hash64 hash);
+
+/// Returns pointer to global TypeCode instance for the given type name.
+const TypeCode* get_type_code(const std::string& type_name);
 
 /// Returns all TypeCode instances known to this process
 std::vector<const TypeCode*> get_all_type_codes();
@@ -420,6 +423,10 @@ public:
 class TypeCode {
 public:
 	TypeCode(bool is_native_ = false);
+	
+	TypeCode(const TypeCode&) = delete;
+	
+	TypeCode& operator=(const TypeCode&) = delete;
 	
 	uint16_t version = 2;	///< Version number
 	

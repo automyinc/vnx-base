@@ -738,9 +738,6 @@ void read_dynamic_list_data(TypeInput& in, T* data_, const uint16_t* code_, cons
 template<typename T>
 void from_string(const std::string& str, T& value);
 
-/// Reads an object from the JSON string
-void from_string(const std::string& str, std::map<std::string, std::string>& value);
-
 template<typename T>
 void from_string(const std::string& str, std::shared_ptr<T>& value);
 
@@ -768,6 +765,12 @@ bool read_value(std::istream& in, std::string& out, bool want_string = false, ch
  * Example: {"key": 123, "foo": "bar"}
  */
 bool read_object(std::istream& in, std::map<std::string, std::string>& object);
+
+/** \brief Reads an object from the JSON string.
+ * 
+ * Example: {"key": 123, "foo": "bar"}
+ */
+bool read_object(const std::string& str, std::map<std::string, std::string>& object);
 
 /// Reads a value directly from the JSON stream
 /// @{
@@ -976,7 +979,7 @@ void read_matrix(std::istream& in, T* data, const std::array<size_t, N>& size) {
 			from_string(str, tmp);
 		} else if(str[0] == '{') {
 			std::map<std::string, std::string> object;
-			from_string(str, object);
+			read_object(str, object);
 			from_string(object["data"], tmp);
 		}
 	}

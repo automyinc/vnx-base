@@ -1,4 +1,20 @@
 
+## [v1.4.3]
+
+- added "vnx_type_map" config option to vnx::init()
+- added "vnx_server_map" and "vnx_proxy_map" config options to vnx::init()
+- replaced "void from_string(const std::string& str, std::map<std::string, std::string>& value)" with "bool read_object(const std::string& str, std::map<std::string, std::string>& object)"
+- added "const TypeCode* get_type_code(const std::string& type_name)"
+
+## [v1.4.2]
+
+- vnxcppcodegen fix for missing inter-package dependency includes in package.hxx
+
+## [v1.4.1]
+
+- Fix for command line parsing of arrays, only worked for first parameter before
+- Added write_dynamic() support for custom comparator std::set, std::unordered_set, std::map and std::unordered_map
+
 ## [v1.4.0]
 
 - vnxread fix for -t option, now resolves actual type name
@@ -10,8 +26,6 @@
 - Added Module::vnx_virtual_time option to better control if a Module should use virtual time or not
 - *_async() request functions no longer throw exceptions, as they should not
 - Added vnxgraph tool
-- Fix for command line parsing of arrays, only worked for first parameter before
-- Addded write_dynamic() support for custom comparator std::set, std::unordered_set, std::map and std::unordered_map
 
 ## [v1.3.4]
 

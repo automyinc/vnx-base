@@ -43,6 +43,11 @@ namespace vnx {
  * - "c" => "config" (a config root directory, multiple possible, loaded left to right)
  * - "d" => "debug" (flag)
  * 
+ * Additional config options:
+ * - "vnx_type_map": A string map that for each entry [<alias type name>, <existing type name>] creates a mapping from an old (and no longer existing) type to a new type.
+ * - "vnx_server_map": A string map that for each entry [<module name>, <server url>] a vnx::Server is spawned in the background.
+ * - "vnx_proxy_map": A string map that for each entry [<module name>, <endpoint url>] a vnx::Proxy is spawned in the background.
+ * 
  * @param process_name Name for this process
  * @param options List of options, see above for info.
  */
