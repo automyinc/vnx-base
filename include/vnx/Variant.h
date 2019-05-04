@@ -235,6 +235,8 @@ public:
 		return vnx::to_string_value(*this);
 	}
 	
+	Object to_object() const;
+	
 	friend std::ostream& operator<<(std::ostream& out, const Variant& value) {
 		vnx::write(out, value);
 		return out;

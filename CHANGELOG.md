@@ -1,4 +1,14 @@
 
+## [v1.5.0]
+
+- removed ambiguous subscribe/unsubscribe functions in vnx::Subscriber
+- codegen fix for segfault in case of reading an un-matched nested type (only possible when using vnx_type_map)
+- istream read fix for vnx::Object, previously did not clear the object first
+- added Variant::to_object()
+- Recorder publishes RecorderStatus now
+- write_to_file() ignores empty file name now
+- added Module::get_vnx_node()
+
 ## [v1.4.3]
 
 - added "vnx_type_map" config option to vnx::init()

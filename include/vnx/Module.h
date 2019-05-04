@@ -67,6 +67,8 @@ public:
 	friend std::ostream& operator<<(std::ostream& _out, const Module& _value);
 	friend std::istream& operator>>(std::istream& _in, Module& _value);
 	
+	Node* get_vnx_node();				///< Returns a pointer to vnx::Node sub-class
+	
 	bool vnx_virtual_time = true;		///< If to use virtual time for timers
 	
 	int vnx_log_level = INFO;			///< The display log level of this module (see LogMsg)

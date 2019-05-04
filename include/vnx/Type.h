@@ -453,6 +453,7 @@ public:
 	 * The following fields are computed at runtime. They are not serialized.
 	 */
 	bool is_native = false;								///< If type is native, ie. corresponds to a C++ class
+	bool is_matched = false;							///< If type is matched to a native C++ type
 	size_t total_field_size = 0;						///< Total size of all primitive fields [bytes]
 	std::vector<TypeField*> field_map;					///< Map from primitive field in data to field in native type
 	std::vector<TypeField*> ext_fields;					///< Map from extended field in data to field in native type

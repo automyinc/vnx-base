@@ -41,17 +41,7 @@ public:
 	~Subscriber();
 	
 protected:
-	/// Subscribe to topic "domain.topic".
-	std::shared_ptr<Pipe> subscribe(const std::string& domain, const std::string& topic, int max_queue_ms = 100);
-	
-	std::shared_ptr<Pipe> subscribe(const std::string& full_topic_name, int max_queue_ms = 100);
-	
 	std::shared_ptr<Pipe> subscribe(TopicPtr topic, int max_queue_ms = 100);
-	
-	/// Unsubscribe from topic "domain.topic".
-	void unsubscribe(const std::string& domain, const std::string& topic);
-	
-	void unsubscribe(const std::string& full_topic_name);
 	
 	void unsubscribe(TopicPtr topic);
 	

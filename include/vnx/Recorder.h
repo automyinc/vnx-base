@@ -18,6 +18,7 @@
 #define INCLUDE_VNX_RECORDER_H_
 
 #include <vnx/RecorderBase.hxx>
+#include <vnx/RecorderStatus.hxx>
 #include <vnx/ProxyClient.hxx>
 #include <vnx/RecordWriter.h>
 #include <vnx/Time.h>
@@ -57,6 +58,8 @@ protected:
 private:
 	std::shared_ptr<RecordWriter> writer;
 	std::shared_ptr<ProxyClient> proxy;
+	
+	RecorderStatus info;
 	
 	int64_t last_output_pos = 0;
 	int64_t last_sample_count = 0;
