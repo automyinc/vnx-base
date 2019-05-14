@@ -15,7 +15,7 @@ cat debian/control >> $DST/DEBIAN/control
 
 ./install.sh -DCMAKE_INSTALL_PREFIX:PATH=$PWD/$DST/usr
 
-dpkg-deb --build $DST
+fakeroot dpkg-deb --build $DST
 
 mv ${DST}.deb $ARCH/
 
