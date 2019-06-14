@@ -34,15 +34,19 @@ public:
 	/// Creates new thread with given name
 	Thread(const std::string& vnx_name_);
 	
+	Thread(const Thread&) = delete;
+	
+	Thread& operator=(const Thread&) = delete;
+	
 	~Thread();
 	
 	/// Start thread in background. Safe to call multiple times.
 	void start();
 	
-	/// Wait for thread to finish and join, if thread is still running. (thread-safe)
+	/// Wait for thread to finish and join, if thread is still running. (not thread-safe)
 	void join();
 	
-	/// Trigger thread to exit and then join it, if thread is still running. (thread-safe)
+	/// Trigger thread to exit and then join it, if thread is still running. (not thread-safe)
 	void stop();
 	
 protected:

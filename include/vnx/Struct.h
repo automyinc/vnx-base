@@ -78,10 +78,12 @@ public:
 	
 	friend std::ostream& operator<<(std::ostream& _out, const Struct& _value) {
 		_out << _value.data;
+		return _out;
 	}
 	
 	friend std::istream& operator>>(std::istream& _in, Struct& _value) {
 		_in >> _value.data;
+		return _in;
 	}
 	
 };
