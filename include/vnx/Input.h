@@ -748,6 +748,7 @@ void from_string(const std::string& str, std::shared_ptr<const T>& value);
  * 
  * A value is either a:
  * - number: 123 or 123.456
+ * - boolean: true or false (without quotes)
  * - string: "string with quotes"
  * - array: [1, 2, 3]
  * - object: {"key": 123, "foo": "bar"}
@@ -774,7 +775,7 @@ bool read_object(const std::string& str, std::map<std::string, std::string>& obj
 
 /// Reads a value directly from the JSON stream
 /// @{
-inline void read(std::istream& in, bool& value) { int tmp; in >> tmp; value = bool(tmp); }
+inline void read(std::istream& in, bool& value) { std::string tmp; read_value(in, tmp); value = (tmp == "true" || tmp == "1"); }
 inline void read(std::istream& in, uint8_t& value) { int tmp; in >> tmp; value = uint8_t(tmp); }
 inline void read(std::istream& in, uint16_t& value) { in >> value; }
 inline void read(std::istream& in, uint32_t& value) { in >> value; }
