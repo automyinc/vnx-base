@@ -30,6 +30,15 @@ void skip(TypeInput& in);
 /// Skips the current value in the stream
 void skip(TypeInput& in, const TypeCode* type_code, const uint16_t* code);
 
+/// Bulk byte copy from in to out (out can be null)
+void copy_bytes(TypeInput& in, TypeOutput* out, size_t num_bytes);
+
+/// Copy next value from in to out (out can be null)
+void copy(TypeInput& in, TypeOutput* out);
+
+/// Copy rest of current value to out (out can be null)
+void copy(TypeInput& in, TypeOutput* out, const TypeCode* type_code, const uint16_t* code);
+
 /** \brief Reads dynamic code from the stream.
  * 
  * @param code Pointer to at least VNX_MAX_BYTE_CODE_SIZE uint16_t elements.
@@ -625,9 +634,8 @@ void read_image_size(TypeInput& in, std::array<size_t, N>& size, const uint16_t*
  */
 template<typename T, size_t N>
 void read_image_data(TypeInput& in, T* data, const std::array<size_t, N>& size, const uint16_t* code) {
-	if(	((code[0] == CODE_IMAGE && code[1] == N)
+	if(	(code[0] == CODE_IMAGE && code[1] == N)
 		|| (code[0] == CODE_ALT_IMAGE && flip_bytes(code[1]) == N))
-		&& data)
 	{
 		size_t total_size = 1;
 		for(size_t i = 0; i < N; ++i) {
@@ -635,11 +643,21 @@ void read_image_data(TypeInput& in, T* data, const std::array<size_t, N>& size, 
 		}
 		const uint16_t* value_code = code + 2;
 		const size_t value_size = get_value_size(value_code[0]);
-		if(get_value_code<T>() == value_code[0] && sizeof(T) == value_size) {
-			in.read((char*)data, total_size * sizeof(T));
+		if(data) {
+			if(get_value_code<T>() == value_code[0] && sizeof(T) == value_size) {
+				in.read((char*)data, total_size * sizeof(T));
+			} else {
+				for(size_t i = 0; i < total_size; ++i) {
+					vnx::type<T>().read(in, data[i], 0, value_code);
+				}
+			}
 		} else {
-			for(size_t i = 0; i < total_size; ++i) {
-				vnx::type<T>().read(in, data[i], 0, value_code);
+			if(value_size) {
+				copy_bytes(in, 0, total_size * value_size);
+			} else {
+				for(size_t i = 0; i < total_size; ++i) {
+					skip(in, 0, value_code);
+				}
 			}
 		}
 	} else {

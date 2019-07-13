@@ -87,12 +87,6 @@ std::shared_ptr<T> clone(const T& value) {
 	return std::dynamic_pointer_cast<T>(value.clone());
 }
 
-void copy_bytes(TypeInput& in, TypeOutput* out, size_t num_bytes);
-
-void copy(TypeInput& in, TypeOutput* out);
-
-void copy(TypeInput& in, TypeOutput* out, const TypeCode* type_code, const uint16_t* code);
-
 
 } // vnx
 
