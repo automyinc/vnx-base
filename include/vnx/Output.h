@@ -241,6 +241,9 @@ void write(TypeOutput& out, const std::vector<T>& vector, const TypeCode* type_c
 	write_vector(out, vector, type_code, code);
 }
 
+template<>
+void write(TypeOutput& out, const std::vector<bool>& vector, const TypeCode* type_code, const uint16_t* code);
+
 /// Writes a dynamic list (SequenceContainer) to the stream
 template<typename T>
 void write_list(TypeOutput& out, const T& list, const TypeCode* type_code, const uint16_t* code) {
@@ -382,6 +385,9 @@ void write_matrix(TypeOutput& out, const T* data, const std::array<size_t, N>& s
  */
 template<typename T, size_t N>
 void write_image(TypeOutput& out, const T* data, const std::array<size_t, N>& size, const uint16_t* code) {
+	if(code[1] != N) {
+		throw std::logic_error("write_image(): code[1] != N");
+	}
 	size_t total_size = 1;
 	for(size_t i = 0; i < N; ++i) {
 		total_size *= size[i];
@@ -464,6 +470,9 @@ template<typename T>
 void write(std::ostream& out, const std::vector<T>& vector) {
 	write_sequence(out, vector.begin(), vector.end());
 }
+
+template<>
+void write(std::ostream& out, const std::vector<bool>& vector);
 
 template<typename K, typename V>
 void write(std::ostream& out, const std::pair<K, V>& value) {

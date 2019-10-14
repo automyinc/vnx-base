@@ -336,11 +336,6 @@ void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, con
  */
 template<typename T>
 void read_vector(TypeInput& in, T& vector, const TypeCode* type_code, const uint16_t* code) {
-	if(code[0] != CODE_LIST) {
-		vector.clear();
-		skip(in, type_code, code);
-		return;
-	}
 	uint32_t size = 0;
 	switch(code[0]) {
 		case CODE_LIST:
@@ -372,6 +367,10 @@ void read(TypeInput& in, std::vector<T>& vector, const TypeCode* type_code, cons
 	read_vector(in, vector, type_code, code);
 }
 
+/// Same as read_vector<T>() with T = std::vector<T> (specialization for std::vector<bool> fuckup)
+template<>
+void read(TypeInput& in, std::vector<bool>& vector, const TypeCode* type_code, const uint16_t* code);
+
 /** \brief Reads a dynamically allocated list (SequenceContainer) from the input stream.
  * 
  * Compatible with CODE_LIST.
@@ -379,10 +378,6 @@ void read(TypeInput& in, std::vector<T>& vector, const TypeCode* type_code, cons
 template<typename T>
 void read_list(TypeInput& in, T& list, const TypeCode* type_code, const uint16_t* code) {
 	list.clear();
-	if(code[0] != CODE_LIST) {
-		skip(in, type_code, code);
-		return;
-	}
 	uint32_t size = 0;
 	switch(code[0]) {
 		case CODE_LIST:
@@ -416,10 +411,6 @@ void read(TypeInput& in, std::list<T>& list, const TypeCode* type_code, const ui
 template<typename T>
 void read_set(TypeInput& in, T& set, const TypeCode* type_code, const uint16_t* code) {
 	set.clear();
-	if(code[0] != CODE_LIST) {
-		skip(in, type_code, code);
-		return;
-	}
 	uint32_t size = 0;
 	switch(code[0]) {
 		case CODE_LIST:
@@ -774,7 +765,7 @@ void from_string(const std::string& str, std::shared_ptr<const T>& value);
  * @param in JSON stream to read from
  * @param out Output string to copy into, will be cleared beforehand.
  * @param want_string Can be set to true if a string is expected to follow. If true will also read a string without quotes
- * 			until \p stop_char or any whitespace is encountered. Any whitespace at the beginning is ignored.
+ * 			until \p stop_char or a JSON delimiter is encountered. Any whitespace is ignored.
  * @param stop_char Where to additionally stop reading a string in case \p want_string == true.
  */
 bool read_value(std::istream& in, std::string& out, bool want_string = false, char stop_char = 0);
