@@ -58,9 +58,25 @@ inline int8_t flip_bytes(const int8_t& value) { return value; }
 inline int16_t flip_bytes(const int16_t& value) { return int16_t(flip_bytes(uint16_t(value))); }
 inline int32_t flip_bytes(const int32_t& value) { return int32_t(flip_bytes(uint32_t(value))); }
 inline int64_t flip_bytes(const int64_t& value) { return int64_t(flip_bytes(uint64_t(value))); }
-inline float32_t flip_bytes(const float32_t& value) { const uint32_t tmp = flip_bytes(reinterpret_cast<const uint32_t&>(value)); return reinterpret_cast<const float32_t&>(tmp); }
-inline float64_t flip_bytes(const float64_t& value) { const uint64_t tmp = flip_bytes(reinterpret_cast<const uint64_t&>(value)); return reinterpret_cast<const float64_t&>(tmp); }
 inline Hash64 flip_bytes(const Hash64& value) { return Hash64(flip_bytes(uint64_t(value))); }
+
+inline float32_t flip_bytes(const float32_t& value) {
+	uint32_t tmp;
+	::memcpy(&tmp, &value, sizeof(float32_t));
+	tmp = flip_bytes(tmp);
+	float32_t out;
+	::memcpy(&out, &tmp, sizeof(float32_t));
+	return out;
+}
+
+inline float64_t flip_bytes(const float64_t& value) {
+	uint64_t tmp;
+	::memcpy(&tmp, &value, sizeof(float64_t));
+	tmp = flip_bytes(tmp);
+	float64_t out;
+	::memcpy(&out, &tmp, sizeof(float64_t));
+	return out;
+}
 /// @}
 
 /** \brief Reads a value directly from the stream.
@@ -824,8 +840,8 @@ std::shared_ptr<Variant> read(std::istream& in);
  */
 template<typename T, size_t N>
 void read(std::istream& in, std::array<T, N>& array) {
-	int stack = 0;
-	int k = 0;
+	size_t stack = 0;
+	size_t k = 0;
 	while(true) {
 		const char c = in.peek();
 		if(!in.good()) {
@@ -849,7 +865,7 @@ void read(std::istream& in, std::array<T, N>& array) {
 			in.get();
 		}
 	}
-	for(int i = k; i < N; ++i) {
+	for(size_t i = k; i < N; ++i) {
 		array[i] = T();
 	}
 }

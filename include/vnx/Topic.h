@@ -71,8 +71,16 @@ public:
 	/** \brief Returns domain name of this topic. (thread-safe)
 	 * 
 	 * Exampe: Returns "mydomain" for topic "mydomain.mytopic".
+	 * Exampe: Returns "" for topic "mytopic".
 	 */
-	std::string get_domain_name() const { return domain_name; }
+	std::string get_domain_name() const;
+	
+	/** \brief Returns the topic's child name (thread-safe)
+	 * 
+	 * Example: Returns "mytopic" for topic "mydomain.mytopic".
+	 * Example: Returns "mytopic" for topic "mytopic".
+	 */
+	std::string get_topic_name() const;
 	
 	/// Returns the full name of this topic. (thread-safe)
 	std::string get_name() const { return topic_name; }
@@ -104,6 +112,9 @@ public:
 	/// Remove a child from this topic. Used internally only. (thread-safe)
 	void remove_child(Topic* child);
 	
+	/// Returns new topic with new domain name. (thread-safe)
+	std::shared_ptr<Topic> remap(const std::string& new_domain) const;
+	
 	/** \brief Close this topic and all its children. (thread-safe)
 	 * 
 	 * Cannot be undone, used only for process shutdown.
@@ -118,7 +129,6 @@ private:
 	std::mutex mutex;
 	std::condition_variable condition;
 	
-	std::string domain_name;
 	std::string topic_name;
 	Hash64 topic_hash;
 	

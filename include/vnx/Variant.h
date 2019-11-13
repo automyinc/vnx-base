@@ -154,9 +154,7 @@ public:
 		return to<uint64_t>();
 	}
 	
-	operator char() const {
-		return to<char>();
-	}
+	operator char() const;
 	
 	operator int8_t() const {
 		return to<int8_t>();
@@ -264,6 +262,14 @@ bool Variant::to<bool>() const;
 
 inline Variant::operator bool() const {
 	return to<bool>();
+}
+
+/// See char()
+template<>
+char Variant::to<char>() const;
+
+inline Variant::operator char() const {
+	return to<char>();
 }
 
 

@@ -7,6 +7,7 @@
 #include <vnx/package.hxx>
 #include <vnx/Hash64.h>
 #include <vnx/Module.h>
+#include <vnx/TopicPtr.h>
 
 
 namespace vnx {
@@ -19,6 +20,8 @@ public:
 	::std::vector<::std::string> export_list;
 	::std::vector<::std::string> forward_list;
 	::std::map<::vnx::Hash64, ::std::string> tunnel_map;
+	::std::map<::vnx::TopicPtr, ::vnx::TopicPtr> import_map;
+	::std::map<::vnx::TopicPtr, ::vnx::TopicPtr> export_map;
 	::vnx::Hash64 receive_tunnel;
 	::vnx::Hash64 request_tunnel;
 	::vnx::bool_t auto_import = false;

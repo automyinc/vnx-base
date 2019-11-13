@@ -7,6 +7,7 @@
 #include <vnx/Client.h>
 #include <vnx/Hash64.h>
 #include <vnx/Module.h>
+#include <vnx/TopicPtr.h>
 
 
 namespace vnx {
