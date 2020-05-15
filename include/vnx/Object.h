@@ -47,6 +47,14 @@ public:
 		return Variant::get_empty();
 	}
 	
+	bool operator==(const Object& other) const {
+		return field == other.field;
+	}
+	
+	bool operator!=(const Object& other) const {
+		return field != other.field;
+	}
+	
 	bool empty() const {
 		return field.empty();
 	}
@@ -61,6 +69,10 @@ public:
 	
 	const char* get_type_name() const override {
 		return "vnx.Object";
+	}
+	
+	const TypeCode* get_type_code() const override {
+		return 0;
 	}
 	
 	static std::shared_ptr<Object> create() {

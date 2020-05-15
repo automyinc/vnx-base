@@ -58,7 +58,7 @@ public:
 	const RecordHeader& get_header() const;
 	
 	/// Get the current byte position.
-	size_t get_output_pos() const;
+	int64_t get_output_pos() const;
 	
 protected:
 	void write_header();

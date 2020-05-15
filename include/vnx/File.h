@@ -76,6 +76,9 @@ public:
 	/// Seeks to the specified byte position. Will flush output buffer before doing so.
 	void seek_to(int64_t pos);
 	
+	/// Maps given region and returns input stream (length <= 0 maps all remaining)
+	std::shared_ptr<MappedMemoryInputStream> mmap_read(int64_t pos = 0, int64_t length = 0);
+	
 	/// Returns file path as it was given
 	std::string get_path() const {
 		return path;
@@ -88,19 +91,19 @@ public:
 	std::string get_extension() const;
 	
 	/// Returns byte offset from current read position to beginning of file when reading data.
-	size_t get_input_pos() const {
+	int64_t get_input_pos() const {
 		return in.get_input_pos();
 	}
 	
 	/// Returns byte offset from current write position to beginning of file when writing data.
-	size_t get_output_pos() const {
+	int64_t get_output_pos() const {
 		return out.get_output_pos();
 	}
 	
 	/// Returns last modification time in seconds
 	int64_t last_write_time() const;
 	
-	/// Returns file size in bytes
+	/// Returns the current file size in bytes
 	int64_t file_size() const;
 	
 	/// Returns if file does exist
@@ -121,19 +124,17 @@ public:
 	/// Flushes output buffer and then closes file. Safe to call multiple times or on an empty object.
 	void close();
 	
+	/// Deletes the file, closes file first if still open.
+	void remove();
+	
 	/// Returns internal file pointer
 	::FILE* get_handle() const {
 		return p_file;
 	}
 	
 private:
-	void update();
-	
-private:
 	std::string path;
 	::FILE* p_file = 0;
-	struct ::stat info = {};
-	bool is_valid = false;
 	
 	FileInputStream stream_in;
 	FileOutputStream stream_out;

@@ -344,7 +344,11 @@ void write_dynamic_list(TypeOutput& out, const T* data, const size_t size) {
 	}
 }
 
-/// Writes a value dynamically to the stream
+/** \brief Writes a value dynamically to the stream.
+ * 
+ * Assumes CODE_DYNAMIC.
+ * For top level writing CODE_DYNAMIC needs to be written first.
+ */
 template<typename T>
 void write_dynamic(TypeOutput& out, const T& value) {
 	std::vector<uint16_t> code;
@@ -589,19 +593,6 @@ std::string to_string_value(TypeInput& in);
 
 /// Converts binary value to regular string (same as to_string_value<T>())
 std::string to_string_value(TypeInput& in, const TypeCode* type_code, const uint16_t* code);
-
-template<typename T>
-const TypeCode* write_type_code(TypeOutput& out) {
-	auto iter = out.type_map.find(T::VNX_CODE_HASH);
-	if(iter != out.type_map.end()) {
-		return iter->second;
-	}
-	const TypeCode* type_code = vnx::get_type_code(T::VNX_CODE_HASH);
-	if(type_code) {
-		out.write_type_code(type_code);
-	}
-	return type_code;
-}
 
 template<typename T>
 void write_class_header(TypeOutput& out) {

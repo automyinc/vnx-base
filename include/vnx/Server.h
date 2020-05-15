@@ -50,7 +50,7 @@ private:
 private:
 	int server = -1;
 	std::shared_ptr<const Endpoint> endpoint;
-	Timer* setup_timer = 0;
+	std::shared_ptr<Timer> setup_timer;
 	
 	std::thread thread;
 	

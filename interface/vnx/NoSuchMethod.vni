@@ -1,6 +1,6 @@
 package vnx;
 
-class NoSuchMethod extends Exception {
+class NoSuchMethod extends NoSuchService {
 	
 	string method;
 	

@@ -40,6 +40,10 @@ public:
 		return data.get_type_name();
 	}
 	
+	const TypeCode* get_type_code() const override {
+		return data.get_type_code();
+	}
+	
 	static std::shared_ptr<Struct<T>> create() {
 		return std::make_shared<Struct<T>>();
 	}

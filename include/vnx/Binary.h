@@ -46,6 +46,7 @@ public:
 	
 	Hash64 get_type_hash() const override;
 	const char* get_type_name() const override;
+	const TypeCode* get_type_code() const override;
 	
 	static std::shared_ptr<Binary> create();
 	std::shared_ptr<Value> clone() const override;

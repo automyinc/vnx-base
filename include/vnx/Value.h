@@ -33,6 +33,7 @@ public:
 	
 	virtual vnx::Hash64 get_type_hash() const = 0;
 	virtual const char* get_type_name() const = 0;
+	virtual const TypeCode* get_type_code() const = 0;
 	
 	static std::shared_ptr<Value> create() { return 0; }
 	virtual std::shared_ptr<Value> clone() const = 0;
@@ -86,6 +87,18 @@ template<typename T>
 std::shared_ptr<T> clone(const T& value) {
 	return std::dynamic_pointer_cast<T>(value.clone());
 }
+
+/* \brief Generic comparison function
+ * 
+ * @return -1 if lhs < rhs, 1 if lhs > rhs, 0 if lhs == rhs
+ */
+int compare(TypeInput& in_lhs, TypeInput& in_rhs, const uint16_t* code_lhs, const uint16_t* code_rhs);
+
+/* \brief Computes generic CRC64 hash
+ * 
+ * Values are only compared by their type hash as given by Value::get_type_hash().
+ */
+Hash64 calc_hash(TypeInput& in, const uint16_t* code);
 
 
 } // vnx

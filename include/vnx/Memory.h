@@ -33,31 +33,40 @@ namespace vnx {
 class Memory {
 public:
 	struct chunk_t {
+	private:
+		static constexpr size_t SHORT_SIZE = 2 * sizeof(void*);
+		static constexpr size_t SHORT_BIT = size_t(1) << (sizeof(size_t) * 8 - 1);
 		
-		uint32_t size() const { return size_; }
+	public:
+		chunk_t() {
+			data_ = 0;
+			next_ = 0;
+		}
 		
-		char* data() { return (flags & SHORT ? mem_ : data_); }
-		const char* data() const { return (flags & SHORT ? mem_ : data_); }
+		size_t size() const { return size_ & ~SHORT_BIT; }
 		
-		chunk_t* next() { return (flags & SHORT ? 0 : next_); }
-		const chunk_t* next() const { return (flags & SHORT ? 0 : next_); }
+		bool is_short() const { return size_ & SHORT_BIT; }
+		
+		char* data() { return (is_short() ? mem_ : data_); }
+		const char* data() const { return (is_short() ? mem_ : data_); }
+		
+		chunk_t* next() { return (is_short() ? 0 : next_); }
+		const chunk_t* next() const { return (is_short() ? 0 : next_); }
 		
 	private:
-		uint32_t size_ = 0;
-		uint32_t flags = 0;
+		size_t size_ = 0;
 		
 		union {
 			struct {
 				char* data_;
 				chunk_t* next_;
 			};
-			char mem_[2 * sizeof(void*)];
+			char mem_[SHORT_SIZE];
 		};
 		
-		void alloc(size_t len, uint32_t flags_);
-		void free();
+		void alloc(size_t num_bytes, bool allow_short = false);
 		
-		static constexpr uint32_t SHORT = 1;
+		void free();
 		
 		friend class Memory;
 		
@@ -97,11 +106,14 @@ public:
 	/// Computes CRC64 hash of memory content
 	Hash64 get_hash() const;
 	
-	/// Adds a chunk of \p len bytes and returns pointer to chunk data
-	char* add_chunk(size_t len);
+	/// Adds a chunk of \p num_bytes bytes and returns pointer to chunk data
+	char* add_chunk(size_t num_bytes);
 	
 	/// Returns total size in bytes
 	size_t get_size() const;
+	
+	/// Writes memory content to \p out
+	void write(OutputStream& out) const;
 	
 	/// Writes memory content to \p out
 	void write(OutputBuffer& out) const;
@@ -135,8 +147,8 @@ public:
 		pos += len;
 	}
 	
-	size_t get_output_pos() const override {
-		return pos;
+	int64_t get_output_pos() const override {
+		return int64_t(pos);
 	}
 	
 private:
@@ -167,7 +179,7 @@ public:
 			chunk = chunk->next();
 			pos = 0;
 		}
-		return len;
+		return int64_t(len);
 	}
 	
 private:

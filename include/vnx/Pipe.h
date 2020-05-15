@@ -31,10 +31,10 @@ class Node;
 class Pipe;
 
 /// Open a new pipe known as \p service_name to Node \p node.
-std::shared_ptr<Pipe> open_pipe(const std::string& service_name, Node* node, int max_queue_ms = 100);
+std::shared_ptr<Pipe> open_pipe(const std::string& service_name, Node* node, int max_queue_ms);
 
 /// Open a new pipe known by \p mac_addr to Node \p node.
-std::shared_ptr<Pipe> open_pipe(Hash64 mac_addr, Node* node, int max_queue_ms = 100);
+std::shared_ptr<Pipe> open_pipe(Hash64 mac_addr, Node* node, int max_queue_ms);
 
 /** \brief Get a pipe to a service called \p service_name.
  * 
@@ -47,6 +47,18 @@ std::shared_ptr<Pipe> get_pipe(const std::string& service_name);
  * Returns 0 if node does not exist.
  */
 std::shared_ptr<Pipe> get_pipe(Hash64 mac_addr);
+
+/** \brief Connect \p pipe to \p peer.
+ * 
+ * Returns false in case of failure.
+ */
+bool connect(std::shared_ptr<Pipe> pipe, std::shared_ptr<Pipe> peer, uint16_t flags);
+
+/** \brief Disconnect peer from \p pipe.
+ * 
+ * Returns false in case of failure.
+ */
+bool disconnect(std::shared_ptr<Pipe> pipe, Hash64 peer_mac);
 
 /** \brief Send a message to service \p service_name.
  * 
@@ -70,7 +82,7 @@ bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<const Message> msg);
 bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<Message> msg, uint16_t flags);
 
 /// Connect a pipe to a node.
-void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms = 100);
+void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms);
 
 /// Unregister service known by \p service_name.
 void remove_pipe(const std::string& service_name);
@@ -103,6 +115,8 @@ void shutdown_pipes();
  */
 class Pipe {
 public:
+	static const int UNLIMITED = 0;		///< Denotes unlimited queue length (max_queue_ms == 0)
+	
 	/// Create a private no-name pipe.
 	Pipe();
 	
@@ -121,6 +135,12 @@ public:
 	
 	/// Connect a Pipe to a Node. (thread-safe)
 	friend void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms);
+	
+	/// Connect another Pipe to this Pipe, which will be notified if this pipe is closed. (thread-safe)
+	friend bool connect(std::shared_ptr<Pipe> pipe, std::shared_ptr<Pipe> peer, uint16_t flags);
+	
+	/// Disconnect another Pipe from this Pipe. (thread-safe)
+	friend bool disconnect(std::shared_ptr<Pipe> pipe, Hash64 peer_mac);
 	
 	/// Send a message through a Pipe. (thread-safe)
 	friend bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<const Message> msg);
@@ -144,10 +164,18 @@ public:
 	 * 
 	 * Only for identification purposes, the node could be deleted at any point in time!
 	 */
-	Node* get_node();
+	Node* get_node() const;
+	
+	/// Returns mac address of this pipe.
+	Hash64 get_mac_addr() const {
+		return mac_addr;
+	}
 	
 	/// Returns if pipe is currently paused.
-	bool get_is_paused() const { return is_paused; }
+	bool is_paused() const;
+	
+	/// Returns true if this pipe has a mac address.
+	bool is_private() const;
 	
 private:
 	/**
@@ -160,23 +188,27 @@ private:
 		explicit entry_t(std::shared_ptr<const Message> msg) : msg(std::move(msg)), time(get_wall_time_micros()) {}
 	};
 	
-	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms = 100);
+	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms);
+	
+	bool connect(std::shared_ptr<Pipe> peer, uint16_t flags);
+	
+	bool disconnect(Hash64 peer_mac);
 	
 	/// Push a new message onto the queue. Used exclusively by send_msg().
 	bool push(std::shared_ptr<Pipe> self, std::shared_ptr<const Message> msg);
 	
 private:
-	std::mutex mutex;
-	std::condition_variable condition;
+	mutable std::mutex mutex;
+	mutable std::condition_variable condition;
 	
 	Node* node = 0;
 	Hash64 mac_addr;
+	bool is_paused_ = false;
 	
-	int64_t max_queue_us = 100000;
-	
+	int64_t max_queue_us = 0;
 	std::queue<entry_t> queue;
 	
-	bool is_paused = false;
+	std::map<Hash64, std::shared_ptr<Pipe>> peer_map;
 	
 	friend class Node;
 	

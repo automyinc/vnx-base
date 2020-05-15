@@ -18,6 +18,10 @@
 #define INCLUDE_VNX_CLIENT_H_
 
 #include <vnx/Node.h>
+#include <vnx/exception.h>
+#include <vnx/NoSuchService.hxx>
+#include <vnx/NoSuchMethod.hxx>
+#include <vnx/InternalError.hxx>
 #include <vnx/Binary.h>
 
 
@@ -47,7 +51,7 @@ protected:
 private:
 	Hash64 vnx_src_mac;
 	Hash64 vnx_service_addr;
-	uint64_t vnx_next_id;
+	uint64_t vnx_next_id = 0;
 	
 	std::shared_ptr<Pipe> vnx_service_pipe;
 	std::shared_ptr<Pipe> vnx_return_pipe;

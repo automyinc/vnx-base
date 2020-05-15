@@ -1,4 +1,9 @@
 
+## [v1.6.0]
+
+- vnxdump do longer does regex matching, will only dump specified topics
+- dump command in terminal also no longer does regex matching, same as vnxdump
+
 ## [v1.5.0]
 
 - removed ambiguous subscribe/unsubscribe functions in vnx::Subscriber

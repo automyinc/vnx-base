@@ -37,7 +37,7 @@ public:
 	 */
 	virtual void write(const void* buf, size_t len) = 0;
 	
-	virtual size_t get_output_pos() const { return 0; }
+	virtual int64_t get_output_pos() const { return 0; }
 	
 };
 
@@ -70,7 +70,7 @@ public:
 	
 	void write(const void* buf, size_t len) override;
 	
-	size_t get_output_pos() const override;
+	int64_t get_output_pos() const override;
 	
 	void reset(FILE* file_) {
 		file = file_;
@@ -78,6 +78,27 @@ public:
 	
 private:
 	FILE* file = 0;
+	
+};
+
+
+/// Output stream for std::vector<uint8_t>
+class VectorOutputStream : public OutputStream {
+public:
+	VectorOutputStream() = default;
+	
+	VectorOutputStream(std::vector<uint8_t>* vector_) : vector(vector_) {}
+	
+	void write(const void* buf, size_t len) override;
+	
+	int64_t get_output_pos() const override;
+	
+	void reset(std::vector<uint8_t>* vector_) {
+		vector = vector_;
+	}
+	
+private:
+	std::vector<uint8_t>* vector = 0;
 	
 };
 
@@ -109,6 +130,10 @@ private:
 class OutputBuffer {
 public:
 	OutputBuffer(OutputStream* stream_) : stream(stream_) {}
+	
+	~OutputBuffer() {
+		// do not flush() here
+	}
 	
 	OutputBuffer(const OutputBuffer& other) = delete;
 	OutputBuffer& operator=(const OutputBuffer& other) = delete;
@@ -169,7 +194,7 @@ public:
 	}
 	
 	/// Returns the number of bytes that have been written to the stream already, plus what is left in the buffer.
-	size_t get_output_pos() const {
+	int64_t get_output_pos() const {
 		return stream->get_output_pos() + pos;
 	}
 	
@@ -189,8 +214,11 @@ class TypeOutput : public OutputBuffer {
 public:
 	TypeOutput(OutputStream* stream_) : OutputBuffer::OutputBuffer(stream_) {}
 	
-	/// Writes given type code to the stream if not already done so
-	void write_type_code(const TypeCode* type_code);
+	/** \brief Writes given type code to the stream if not already done so.
+	 * 
+	 * @return True if type code was actually written, false if already done so before.
+	 */
+	bool write_type_code(const TypeCode* type_code);
 	
 	/** \brief Resets the buffer and clears the type map.
 	 * 
@@ -198,11 +226,8 @@ public:
 	 */
 	void clear();
 	
-	/// To keep track of which type codes have already been written to the stream
-	std::unordered_map<Hash64, const TypeCode*> type_map;
-	
-	/// To keep track of where the type codes have been written
-	std::vector<size_t> type_code_positions;
+	/// To keep track of which type codes have already been written to the stream (and at what byte position)
+	std::unordered_map<Hash64, int64_t> type_code_map;
 	
 };
 

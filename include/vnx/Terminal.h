@@ -64,7 +64,7 @@ protected:
 	void handle(std::shared_ptr<const LogMsg> value);
 	
 private:
-	void read_loop();
+	static void read_loop(Hash64 service_addr);
 	
 private:
 	Hash64 service_addr;

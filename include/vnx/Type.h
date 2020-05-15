@@ -211,31 +211,38 @@ template<> inline uint16_t get_value_code<float32_t>() { return CODE_FLOAT; }
 /// \private
 template<> inline uint16_t get_value_code<float64_t>() { return CODE_DOUBLE; }
 
+/// Returns size of type \p code in bytes + if alternate byte order
+inline size_t get_value_size(uint16_t code, bool& is_alt) {
+	switch(code) {
+		case CODE_UINT8: is_alt = false; return 1;
+		case CODE_UINT16: is_alt = false; return 2;
+		case CODE_UINT32: is_alt = false; return 4;
+		case CODE_UINT64: is_alt = false; return 8;
+		case CODE_INT8: is_alt = false; return 1;
+		case CODE_INT16: is_alt = false; return 2;
+		case CODE_INT32: is_alt = false; return 4;
+		case CODE_INT64: is_alt = false; return 8;
+		case CODE_FLOAT: is_alt = false; return 4;
+		case CODE_DOUBLE: is_alt = false; return 8;
+		case CODE_ALT_UINT8: is_alt = true; return 1;
+		case CODE_ALT_UINT16: is_alt = true; return 2;
+		case CODE_ALT_UINT32: is_alt = true; return 4;
+		case CODE_ALT_UINT64: is_alt = true; return 8;
+		case CODE_ALT_INT8: is_alt = true; return 1;
+		case CODE_ALT_INT16: is_alt = true; return 2;
+		case CODE_ALT_INT32: is_alt = true; return 4;
+		case CODE_ALT_INT64: is_alt = true; return 8;
+		case CODE_ALT_FLOAT: is_alt = true; return 4;
+		case CODE_ALT_DOUBLE: is_alt = true; return 8;
+	}
+	is_alt = false;
+	return 0;
+}
+
 /// Returns size of type \p code in bytes
 inline size_t get_value_size(uint16_t code) {
-	switch(code) {
-		case CODE_UINT8: return 1;
-		case CODE_UINT16: return 2;
-		case CODE_UINT32: return 4;
-		case CODE_UINT64: return 8;
-		case CODE_INT8: return 1;
-		case CODE_INT16: return 2;
-		case CODE_INT32: return 4;
-		case CODE_INT64: return 8;
-		case CODE_FLOAT: return 4;
-		case CODE_DOUBLE: return 8;
-		case CODE_ALT_UINT8: return 1;
-		case CODE_ALT_UINT16: return 2;
-		case CODE_ALT_UINT32: return 4;
-		case CODE_ALT_UINT64: return 8;
-		case CODE_ALT_INT8: return 1;
-		case CODE_ALT_INT16: return 2;
-		case CODE_ALT_INT32: return 4;
-		case CODE_ALT_INT64: return 8;
-		case CODE_ALT_FLOAT: return 4;
-		case CODE_ALT_DOUBLE: return 8;
-		default: return 0;
-	}
+	bool dummy;
+	return get_value_size(code, dummy);
 }
 
 /** \brief Returns true if T is equivalent to \p code

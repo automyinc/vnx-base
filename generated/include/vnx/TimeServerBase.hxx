@@ -27,6 +27,7 @@ public:
 	
 	vnx::Hash64 get_type_hash() const;
 	const char* get_type_name() const;
+	const vnx::TypeCode* get_type_code() const;
 	
 	void read(std::istream& _in);
 	void write(std::ostream& _out) const;
@@ -39,13 +40,15 @@ public:
 	friend std::ostream& operator<<(std::ostream& _out, const TimeServerBase& _value);
 	friend std::istream& operator>>(std::istream& _in, TimeServerBase& _value);
 	
-	static const vnx::TypeCode* get_type_code();
-	static std::shared_ptr<vnx::TypeCode> create_type_code();
+	static const vnx::TypeCode* static_get_type_code();
+	static std::shared_ptr<vnx::TypeCode> static_create_type_code();
 	
 protected:
 	
-	void handle_switch(std::shared_ptr<const ::vnx::Sample> _sample);
-	bool call_switch(vnx::TypeInput& _in, vnx::TypeOutput& _out, const vnx::TypeCode* _call_type, const vnx::TypeCode* _return_type);
+	void vnx_handle_switch(std::shared_ptr<const ::vnx::Sample> _sample) override;
+	std::shared_ptr<vnx::Value> vnx_call_switch(vnx::TypeInput& _in, const vnx::TypeCode* _call_type, const vnx::request_id_t& _request_id) override;
+	
+private:
 	
 };
 

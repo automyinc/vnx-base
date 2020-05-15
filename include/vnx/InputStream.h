@@ -43,7 +43,7 @@ public:
 	 * In case of a file it returns the current read position, ie. seeking
 	 * should be correctly handled.
 	 */
-	virtual size_t get_input_pos() const { return 0; }
+	virtual int64_t get_input_pos() const { return 0; }
 	
 };
 
@@ -76,7 +76,7 @@ public:
 	
 	size_t read(void* buf, size_t len) override;
 	
-	size_t get_input_pos() const override;
+	int64_t get_input_pos() const override;
 	
 	void reset(FILE* file_) {
 		file = file_;
@@ -84,6 +84,101 @@ public:
 	
 private:
 	FILE* file = 0;
+	
+};
+
+
+/// Input stream for arbitrary memory
+class PointerInputStream : public InputStream {
+public:
+	PointerInputStream() = default;
+	
+	PointerInputStream(const void* data_, size_t size_)
+		:	data((const char*)data_),
+			size(size_)
+	{}
+	
+	size_t read(void* buf, size_t len) override;
+	
+	int64_t get_input_pos() const override {
+		return pos;
+	}
+	
+	void reset(const void* data_, size_t size_) {
+		data = (const char*)data_;
+		size = size_;
+		pos = 0;
+	}
+	
+	void set_input_pos(size_t pos_) {
+		if(pos_ > size) {
+			throw std::logic_error("pos_ > size");
+		}
+		pos = pos_;
+	}
+	
+private:
+	const char* data = 0;
+	size_t size = 0;
+	size_t pos = 0;
+	
+};
+
+
+/// Input stream for mapped memory, will unmap memory on destruction
+class MappedMemoryInputStream : public PointerInputStream {
+public:
+	/// Constructor will map memory, on failure there is no data to read
+	MappedMemoryInputStream(int fd, size_t length, size_t offset = 0);
+	
+	~MappedMemoryInputStream() {
+		release();
+	}
+	
+	/// Returns true if mmap() was successful
+	bool is_valid() const {
+		return map_ptr && map_size;
+	}
+	
+protected:
+	void release();
+	
+private:
+	void* map_ptr = 0;
+	size_t map_size = 0;
+	
+};
+
+
+/// Input stream for binary vector
+class VectorInputStream : public InputStream {
+public:
+	VectorInputStream() = default;
+	
+	VectorInputStream(const std::vector<uint8_t>* vector_) : vector(vector_) {}
+	
+	size_t read(void* buf, size_t len) override;
+	
+	int64_t get_input_pos() const override {
+		return pos;
+	}
+	
+	void reset(const std::vector<uint8_t>* vector_) {
+		vector = vector_;
+		pos = 0;
+	}
+	
+	void set_input_pos(size_t pos_) {
+		if(pos_ > vector->size()) {
+			throw std::logic_error("pos_ > vector->size()");
+		}
+		pos = pos_;
+	}
+	
+private:
+	const std::vector<uint8_t>* vector = 0;
+	
+	size_t pos = 0;
 	
 };
 
@@ -181,7 +276,7 @@ public:
 	}
 	
 	/// Returns stream read position, while taking buffered data into account.
-	size_t get_input_pos() const {
+	int64_t get_input_pos() const {
 		return stream->get_input_pos() - get_num_avail();
 	}
 	
@@ -211,7 +306,7 @@ public:
 	 */
 	void clear();
 	
-	std::unordered_map<Hash64, const TypeCode*> type_map;		/// for faster lock-free lookup
+	std::unordered_map<Hash64, const TypeCode*> type_code_map;		///< for faster lock-free lookup
 	
 };
 

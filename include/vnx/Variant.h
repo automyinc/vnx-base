@@ -18,9 +18,10 @@
 #define INCLUDE_VNX_VARIANT_H
 
 #include <vnx/package.hxx>
-#include <vnx/Memory.h>
 #include <vnx/Input.h>
 #include <vnx/Output.h>
+#include <vnx/InputStream.h>
+#include <vnx/OutputStream.h>
 
 
 namespace vnx {
@@ -31,7 +32,7 @@ namespace vnx {
  */
 class Variant {
 public:
-	Memory data;		///< The serialized data
+	std::vector<uint8_t> data;		///< The serialized data
 	
 	/// Creates empty Variant
 	Variant() = default;
@@ -62,7 +63,7 @@ public:
 	template<typename T>
 	Variant& assign(const T& value) {
 		clear();
-		MemoryOutputStream stream(&data);
+		VectorOutputStream stream(&data);
 		TypeOutput out(&stream);
 		vnx::write_dynamic(out, value);
 		out.flush();
@@ -94,7 +95,7 @@ public:
 		if(empty()) {
 			return T();
 		}
-		MemoryInputStream stream(&data);
+		VectorInputStream stream(&data);
 		TypeInput in(&stream);
 		T value;
 		vnx::read_dynamic(in, value);
@@ -117,6 +118,9 @@ public:
 	
 	/// Returns type code of current value
 	const uint16_t* get_code() const;
+	
+	/// Returns type code of current value + size of code
+	const uint16_t* get_code(uint16_t& code_size) const;
 	
 	/// Checks for equality using ToBinaryString
 	bool operator==(const Variant& other) const;

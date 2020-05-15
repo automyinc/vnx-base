@@ -53,10 +53,27 @@ void set_time_sync(const TimeSync& state);
 
 class Timer {
 public:
-	/// Reset (ie. restart) the timer using \p now as the current virtual time.
+	/// Reset (ie. restart) the timer using \p now [usec] as the current virtual time.
 	void reset(int64_t now) {
 		is_active = true;
 		deadline = now + interval;
+	}
+	
+	/// Reset (ie. restart) the timer now.
+	void reset() {
+		reset(get_time_micros());
+	}
+	
+	/// Reset timer with new millisecond interval starting now.
+	void set_millis(int64_t interval_ms) {
+		interval = interval_ms * 1000;
+		reset(get_time_micros());
+	}
+	
+	/// Reset timer with new microsecond interval starting now.
+	void set_micros(int64_t interval_us) {
+		interval = interval_us;
+		reset(get_time_micros());
 	}
 	
 	/// Stop this timer.

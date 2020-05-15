@@ -5,23 +5,24 @@
 #define INCLUDE_vnx_NoSuchMethod_HXX_
 
 #include <vnx/package.hxx>
-#include <vnx/Exception.hxx>
+#include <vnx/NoSuchService.hxx>
 
 
 namespace vnx {
 
-class NoSuchMethod : public ::vnx::Exception {
+class NoSuchMethod : public ::vnx::NoSuchService {
 public:
 	
 	::std::string method;
 	
-	typedef ::vnx::Exception Super;
+	typedef ::vnx::NoSuchService Super;
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
-	vnx::Hash64 get_type_hash() const;
-	const char* get_type_name() const;
+	vnx::Hash64 get_type_hash() const override;
+	const char* get_type_name() const override;
+	const vnx::TypeCode* get_type_code() const override;
 	
 	static std::shared_ptr<NoSuchMethod> create();
 	std::shared_ptr<vnx::Value> clone() const;
@@ -40,8 +41,8 @@ public:
 	friend std::ostream& operator<<(std::ostream& _out, const NoSuchMethod& _value);
 	friend std::istream& operator>>(std::istream& _in, NoSuchMethod& _value);
 	
-	static const vnx::TypeCode* get_type_code();
-	static std::shared_ptr<vnx::TypeCode> create_type_code();
+	static const vnx::TypeCode* static_get_type_code();
+	static std::shared_ptr<vnx::TypeCode> static_create_type_code();
 	
 };
 

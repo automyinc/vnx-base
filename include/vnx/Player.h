@@ -74,7 +74,7 @@ private:
 	std::shared_ptr<const RecordHeader> header;
 	std::shared_ptr<Sample> sample;
 	
-	Timer* timer = 0;
+	std::shared_ptr<Timer> timer;
 	TimeControl control;
 	PlayerStatus status;
 	

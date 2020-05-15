@@ -6,6 +6,8 @@
 #include <vnx/Memory.h>
 #include <vnx/Output.h>
 
+#include <cmath>
+
 
 namespace vnx {
 
@@ -13,6 +15,10 @@ namespace vnx {
  * 
  * The generated string is invariant against different byte order, different integer size and type,
  * different array types and different list types.
+ * 
+ * Negative integers are not equal to any positive integer.
+ * 
+ * Floating point values that are integer are equal to an integer of the same value.
  */
 class ToBinaryString : public Visitor {
 public:
@@ -26,76 +32,114 @@ public:
 	void visit_null() {}
 	
 	void visit(const uint8_t& value) {
+		vnx::write(out, uint16_t(0xffaa));
 		vnx::write(out, uint64_t(value));
 	}
 	
 	void visit(const uint16_t& value) {
+		vnx::write(out, uint16_t(0xffaa));
 		vnx::write(out, uint64_t(value));
 	}
 	
 	void visit(const uint32_t& value) {
+		vnx::write(out, uint16_t(0xffaa));
 		vnx::write(out, uint64_t(value));
 	}
 	
 	void visit(const uint64_t& value) {
+		vnx::write(out, uint16_t(0xffaa));
 		vnx::write(out, uint64_t(value));
 	}
 	
 	void visit(const int8_t& value) {
-		vnx::write(out, uint64_t(value));
+		if(value >= 0) {
+			vnx::write(out, uint16_t(0xffaa));
+		} else {
+			vnx::write(out, uint16_t(0xffbb));
+		}
+		vnx::write(out, int64_t(value));
 	}
 	
 	void visit(const int16_t& value) {
-		vnx::write(out, uint64_t(value));
+		if(value >= 0) {
+			vnx::write(out, uint16_t(0xffaa));
+		} else {
+			vnx::write(out, uint16_t(0xffbb));
+		}
+		vnx::write(out, int64_t(value));
 	}
 	
 	void visit(const int32_t& value) {
-		vnx::write(out, uint64_t(value));
+		if(value >= 0) {
+			vnx::write(out, uint16_t(0xffaa));
+		} else {
+			vnx::write(out, uint16_t(0xffbb));
+		}
+		vnx::write(out, int64_t(value));
 	}
 	
 	void visit(const int64_t& value) {
-		vnx::write(out, uint64_t(value));
+		if(value >= 0) {
+			vnx::write(out, uint16_t(0xffaa));
+		} else {
+			vnx::write(out, uint16_t(0xffbb));
+		}
+		vnx::write(out, int64_t(value));
 	}
 	
 	void visit(const float32_t& value) {
-		vnx::write(out, float64_t(value));
+		if(std::floor(value) == value && std::fabs(value) <= 16777216.f) {
+			visit(int64_t(value));
+		} else {
+			vnx::write(out, uint16_t(0xffcc));
+			vnx::write(out, float64_t(value));
+		}
 	}
 	
 	void visit(const float64_t& value) {
-		vnx::write(out, float64_t(value));
+		if(std::floor(value) == value && std::fabs(value) <= 9007199254740993.) {
+			visit(int64_t(value));
+		} else {
+			vnx::write(out, uint16_t(0xffcc));
+			vnx::write(out, float64_t(value));
+		}
 	}
 	
 	void visit(const std::string& value) {
+		vnx::write(out, uint32_t(0xf5b72973));
 		out.write(value.data(), value.size());
 	}
 	
-	void list_begin(size_t size) {
+	void list_begin(size_t size) {}
+	
+	void list_element(size_t index) {
 		vnx::write(out, uint32_t(0xa4f82412));
 	}
-	
-	void list_element(size_t index) {}
 	
 	void list_end(size_t size) {
 		vnx::write(out, uint32_t(0x7d804d8b));
 	}
 	
-	void map_begin(size_t size) {
+	void map_begin(size_t size) {}
+	
+	void map_entry_begin(size_t index) {
 		vnx::write(out, uint32_t(0x294b5acb));
 	}
 	
-	void map_entry_begin(size_t index) {}
-	void map_entry_value(size_t index) {}
+	void map_entry_value(size_t index) {
+		vnx::write(out, uint32_t(0x294b5acc));
+	}
+	
 	void map_entry_end(size_t index) {}
 	
 	void map_end(size_t size) {
 		vnx::write(out, uint32_t(0x7d804d8b));
 	}
 	
-	void type_begin(size_t num_fields) {
-		vnx::write(out, uint32_t(0x749354c0));
-	}
+	void type_begin(size_t num_fields) {}
 	
 	void type_field(const std::string& field, size_t index) {
+		vnx::write(out, uint32_t(0x749354c0));
 		out.write(field.data(), field.size());
 	}
 	

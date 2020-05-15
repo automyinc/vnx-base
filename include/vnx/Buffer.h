@@ -55,8 +55,8 @@ public:
 	/// Same as std::vector<>::reserve()
 	void reserve(size_t new_capacity);
 	
-	/// Same as std::vector<>::resize(), however \p new_size needs to be <= capacity.
-	void set_size(size_t new_size);
+	/// Same as std::vector<>::resize()
+	void resize(size_t new_size);
 	
 	/// Same as std::vector<>::size()
 	size_t size() const {
@@ -92,9 +92,10 @@ public:
 	void release();
 	
 	/// Same as std::vector<>::clear()
-	void clear() {
-		size_ = 0;
-	}
+	void clear();
+	
+	/// clear() + deallocate memory
+	void reset();
 	
 	/// Returns a string representation of the buffer
 	std::string as_string() const;

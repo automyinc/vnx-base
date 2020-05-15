@@ -2,10 +2,10 @@ package vnx;
 
 class Request extends Message {
 	
-	Hash64 src_mac;
-	Hash64 dst_mac;
+	Hash64 src_mac;			// unique id
+	Hash64 dst_mac;			// unique id
 	
-	ulong request_id;
+	ulong request_id;		// counter
 	
 	Value* arguments;
 	

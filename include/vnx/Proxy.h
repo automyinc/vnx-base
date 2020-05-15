@@ -60,7 +60,7 @@ protected:
 	
 	void main() override;
 	
-	void handle(std::shared_ptr<const Message> msg) override;
+	void handle(std::shared_ptr<const Message> message) override;
 	
 	void handle(std::shared_ptr<const Sample> sample) override;
 	
@@ -97,16 +97,23 @@ private:
 	
 	void print_stats();
 	
+	// to be called by read_loop() only
+	std::shared_ptr<Pipe> add_return_pipe(Hash64 src_mac, std::shared_ptr<Pipe> pipe = 0);
+	
 	void read_loop(std::shared_ptr<const Endpoint> endpoint);
 	
 private:
 	Hash64 service_addr;
+	Hash64 public_service_addr;
+	Hash64 remote_addr;
+	Hash64 remote_tunnel_addr;
 	std::shared_ptr<const Endpoint> endpoint;
 	
 	std::unordered_map<std::string, uint64_t> import_table;
 	std::unordered_map<Hash64, uint64_t> forward_table;
 	std::unordered_map<Hash64, Hash64> tunnel_hash_map;
 	std::vector<std::shared_ptr<Pipe>> resume_list;
+	std::set<std::pair<Hash64, Hash64>> outgoing;
 	
 	std::shared_ptr<ProxyClient> remote;
 	std::shared_ptr<const TopicInfoList> topic_info;
@@ -114,18 +121,21 @@ private:
 	
 	bool is_connected = false;
 	SocketOutputStream stream_out;
-	std::ostringstream str_stream_out;
 	TypeOutput out;
 	
-	std::atomic<int64_t> num_samples_send;
-	std::atomic<int64_t> num_samples_recv;
-	std::atomic<int64_t> num_requests_send;
-	std::atomic<int64_t> num_requests_recv;
+	std::atomic<int64_t> num_samples_send {0};
+	std::atomic<int64_t> num_samples_recv {0};
+	std::atomic<int64_t> num_requests_send {0};
+	std::atomic<int64_t> num_requests_recv {0};
 	
 	// all below shared via mutex
 	std::mutex mutex;
 	int socket = -1;
-	std::unordered_map<uint64_t, std::shared_ptr<const Request>> request_map;
+	std::map<Hash64, std::map<uint64_t, std::shared_ptr<const Request>>> request_map;
+	
+	// all below belong to read_loop()
+	std::map<Hash64, std::shared_ptr<Pipe>> return_map;		// to keep track of return pipes
+	std::set<std::pair<Hash64, Hash64>> incoming;			// map of incoming connections
 	
 };
 

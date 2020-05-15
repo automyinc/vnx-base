@@ -12,6 +12,10 @@ class ModuleInfo {
 	
 	string type;			// type name
 	
+	long num_async_pending;			// number of pending async requests (waiting for returns)
+	
+	long num_async_process;			// number of async requests being processed right now
+	
 	vector<string> sub_topics;		// topic subscriptions
 	
 	vector<string> pub_topics;		// topic publishers
