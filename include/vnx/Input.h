@@ -781,10 +781,9 @@ void from_string(const std::string& str, std::shared_ptr<const T>& value);
  * @param in JSON stream to read from
  * @param out Output string to copy into, will be cleared beforehand.
  * @param want_string Can be set to true if a string is expected to follow. If true will also read a string without quotes
- * 			until \p stop_char or a JSON delimiter is encountered. Any whitespace is ignored.
- * @param stop_char Where to additionally stop reading a string in case \p want_string == true.
+ * 			until a JSON delimiter is encountered. Any whitespace is ignored.
  */
-bool read_value(std::istream& in, std::string& out, bool want_string = false, char stop_char = 0);
+bool read_value(std::istream& in, std::string& out, bool want_string = false);
 
 /** \brief Reads an object from the JSON stream.
  * 
