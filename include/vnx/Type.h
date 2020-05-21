@@ -144,6 +144,9 @@ enum {
 	CODE_TUPLE = 23,			///< array of different types, code = {23, <size>, <type code offset 0>, ..., <type code>, ...}
 	CODE_OBJECT = 24,			///< same as CODE_MAP with {MAP, 4, LIST, INT8, DYNAMIC} but intended to be a dynamically defined type instead of a map
 	
+	CODE_BOOL = 31,				///< 8-bit unsigned integer (0 = false, otherwise = true)
+	CODE_CHAR = 32,				///< 8-bit signed integer (same as CODE_INT8, but different meaning, used to denote a readable character)
+
 	CODE_MAGIC = 0x3713,		///< magic number for VNX to detect binary files containing serialized data
 	CODE_NONE = 0xFFFF,			///< used to detect binary file vs. text file, irrespective of byte order
 	
@@ -176,6 +179,9 @@ enum {
 	CODE_ALT_TUPLE = 0x1700,	///< Same as CODE_TUPLE but with alternate byte order
 	CODE_ALT_OBJECT = 0x1800,	///< Same as CODE_OBJECT but with alternate byte order
 	
+	CODE_ALT_BOOL = 0x1F00,		///< Same as CODE_BOOL but with alternate byte order
+	CODE_ALT_CHAR = 0x2000,		///< Same as CODE_CHAR but with alternate byte order
+
 	CODE_ALT_MAGIC = 0x1337,	///< Same as CODE_MAGIC but with alternate byte order
 	
 };
@@ -429,8 +435,8 @@ public:
  */
 class TypeCode {
 public:
-	TypeCode(bool is_native_ = false);
-	
+	TypeCode();
+
 	TypeCode(const TypeCode&) = delete;
 	
 	TypeCode& operator=(const TypeCode&) = delete;

@@ -428,7 +428,7 @@ void type<T>::write(TypeOutput& out, const T& value, const TypeCode* type_code, 
 }
 
 
-inline void write(std::ostream& out, const bool& value) { out << int(value); }
+inline void write(std::ostream& out, const bool& value) { out << (value ? "true" : "false"); }
 inline void write(std::ostream& out, const uint8_t& value) { out << int(value); }
 inline void write(std::ostream& out, const uint16_t& value) { out << value; }
 inline void write(std::ostream& out, const uint32_t& value) { out << value; }
@@ -460,14 +460,14 @@ void write(std::ostream& out, const std::vector<T>& vector);
 
 template<typename T, size_t N>
 void write(std::ostream& out, const std::array<T, N>& array) {
-	out << "[";
+	out << '[';
 	for(size_t i = 0; i < N; ++i) {
 		if(i > 0) {
 			out << ", ";
 		}
 		vnx::type<T>().write(out, array[i]);
 	}
-	out << "]";
+	out << ']';
 }
 
 template<typename T>
@@ -480,11 +480,11 @@ void write(std::ostream& out, const std::vector<bool>& vector);
 
 template<typename K, typename V>
 void write(std::ostream& out, const std::pair<K, V>& value) {
-	out << "[";
+	out << '[';
 	vnx::type<K>().write(out, value.first);
 	out << ", ";
 	vnx::type<V>().write(out, value.second);
-	out << "]";
+	out << ']';
 }
 
 template<typename K, typename V>
@@ -494,14 +494,14 @@ void write(std::ostream& out, const std::map<K, V>& map) {
 
 template<class Iter>
 void write_sequence(std::ostream &out, Iter first, Iter last) {
-	out << "[";
+	out << '[';
 	for(Iter it = first; it != last; ++it) {
 		if(it != first) {
 			out << ", ";
 		}
 		vnx::type<typename Iter::value_type>().write(out, *it);
 	}
-	out << "]";
+	out << ']';
 }
 
 template<typename T>
@@ -509,20 +509,20 @@ void write(std::ostream& out, std::shared_ptr<T> value) {
 	if(value) {
 		value->write(out);
 	} else {
-		out << "{}";
+		out << "null";
 	}
 }
 
 template<typename T>
 void write_list(std::ostream &out, const T *data, const size_t size) {
-	out << "[";
+	out << '[';
 	for(size_t i = 0; i < size; ++i) {
 		if(i > 0) {
 			out << ", ";
 		}
 		out << data[i];
 	}
-	out << "]";
+	out << ']';
 }
 
 template<typename T, size_t N>
@@ -578,7 +578,7 @@ std::string to_string(TypeInput& in, const TypeCode* type_code, const uint16_t* 
 /** \brief Converts value to regular string
  * 
  * Same as to_string<T>() except strings and enum values are without quotes.
- * In addition null values result in an empty string instead of "{}".
+ * In addition null values result in an empty string instead of "null".
  */
 template<typename T>
 std::string to_string_value(const T& value) {

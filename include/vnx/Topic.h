@@ -88,7 +88,7 @@ public:
 	/// Returns the CRC64 hash of this topic. (thread-safe)
 	Hash64 get_hash() const { return topic_hash; }
 	
-	/// Returns the the topic info for this topic. (thread-safe)
+	/// Returns the topic info for this topic. (thread-safe)
 	TopicInfo get_info();
 	
 	/// Returns a pointer to the parent of this topic (ie. its domain). (thread-safe)
@@ -106,6 +106,9 @@ public:
 	/// Publish a sample on this topic. (thread-safe)
 	void publish(std::shared_ptr<Sample> sample);
 	
+	/// Broadcast a message on this topic. (thread-safe)
+	void broadcast(std::shared_ptr<const Message> msg);
+	
 	/// Add a child to this topic. Used internally only. (thread-safe)
 	void add_child(std::shared_ptr<Topic> child);
 	
@@ -120,10 +123,6 @@ public:
 	 * Cannot be undone, used only for process shutdown.
 	 */
 	void close();
-	
-private:
-	/// Forwards the Sample to all subscribers.
-	void forward(std::shared_ptr<const Sample> sample);
 	
 private:
 	std::mutex mutex;

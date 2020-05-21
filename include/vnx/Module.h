@@ -120,7 +120,7 @@ protected:
 	 */
 	LogPublisher log(int level) const;
 	
-	/// Returns false if this module or the process is being shut down.
+	/// Returns false if this module or the process is being shut down. [thread-safe]
 	bool vnx_do_run() const;
 	
 	/** \brief Create a new timer.

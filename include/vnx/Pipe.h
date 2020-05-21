@@ -52,7 +52,7 @@ std::shared_ptr<Pipe> get_pipe(Hash64 mac_addr);
  * 
  * Returns false in case of failure.
  */
-bool connect(std::shared_ptr<Pipe> pipe, std::shared_ptr<Pipe> peer, uint16_t flags);
+bool connect(std::shared_ptr<Pipe> pipe, std::shared_ptr<Pipe> peer, uint16_t flags = 0);
 
 /** \brief Disconnect peer from \p pipe.
  * 
@@ -124,7 +124,7 @@ public:
 	 * 
 	 * Used for services and tunnels to receive requests and messages.
 	 */
-	Pipe(Hash64 mac_addr);
+	explicit Pipe(Hash64 mac_addr);
 	
 	~Pipe();
 	
@@ -167,9 +167,7 @@ public:
 	Node* get_node() const;
 	
 	/// Returns mac address of this pipe.
-	Hash64 get_mac_addr() const {
-		return mac_addr;
-	}
+	Hash64 get_mac_addr() const;
 	
 	/// Returns if pipe is currently paused.
 	bool is_paused() const;

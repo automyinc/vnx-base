@@ -131,11 +131,11 @@ private:
 	// all below shared via mutex
 	std::mutex mutex;
 	int socket = -1;
-	std::map<Hash64, std::map<uint64_t, std::shared_ptr<const Request>>> request_map;
+	std::unordered_map<Hash64, std::map<uint64_t, std::shared_ptr<const Request>>> request_map;
 	
 	// all below belong to read_loop()
-	std::map<Hash64, std::shared_ptr<Pipe>> return_map;		// to keep track of return pipes
-	std::set<std::pair<Hash64, Hash64>> incoming;			// map of incoming connections
+	std::unordered_map<Hash64, std::shared_ptr<Pipe>> return_map;		// to keep track of return pipes
+	std::set<std::pair<Hash64, Hash64>> incoming;						// map of incoming connections
 	
 };
 

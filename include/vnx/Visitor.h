@@ -53,9 +53,9 @@ public:
 	virtual void map_entry_end(size_t index) = 0;
 	virtual void map_end(size_t size) = 0;
 	
-	virtual void type_begin(size_t num_fields) = 0;
+	virtual void type_begin(size_t num_fields, const std::string& type_name = std::string()) = 0;
 	virtual void type_field(const std::string& field, size_t index) = 0;
-	virtual void type_end(size_t num_fields) = 0;
+	virtual void type_end(size_t num_fields, const std::string& type_name = std::string()) = 0;
 	
 	/** \brief Called for enum values.
 	 * 

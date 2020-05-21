@@ -31,7 +31,7 @@ class PrettyPrinter : public Visitor {
 public:
 	size_t max_size = 0;		///< Max display size of list and map, 0 = unlimited
 	
-	PrettyPrinter(std::ostream& out) : out(&out) {}
+	PrettyPrinter(std::ostream& out);
 	
 	void visit_null();
 	void visit(const uint8_t& value);
@@ -56,9 +56,9 @@ public:
 	void map_entry_end(size_t index);
 	void map_end(size_t size);
 	
-	void type_begin(size_t num_fields);
+	void type_begin(size_t num_fields, const std::string& type_name);
 	void type_field(const std::string& field, size_t index);
-	void type_end(size_t num_fields);
+	void type_end(size_t num_fields, const std::string& type_name);
 
 protected:
 	void add_indentation();
