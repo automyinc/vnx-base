@@ -34,10 +34,68 @@ class NoSuchMethod;
 class NoSuchService;
 class Object;
 class PlayerBase;
+class Player_get_info;
+class Player_get_info_return;
+class Player_pause;
+class Player_pause_return;
+class Player_play;
+class Player_play_return;
+class Player_seek_by_count;
+class Player_seek_by_count_return;
+class Player_seek_by_time;
+class Player_seek_by_time_return;
+class Player_seek_to_position;
+class Player_seek_to_position_return;
+class Player_seek_to_time;
+class Player_seek_to_time_return;
+class Player_set_speed;
+class Player_set_speed_return;
+class Player_stop;
+class Player_stop_return;
+class Player_toggle;
+class Player_toggle_return;
 class PlayerStatus;
 class ProcessBase;
+class Process_close;
+class Process_close_return;
+class Process_get_name;
+class Process_get_name_return;
+class Process_get_process_info;
+class Process_get_process_info_return;
+class Process_get_sync_time;
+class Process_get_sync_time_return;
+class Process_get_topic_info;
+class Process_get_topic_info_return;
+class Process_pause_log;
+class Process_pause_log_return;
+class Process_resume_log;
+class Process_resume_log_return;
+class Process_set_debug;
+class Process_set_debug_return;
 class ProcessInfo;
 class ProxyBase;
+class Proxy_disable_export;
+class Proxy_disable_export_return;
+class Proxy_disable_forward;
+class Proxy_disable_forward_return;
+class Proxy_disable_import;
+class Proxy_disable_import_return;
+class Proxy_disable_tunnel;
+class Proxy_disable_tunnel_return;
+class Proxy_enable_export;
+class Proxy_enable_export_return;
+class Proxy_enable_forward;
+class Proxy_enable_forward_return;
+class Proxy_enable_import;
+class Proxy_enable_import_return;
+class Proxy_enable_tunnel;
+class Proxy_enable_tunnel_return;
+class Proxy_on_connect;
+class Proxy_on_connect_return;
+class Proxy_on_disconnect;
+class Proxy_on_disconnect_return;
+class Proxy_on_remote_connect;
+class Proxy_on_remote_connect_return;
 class RecordHeader;
 class RecordIndex;
 class RecorderBase;
@@ -50,6 +108,16 @@ class ServerBase;
 class SpyToolBase;
 class TcpEndpoint;
 class TerminalBase;
+class Terminal_command;
+class Terminal_command_return;
+class Terminal_dump;
+class Terminal_dump_return;
+class Terminal_grep;
+class Terminal_grep_return;
+class Terminal_spy;
+class Terminal_spy_return;
+class Terminal_topic_info;
+class Terminal_topic_info_return;
 class TimeControl;
 class TimeServerBase;
 class TimeSync;
@@ -58,38 +126,21 @@ class TopicInfoList;
 class TopicPtr;
 class UnixEndpoint;
 class Variant;
-struct record_index_entry_t;
-struct record_topic_info_t;
+class record_index_entry_t;
+class record_topic_info_t;
+
 extern const vnx::TypeCode* const vnx_native_type_code_Endpoint; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_accept; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_accept_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_bind; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_bind_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_connect; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_connect_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_from_url; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_from_url_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_listen; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_listen_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_open; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_open_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_to_url; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Endpoint_to_url_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Exception; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_FlowMessage; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Generic; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Generic_create; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Generic_create_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_InternalError; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_LogMsg; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_LogMsg_get_output; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_LogMsg_get_output_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Marker; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Message; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInfo; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_NoSuchMethod; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_NoSuchService; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Player; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_PlayerBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Player_get_info; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Player_get_info_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Player_pause; ///< \private
@@ -111,7 +162,7 @@ extern const vnx::TypeCode* const vnx_native_type_code_Player_stop_return; ///< 
 extern const vnx::TypeCode* const vnx_native_type_code_Player_toggle; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Player_toggle_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_PlayerStatus; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_ProcessBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_close; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_close_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_get_name; ///< \private
@@ -122,14 +173,6 @@ extern const vnx::TypeCode* const vnx_native_type_code_Process_get_sync_time; //
 extern const vnx::TypeCode* const vnx_native_type_code_Process_get_sync_time_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_get_topic_info; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_get_topic_info_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process_handle_vnx_LogMsg; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process_handle_vnx_LogMsg_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process_handle_vnx_ModuleInfo; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process_handle_vnx_ModuleInfo_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process_handle_vnx_TimeControl; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process_handle_vnx_TimeControl_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process_handle_vnx_TimeSync; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process_handle_vnx_TimeSync_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_pause_log; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_pause_log_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_resume_log; ///< \private
@@ -137,7 +180,7 @@ extern const vnx::TypeCode* const vnx_native_type_code_Process_resume_log_return
 extern const vnx::TypeCode* const vnx_native_type_code_Process_set_debug; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_set_debug_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ProcessInfo; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Proxy; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_ProxyBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_disable_export; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_disable_export_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_disable_forward; ///< \private
@@ -162,74 +205,32 @@ extern const vnx::TypeCode* const vnx_native_type_code_Proxy_on_remote_connect; 
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_on_remote_connect_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_RecordHeader; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_RecordIndex; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Recorder; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_RecorderBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_RecorderStatus; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Request; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Return_create_no_such_service_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Return_create_no_such_service_return_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Router; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_RouterBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Sample; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Server; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_SpyTool; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_SpyTool_handle_vnx_TopicInfoList; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_SpyTool_handle_vnx_TopicInfoList_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_ServerBase; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_SpyToolBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_accept; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_accept_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_bind; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_bind_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_connect; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_connect_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_create; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_create_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_from_url; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_from_url_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_listen; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_listen_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_open; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_open_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_to_url; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint_to_url_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Terminal; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_TerminalBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_command; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_command_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_dump; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_dump_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_grep; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_grep_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Terminal_handle_vnx_LogMsg; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Terminal_handle_vnx_LogMsg_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_spy; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_spy_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_topic_info; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_topic_info_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_TimeControl; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TimeControl_get_time_micros; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TimeControl_get_time_micros_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TimeServer; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_TimeServerBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_TimeSync; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TimeSync_get_time_micros; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_TimeSync_get_time_micros_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_TopicInfo; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_TopicInfoList; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_accept; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_accept_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_bind; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_bind_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_connect; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_connect_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_create; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_create_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_from_url; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_from_url_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_listen; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_listen_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_open; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_open_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_to_url; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint_to_url_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_record_index_entry_t; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_record_topic_info_t; ///< \private
 
@@ -255,10 +256,68 @@ void read(TypeInput& in, ::vnx::NoSuchMethod& value, const TypeCode* type_code, 
 void read(TypeInput& in, ::vnx::NoSuchService& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Object& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::PlayerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_get_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_get_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_pause& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_pause_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_play& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_play_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_seek_by_count& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_seek_by_count_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_seek_by_time& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_seek_by_time_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_seek_to_position& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_seek_to_position_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_seek_to_time& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_seek_to_time_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_set_speed& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_set_speed_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_stop& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_stop_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_toggle& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Player_toggle_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::PlayerStatus& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ProcessBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_close& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_close_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_get_name& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_get_name_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_get_process_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_get_process_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_get_sync_time& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_get_sync_time_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_get_topic_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_get_topic_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_pause_log& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_pause_log_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_resume_log& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_resume_log_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_set_debug& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_set_debug_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ProcessInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ProxyBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_disable_export& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_disable_export_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_disable_forward& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_disable_forward_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_disable_import& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_disable_import_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_disable_tunnel& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_disable_tunnel_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_enable_export& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_enable_export_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_enable_forward& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_enable_forward_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_enable_import& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_enable_import_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_enable_tunnel& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_enable_tunnel_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_on_connect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_on_connect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_on_disconnect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_on_disconnect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_on_remote_connect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_on_remote_connect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::RecordHeader& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::RecordIndex& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::RecorderBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -271,6 +330,16 @@ void read(TypeInput& in, ::vnx::ServerBase& value, const TypeCode* type_code, co
 void read(TypeInput& in, ::vnx::SpyToolBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::TcpEndpoint& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::TerminalBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_command& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_command_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_dump& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_dump_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_grep& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_grep_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_spy& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_spy_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_topic_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_topic_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::TimeControl& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::TimeServerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::TimeSync& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -299,10 +368,68 @@ void write(TypeOutput& out, const ::vnx::NoSuchMethod& value, const TypeCode* ty
 void write(TypeOutput& out, const ::vnx::NoSuchService& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Object& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::PlayerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_get_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_get_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_pause& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_pause_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_play& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_play_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_seek_by_count& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_seek_by_count_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_seek_by_time& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_seek_by_time_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_seek_to_position& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_seek_to_position_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_seek_to_time& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_seek_to_time_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_set_speed& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_set_speed_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_stop& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_stop_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_toggle& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Player_toggle_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::PlayerStatus& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ProcessBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_close& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_close_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_get_name& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_get_name_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_get_process_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_get_process_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_get_sync_time& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_get_sync_time_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_get_topic_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_get_topic_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_pause_log& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_pause_log_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_resume_log& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_resume_log_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_set_debug& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_set_debug_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ProcessInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ProxyBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_disable_export& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_disable_export_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_disable_forward& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_disable_forward_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_disable_import& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_disable_import_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_disable_tunnel& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_disable_tunnel_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_enable_export& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_enable_export_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_enable_forward& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_enable_forward_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_enable_import& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_enable_import_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_enable_tunnel& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_enable_tunnel_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_on_connect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_on_connect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_on_disconnect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_on_disconnect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_on_remote_connect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_on_remote_connect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::RecordHeader& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::RecordIndex& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::RecorderBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -315,6 +442,16 @@ void write(TypeOutput& out, const ::vnx::ServerBase& value, const TypeCode* type
 void write(TypeOutput& out, const ::vnx::SpyToolBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::TcpEndpoint& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::TerminalBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_command& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_command_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_dump& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_dump_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_grep& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_grep_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_spy& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_spy_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_topic_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_topic_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::TimeControl& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::TimeServerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::TimeSync& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -343,10 +480,68 @@ void read(std::istream& in, ::vnx::NoSuchMethod& value); ///< \private
 void read(std::istream& in, ::vnx::NoSuchService& value); ///< \private
 void read(std::istream& in, ::vnx::Object& value); ///< \private
 void read(std::istream& in, ::vnx::PlayerBase& value); ///< \private
+void read(std::istream& in, ::vnx::Player_get_info& value); ///< \private
+void read(std::istream& in, ::vnx::Player_get_info_return& value); ///< \private
+void read(std::istream& in, ::vnx::Player_pause& value); ///< \private
+void read(std::istream& in, ::vnx::Player_pause_return& value); ///< \private
+void read(std::istream& in, ::vnx::Player_play& value); ///< \private
+void read(std::istream& in, ::vnx::Player_play_return& value); ///< \private
+void read(std::istream& in, ::vnx::Player_seek_by_count& value); ///< \private
+void read(std::istream& in, ::vnx::Player_seek_by_count_return& value); ///< \private
+void read(std::istream& in, ::vnx::Player_seek_by_time& value); ///< \private
+void read(std::istream& in, ::vnx::Player_seek_by_time_return& value); ///< \private
+void read(std::istream& in, ::vnx::Player_seek_to_position& value); ///< \private
+void read(std::istream& in, ::vnx::Player_seek_to_position_return& value); ///< \private
+void read(std::istream& in, ::vnx::Player_seek_to_time& value); ///< \private
+void read(std::istream& in, ::vnx::Player_seek_to_time_return& value); ///< \private
+void read(std::istream& in, ::vnx::Player_set_speed& value); ///< \private
+void read(std::istream& in, ::vnx::Player_set_speed_return& value); ///< \private
+void read(std::istream& in, ::vnx::Player_stop& value); ///< \private
+void read(std::istream& in, ::vnx::Player_stop_return& value); ///< \private
+void read(std::istream& in, ::vnx::Player_toggle& value); ///< \private
+void read(std::istream& in, ::vnx::Player_toggle_return& value); ///< \private
 void read(std::istream& in, ::vnx::PlayerStatus& value); ///< \private
 void read(std::istream& in, ::vnx::ProcessBase& value); ///< \private
+void read(std::istream& in, ::vnx::Process_close& value); ///< \private
+void read(std::istream& in, ::vnx::Process_close_return& value); ///< \private
+void read(std::istream& in, ::vnx::Process_get_name& value); ///< \private
+void read(std::istream& in, ::vnx::Process_get_name_return& value); ///< \private
+void read(std::istream& in, ::vnx::Process_get_process_info& value); ///< \private
+void read(std::istream& in, ::vnx::Process_get_process_info_return& value); ///< \private
+void read(std::istream& in, ::vnx::Process_get_sync_time& value); ///< \private
+void read(std::istream& in, ::vnx::Process_get_sync_time_return& value); ///< \private
+void read(std::istream& in, ::vnx::Process_get_topic_info& value); ///< \private
+void read(std::istream& in, ::vnx::Process_get_topic_info_return& value); ///< \private
+void read(std::istream& in, ::vnx::Process_pause_log& value); ///< \private
+void read(std::istream& in, ::vnx::Process_pause_log_return& value); ///< \private
+void read(std::istream& in, ::vnx::Process_resume_log& value); ///< \private
+void read(std::istream& in, ::vnx::Process_resume_log_return& value); ///< \private
+void read(std::istream& in, ::vnx::Process_set_debug& value); ///< \private
+void read(std::istream& in, ::vnx::Process_set_debug_return& value); ///< \private
 void read(std::istream& in, ::vnx::ProcessInfo& value); ///< \private
 void read(std::istream& in, ::vnx::ProxyBase& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_disable_export& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_disable_export_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_disable_forward& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_disable_forward_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_disable_import& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_disable_import_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_disable_tunnel& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_disable_tunnel_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_enable_export& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_enable_export_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_enable_forward& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_enable_forward_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_enable_import& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_enable_import_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_enable_tunnel& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_enable_tunnel_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_on_connect& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_on_connect_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_on_disconnect& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_on_disconnect_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_on_remote_connect& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_on_remote_connect_return& value); ///< \private
 void read(std::istream& in, ::vnx::RecordHeader& value); ///< \private
 void read(std::istream& in, ::vnx::RecordIndex& value); ///< \private
 void read(std::istream& in, ::vnx::RecorderBase& value); ///< \private
@@ -359,6 +554,16 @@ void read(std::istream& in, ::vnx::ServerBase& value); ///< \private
 void read(std::istream& in, ::vnx::SpyToolBase& value); ///< \private
 void read(std::istream& in, ::vnx::TcpEndpoint& value); ///< \private
 void read(std::istream& in, ::vnx::TerminalBase& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_command& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_command_return& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_dump& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_dump_return& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_grep& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_grep_return& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_spy& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_spy_return& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_topic_info& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_topic_info_return& value); ///< \private
 void read(std::istream& in, ::vnx::TimeControl& value); ///< \private
 void read(std::istream& in, ::vnx::TimeServerBase& value); ///< \private
 void read(std::istream& in, ::vnx::TimeSync& value); ///< \private
@@ -387,10 +592,68 @@ void write(std::ostream& out, const ::vnx::NoSuchMethod& value); ///< \private
 void write(std::ostream& out, const ::vnx::NoSuchService& value); ///< \private
 void write(std::ostream& out, const ::vnx::Object& value); ///< \private
 void write(std::ostream& out, const ::vnx::PlayerBase& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_get_info& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_get_info_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_pause& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_pause_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_play& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_play_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_seek_by_count& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_seek_by_count_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_seek_by_time& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_seek_by_time_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_seek_to_position& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_seek_to_position_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_seek_to_time& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_seek_to_time_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_set_speed& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_set_speed_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_stop& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_stop_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_toggle& value); ///< \private
+void write(std::ostream& out, const ::vnx::Player_toggle_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::PlayerStatus& value); ///< \private
 void write(std::ostream& out, const ::vnx::ProcessBase& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_close& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_close_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_get_name& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_get_name_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_get_process_info& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_get_process_info_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_get_sync_time& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_get_sync_time_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_get_topic_info& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_get_topic_info_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_pause_log& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_pause_log_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_resume_log& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_resume_log_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_set_debug& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_set_debug_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::ProcessInfo& value); ///< \private
 void write(std::ostream& out, const ::vnx::ProxyBase& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_disable_export& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_disable_export_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_disable_forward& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_disable_forward_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_disable_import& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_disable_import_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_disable_tunnel& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_disable_tunnel_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_enable_export& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_enable_export_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_enable_forward& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_enable_forward_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_enable_import& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_enable_import_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_enable_tunnel& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_enable_tunnel_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_on_connect& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_on_connect_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_on_disconnect& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_on_disconnect_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_on_remote_connect& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_on_remote_connect_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::RecordHeader& value); ///< \private
 void write(std::ostream& out, const ::vnx::RecordIndex& value); ///< \private
 void write(std::ostream& out, const ::vnx::RecorderBase& value); ///< \private
@@ -403,6 +666,16 @@ void write(std::ostream& out, const ::vnx::ServerBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::SpyToolBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::TcpEndpoint& value); ///< \private
 void write(std::ostream& out, const ::vnx::TerminalBase& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_command& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_command_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_dump& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_dump_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_grep& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_grep_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_spy& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_spy_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_topic_info& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_topic_info_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::TimeControl& value); ///< \private
 void write(std::ostream& out, const ::vnx::TimeServerBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::TimeSync& value); ///< \private
@@ -431,10 +704,68 @@ void accept(Visitor& visitor, const ::vnx::NoSuchMethod& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::NoSuchService& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Object& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::PlayerBase& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_get_info& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_get_info_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_pause& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_pause_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_play& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_play_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_seek_by_count& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_seek_by_count_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_seek_by_time& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_seek_by_time_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_seek_to_position& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_seek_to_position_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_seek_to_time& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_seek_to_time_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_set_speed& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_set_speed_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_stop& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_stop_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_toggle& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Player_toggle_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::PlayerStatus& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ProcessBase& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_close& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_close_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_get_name& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_get_name_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_get_process_info& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_get_process_info_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_get_sync_time& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_get_sync_time_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_get_topic_info& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_get_topic_info_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_pause_log& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_pause_log_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_resume_log& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_resume_log_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_set_debug& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_set_debug_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ProcessInfo& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ProxyBase& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_disable_export& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_disable_export_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_disable_forward& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_disable_forward_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_disable_import& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_disable_import_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_disable_tunnel& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_disable_tunnel_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_enable_export& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_enable_export_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_enable_forward& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_enable_forward_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_enable_import& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_enable_import_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_enable_tunnel& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_enable_tunnel_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_on_connect& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_on_connect_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_on_disconnect& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_on_disconnect_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_on_remote_connect& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_on_remote_connect_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::RecordHeader& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::RecordIndex& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::RecorderBase& value); ///< \private
@@ -447,6 +778,16 @@ void accept(Visitor& visitor, const ::vnx::ServerBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::SpyToolBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::TcpEndpoint& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::TerminalBase& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_command& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_command_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_dump& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_dump_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_grep& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_grep_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_spy& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_spy_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_topic_info& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_topic_info_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::TimeControl& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::TimeServerBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::TimeSync& value); ///< \private
@@ -856,6 +1197,466 @@ struct type<::vnx::PlayerBase> {
 
 /// \private
 template<>
+struct type<::vnx::Player_get_info> {
+	void read(TypeInput& in, ::vnx::Player_get_info& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_get_info& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_get_info& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_get_info& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_get_info& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_get_info_return> {
+	void read(TypeInput& in, ::vnx::Player_get_info_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_get_info_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_get_info_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_get_info_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_get_info_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_pause> {
+	void read(TypeInput& in, ::vnx::Player_pause& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_pause& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_pause& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_pause& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_pause& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_pause_return> {
+	void read(TypeInput& in, ::vnx::Player_pause_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_pause_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_pause_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_pause_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_pause_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_play> {
+	void read(TypeInput& in, ::vnx::Player_play& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_play& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_play& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_play& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_play& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_play_return> {
+	void read(TypeInput& in, ::vnx::Player_play_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_play_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_play_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_play_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_play_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_seek_by_count> {
+	void read(TypeInput& in, ::vnx::Player_seek_by_count& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_seek_by_count& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_seek_by_count& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_seek_by_count& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_seek_by_count& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_seek_by_count_return> {
+	void read(TypeInput& in, ::vnx::Player_seek_by_count_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_seek_by_count_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_seek_by_count_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_seek_by_count_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_seek_by_count_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_seek_by_time> {
+	void read(TypeInput& in, ::vnx::Player_seek_by_time& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_seek_by_time& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_seek_by_time& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_seek_by_time& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_seek_by_time& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_seek_by_time_return> {
+	void read(TypeInput& in, ::vnx::Player_seek_by_time_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_seek_by_time_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_seek_by_time_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_seek_by_time_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_seek_by_time_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_seek_to_position> {
+	void read(TypeInput& in, ::vnx::Player_seek_to_position& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_seek_to_position& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_seek_to_position& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_seek_to_position& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_seek_to_position& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_seek_to_position_return> {
+	void read(TypeInput& in, ::vnx::Player_seek_to_position_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_seek_to_position_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_seek_to_position_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_seek_to_position_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_seek_to_position_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_seek_to_time> {
+	void read(TypeInput& in, ::vnx::Player_seek_to_time& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_seek_to_time& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_seek_to_time& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_seek_to_time& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_seek_to_time& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_seek_to_time_return> {
+	void read(TypeInput& in, ::vnx::Player_seek_to_time_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_seek_to_time_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_seek_to_time_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_seek_to_time_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_seek_to_time_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_set_speed> {
+	void read(TypeInput& in, ::vnx::Player_set_speed& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_set_speed& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_set_speed& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_set_speed& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_set_speed& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_set_speed_return> {
+	void read(TypeInput& in, ::vnx::Player_set_speed_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_set_speed_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_set_speed_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_set_speed_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_set_speed_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_stop> {
+	void read(TypeInput& in, ::vnx::Player_stop& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_stop& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_stop& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_stop& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_stop& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_stop_return> {
+	void read(TypeInput& in, ::vnx::Player_stop_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_stop_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_stop_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_stop_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_stop_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_toggle> {
+	void read(TypeInput& in, ::vnx::Player_toggle& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_toggle& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_toggle& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_toggle& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_toggle& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Player_toggle_return> {
+	void read(TypeInput& in, ::vnx::Player_toggle_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Player_toggle_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Player_toggle_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Player_toggle_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Player_toggle_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
 struct type<::vnx::PlayerStatus> {
 	void read(TypeInput& in, ::vnx::PlayerStatus& value, const TypeCode* type_code, const uint16_t* code) {
 		vnx::read(in, value, type_code, code);
@@ -902,6 +1703,374 @@ struct type<::vnx::ProcessBase> {
 
 /// \private
 template<>
+struct type<::vnx::Process_close> {
+	void read(TypeInput& in, ::vnx::Process_close& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_close& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_close& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_close& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_close& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_close_return> {
+	void read(TypeInput& in, ::vnx::Process_close_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_close_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_close_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_close_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_close_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_get_name> {
+	void read(TypeInput& in, ::vnx::Process_get_name& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_get_name& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_get_name& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_get_name& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_get_name& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_get_name_return> {
+	void read(TypeInput& in, ::vnx::Process_get_name_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_get_name_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_get_name_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_get_name_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_get_name_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_get_process_info> {
+	void read(TypeInput& in, ::vnx::Process_get_process_info& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_get_process_info& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_get_process_info& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_get_process_info& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_get_process_info& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_get_process_info_return> {
+	void read(TypeInput& in, ::vnx::Process_get_process_info_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_get_process_info_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_get_process_info_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_get_process_info_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_get_process_info_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_get_sync_time> {
+	void read(TypeInput& in, ::vnx::Process_get_sync_time& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_get_sync_time& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_get_sync_time& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_get_sync_time& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_get_sync_time& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_get_sync_time_return> {
+	void read(TypeInput& in, ::vnx::Process_get_sync_time_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_get_sync_time_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_get_sync_time_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_get_sync_time_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_get_sync_time_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_get_topic_info> {
+	void read(TypeInput& in, ::vnx::Process_get_topic_info& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_get_topic_info& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_get_topic_info& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_get_topic_info& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_get_topic_info& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_get_topic_info_return> {
+	void read(TypeInput& in, ::vnx::Process_get_topic_info_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_get_topic_info_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_get_topic_info_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_get_topic_info_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_get_topic_info_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_pause_log> {
+	void read(TypeInput& in, ::vnx::Process_pause_log& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_pause_log& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_pause_log& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_pause_log& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_pause_log& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_pause_log_return> {
+	void read(TypeInput& in, ::vnx::Process_pause_log_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_pause_log_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_pause_log_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_pause_log_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_pause_log_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_resume_log> {
+	void read(TypeInput& in, ::vnx::Process_resume_log& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_resume_log& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_resume_log& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_resume_log& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_resume_log& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_resume_log_return> {
+	void read(TypeInput& in, ::vnx::Process_resume_log_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_resume_log_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_resume_log_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_resume_log_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_resume_log_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_set_debug> {
+	void read(TypeInput& in, ::vnx::Process_set_debug& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_set_debug& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_set_debug& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_set_debug& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_set_debug& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_set_debug_return> {
+	void read(TypeInput& in, ::vnx::Process_set_debug_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_set_debug_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_set_debug_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_set_debug_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_set_debug_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
 struct type<::vnx::ProcessInfo> {
 	void read(TypeInput& in, ::vnx::ProcessInfo& value, const TypeCode* type_code, const uint16_t* code) {
 		vnx::read(in, value, type_code, code);
@@ -939,6 +2108,512 @@ struct type<::vnx::ProxyBase> {
 		vnx::write(out, value);
 	}
 	void accept(Visitor& visitor, const ::vnx::ProxyBase& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_disable_export> {
+	void read(TypeInput& in, ::vnx::Proxy_disable_export& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_disable_export& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_disable_export& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_disable_export& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_disable_export& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_disable_export_return> {
+	void read(TypeInput& in, ::vnx::Proxy_disable_export_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_disable_export_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_disable_export_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_disable_export_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_disable_export_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_disable_forward> {
+	void read(TypeInput& in, ::vnx::Proxy_disable_forward& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_disable_forward& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_disable_forward& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_disable_forward& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_disable_forward& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_disable_forward_return> {
+	void read(TypeInput& in, ::vnx::Proxy_disable_forward_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_disable_forward_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_disable_forward_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_disable_forward_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_disable_forward_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_disable_import> {
+	void read(TypeInput& in, ::vnx::Proxy_disable_import& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_disable_import& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_disable_import& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_disable_import& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_disable_import& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_disable_import_return> {
+	void read(TypeInput& in, ::vnx::Proxy_disable_import_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_disable_import_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_disable_import_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_disable_import_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_disable_import_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_disable_tunnel> {
+	void read(TypeInput& in, ::vnx::Proxy_disable_tunnel& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_disable_tunnel& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_disable_tunnel& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_disable_tunnel& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_disable_tunnel& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_disable_tunnel_return> {
+	void read(TypeInput& in, ::vnx::Proxy_disable_tunnel_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_disable_tunnel_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_disable_tunnel_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_disable_tunnel_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_disable_tunnel_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_enable_export> {
+	void read(TypeInput& in, ::vnx::Proxy_enable_export& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_enable_export& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_enable_export& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_enable_export& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_enable_export& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_enable_export_return> {
+	void read(TypeInput& in, ::vnx::Proxy_enable_export_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_enable_export_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_enable_export_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_enable_export_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_enable_export_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_enable_forward> {
+	void read(TypeInput& in, ::vnx::Proxy_enable_forward& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_enable_forward& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_enable_forward& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_enable_forward& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_enable_forward& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_enable_forward_return> {
+	void read(TypeInput& in, ::vnx::Proxy_enable_forward_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_enable_forward_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_enable_forward_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_enable_forward_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_enable_forward_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_enable_import> {
+	void read(TypeInput& in, ::vnx::Proxy_enable_import& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_enable_import& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_enable_import& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_enable_import& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_enable_import& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_enable_import_return> {
+	void read(TypeInput& in, ::vnx::Proxy_enable_import_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_enable_import_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_enable_import_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_enable_import_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_enable_import_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_enable_tunnel> {
+	void read(TypeInput& in, ::vnx::Proxy_enable_tunnel& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_enable_tunnel& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_enable_tunnel& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_enable_tunnel& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_enable_tunnel& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_enable_tunnel_return> {
+	void read(TypeInput& in, ::vnx::Proxy_enable_tunnel_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_enable_tunnel_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_enable_tunnel_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_enable_tunnel_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_enable_tunnel_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_on_connect> {
+	void read(TypeInput& in, ::vnx::Proxy_on_connect& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_on_connect& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_on_connect& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_on_connect& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_on_connect& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_on_connect_return> {
+	void read(TypeInput& in, ::vnx::Proxy_on_connect_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_on_connect_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_on_connect_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_on_connect_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_on_connect_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_on_disconnect> {
+	void read(TypeInput& in, ::vnx::Proxy_on_disconnect& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_on_disconnect& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_on_disconnect& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_on_disconnect& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_on_disconnect& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_on_disconnect_return> {
+	void read(TypeInput& in, ::vnx::Proxy_on_disconnect_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_on_disconnect_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_on_disconnect_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_on_disconnect_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_on_disconnect_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_on_remote_connect> {
+	void read(TypeInput& in, ::vnx::Proxy_on_remote_connect& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_on_remote_connect& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_on_remote_connect& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_on_remote_connect& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_on_remote_connect& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_on_remote_connect_return> {
+	void read(TypeInput& in, ::vnx::Proxy_on_remote_connect_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_on_remote_connect_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_on_remote_connect_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_on_remote_connect_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_on_remote_connect_return& value) {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code) {
@@ -1215,6 +2890,236 @@ struct type<::vnx::TerminalBase> {
 		vnx::write(out, value);
 	}
 	void accept(Visitor& visitor, const ::vnx::TerminalBase& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_command> {
+	void read(TypeInput& in, ::vnx::Terminal_command& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_command& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_command& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_command& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_command& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_command_return> {
+	void read(TypeInput& in, ::vnx::Terminal_command_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_command_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_command_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_command_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_command_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_dump> {
+	void read(TypeInput& in, ::vnx::Terminal_dump& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_dump& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_dump& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_dump& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_dump& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_dump_return> {
+	void read(TypeInput& in, ::vnx::Terminal_dump_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_dump_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_dump_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_dump_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_dump_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_grep> {
+	void read(TypeInput& in, ::vnx::Terminal_grep& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_grep& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_grep& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_grep& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_grep& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_grep_return> {
+	void read(TypeInput& in, ::vnx::Terminal_grep_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_grep_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_grep_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_grep_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_grep_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_spy> {
+	void read(TypeInput& in, ::vnx::Terminal_spy& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_spy& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_spy& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_spy& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_spy& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_spy_return> {
+	void read(TypeInput& in, ::vnx::Terminal_spy_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_spy_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_spy_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_spy_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_spy_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_topic_info> {
+	void read(TypeInput& in, ::vnx::Terminal_topic_info& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_topic_info& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_topic_info& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_topic_info& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_topic_info& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_topic_info_return> {
+	void read(TypeInput& in, ::vnx::Terminal_topic_info_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_topic_info_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_topic_info_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_topic_info_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_topic_info_return& value) {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code) {

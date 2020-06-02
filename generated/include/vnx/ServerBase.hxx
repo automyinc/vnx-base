@@ -13,9 +13,9 @@ namespace vnx {
 class ServerBase : public ::vnx::Module {
 public:
 	
-	::std::string address;
-	::std::vector<::std::string> export_list;
-	::int32_t max_queue_ms = 100;
+	std::string address;
+	std::vector<std::string> export_list;
+	int32_t max_queue_ms = 100;
 	
 	typedef ::vnx::Module Super;
 	
@@ -44,8 +44,8 @@ public:
 	
 protected:
 	
-	void vnx_handle_switch(std::shared_ptr<const ::vnx::Sample> _sample) override;
-	std::shared_ptr<vnx::Value> vnx_call_switch(vnx::TypeInput& _in, const vnx::TypeCode* _call_type, const vnx::request_id_t& _request_id) override;
+	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
+	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _value, const vnx::request_id_t& _request_id) override;
 	
 private:
 	

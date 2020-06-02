@@ -13,7 +13,7 @@ namespace vnx {
 class NoSuchService : public ::vnx::Exception {
 public:
 	
-	::uint64_t dst_mac = 0;
+	uint64_t dst_mac = 0;
 	
 	typedef ::vnx::Exception Super;
 	

@@ -73,13 +73,15 @@ public:
 	friend std::ostream& operator<<(std::ostream& _out, const Module& _value);
 	friend std::istream& operator>>(std::istream& _in, Module& _value);
 	
-	Node* get_vnx_node();				///< Returns a pointer to vnx::Node sub-class
+	Node* vnx_get_node();				///< Returns a pointer to vnx::Node sub-class
 	
-	std::string get_vnx_name();			///< Returns the module name (Module::vnx_name)
+	std::string vnx_get_name();			///< Returns the module name (Module::vnx_name)
 	
 	bool vnx_virtual_time = true;		///< If to use virtual time for timers
 	
 	int vnx_log_level = INFO;			///< The display log level of this module (see LogMsg)
+	
+	int64_t vnx_time_slice_us = 10000;			///< Maximum time to spend processing messages in a loop [us]
 	
 	int64_t vnx_heartbeat_interval_ms = 1000;	///< Interval at which to publish ModuleInfo on vnx.module_info [ms]
 	
@@ -94,31 +96,33 @@ protected:
 	
 	std::map<Hash64, std::shared_ptr<const Endpoint>> vnx_remotes;		///< Map of connected processes (process id => endpoint)
 	
-	/** \brief Publish a copy of the value.
+	/** \brief Publish a copy of the value. [thread-safe]
 	 * 
 	 * @param flags List of or'ed flags for Message, for example Message::BLOCKING
 	 */
-	void publish(const Value& value, TopicPtr topic, uint16_t flags = 0) {
+	void publish(const Value& value, TopicPtr topic, uint16_t flags = 0) const {
 		publisher->publish(value.clone(), topic, flags);
 	}
 	
-	/** \brief Publish the actual value directly. (zero-copy)
+	/** \brief Publish the actual value directly. (zero-copy) [thread-safe]
 	 * 
 	 * @param flags List of or'ed flags for Message, for example Message::BLOCKING
 	 * 
 	 * WARNING: \p value may not be modified anymore after this call, since other threads have a pointer now.
 	 */
 	template<typename T>
-	void publish(std::shared_ptr<T> value, TopicPtr topic, uint16_t flags = 0) {
+	void publish(std::shared_ptr<T> value, TopicPtr topic, uint16_t flags = 0) const {
 		publisher->publish(value, topic, flags);
 	}
 	
-	/** \brief Publishes log output.
+	/** \brief Publishes log output. [thread-safe]
 	 * 
 	 * Use ERROR, WARN, INFO, DEBUG or custom level.
-	 * Usage: log(level).out << "..."; 		// no std::endl needed at the ned
+	 * Usage: log(level) << "..."; 		// no std::endl needed at the ned
 	 */
-	LogPublisher log(int level) const;
+	LogPublisher log(int level) const {
+		return LogPublisher(publisher, vnx_name, level, vnx_log_level);
+	}
 	
 	/// Returns false if this module or the process is being shut down. [thread-safe]
 	bool vnx_do_run() const;
@@ -191,10 +195,10 @@ protected:
 	virtual void vnx_handle_switch(std::shared_ptr<const Sample> sample) = 0;
 	
 	/// Call service function for a Request (internal use and special cases only)
-	virtual std::shared_ptr<Value> vnx_call_switch(TypeInput& in, const TypeCode* call_type, const vnx::request_id_t& request_id) = 0;
+	virtual std::shared_ptr<Value> vnx_call_switch(std::shared_ptr<const Value> value, const vnx::request_id_t& request_id) = 0;
 	
 	/// Sends a Return back to the client [thread-safe]
-	virtual bool vnx_async_return(const vnx::request_id_t& request_id, std::shared_ptr<Value> return_value) const;
+	virtual bool vnx_async_callback(const vnx::request_id_t& request_id, std::shared_ptr<Value> return_value) const;
 	
 private:
 	void heartbeat();
@@ -213,7 +217,6 @@ private:
 	Hash64 module_id;
 	TimeControl time_state;
 	std::shared_ptr<Publisher> publisher;
-	mutable std::ostringstream log_stream;
 	std::unordered_map<Hash128, uint64_t> seq_map;
 	std::vector<std::shared_ptr<Timer>> timers;
 	

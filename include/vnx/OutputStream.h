@@ -66,18 +66,18 @@ class FileOutputStream : public OutputStream {
 public:
 	FileOutputStream() = default;
 	
-	FileOutputStream(FILE* file_) : file(file_) {}
+	FileOutputStream(::FILE* file_) : file(file_) {}
 	
 	void write(const void* buf, size_t len) override;
 	
 	int64_t get_output_pos() const override;
 	
-	void reset(FILE* file_) {
+	void reset(::FILE* file_) {
 		file = file_;
 	}
 	
 private:
-	FILE* file = 0;
+	::FILE* file = 0;
 	
 };
 

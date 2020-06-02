@@ -18,10 +18,6 @@ public:
 	
 	SpyToolClient(vnx::Hash64 service_addr);
 	
-	void handle(const ::std::shared_ptr<const ::vnx::TopicInfoList>& sample);
-	
-	void handle_async(const ::std::shared_ptr<const ::vnx::TopicInfoList>& sample);
-	
 };
 
 

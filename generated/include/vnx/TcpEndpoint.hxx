@@ -12,13 +12,13 @@ namespace vnx {
 
 class TcpEndpoint : public ::vnx::Endpoint {
 public:
-	static const ::int32_t default_port = 4444;
+	static const int32_t default_port = 4444;
 	
-	::std::string host_name;
-	::int32_t port = 0;
-	::vnx::bool_t reuse_addr = true;
-	::vnx::bool_t tcp_no_delay = true;
-	::vnx::bool_t tcp_keepalive = true;
+	std::string host_name;
+	int32_t port = 0;
+	vnx::bool_t reuse_addr = true;
+	vnx::bool_t tcp_no_delay = true;
+	vnx::bool_t tcp_keepalive = true;
 	
 	typedef ::vnx::Endpoint Super;
 	
@@ -29,14 +29,14 @@ public:
 	const char* get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	static ::std::shared_ptr<const ::vnx::TcpEndpoint> create(const ::std::string& host_name, const ::int32_t& port);
-	static ::std::shared_ptr<const ::vnx::TcpEndpoint> from_url(const ::std::string& url);
-	virtual ::int32_t open() const;
-	virtual void bind(const ::int32_t& socket) const;
-	virtual void connect(const ::int32_t& socket) const;
-	virtual void listen(const ::int32_t& socket) const;
-	virtual ::int32_t accept(const ::int32_t& socket) const;
-	virtual ::std::string to_url() const;
+	static std::shared_ptr<const ::vnx::TcpEndpoint> create(const std::string& host_name, const int32_t& port);
+	static std::shared_ptr<const ::vnx::TcpEndpoint> from_url(const std::string& url);
+	virtual int32_t open() const;
+	virtual void bind(const int32_t& socket) const;
+	virtual void connect(const int32_t& socket) const;
+	virtual void listen(const int32_t& socket) const;
+	virtual int32_t accept(const int32_t& socket) const;
+	virtual std::string to_url() const;
 	
 	static std::shared_ptr<TcpEndpoint> create();
 	std::shared_ptr<vnx::Value> clone() const;

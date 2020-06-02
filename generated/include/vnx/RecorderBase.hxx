@@ -14,13 +14,13 @@ namespace vnx {
 class RecorderBase : public ::vnx::Module {
 public:
 	
-	::std::string filename;
-	::int32_t max_queue_ms = 1000;
-	::int32_t flush_interval_ms = 1000;
-	::int32_t header_size = 262144;
-	::int32_t block_size = 4096;
-	::std::vector<::std::string> topics;
-	::std::string proxy_name;
+	std::string filename;
+	int32_t max_queue_ms = 1000;
+	int32_t flush_interval_ms = 1000;
+	int32_t header_size = 262144;
+	int32_t block_size = 4096;
+	std::vector<std::string> topics;
+	std::string proxy_name;
 	::vnx::Hash64 receive_tunnel;
 	
 	typedef ::vnx::Module Super;
@@ -50,8 +50,8 @@ public:
 	
 protected:
 	
-	void vnx_handle_switch(std::shared_ptr<const ::vnx::Sample> _sample) override;
-	std::shared_ptr<vnx::Value> vnx_call_switch(vnx::TypeInput& _in, const vnx::TypeCode* _call_type, const vnx::request_id_t& _request_id) override;
+	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
+	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _value, const vnx::request_id_t& _request_id) override;
 	
 private:
 	

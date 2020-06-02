@@ -15,12 +15,12 @@ namespace vnx {
 class PlayerStatus : public ::vnx::Value {
 public:
 	
-	::std::string filename;
-	::int64_t begin_time = 0;
-	::int64_t end_time = 0;
-	::int64_t current_time = 0;
-	::vnx::float64_t actual_speed = 0;
-	::std::string message;
+	std::string filename;
+	int64_t begin_time = 0;
+	int64_t end_time = 0;
+	int64_t current_time = 0;
+	vnx::float64_t actual_speed = 0;
+	std::string message;
 	::vnx::TimeControl control;
 	::vnx::RecordHeader info;
 	

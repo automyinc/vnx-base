@@ -14,9 +14,9 @@ namespace vnx {
 class TopicInfoList : public ::vnx::Value {
 public:
 	
-	::int64_t time = 0;
-	::std::string process;
-	::std::vector<::vnx::TopicInfo> list;
+	int64_t time = 0;
+	std::string process;
+	std::vector<::vnx::TopicInfo> list;
 	
 	typedef ::vnx::Value Super;
 	

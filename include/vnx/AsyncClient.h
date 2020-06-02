@@ -69,11 +69,11 @@ protected:
 	std::function<void(uint64_t, const std::exception&)> vnx_error_callback;
 	
 	/// Performs the actual request, non-blocking
-	uint64_t vnx_request(std::shared_ptr<const Binary> arguments);
+	uint64_t vnx_request(std::shared_ptr<const Value> method);
 	
 	virtual void vnx_purge_request(uint64_t request_id) = 0;
 	
-	virtual void vnx_callback_switch(uint64_t request_id, std::shared_ptr<const Binary> data) = 0;
+	virtual void vnx_callback_switch(uint64_t request_id, std::shared_ptr<const Value> value) = 0;
 	
 private:
 	Node* vnx_node = 0;

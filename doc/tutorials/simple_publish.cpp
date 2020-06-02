@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 		 */
 		
 		// Publish an info log message, VNX will print it to std::cout by default.
-		vnx::log_info().out << "Published a vnx::Marker with time " << value->time;
+		vnx::log_info() << "Published a vnx::Marker with time " << value->time;
 		
 		::usleep(1000 * 1000);
 	}

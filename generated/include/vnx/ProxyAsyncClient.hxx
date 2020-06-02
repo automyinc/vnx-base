@@ -18,28 +18,28 @@ public:
 	
 	ProxyAsyncClient(vnx::Hash64 service_addr);
 	
-	uint64_t disable_export(const ::std::string& topic_name, 
+	uint64_t disable_export(const std::string& topic_name, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t disable_forward(const ::std::string& service_name, 
+	uint64_t disable_forward(const std::string& service_name, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t disable_import(const ::std::string& topic_name, 
+	uint64_t disable_import(const std::string& topic_name, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
 	uint64_t disable_tunnel(const ::vnx::Hash64& tunnel_addr, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t enable_export(const ::std::string& topic_name, 
+	uint64_t enable_export(const std::string& topic_name, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t enable_forward(const ::std::string& service_name, const ::int32_t& max_queue_ms, 
+	uint64_t enable_forward(const std::string& service_name, const int32_t& max_queue_ms, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t enable_import(const ::std::string& topic_name, 
+	uint64_t enable_import(const std::string& topic_name, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t enable_tunnel(const ::vnx::Hash64& tunnel_addr, const ::std::string& service_name, const ::int32_t& max_queue_ms, 
+	uint64_t enable_tunnel(const ::vnx::Hash64& tunnel_addr, const std::string& service_name, const int32_t& max_queue_ms, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
 	uint64_t on_connect(
@@ -56,7 +56,7 @@ public:
 protected:
 	void vnx_purge_request(uint64_t _request_id) override;
 	
-	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Binary> _data) override;
+	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Value> _value) override;
 	
 private:
 	std::map<uint64_t, std::function<void()>> vnx_queue_disable_export;

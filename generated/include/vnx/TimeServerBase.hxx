@@ -15,8 +15,8 @@ class TimeServerBase : public ::vnx::Module {
 public:
 	
 	::vnx::Hash64 remote_tunnel;
-	::int32_t interval_ms = 200;
-	::int32_t inv_gain = 100;
+	int32_t interval_ms = 200;
+	int32_t inv_gain = 100;
 	
 	typedef ::vnx::Module Super;
 	
@@ -45,8 +45,8 @@ public:
 	
 protected:
 	
-	void vnx_handle_switch(std::shared_ptr<const ::vnx::Sample> _sample) override;
-	std::shared_ptr<vnx::Value> vnx_call_switch(vnx::TypeInput& _in, const vnx::TypeCode* _call_type, const vnx::request_id_t& _request_id) override;
+	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
+	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _value, const vnx::request_id_t& _request_id) override;
 	
 private:
 	

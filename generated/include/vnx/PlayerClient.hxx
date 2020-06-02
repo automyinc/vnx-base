@@ -28,25 +28,25 @@ public:
 	
 	void play_async();
 	
-	void seek_by_count(const ::int64_t& delta_count);
+	void seek_by_count(const int64_t& delta_count);
 	
-	void seek_by_count_async(const ::int64_t& delta_count);
+	void seek_by_count_async(const int64_t& delta_count);
 	
-	void seek_by_time(const ::int64_t& delta_us);
+	void seek_by_time(const int64_t& delta_us);
 	
-	void seek_by_time_async(const ::int64_t& delta_us);
+	void seek_by_time_async(const int64_t& delta_us);
 	
-	void seek_to_position(const ::vnx::float64_t& position);
+	void seek_to_position(const vnx::float64_t& position);
 	
-	void seek_to_position_async(const ::vnx::float64_t& position);
+	void seek_to_position_async(const vnx::float64_t& position);
 	
-	void seek_to_time(const ::int64_t& time_us);
+	void seek_to_time(const int64_t& time_us);
 	
-	void seek_to_time_async(const ::int64_t& time_us);
+	void seek_to_time_async(const int64_t& time_us);
 	
-	void set_speed(const ::vnx::float64_t& speed);
+	void set_speed(const vnx::float64_t& speed);
 	
-	void set_speed_async(const ::vnx::float64_t& speed);
+	void set_speed_async(const vnx::float64_t& speed);
 	
 	void stop();
 	

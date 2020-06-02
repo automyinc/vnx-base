@@ -15,16 +15,16 @@ namespace vnx {
 class ModuleInfo : public ::vnx::Value {
 public:
 	
-	::int64_t time = 0;
+	int64_t time = 0;
 	::vnx::Hash64 id;
 	::vnx::Hash64 src_mac;
-	::std::string name;
-	::std::string type;
-	::int64_t num_async_pending = 0;
-	::int64_t num_async_process = 0;
-	::std::vector<::std::string> sub_topics;
-	::std::vector<::std::string> pub_topics;
-	::std::map<::vnx::Hash64, ::std::shared_ptr<const ::vnx::Endpoint>> remotes;
+	std::string name;
+	std::string type;
+	int64_t num_async_pending = 0;
+	int64_t num_async_process = 0;
+	std::vector<std::string> sub_topics;
+	std::vector<std::string> pub_topics;
+	std::map<::vnx::Hash64, std::shared_ptr<const ::vnx::Endpoint>> remotes;
 	
 	typedef ::vnx::Value Super;
 	

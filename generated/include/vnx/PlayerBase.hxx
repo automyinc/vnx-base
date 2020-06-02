@@ -15,17 +15,17 @@ namespace vnx {
 class PlayerBase : public ::vnx::Module {
 public:
 	
-	::std::vector<::std::string> files;
-	::int32_t interval_ms = 100;
-	::int32_t max_time_gap_ms = 5000;
-	::vnx::float64_t play_speed = 1;
-	::vnx::bool_t is_default_enable = true;
-	::vnx::bool_t is_blocking = false;
-	::vnx::bool_t is_repeat = false;
-	::vnx::bool_t is_autostart = false;
-	::vnx::bool_t is_autoclose = false;
-	::vnx::bool_t is_autoshutdown = false;
-	::std::map<::vnx::TopicPtr, ::vnx::TopicPtr> topic_map;
+	std::vector<std::string> files;
+	int32_t interval_ms = 100;
+	int32_t max_time_gap_ms = 5000;
+	vnx::float64_t play_speed = 1;
+	vnx::bool_t is_default_enable = true;
+	vnx::bool_t is_blocking = false;
+	vnx::bool_t is_repeat = false;
+	vnx::bool_t is_autostart = false;
+	vnx::bool_t is_autoclose = false;
+	vnx::bool_t is_autoshutdown = false;
+	std::map<::vnx::TopicPtr, ::vnx::TopicPtr> topic_map;
 	
 	typedef ::vnx::Module Super;
 	
@@ -56,16 +56,16 @@ protected:
 	virtual ::vnx::RecordHeader get_info() const = 0;
 	virtual void pause() = 0;
 	virtual void play() = 0;
-	virtual void seek_by_count(const ::int64_t& delta_count) = 0;
-	virtual void seek_by_time(const ::int64_t& delta_us) = 0;
-	virtual void seek_to_position(const ::vnx::float64_t& position) = 0;
-	virtual void seek_to_time(const ::int64_t& time_us) = 0;
-	virtual void set_speed(const ::vnx::float64_t& speed) = 0;
+	virtual void seek_by_count(const int64_t& delta_count) = 0;
+	virtual void seek_by_time(const int64_t& delta_us) = 0;
+	virtual void seek_to_position(const vnx::float64_t& position) = 0;
+	virtual void seek_to_time(const int64_t& time_us) = 0;
+	virtual void set_speed(const vnx::float64_t& speed) = 0;
 	virtual void stop() = 0;
 	virtual void toggle() = 0;
 	
-	void vnx_handle_switch(std::shared_ptr<const ::vnx::Sample> _sample) override;
-	std::shared_ptr<vnx::Value> vnx_call_switch(vnx::TypeInput& _in, const vnx::TypeCode* _call_type, const vnx::request_id_t& _request_id) override;
+	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
+	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _value, const vnx::request_id_t& _request_id) override;
 	
 private:
 	

@@ -26,7 +26,7 @@ public:
 			const std::function<void()>& _callback = std::function<void()>());
 	
 	uint64_t get_name(
-			const std::function<void(::std::string)>& _callback = std::function<void(::std::string)>());
+			const std::function<void(std::string)>& _callback = std::function<void(std::string)>());
 	
 	uint64_t get_process_info(
 			const std::function<void(::vnx::ProcessInfo)>& _callback = std::function<void(::vnx::ProcessInfo)>());
@@ -37,25 +37,13 @@ public:
 	uint64_t get_topic_info(
 			const std::function<void(::vnx::TopicInfoList)>& _callback = std::function<void(::vnx::TopicInfoList)>());
 	
-	uint64_t handle(const ::std::shared_ptr<const ::vnx::LogMsg>& sample, 
-			const std::function<void()>& _callback = std::function<void()>());
-	
-	uint64_t handle(const ::std::shared_ptr<const ::vnx::ModuleInfo>& sample, 
-			const std::function<void()>& _callback = std::function<void()>());
-	
-	uint64_t handle(const ::std::shared_ptr<const ::vnx::TimeControl>& sample, 
-			const std::function<void()>& _callback = std::function<void()>());
-	
-	uint64_t handle(const ::std::shared_ptr<const ::vnx::TimeSync>& sample, 
-			const std::function<void()>& _callback = std::function<void()>());
-	
 	uint64_t pause_log(
 			const std::function<void()>& _callback = std::function<void()>());
 	
 	uint64_t resume_log(
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t set_debug(const ::int32_t& level, 
+	uint64_t set_debug(const int32_t& level, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
 	std::vector<uint64_t> vnx_get_pending_ids() const override;
@@ -63,18 +51,14 @@ public:
 protected:
 	void vnx_purge_request(uint64_t _request_id) override;
 	
-	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Binary> _data) override;
+	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Value> _value) override;
 	
 private:
 	std::map<uint64_t, std::function<void()>> vnx_queue_close;
-	std::map<uint64_t, std::function<void(::std::string)>> vnx_queue_get_name;
+	std::map<uint64_t, std::function<void(std::string)>> vnx_queue_get_name;
 	std::map<uint64_t, std::function<void(::vnx::ProcessInfo)>> vnx_queue_get_process_info;
 	std::map<uint64_t, std::function<void(::vnx::TimeSync)>> vnx_queue_get_sync_time;
 	std::map<uint64_t, std::function<void(::vnx::TopicInfoList)>> vnx_queue_get_topic_info;
-	std::map<uint64_t, std::function<void()>> vnx_queue_handle_vnx_LogMsg;
-	std::map<uint64_t, std::function<void()>> vnx_queue_handle_vnx_ModuleInfo;
-	std::map<uint64_t, std::function<void()>> vnx_queue_handle_vnx_TimeControl;
-	std::map<uint64_t, std::function<void()>> vnx_queue_handle_vnx_TimeSync;
 	std::map<uint64_t, std::function<void()>> vnx_queue_pause_log;
 	std::map<uint64_t, std::function<void()>> vnx_queue_resume_log;
 	std::map<uint64_t, std::function<void()>> vnx_queue_set_debug;

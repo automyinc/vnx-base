@@ -5,7 +5,7 @@ class Message {
 	static const ushort BLOCKING = 1;
 	static const ushort REPLAY = 2;
 	
-	Hash64 tunnel;		// tunnel address if any
+	Hash64 stream;			// stream id (tunnel mac, or proxy mac, or pipe mac)
 	
 	ushort flags;
 	ushort hop_count;

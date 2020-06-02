@@ -42,6 +42,12 @@ public:
 		*this = other;
 	}
 	
+	/// Move constructor (deep-move)
+	Variant(Variant&& other)
+		:	data(std::move(other.data))
+	{
+	}
+	
 	/// Create Variant with given value
 	template<typename T>
 	Variant(const T& value) {

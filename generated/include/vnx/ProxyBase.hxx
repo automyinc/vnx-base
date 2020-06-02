@@ -15,19 +15,19 @@ namespace vnx {
 class ProxyBase : public ::vnx::Module {
 public:
 	
-	::std::string address;
-	::std::vector<::std::string> import_list;
-	::std::vector<::std::string> export_list;
-	::std::vector<::std::string> forward_list;
-	::std::map<::vnx::Hash64, ::std::string> tunnel_map;
-	::std::map<::vnx::TopicPtr, ::vnx::TopicPtr> import_map;
-	::std::map<::vnx::TopicPtr, ::vnx::TopicPtr> export_map;
+	std::string address;
+	std::vector<std::string> import_list;
+	std::vector<std::string> export_list;
+	std::vector<std::string> forward_list;
+	std::map<::vnx::Hash64, std::string> tunnel_map;
+	std::map<::vnx::TopicPtr, ::vnx::TopicPtr> import_map;
+	std::map<::vnx::TopicPtr, ::vnx::TopicPtr> export_map;
 	::vnx::Hash64 receive_tunnel;
 	::vnx::Hash64 request_tunnel;
-	::vnx::bool_t auto_import = false;
-	::vnx::bool_t time_sync = false;
-	::int32_t max_queue_ms = 100;
-	::int32_t max_hop_count = 10;
+	vnx::bool_t auto_import = false;
+	vnx::bool_t time_sync = false;
+	int32_t max_queue_ms = 100;
+	int32_t max_hop_count = 10;
 	
 	typedef ::vnx::Module Super;
 	
@@ -55,20 +55,20 @@ public:
 	static std::shared_ptr<vnx::TypeCode> static_create_type_code();
 	
 protected:
-	virtual void disable_export(const ::std::string& topic_name) = 0;
-	virtual void disable_forward(const ::std::string& service_name) = 0;
-	virtual void disable_import(const ::std::string& topic_name) = 0;
+	virtual void disable_export(const std::string& topic_name) = 0;
+	virtual void disable_forward(const std::string& service_name) = 0;
+	virtual void disable_import(const std::string& topic_name) = 0;
 	virtual void disable_tunnel(const ::vnx::Hash64& tunnel_addr) = 0;
-	virtual void enable_export(const ::std::string& topic_name) = 0;
-	virtual void enable_forward(const ::std::string& service_name, const ::int32_t& max_queue_ms) = 0;
-	virtual void enable_import(const ::std::string& topic_name) = 0;
-	virtual void enable_tunnel(const ::vnx::Hash64& tunnel_addr, const ::std::string& service_name, const ::int32_t& max_queue_ms) = 0;
+	virtual void enable_export(const std::string& topic_name) = 0;
+	virtual void enable_forward(const std::string& service_name, const int32_t& max_queue_ms) = 0;
+	virtual void enable_import(const std::string& topic_name) = 0;
+	virtual void enable_tunnel(const ::vnx::Hash64& tunnel_addr, const std::string& service_name, const int32_t& max_queue_ms) = 0;
 	virtual void on_connect() = 0;
 	virtual void on_disconnect() = 0;
 	virtual void on_remote_connect(const ::vnx::Hash64& process_id) = 0;
 	
-	void vnx_handle_switch(std::shared_ptr<const ::vnx::Sample> _sample) override;
-	std::shared_ptr<vnx::Value> vnx_call_switch(vnx::TypeInput& _in, const vnx::TypeCode* _call_type, const vnx::request_id_t& _request_id) override;
+	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
+	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _value, const vnx::request_id_t& _request_id) override;
 	
 private:
 	

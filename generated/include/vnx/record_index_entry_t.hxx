@@ -14,8 +14,8 @@ namespace vnx {
 struct record_index_entry_t {
 	
 	
-	::int64_t pos = -1;
-	::int64_t time = 0;
+	int64_t pos = -1;
+	int64_t time = 0;
 	::vnx::Hash64 topic;
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;

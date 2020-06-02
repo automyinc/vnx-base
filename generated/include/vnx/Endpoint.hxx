@@ -13,9 +13,9 @@ namespace vnx {
 class Endpoint : public ::vnx::Value {
 public:
 	
-	::int32_t send_buffer_size = 0;
-	::int32_t receive_buffer_size = 0;
-	::int32_t listen_queue_size = 10;
+	int32_t send_buffer_size = 0;
+	int32_t receive_buffer_size = 0;
+	int32_t listen_queue_size = 10;
 	
 	typedef ::vnx::Value Super;
 	
@@ -26,13 +26,13 @@ public:
 	const char* get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	virtual ::int32_t open() const;
-	virtual void bind(const ::int32_t& socket) const;
-	virtual void connect(const ::int32_t& socket) const;
-	virtual void listen(const ::int32_t& socket) const;
-	virtual ::int32_t accept(const ::int32_t& socket) const;
-	virtual ::std::string to_url() const;
-	static ::std::shared_ptr<const ::vnx::Endpoint> from_url(const ::std::string& url);
+	virtual int32_t open() const;
+	virtual void bind(const int32_t& socket) const;
+	virtual void connect(const int32_t& socket) const;
+	virtual void listen(const int32_t& socket) const;
+	virtual int32_t accept(const int32_t& socket) const;
+	virtual std::string to_url() const;
+	static std::shared_ptr<const ::vnx::Endpoint> from_url(const std::string& url);
 	
 	static std::shared_ptr<Endpoint> create();
 	std::shared_ptr<vnx::Value> clone() const;

@@ -17,8 +17,8 @@ public:
 	
 	::vnx::Hash64 src_mac;
 	::vnx::Hash64 dst_mac;
-	::uint64_t request_id = 0;
-	::std::shared_ptr<const ::vnx::Value> arguments;
+	uint64_t request_id = 0;
+	std::shared_ptr<const ::vnx::Value> method;
 	
 	typedef ::vnx::Message Super;
 	

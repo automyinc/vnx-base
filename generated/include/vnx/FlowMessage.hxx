@@ -13,13 +13,13 @@ namespace vnx {
 
 class FlowMessage : public ::vnx::Message {
 public:
-	static const ::uint16_t OPEN = 1;
-	static const ::uint16_t PING = 2;
-	static const ::uint16_t CLOSE = 3;
+	static const uint16_t OPEN = 1;
+	static const uint16_t PING = 2;
+	static const uint16_t CLOSE = 3;
 	
 	::vnx::Hash64 src_mac;
 	::vnx::Hash64 dst_mac;
-	::uint16_t flow_code = 0;
+	uint16_t flow_code = 0;
 	
 	typedef ::vnx::Message Super;
 	

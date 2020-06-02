@@ -23,7 +23,7 @@ public:
 		:	value_(value)
 	{
 		if(value) {
-			what_ = std::string(value->get_type_name()) + ": " + value->to_string();
+			what_ = value->to_string();
 		}
 	}
 	

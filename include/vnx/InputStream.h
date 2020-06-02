@@ -72,18 +72,50 @@ class FileInputStream : public InputStream {
 public:
 	FileInputStream() = default;
 	
-	FileInputStream(FILE* file_) : file(file_) {}
+	FileInputStream(::FILE* file_) : file(file_) {}
 	
 	size_t read(void* buf, size_t len) override;
 	
 	int64_t get_input_pos() const override;
 	
-	void reset(FILE* file_) {
+	void reset(::FILE* file_) {
 		file = file_;
 	}
 	
 private:
-	FILE* file = 0;
+	::FILE* file = 0;
+	
+};
+
+
+/// Input stream for a section of a file
+class FileSectionInputStream : public InputStream {
+public:
+	FileSectionInputStream() = default;
+	
+	/* @param file_ File pointer
+	 * @param offset_ Byte offset from beginning of file
+	 * @param length_ Size of section to read, -1 = remaining
+	 */
+	FileSectionInputStream(::FILE* file_, int64_t offset_ = 0, int64_t length_ = -1) {
+		reset(file_, offset_, length_);
+	}
+	
+	size_t read(void* buf, size_t len) override;
+	
+	int64_t get_input_pos() const override;
+	
+	/* @param file_ File pointer
+	 * @param offset_ Byte offset from beginning of file
+	 * @param length_ Size of section to read, -1 = remaining
+	 */
+	void reset(::FILE* file_, int64_t offset_ = 0, int64_t length_ = -1);
+	
+private:
+	int fd = -1;
+	int64_t offset = 0;
+	int64_t length = 0;
+	int64_t pos = 0;
 	
 };
 
@@ -129,7 +161,7 @@ private:
 class MappedMemoryInputStream : public PointerInputStream {
 public:
 	/// Constructor will map memory, on failure there is no data to read
-	MappedMemoryInputStream(int fd, size_t length, size_t offset = 0);
+	MappedMemoryInputStream(int fd, uint64_t offset = 0, size_t length = 0);
 	
 	~MappedMemoryInputStream() {
 		release();
@@ -177,7 +209,6 @@ public:
 	
 private:
 	const std::vector<uint8_t>* vector = 0;
-	
 	size_t pos = 0;
 	
 };

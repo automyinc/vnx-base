@@ -16,9 +16,9 @@ namespace vnx {
 class Return : public ::vnx::Message {
 public:
 	
-	::uint64_t request_id = 0;
+	uint64_t request_id = 0;
 	::vnx::Hash64 src_mac;
-	::std::shared_ptr<const ::vnx::Value> value;
+	std::shared_ptr<const ::vnx::Value> value;
 	
 	typedef ::vnx::Message Super;
 	
@@ -29,7 +29,7 @@ public:
 	const char* get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	static ::std::shared_ptr<const ::vnx::Return> create_no_such_service_return(const ::std::shared_ptr<const ::vnx::Request>& request);
+	static std::shared_ptr<const ::vnx::Return> create_no_such_service_return(const std::shared_ptr<const ::vnx::Request>& request);
 	
 	static std::shared_ptr<Return> create();
 	std::shared_ptr<vnx::Value> clone() const;

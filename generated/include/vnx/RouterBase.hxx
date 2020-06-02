@@ -13,12 +13,12 @@ namespace vnx {
 class RouterBase : public ::vnx::Module {
 public:
 	
-	::int32_t port = 4444;
-	::std::string unix_path = ".vnxrouter.sock";
-	::int32_t max_queue_ms = 100;
-	::std::map<::std::string, ::std::vector<::std::string>> import_map;
-	::std::map<::std::string, ::std::vector<::std::string>> export_map;
-	::std::vector<::std::string> export_list;
+	int32_t port = 4444;
+	std::string unix_path = ".vnxrouter.sock";
+	int32_t max_queue_ms = 100;
+	std::map<std::string, std::vector<std::string>> import_map;
+	std::map<std::string, std::vector<std::string>> export_map;
+	std::vector<std::string> export_list;
 	
 	typedef ::vnx::Module Super;
 	
@@ -47,8 +47,8 @@ public:
 	
 protected:
 	
-	void vnx_handle_switch(std::shared_ptr<const ::vnx::Sample> _sample) override;
-	std::shared_ptr<vnx::Value> vnx_call_switch(vnx::TypeInput& _in, const vnx::TypeCode* _call_type, const vnx::request_id_t& _request_id) override;
+	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
+	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _value, const vnx::request_id_t& _request_id) override;
 	
 private:
 	

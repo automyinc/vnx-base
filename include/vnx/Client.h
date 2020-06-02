@@ -41,11 +41,9 @@ public:
 	
 protected:
 	/// Performs the actual request, blocks in case vnx_is_async == false.
-	void vnx_request(std::shared_ptr<const Binary> arguments);
+	std::shared_ptr<const Value> vnx_request(std::shared_ptr<const Value> method);
 	
 protected:
-	std::shared_ptr<const Binary> vnx_return_data;		///< The returned data from the last request
-	
 	bool vnx_is_async = false;		///< Flag to indicate if next request should be performed asynchronously
 	
 private:

@@ -176,16 +176,6 @@ public:
 	bool is_private() const;
 	
 private:
-	/**
-	 * Queue entry type that combines the message and timestamp when it was put into the queue.
-	 */
-	struct entry_t {
-		std::shared_ptr<const Message> msg;
-		int64_t time = 0;
-		entry_t() = default;
-		explicit entry_t(std::shared_ptr<const Message> msg) : msg(std::move(msg)), time(get_wall_time_micros()) {}
-	};
-	
 	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms);
 	
 	bool connect(std::shared_ptr<Pipe> peer, uint16_t flags);
@@ -204,7 +194,7 @@ private:
 	bool is_paused_ = false;
 	
 	int64_t max_queue_us = 0;
-	std::queue<entry_t> queue;
+	std::queue<std::pair<std::shared_ptr<const Message>, int64_t>> queue;
 	
 	std::map<Hash64, std::shared_ptr<Pipe>> peer_map;
 	

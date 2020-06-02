@@ -23,6 +23,7 @@
 #include <vnx/Util.h>
 #include <vnx/Sample.hxx>
 
+#include <mutex>
 #include <sstream>
 
 
@@ -43,13 +44,13 @@ public:
 	Publisher(const Publisher& other) = delete;
 	Publisher& operator=(const Publisher& other) = delete;
 	
-	/** \brief Publish a copy of the value.
+	/** \brief Publish a copy of the value. [thread-safe]
 	 * 
 	 * @param flags List of or'ed flags for Message, for example Message::BLOCKING
 	 */
 	void publish(const Value& value, TopicPtr topic, uint16_t flags = 0);
 	
-	/** \brief Publish the actual value directly. (zero-copy)
+	/** \brief Publish the actual value directly. (zero-copy) [thread-safe]
 	 * 
 	 * @param flags List of or'ed flags for Message, for example Message::BLOCKING
 	 * 
@@ -60,7 +61,7 @@ public:
 		publish(std::shared_ptr<const Value>(value), topic, flags);
 	}
 	
-	/** \brief Publish the actual value directly. (zero-copy)
+	/** \brief Publish the actual value directly. (zero-copy) [thread-safe]
 	 * 
 	 * @param flags List of or'ed flags for Message, for example Message::BLOCKING
 	 * 
@@ -77,6 +78,7 @@ public:
 	std::vector<TopicPtr> get_topics() const;
 	
 private:
+	mutable std::mutex mutex;
 	const Hash64 src_mac;
 	std::unordered_map<std::shared_ptr<Topic>, uint64_t> topic_map;
 	
@@ -87,9 +89,11 @@ private:
  * 
  * Used internally by log() functions.
  */
-class LogPublisher {
+class LogPublisher : public std::ostringstream {
 public:
-	LogPublisher(std::shared_ptr<Publisher> publisher, std::ostringstream& stream, const std::string& module, int level, int display_level);
+	LogPublisher(const LogPublisher& other);
+
+	LogPublisher(std::shared_ptr<Publisher> publisher, const std::string& module, int level, int display_level);
 	
 	~LogPublisher();
 	
@@ -98,8 +102,8 @@ public:
 private:
 	std::shared_ptr<Publisher> publisher;
 	std::string module;
-	int level;
-	int display_level;
+	int level = 0;
+	int display_level = 0;
 	
 };
 

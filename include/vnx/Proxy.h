@@ -66,6 +66,8 @@ protected:
 	
 	std::shared_ptr<const Return> handle(std::shared_ptr<const Request> request) override;
 	
+	bool handle(std::shared_ptr<const Return> result) override;
+	
 	void enable_import(const std::string& topic_name) override;
 	
 	void disable_import(const std::string& topic_name) override;

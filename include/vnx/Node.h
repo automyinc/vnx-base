@@ -53,7 +53,9 @@ public:
 protected:
 	std::mutex vnx_mutex;
 	
-	volatile bool vnx_do_run = true;
+	volatile bool vnx_do_run = true;			///< If this node should continue to run
+	
+	std::shared_ptr<Pipe> vnx_pipe;				///< Pipe through which the last message was read
 	
 	/**
 	 * Read the next message if one is available. Does not wait.

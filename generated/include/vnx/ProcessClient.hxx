@@ -26,29 +26,13 @@ public:
 	
 	void close_async();
 	
-	::std::string get_name();
+	std::string get_name();
 	
 	::vnx::ProcessInfo get_process_info();
 	
 	::vnx::TimeSync get_sync_time();
 	
 	::vnx::TopicInfoList get_topic_info();
-	
-	void handle(const ::std::shared_ptr<const ::vnx::LogMsg>& sample);
-	
-	void handle_async(const ::std::shared_ptr<const ::vnx::LogMsg>& sample);
-	
-	void handle(const ::std::shared_ptr<const ::vnx::ModuleInfo>& sample);
-	
-	void handle_async(const ::std::shared_ptr<const ::vnx::ModuleInfo>& sample);
-	
-	void handle(const ::std::shared_ptr<const ::vnx::TimeControl>& sample);
-	
-	void handle_async(const ::std::shared_ptr<const ::vnx::TimeControl>& sample);
-	
-	void handle(const ::std::shared_ptr<const ::vnx::TimeSync>& sample);
-	
-	void handle_async(const ::std::shared_ptr<const ::vnx::TimeSync>& sample);
 	
 	void pause_log();
 	
@@ -58,9 +42,9 @@ public:
 	
 	void resume_log_async();
 	
-	void set_debug(const ::int32_t& level);
+	void set_debug(const int32_t& level);
 	
-	void set_debug_async(const ::int32_t& level);
+	void set_debug_async(const int32_t& level);
 	
 };
 

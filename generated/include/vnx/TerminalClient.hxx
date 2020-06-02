@@ -17,29 +17,25 @@ public:
 	
 	TerminalClient(vnx::Hash64 service_addr);
 	
-	void command(const ::std::string& cmd);
+	void command(const std::string& cmd);
 	
-	void command_async(const ::std::string& cmd);
+	void command_async(const std::string& cmd);
 	
-	void dump(const ::std::string& expr);
+	void dump(const std::string& expr);
 	
-	void dump_async(const ::std::string& expr);
+	void dump_async(const std::string& expr);
 	
-	void grep(const ::std::string& expr);
+	void grep(const std::string& expr);
 	
-	void grep_async(const ::std::string& expr);
+	void grep_async(const std::string& expr);
 	
-	void handle(const ::std::shared_ptr<const ::vnx::LogMsg>& sample);
+	void spy(const std::string& expr);
 	
-	void handle_async(const ::std::shared_ptr<const ::vnx::LogMsg>& sample);
+	void spy_async(const std::string& expr);
 	
-	void spy(const ::std::string& expr);
+	void topic_info(const std::string& expr);
 	
-	void spy_async(const ::std::string& expr);
-	
-	void topic_info(const ::std::string& expr);
-	
-	void topic_info_async(const ::std::string& expr);
+	void topic_info_async(const std::string& expr);
 	
 };
 

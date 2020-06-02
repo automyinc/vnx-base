@@ -17,22 +17,19 @@ public:
 	
 	TerminalAsyncClient(vnx::Hash64 service_addr);
 	
-	uint64_t command(const ::std::string& cmd, 
+	uint64_t command(const std::string& cmd, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t dump(const ::std::string& expr, 
+	uint64_t dump(const std::string& expr, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t grep(const ::std::string& expr, 
+	uint64_t grep(const std::string& expr, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t handle(const ::std::shared_ptr<const ::vnx::LogMsg>& sample, 
+	uint64_t spy(const std::string& expr, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t spy(const ::std::string& expr, 
-			const std::function<void()>& _callback = std::function<void()>());
-	
-	uint64_t topic_info(const ::std::string& expr, 
+	uint64_t topic_info(const std::string& expr, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
 	std::vector<uint64_t> vnx_get_pending_ids() const override;
@@ -40,13 +37,12 @@ public:
 protected:
 	void vnx_purge_request(uint64_t _request_id) override;
 	
-	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Binary> _data) override;
+	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Value> _value) override;
 	
 private:
 	std::map<uint64_t, std::function<void()>> vnx_queue_command;
 	std::map<uint64_t, std::function<void()>> vnx_queue_dump;
 	std::map<uint64_t, std::function<void()>> vnx_queue_grep;
-	std::map<uint64_t, std::function<void()>> vnx_queue_handle_vnx_LogMsg;
 	std::map<uint64_t, std::function<void()>> vnx_queue_spy;
 	std::map<uint64_t, std::function<void()>> vnx_queue_topic_info;
 	

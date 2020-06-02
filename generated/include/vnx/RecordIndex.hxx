@@ -14,9 +14,9 @@ namespace vnx {
 class RecordIndex : public ::vnx::Value {
 public:
 	
-	::int64_t prev_block = -1;
-	::int64_t next_block = -1;
-	::std::vector<::vnx::record_index_entry_t> index;
+	int64_t prev_block = -1;
+	int64_t next_block = -1;
+	std::vector<::vnx::record_index_entry_t> index;
 	
 	typedef ::vnx::Value Super;
 	

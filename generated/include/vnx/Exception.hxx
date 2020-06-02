@@ -13,7 +13,7 @@ namespace vnx {
 class Exception : public ::vnx::Value {
 public:
 	
-	::std::string what;
+	std::string what;
 	
 	typedef ::vnx::Value Super;
 	

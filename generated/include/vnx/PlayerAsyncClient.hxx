@@ -27,19 +27,19 @@ public:
 	uint64_t play(
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t seek_by_count(const ::int64_t& delta_count, 
+	uint64_t seek_by_count(const int64_t& delta_count, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t seek_by_time(const ::int64_t& delta_us, 
+	uint64_t seek_by_time(const int64_t& delta_us, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t seek_to_position(const ::vnx::float64_t& position, 
+	uint64_t seek_to_position(const vnx::float64_t& position, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t seek_to_time(const ::int64_t& time_us, 
+	uint64_t seek_to_time(const int64_t& time_us, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
-	uint64_t set_speed(const ::vnx::float64_t& speed, 
+	uint64_t set_speed(const vnx::float64_t& speed, 
 			const std::function<void()>& _callback = std::function<void()>());
 	
 	uint64_t stop(
@@ -53,7 +53,7 @@ public:
 protected:
 	void vnx_purge_request(uint64_t _request_id) override;
 	
-	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Binary> _data) override;
+	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Value> _value) override;
 	
 private:
 	std::map<uint64_t, std::function<void(::vnx::RecordHeader)>> vnx_queue_get_info;

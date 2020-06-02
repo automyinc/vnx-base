@@ -12,17 +12,17 @@ namespace vnx {
 
 class LogMsg : public ::vnx::Value {
 public:
-	static const ::int32_t ERROR = 1;
-	static const ::int32_t WARN = 2;
-	static const ::int32_t INFO = 3;
-	static const ::int32_t DEBUG = 4;
+	static const int32_t ERROR = 1;
+	static const int32_t WARN = 2;
+	static const int32_t INFO = 3;
+	static const int32_t DEBUG = 4;
 	
-	::int64_t time = 0;
-	::int32_t level = 0;
-	::int32_t display_level = 3;
-	::std::string process;
-	::std::string module;
-	::std::string message;
+	int64_t time = 0;
+	int32_t level = 0;
+	int32_t display_level = 3;
+	std::string process;
+	std::string module;
+	std::string message;
 	
 	typedef ::vnx::Value Super;
 	
@@ -33,7 +33,7 @@ public:
 	const char* get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	virtual ::std::string get_output() const;
+	virtual std::string get_output() const;
 	
 	static std::shared_ptr<LogMsg> create();
 	std::shared_ptr<vnx::Value> clone() const;

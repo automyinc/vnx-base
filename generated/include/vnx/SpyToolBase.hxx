@@ -15,13 +15,13 @@ namespace vnx {
 class SpyToolBase : public ::vnx::Module {
 public:
 	
-	::std::string proxy_name;
-	::std::string topic_expr;
-	::vnx::bool_t only_once = false;
-	::vnx::bool_t header_only = false;
-	::vnx::bool_t pretty_print = true;
-	::int32_t max_list_size = 1000;
-	::int32_t max_queue_ms = 100;
+	std::string proxy_name;
+	std::string topic_expr;
+	vnx::bool_t only_once = false;
+	vnx::bool_t header_only = false;
+	vnx::bool_t pretty_print = true;
+	int32_t max_list_size = 1000;
+	int32_t max_queue_ms = 100;
 	::vnx::Hash64 receive_tunnel;
 	
 	typedef ::vnx::Module Super;
@@ -50,11 +50,11 @@ public:
 	static std::shared_ptr<vnx::TypeCode> static_create_type_code();
 	
 protected:
-	virtual void handle(std::shared_ptr<const ::vnx::TopicInfoList> _value, std::shared_ptr<const ::vnx::Sample> _sample) { handle(_value); }
+	virtual void handle(std::shared_ptr<const ::vnx::TopicInfoList> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
 	virtual void handle(std::shared_ptr<const ::vnx::TopicInfoList> _value) {}
 	
-	void vnx_handle_switch(std::shared_ptr<const ::vnx::Sample> _sample) override;
-	std::shared_ptr<vnx::Value> vnx_call_switch(vnx::TypeInput& _in, const vnx::TypeCode* _call_type, const vnx::request_id_t& _request_id) override;
+	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
+	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _value, const vnx::request_id_t& _request_id) override;
 	
 private:
 	

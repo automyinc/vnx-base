@@ -13,12 +13,12 @@ namespace vnx {
 class TimeControl : public ::vnx::Value {
 public:
 	
-	::int64_t time = 0;
-	::int64_t time_start = 0;
-	::int64_t time_offset = 0;
-	::vnx::bool_t is_realtime = true;
-	::vnx::bool_t is_paused = false;
-	::vnx::float64_t time_speed = 1;
+	int64_t time = 0;
+	int64_t time_start = 0;
+	int64_t time_offset = 0;
+	vnx::bool_t is_realtime = true;
+	vnx::bool_t is_paused = false;
+	vnx::float64_t time_speed = 1;
 	
 	typedef ::vnx::Value Super;
 	
@@ -29,7 +29,7 @@ public:
 	const char* get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	virtual ::int64_t get_time_micros() const;
+	virtual int64_t get_time_micros() const;
 	
 	static std::shared_ptr<TimeControl> create();
 	std::shared_ptr<vnx::Value> clone() const;

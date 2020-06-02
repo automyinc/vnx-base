@@ -13,7 +13,7 @@ namespace vnx {
 class NoSuchMethod : public ::vnx::NoSuchService {
 public:
 	
-	::std::string method;
+	std::string method;
 	
 	typedef ::vnx::NoSuchService Super;
 	

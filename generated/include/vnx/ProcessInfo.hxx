@@ -16,11 +16,11 @@ namespace vnx {
 class ProcessInfo : public ::vnx::Value {
 public:
 	
-	::int64_t time = 0;
+	int64_t time = 0;
 	::vnx::Hash64 id;
-	::std::string name;
-	::std::vector<::vnx::TopicInfo> topics;
-	::std::vector<::vnx::ModuleInfo> modules;
+	std::string name;
+	std::vector<::vnx::TopicInfo> topics;
+	std::vector<::vnx::ModuleInfo> modules;
 	
 	typedef ::vnx::Value Super;
 	

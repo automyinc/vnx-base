@@ -13,9 +13,9 @@ namespace vnx {
 class TopicInfo : public ::vnx::Value {
 public:
 	
-	::std::string name;
-	::uint64_t sample_count = 0;
-	::uint64_t num_subscribers = 0;
+	std::string name;
+	uint64_t sample_count = 0;
+	uint64_t num_subscribers = 0;
 	
 	typedef ::vnx::Value Super;
 	

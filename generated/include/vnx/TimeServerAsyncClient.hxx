@@ -22,7 +22,7 @@ public:
 protected:
 	void vnx_purge_request(uint64_t _request_id) override;
 	
-	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Binary> _data) override;
+	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Value> _value) override;
 	
 private:
 	

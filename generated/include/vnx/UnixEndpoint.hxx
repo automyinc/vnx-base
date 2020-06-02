@@ -13,7 +13,7 @@ namespace vnx {
 class UnixEndpoint : public ::vnx::Endpoint {
 public:
 	
-	::std::string domain_path;
+	std::string domain_path;
 	
 	typedef ::vnx::Endpoint Super;
 	
@@ -24,14 +24,14 @@ public:
 	const char* get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	static ::std::shared_ptr<const ::vnx::UnixEndpoint> create(const ::std::string& domain_path);
-	static ::std::shared_ptr<const ::vnx::UnixEndpoint> from_url(const ::std::string& url);
-	virtual ::int32_t open() const;
-	virtual void bind(const ::int32_t& socket) const;
-	virtual void connect(const ::int32_t& socket) const;
-	virtual void listen(const ::int32_t& socket) const;
-	virtual ::int32_t accept(const ::int32_t& socket) const;
-	virtual ::std::string to_url() const;
+	static std::shared_ptr<const ::vnx::UnixEndpoint> create(const std::string& domain_path);
+	static std::shared_ptr<const ::vnx::UnixEndpoint> from_url(const std::string& url);
+	virtual int32_t open() const;
+	virtual void bind(const int32_t& socket) const;
+	virtual void connect(const int32_t& socket) const;
+	virtual void listen(const int32_t& socket) const;
+	virtual int32_t accept(const int32_t& socket) const;
+	virtual std::string to_url() const;
 	
 	static std::shared_ptr<UnixEndpoint> create();
 	std::shared_ptr<vnx::Value> clone() const;

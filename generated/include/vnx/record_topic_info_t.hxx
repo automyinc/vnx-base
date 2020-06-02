@@ -13,10 +13,10 @@ namespace vnx {
 struct record_topic_info_t {
 	
 	
-	::std::string name;
-	::int64_t num_bytes = 0;
-	::int64_t num_samples = 0;
-	::int64_t num_samples_lost = 0;
+	std::string name;
+	int64_t num_bytes = 0;
+	int64_t num_samples = 0;
+	int64_t num_samples_lost = 0;
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;

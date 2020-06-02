@@ -15,17 +15,17 @@ namespace vnx {
 class RecordHeader : public ::vnx::Value {
 public:
 	
-	::std::string filename;
-	::uint32_t header_size = 0;
-	::uint32_t block_size = 0;
-	::int64_t begin_time = 0;
-	::int64_t end_time = 0;
-	::int64_t num_bytes = 0;
-	::int64_t num_samples = 0;
-	::int64_t num_samples_lost = 0;
-	::std::vector<::uint64_t> type_code_positions;
-	::std::vector<::vnx::record_topic_info_t> topics;
-	::std::vector<::vnx::Marker> markers;
+	std::string filename;
+	uint32_t header_size = 0;
+	uint32_t block_size = 0;
+	int64_t begin_time = 0;
+	int64_t end_time = 0;
+	int64_t num_bytes = 0;
+	int64_t num_samples = 0;
+	int64_t num_samples_lost = 0;
+	std::vector<uint64_t> type_code_positions;
+	std::vector<::vnx::record_topic_info_t> topics;
+	std::vector<::vnx::Marker> markers;
 	
 	typedef ::vnx::Value Super;
 	

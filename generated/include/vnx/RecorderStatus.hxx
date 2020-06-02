@@ -14,11 +14,11 @@ namespace vnx {
 class RecorderStatus : public ::vnx::Value {
 public:
 	
-	::std::string file_name;
-	::vnx::bool_t is_recording = 0;
-	::vnx::float64_t bandwidth = 0;
-	::vnx::float64_t sample_rate = 0;
-	::vnx::float64_t loss_factor = 0;
+	std::string file_name;
+	vnx::bool_t is_recording = 0;
+	vnx::float64_t bandwidth = 0;
+	vnx::float64_t sample_rate = 0;
+	vnx::float64_t loss_factor = 0;
 	::vnx::RecordHeader header;
 	
 	typedef ::vnx::Value Super;

@@ -25,7 +25,7 @@ public:
 	const char* get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	static ::std::shared_ptr<const ::vnx::Generic> create(const ::vnx::Variant& data);
+	static std::shared_ptr<const ::vnx::Generic> create(const ::vnx::Variant& data);
 	
 	static std::shared_ptr<Generic> create();
 	std::shared_ptr<vnx::Value> clone() const;

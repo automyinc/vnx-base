@@ -13,12 +13,12 @@ namespace vnx {
 
 class Message : public ::vnx::Value {
 public:
-	static const ::uint16_t BLOCKING = 1;
-	static const ::uint16_t REPLAY = 2;
+	static const uint16_t BLOCKING = 1;
+	static const uint16_t REPLAY = 2;
 	
-	::vnx::Hash64 tunnel;
-	::uint16_t flags = 0;
-	::uint16_t hop_count = 0;
+	::vnx::Hash64 stream;
+	uint16_t flags = 0;
+	uint16_t hop_count = 0;
 	
 	typedef ::vnx::Value Super;
 	

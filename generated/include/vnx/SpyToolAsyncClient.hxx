@@ -18,18 +18,14 @@ public:
 	
 	SpyToolAsyncClient(vnx::Hash64 service_addr);
 	
-	uint64_t handle(const ::std::shared_ptr<const ::vnx::TopicInfoList>& sample, 
-			const std::function<void()>& _callback = std::function<void()>());
-	
 	std::vector<uint64_t> vnx_get_pending_ids() const override;
 	
 protected:
 	void vnx_purge_request(uint64_t _request_id) override;
 	
-	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Binary> _data) override;
+	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Value> _value) override;
 	
 private:
-	std::map<uint64_t, std::function<void()>> vnx_queue_handle_vnx_TopicInfoList;
 	
 };
 

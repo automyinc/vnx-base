@@ -315,14 +315,30 @@ void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, c
  */
 template<typename T>
 void read_array(TypeInput& in, T& array, const TypeCode* type_code, const uint16_t* code) {
-	size_t size = 0;
+	uint32_t size = 0;
+	const uint16_t* value_code = 0;
 	switch(code[0]) {
-		case CODE_ARRAY: size = code[1]; break;
-		case CODE_ALT_ARRAY: size = flip_bytes(code[1]); break;
-		default: skip(in, type_code, code);
+		case CODE_LIST:
+			read(in, size);
+			value_code = code + 1;
+			break;
+		case CODE_ALT_LIST:
+			read(in, size);
+			size = flip_bytes(size);
+			value_code = code + 1;
+			break;
+		case CODE_ARRAY:
+			size = code[1];
+			value_code = code + 2;
+			break;
+		case CODE_ALT_ARRAY:
+			size = flip_bytes(code[1]);
+			value_code = code + 2;
+			break;
+		default:
+			skip(in, type_code, code);
 	}
 	if(size) {
-		const uint16_t* value_code = code + 2;
 		if(is_equivalent<typename T::value_type>(value_code[0]) && size <= array.size()) {
 			in.read((char*)array.data(), size * sizeof(typename T::value_type));
 		} else {
@@ -353,13 +369,24 @@ void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, con
 template<typename T>
 void read_vector(TypeInput& in, T& vector, const TypeCode* type_code, const uint16_t* code) {
 	uint32_t size = 0;
+	const uint16_t* value_code = 0;
 	switch(code[0]) {
 		case CODE_LIST:
 			read(in, size);
+			value_code = code + 1;
 			break;
 		case CODE_ALT_LIST:
 			read(in, size);
 			size = flip_bytes(size);
+			value_code = code + 1;
+			break;
+		case CODE_ARRAY:
+			size = code[1];
+			value_code = code + 2;
+			break;
+		case CODE_ALT_ARRAY:
+			size = flip_bytes(code[1]);
+			value_code = code + 2;
 			break;
 		default:
 			vector.clear();
@@ -367,7 +394,6 @@ void read_vector(TypeInput& in, T& vector, const TypeCode* type_code, const uint
 			return;
 	}
 	vector.resize(size);
-	const uint16_t* value_code = code + 1;
 	if(is_equivalent<typename T::value_type>(value_code[0])) {
 		in.read((char*)vector.data(), size * sizeof(typename T::value_type));
 	} else {
@@ -395,19 +421,29 @@ template<typename T>
 void read_list(TypeInput& in, T& list, const TypeCode* type_code, const uint16_t* code) {
 	list.clear();
 	uint32_t size = 0;
+	const uint16_t* value_code = 0;
 	switch(code[0]) {
 		case CODE_LIST:
 			read(in, size);
+			value_code = code + 1;
 			break;
 		case CODE_ALT_LIST:
 			read(in, size);
 			size = flip_bytes(size);
+			value_code = code + 1;
+			break;
+		case CODE_ARRAY:
+			size = code[1];
+			value_code = code + 2;
+			break;
+		case CODE_ALT_ARRAY:
+			size = flip_bytes(code[1]);
+			value_code = code + 2;
 			break;
 		default:
 			skip(in, type_code, code);
 			return;
 	}
-	const uint16_t* value_code = code + 1;
 	for(uint32_t i = 0; i < size; ++i) {
 		list.emplace_back();
 		vnx::type<typename T::value_type>().read(in, list.back(), type_code, value_code);
@@ -428,19 +464,29 @@ template<typename T>
 void read_set(TypeInput& in, T& set, const TypeCode* type_code, const uint16_t* code) {
 	set.clear();
 	uint32_t size = 0;
+	const uint16_t* value_code = 0;
 	switch(code[0]) {
 		case CODE_LIST:
 			read(in, size);
+			value_code = code + 1;
 			break;
 		case CODE_ALT_LIST:
 			read(in, size);
 			size = flip_bytes(size);
+			value_code = code + 1;
+			break;
+		case CODE_ARRAY:
+			size = code[1];
+			value_code = code + 2;
+			break;
+		case CODE_ALT_ARRAY:
+			size = flip_bytes(code[1]);
+			value_code = code + 2;
 			break;
 		default:
 			skip(in, type_code, code);
 			return;
 	}
-	const uint16_t* value_code = code + 1;
 	for(uint32_t i = 0; i < size; ++i) {
 		typename T::value_type key;
 		vnx::type<typename T::value_type>().read(in, key, type_code, value_code);
@@ -492,6 +538,7 @@ void read_map(TypeInput& in, T& map, const TypeCode* type_code, const uint16_t* 
 			size = flip_bytes(size);
 			value_code = code + flip_bytes(code[1]);
 			break;
+		// TODO: compatibility to vector<pair<K, V>>
 		default:
 			skip(in, type_code, code);
 			return;
