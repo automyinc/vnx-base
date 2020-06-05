@@ -7,7 +7,7 @@
 #include <vnx/AsyncClient.h>
 #include <vnx/Module.h>
 #include <vnx/RecordHeader.hxx>
-#include <vnx/TopicPtr.h>
+#include <vnx/TopicPtr.hpp>
 
 
 namespace vnx {

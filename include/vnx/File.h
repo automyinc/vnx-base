@@ -90,7 +90,7 @@ public:
 	/// Returns file name without any directories and without trailing "/"
 	std::string get_name() const;
 	
-	/// Returns file extension including the last ".". Returns file name if it has no extension.
+	/// Returns file extension including the last ".". Returns empty string if it has no extension.
 	std::string get_extension() const;
 	
 	/// Returns byte offset from current read position to beginning of file when reading data.

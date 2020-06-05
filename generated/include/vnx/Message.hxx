@@ -5,7 +5,7 @@
 #define INCLUDE_vnx_Message_HXX_
 
 #include <vnx/package.hxx>
-#include <vnx/Hash64.h>
+#include <vnx/Hash64.hpp>
 #include <vnx/Value.h>
 
 
@@ -15,6 +15,7 @@ class Message : public ::vnx::Value {
 public:
 	static const uint16_t BLOCKING = 1;
 	static const uint16_t REPLAY = 2;
+	static const uint16_t NO_RETURN = 4;
 	
 	::vnx::Hash64 stream;
 	uint16_t flags = 0;

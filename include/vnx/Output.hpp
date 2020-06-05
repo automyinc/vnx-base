@@ -1,8 +1,8 @@
  /*************************************************************************
- * 
- *  [2017] - [2018] Automy Inc. 
+ *
+ *  [2017] - [2018] Automy Inc.
  *  All Rights Reserved.
- * 
+ *
  * NOTICE:  All information contained herein is, and remains
  * the property of Automy Incorporated and its suppliers,
  * if any.  The intellectual and technical concepts contained
@@ -14,24 +14,29 @@
  * from Automy Incorporated.
  */
 
-#ifndef INCLUDE_VNX_CONFIG_H_
-#define INCLUDE_VNX_CONFIG_H_
+#ifndef INCLUDE_VNX_OUTPUT_HPP_
+#define INCLUDE_VNX_OUTPUT_HPP_
 
-#include <vnx/Type.h>
+#include <vnx/Output.h>
+#include <vnx/DefaultPrinter.h>
 
 
 namespace vnx {
 
-/// Returns config value for key \p key, returns null in case no such key.
-std::shared_ptr<std::string> get_config(const std::string& key);
-
-/// Set config value (in-memory)
-void set_config(const std::string& key, const std::string& value);
-
-/// Read config file system tree starting at \p root_path
-void read_config_tree(const std::string& root_path);
+/** \brief Converts value to regular string
+ *
+ * Same as to_string<T>() except strings and enum values are without quotes.
+ * In addition null values result in an empty string instead of "null".
+ */
+template<typename T>
+std::string to_string_value(const T& value) {
+	std::ostringstream stream;
+	ToStringValue visitor(stream);
+	vnx::type<T>().accept(visitor, value);
+	return stream.str();
+}
 
 
 } // vnx
 
-#endif /* INCLUDE_VNX_CONFIG_H_ */
+#endif /* INCLUDE_VNX_OUTPUT_HPP_ */

@@ -22,6 +22,7 @@
 
 #include <queue>
 #include <mutex>
+#include <atomic>
 #include <condition_variable>
 
 
@@ -151,29 +152,29 @@ public:
 	 */
 	std::shared_ptr<const Message> pop();
 	
-	/// Temporarily prevent new messages from being pushed into the pipe. (thread-safe)
+	/// Temporarily prevent new messages from being pushed into the pipe, by blocking in push(). (thread-safe)
 	void pause();
 	
 	/// Resume normal operation after pause() was called. (thread-safe)
 	void resume();
 	
+	/// Prevent new messages from being pushed into the pipe, push() will return false. (thread-safe)
+	void shutdown();
+
 	/// Close this pipe. (thread-safe)
 	void close();
 	
-	/** \brief Get a pointer to the node which is connected to this pipe.
+	/** \brief Get a pointer to the node which is connected to this pipe. (thread-safe)
 	 * 
 	 * Only for identification purposes, the node could be deleted at any point in time!
 	 */
 	Node* get_node() const;
 	
-	/// Returns mac address of this pipe.
+	/// Returns mac address of this pipe. (thread-safe)
 	Hash64 get_mac_addr() const;
 	
-	/// Returns if pipe is currently paused.
+	/// Returns if pipe is currently paused. (thread-safe)
 	bool is_paused() const;
-	
-	/// Returns true if this pipe has a mac address.
-	bool is_private() const;
 	
 private:
 	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms);
@@ -182,7 +183,7 @@ private:
 	
 	bool disconnect(Hash64 peer_mac);
 	
-	/// Push a new message onto the queue. Used exclusively by send_msg().
+	/// Push a new message onto the queue. Used exclusively by send_msg(). (thread-safe)
 	bool push(std::shared_ptr<Pipe> self, std::shared_ptr<const Message> msg);
 	
 private:
@@ -191,7 +192,8 @@ private:
 	
 	Node* node = 0;
 	Hash64 mac_addr;
-	bool is_paused_ = false;
+	std::atomic_bool is_paused_ {false};
+	std::atomic_bool is_shutdown_ {false};
 	
 	int64_t max_queue_us = 0;
 	std::queue<std::pair<std::shared_ptr<const Message>, int64_t>> queue;

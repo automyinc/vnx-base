@@ -79,6 +79,8 @@ public:
 	
 	bool vnx_virtual_time = true;		///< If to use virtual time for timers
 	
+	bool vnx_clean_exit = false;		///< If to process all remaining messages on shutdown
+
 	int vnx_log_level = INFO;			///< The display log level of this module (see LogMsg)
 	
 	int64_t vnx_time_slice_us = 10000;			///< Maximum time to spend processing messages in a loop [us]

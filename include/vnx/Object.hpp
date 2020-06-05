@@ -1,8 +1,8 @@
  /*************************************************************************
- * 
- *  [2017] - [2018] Automy Inc. 
+ *
+ *  [2017] - [2018] Automy Inc.
  *  All Rights Reserved.
- * 
+ *
  * NOTICE:  All information contained herein is, and remains
  * the property of Automy Incorporated and its suppliers,
  * if any.  The intellectual and technical concepts contained
@@ -14,24 +14,29 @@
  * from Automy Incorporated.
  */
 
-#ifndef INCLUDE_VNX_CONFIG_H_
-#define INCLUDE_VNX_CONFIG_H_
+#ifndef INCLUDE_VNX_OBJECT_HPP_
+#define INCLUDE_VNX_OBJECT_HPP_
 
-#include <vnx/Type.h>
+#include <vnx/Object.h>
+#include <vnx/Input.hpp>
+#include <vnx/Output.hpp>
 
 
 namespace vnx {
 
-/// Returns config value for key \p key, returns null in case no such key.
-std::shared_ptr<std::string> get_config(const std::string& key);
+inline
+std::ostream& operator<<(std::ostream& out, const Object& value) {
+	vnx::write(out, value);
+	return out;
+}
 
-/// Set config value (in-memory)
-void set_config(const std::string& key, const std::string& value);
-
-/// Read config file system tree starting at \p root_path
-void read_config_tree(const std::string& root_path);
+inline
+std::istream& operator>>(std::istream& in, Object& value) {
+	vnx::read(in, value);
+	return in;
+}
 
 
 } // vnx
 
-#endif /* INCLUDE_VNX_CONFIG_H_ */
+#endif /* INCLUDE_VNX_OBJECT_HPP_ */

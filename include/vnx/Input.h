@@ -213,6 +213,25 @@ void read_value(TypeInput& in, T& value, const TypeCode* type_code, const uint16
 	}
 }
 
+/** \brief Reads a value of type T from the stream.
+ *
+ * This function assumes an implicit CODE_DYNAMIC, ie. it expects dynamic code to be in the data.
+ * Used primarily by Variant, otherwise in special cases.
+ */
+template<typename T>
+void read_dynamic(TypeInput& in, T& value) {
+	uint16_t code[VNX_MAX_BYTE_CODE_SIZE];
+	read_byte_code(in, code);
+	switch(code[0]) {
+		case CODE_DYNAMIC:
+		case CODE_ALT_DYNAMIC:
+			read_dynamic(in, value);
+			break;
+		default:
+			vnx::type<T>().read(in, value, 0, code);
+	}
+}
+
 /** \brief Reads a dynamic value from the stream.
  * 
  * Directly compatible with CODE_DYNAMIC.
@@ -311,7 +330,8 @@ void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, c
  * \brief Reads a statically allocated array (ContiguousContainer) from the input stream.
  * 
  * If there is less elements in the data the remaining elements in \p array will be default assigned.
- * Compatible with CODE_ARRAY data. Works for std::array and pre-allocated std::vector.
+ * Compatible with CODE_ARRAY, CODE_LIST and CODE_DYNAMIC.
+ * Works for std::array and pre-allocated std::vector.
  */
 template<typename T>
 void read_array(TypeInput& in, T& array, const TypeCode* type_code, const uint16_t* code) {
@@ -335,6 +355,11 @@ void read_array(TypeInput& in, T& array, const TypeCode* type_code, const uint16
 			size = flip_bytes(code[1]);
 			value_code = code + 2;
 			break;
+		case CODE_DYNAMIC:
+		case CODE_ALT_DYNAMIC: {
+			read_dynamic(in, array);
+			return;
+		}
 		default:
 			skip(in, type_code, code);
 	}
@@ -364,7 +389,7 @@ void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, con
 
 /** \brief Reads a dynamically allocated array (ContiguousContainer) from the input stream.
  * 
- * Compatible with CODE_LIST.
+ * Compatible with CODE_ARRAY, CODE_LIST and CODE_DYNAMIC.
  */
 template<typename T>
 void read_vector(TypeInput& in, T& vector, const TypeCode* type_code, const uint16_t* code) {
@@ -388,6 +413,11 @@ void read_vector(TypeInput& in, T& vector, const TypeCode* type_code, const uint
 			size = flip_bytes(code[1]);
 			value_code = code + 2;
 			break;
+		case CODE_DYNAMIC:
+		case CODE_ALT_DYNAMIC: {
+			read_dynamic(in, vector);
+			return;
+		}
 		default:
 			vector.clear();
 			skip(in, type_code, code);
@@ -415,7 +445,7 @@ void read(TypeInput& in, std::vector<bool>& vector, const TypeCode* type_code, c
 
 /** \brief Reads a dynamically allocated list (SequenceContainer) from the input stream.
  * 
- * Compatible with CODE_LIST.
+ * Compatible with CODE_ARRAY, CODE_LIST and CODE_DYNAMIC.
  */
 template<typename T>
 void read_list(TypeInput& in, T& list, const TypeCode* type_code, const uint16_t* code) {
@@ -440,13 +470,19 @@ void read_list(TypeInput& in, T& list, const TypeCode* type_code, const uint16_t
 			size = flip_bytes(code[1]);
 			value_code = code + 2;
 			break;
+		case CODE_DYNAMIC:
+		case CODE_ALT_DYNAMIC: {
+			read_dynamic(in, list);
+			return;
+		}
 		default:
 			skip(in, type_code, code);
 			return;
 	}
 	for(uint32_t i = 0; i < size; ++i) {
-		list.emplace_back();
-		vnx::type<typename T::value_type>().read(in, list.back(), type_code, value_code);
+		typename T::value_type value;
+		vnx::type<typename T::value_type>().read(in, value, type_code, value_code);
+		list.emplace_back(std::move(value));
 	}
 }
 
@@ -458,7 +494,7 @@ void read(TypeInput& in, std::list<T>& list, const TypeCode* type_code, const ui
 
 /** \brief Reads a dynamically allocated set (AssociativeContainer) from the input stream.
  * 
- * Compatible with CODE_LIST.
+ * Compatible with CODE_ARRAY, CODE_LIST and CODE_DYNAMIC.
  */
 template<typename T>
 void read_set(TypeInput& in, T& set, const TypeCode* type_code, const uint16_t* code) {
@@ -483,6 +519,11 @@ void read_set(TypeInput& in, T& set, const TypeCode* type_code, const uint16_t* 
 			size = flip_bytes(code[1]);
 			value_code = code + 2;
 			break;
+		case CODE_DYNAMIC:
+		case CODE_ALT_DYNAMIC: {
+			read_dynamic(in, set);
+			return;
+		}
 		default:
 			skip(in, type_code, code);
 			return;
@@ -490,7 +531,7 @@ void read_set(TypeInput& in, T& set, const TypeCode* type_code, const uint16_t* 
 	for(uint32_t i = 0; i < size; ++i) {
 		typename T::value_type key;
 		vnx::type<typename T::value_type>().read(in, key, type_code, value_code);
-		set.insert(key);
+		set.emplace(std::move(key));
 	}
 }
 
@@ -520,7 +561,7 @@ void read(TypeInput& in, std::unordered_set<T, C>& set, const TypeCode* type_cod
 
 /** \brief Reads a dynamically allocated map (AssociativeContainer) from the input stream.
  * 
- * Compatible with CODE_MAP.
+ * Compatible with CODE_MAP and CODE_DYNAMIC.
  */
 template<typename T>
 void read_map(TypeInput& in, T& map, const TypeCode* type_code, const uint16_t* code) {
@@ -538,6 +579,11 @@ void read_map(TypeInput& in, T& map, const TypeCode* type_code, const uint16_t* 
 			size = flip_bytes(size);
 			value_code = code + flip_bytes(code[1]);
 			break;
+		case CODE_DYNAMIC:
+		case CODE_ALT_DYNAMIC: {
+			read_dynamic(in, map);
+			return;
+		}
 		// TODO: compatibility to vector<pair<K, V>>
 		default:
 			skip(in, type_code, code);
@@ -739,44 +785,9 @@ void read(TypeInput& in, std::shared_ptr<T>& value) {
 	value = std::dynamic_pointer_cast<T>(read(in));
 }
 
-/** \brief Reads a Value from the input stream.
- * 
- * Same as read(TypeInput& in) but not at top level, ie. this function expects a code.
- * In case of incompatible data a nullptr will be returned.
- * Compatible with CODE_ANY.
- */
-template<typename T>
-void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, const uint16_t* code) {
-	if(code[0] == CODE_ANY || code[0] == CODE_ALT_ANY) {
-		value = std::dynamic_pointer_cast<T>(read(in));
-	} else {
-		value = 0;
-		skip(in, type_code, code);
-	}
-}
-
 template<typename T>
 void type<T>::read(TypeInput& in, T& value, const TypeCode* type_code, const uint16_t* code) {
 	vnx::read(in, value, type_code, code);
-}
-
-/** \brief Reads a value of type T from the stream.
- * 
- * This function assumes an implicit CODE_DYNAMIC, ie. it expects dynamic code to be in the data.
- * Used primarily by Variant, otherwise in special cases.
- */
-template<typename T>
-void read_dynamic(TypeInput& in, T& value) {
-	uint16_t code[VNX_MAX_BYTE_CODE_SIZE];
-	read_byte_code(in, code);
-	switch(code[0]) {
-		case CODE_DYNAMIC:
-		case CODE_ALT_DYNAMIC:
-			read_dynamic(in, value);
-			break;
-		default:
-			vnx::type<T>().read(in, value, 0, code);
-	}
 }
 
 template<typename T>
@@ -807,16 +818,7 @@ void read_dynamic_list_data(TypeInput& in, T* data_, const uint16_t* code_, cons
 	}
 }
 
-template<typename T>
-void from_string(const std::string& str, T& value);
-
-template<typename T>
-void from_string(const std::string& str, std::shared_ptr<T>& value);
-
-template<typename T>
-void from_string(const std::string& str, std::shared_ptr<const T>& value);
-
-/** \brief Copies a value from the JSON stream into \p out.
+/** \brief Reads a value from the JSON stream into \p out. (generic version)
  * 
  * A value is either a:
  * - number: 123 or 123.456
@@ -833,13 +835,19 @@ void from_string(const std::string& str, std::shared_ptr<const T>& value);
  */
 bool read_value(std::istream& in, std::string& out, bool want_string = false);
 
-/** \brief Reads an object from the JSON stream.
+/** \brief Reads an array from the JSON stream. (generic version)
+ *
+ * Example: [1, 2, 3, "example", [1, 2, 3], {"key": 123}]
+ */
+bool read_array(std::istream& in, std::vector<std::string>& array);
+
+/** \brief Reads an object from the JSON stream. (generic version)
  * 
  * Example: {"key": 123, "foo": "bar"}
  */
 bool read_object(std::istream& in, std::map<std::string, std::string>& object);
 
-/** \brief Reads an object from the JSON string.
+/** \brief Reads an object from the JSON string. (generic version)
  * 
  * Example: {"key": 123, "foo": "bar"}
  */
@@ -881,244 +889,9 @@ void read(std::istream& in, std::string& value);
  * - string (CODE_LIST, CODE_INT8)
  * - array (CODE_LIST)
  * - vnx::Object (CODE_OBJECT)
+ * - vnx::Value (CODE_TYPE)
  */
-std::shared_ptr<Variant> read(std::istream& in);
-
-/** \brief Reads a static array from the JSON stream
- * 
- * Example: [1, 2, 3] \n 
- * If the input array is smaller than \p array the left-over elements are default initialized.
- */
-template<typename T, size_t N>
-void read(std::istream& in, std::array<T, N>& array) {
-	size_t stack = 0;
-	size_t k = 0;
-	while(true) {
-		const char c = in.peek();
-		if(!in.good()) {
-			break;
-		}
-		if(c == '[') {
-			stack++;
-			in.get();
-		} else if(c == ']') {
-			in.get();
-			break;
-		} else if(stack && c != ',') {
-			std::string value;
-			if(!read_value(in, value)) {
-				break;		// prevent infinite loop
-			}
-			if(k < N) {
-				from_string(value, array[k++]);
-			}
-		} else {
-			in.get();
-		}
-	}
-	for(size_t i = k; i < N; ++i) {
-		array[i] = T();
-	}
-}
-
-/** \brief Reads a dynamic array from the JSON stream
- * 
- * Example: [1, 2, 3]
- */
-template<typename T>
-void read(std::istream& in, std::vector<T>& vector) {
-	vector.clear();
-	int stack = 0;
-	while(true) {
-		const char c = in.peek();
-		if(!in.good()) {
-			break;
-		}
-		if(!stack && c == '[') {
-			stack++;
-			in.get();
-		} else if(stack && c == ']') {
-			in.get();
-			break;
-		} else if(c != ',' && c != ' ') {
-			std::string value;
-			if(!read_value(in, value)) {
-				break;		// prevent infinite loop
-			}
-			T next = T();
-			from_string(value, next);
-			vector.push_back(next);
-		} else {
-			in.get();
-		}
-	}
-}
-
-/** \brief Reads a pair from the JSON stream
- * 
- * Example: ["key", "value"] \n 
- * Example: {"key": "value"}
- */
-template<typename K, typename V>
-void read(std::istream& in, std::pair<K, V>& pair) {
-	pair = std::pair<K, V>();
-	int stack = 0;
-	int state = 0;
-	while(true) {
-		const char c = in.peek();
-		if(!in.good()) {
-			break;
-		}
-		if(c == '[' || c == '{') {
-			in.get();
-			stack++;
-		} else if(c == ']' || c == '}') {
-			in.get();
-			break;
-		} else if(c == ',' || c == ':') {
-			in.get();
-			stack++;
-		} else if(stack > state) {
-			std::string value;
-			if(!read_value(in, value)) {
-				break;		// prevent infinite loop
-			}
-			if(stack == 1) {
-				from_string(value, pair.first);
-				state++;
-			} else if(stack == 2) {
-				from_string(value, pair.second);
-				state++;
-			}
-		} else {
-			in.get();
-		}
-	}
-}
-
-/** \brief Reads a map from the JSON stream
- * 
- * Example: [[1, 1.234], [123, 5.678]] \n 
- * Example: {"foo": 1, "bar": 123}
- */
-template<typename K, typename V>
-void read(std::istream& in, std::map<K, V>& map) {
-	map.clear();
-	int stack = 0;
-	while(true) {
-		const char c = in.peek();
-		if(!in.good()) {
-			break;
-		}
-		if(!stack && c == '{') {
-			std::map<std::string, std::string> object;
-			read_object(in, object);
-			for(const auto& entry : object) {
-				K key = K();
-				from_string(entry.first, key);
-				from_string(entry.second, map[key]);
-			}
-			break;
-		} else if(c == '[') {
-			if(stack) {
-				std::pair<K, V> entry;
-				read(in, entry);
-				map[entry.first] = entry.second;
-			} else {
-				in.get();
-				stack++;
-			}
-		} else if(c == ']') {
-			in.get();
-			break;
-		} else {
-			in.get();
-		}
-	}
-}
-
-/** \brief Reads a matrix from the JSON stream.
- * 
- * Example: [1, 2, 3, 4]	// column vector \n 
- * Example: {"size": [2, 2], "data": [1, 2, 3, 4]}		// general N-by-M matrix \n 
- */
-template<typename T, size_t N>
-void read_matrix(std::istream& in, T* data, const std::array<size_t, N>& size) {
-	size_t total_size = 1;
-	for(size_t i = 0; i < N; ++i) {
-		total_size *= size[i];
-	}
-	std::string str;
-	read(in, str);
-	std::vector<T> tmp;
-	if(!str.empty()) {
-		if(str[0] == '[') {
-			from_string(str, tmp);
-		} else if(str[0] == '{') {
-			std::map<std::string, std::string> object;
-			read_object(str, object);
-			from_string(object["data"], tmp);
-		}
-	}
-	for(size_t i = 0; i < total_size; ++i) {
-		if(i < tmp.size()) {
-			data[i] = tmp[i];
-		} else {
-			data[i] = T();
-		}
-	}
-}
-
-template<size_t N>
-void read_image_size(std::istream& in, std::array<size_t, N>& size) {
-	// not implemented yet
-	for(size_t i = 0; i < N; ++i) {
-		size[i] = 0;
-	}
-}
-
-template<typename T, size_t N>
-void read_image_data(std::istream& in, T* data, const std::array<size_t, N>& size) {
-	// not implemented yet
-}
-
-template<typename T>
-void type<T>::read(std::istream& in, T& value) {
-	vnx::read(in, value);
-}
-
-/// Reads a value of type T from the JSON string
-template<typename T>
-void from_string(const std::string& str, T& value) {
-	std::istringstream stream;
-	stream.str(str);
-	vnx::type<T>().read(stream, value);
-}
-
-/// Reads a Value of type T from the JSON stream
-template<typename T>
-void from_string(const std::string& str, std::shared_ptr<T>& value) {
-	if(!value) {
-		value = T::create();
-	}
-	if(value) {
-		std::istringstream stream;
-		stream.str(str);
-		value->read(stream);
-	}
-}
-
-/// Reads a Value of type T from the JSON stream
-template<typename T>
-void from_string(const std::string& str, std::shared_ptr<const T>& value) {
-	std::shared_ptr<T> tmp = T::create();
-	if(tmp) {
-		std::istringstream stream;
-		stream.str(str);
-		tmp->read(stream);
-	}
-	value = tmp;
-}
+Variant read(std::istream& in);
 
 /// Reads a TypeCode from the stream
 void read_type_code(TypeInput& in);

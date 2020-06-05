@@ -18,10 +18,6 @@
 #define INCLUDE_VNX_VARIANT_H
 
 #include <vnx/package.hxx>
-#include <vnx/Input.h>
-#include <vnx/Output.h>
-#include <vnx/InputStream.h>
-#include <vnx/OutputStream.h>
 
 
 namespace vnx {
@@ -50,7 +46,7 @@ public:
 	
 	/// Create Variant with given value
 	template<typename T>
-	Variant(const T& value) {
+	explicit Variant(const T& value) {
 		assign(value);
 	}
 	
@@ -67,14 +63,7 @@ public:
 	
 	/// Assign new value
 	template<typename T>
-	Variant& assign(const T& value) {
-		clear();
-		VectorOutputStream stream(&data);
-		TypeOutput out(&stream);
-		vnx::write_dynamic(out, value);
-		out.flush();
-		return *this;
-	}
+	Variant& assign(const T& value);
 	
 	/// Assign new value
 	Variant& assign(const Variant& value) {
@@ -97,16 +86,7 @@ public:
 	
 	/// Convert value to type T
 	template<typename T>
-	T to() const {
-		if(empty()) {
-			return T();
-		}
-		VectorInputStream stream(&data);
-		TypeInput in(&stream);
-		T value;
-		vnx::read_dynamic(in, value);
-		return value;
-	}
+	T to() const;
 	
 	/// Convert value to type T
 	template<typename T>
@@ -235,28 +215,18 @@ public:
 		data.clear();
 	}
 	
-	std::string to_string() const {
-		return vnx::to_string(*this);
-	}
+	std::string to_string() const;
 	
-	std::string to_string_value() const {
-		return vnx::to_string_value(*this);
-	}
+	std::string to_string_value() const;
 	
 	Object to_object() const;
 	
-	friend std::ostream& operator<<(std::ostream& out, const Variant& value) {
-		vnx::write(out, value);
-		return out;
-	}
+	friend std::ostream& operator<<(std::ostream& out, const Variant& value);
 	
-	friend std::istream& operator>>(std::istream& in, Variant& value) {
-		vnx::read(in, value);
-		return in;
-	}
+	friend std::istream& operator>>(std::istream& in, Variant& value);
 	
 	/// Returns reference to an empty Variant
-	static const Variant& get_empty() {
+	static const Variant& static_empty() {
 		return empty_instance;
 	}
 	

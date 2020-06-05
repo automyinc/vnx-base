@@ -5,9 +5,9 @@
 #define INCLUDE_vnx_Proxy_ASYNC_CLIENT_HXX_
 
 #include <vnx/AsyncClient.h>
-#include <vnx/Hash64.h>
+#include <vnx/Hash64.hpp>
 #include <vnx/Module.h>
-#include <vnx/TopicPtr.h>
+#include <vnx/TopicPtr.hpp>
 
 
 namespace vnx {

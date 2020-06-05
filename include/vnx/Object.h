@@ -44,7 +44,7 @@ public:
 		if(iter != field.end()) {
 			return iter->second;
 		}
-		return Variant::get_empty();
+		return Variant::static_empty();
 	}
 	
 	bool operator==(const Object& other) const {
@@ -111,15 +111,12 @@ public:
 		*this = object;
 	}
 	
-	friend std::ostream& operator<<(std::ostream& out, const Object& value) {
-		vnx::write(out, value);
-		return out;
-	}
+	/// Returns polymorphic Value (using "__type" field)
+	std::shared_ptr<Value> to_value() const;
+
+	friend std::ostream& operator<<(std::ostream& out, const Object& value);
 	
-	friend std::istream& operator>>(std::istream& in, Object& value) {
-		vnx::read(in, value);
-		return in;
-	}
+	friend std::istream& operator>>(std::istream& in, Object& value);
 	
 	static const uint16_t CODE[];
 	static const uint16_t ALT_CODE[];

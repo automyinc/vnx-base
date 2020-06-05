@@ -18,7 +18,6 @@
 #define INCLUDE_VNX_OUTPUT_H_
 
 #include <vnx/OutputStream.h>
-#include <vnx/DefaultPrinter.h>
 
 #include <sstream>
 
@@ -574,19 +573,6 @@ std::string to_string(TypeInput& in);
 
 /// Converts binary value to JSON string
 std::string to_string(TypeInput& in, const TypeCode* type_code, const uint16_t* code);
-
-/** \brief Converts value to regular string
- * 
- * Same as to_string<T>() except strings and enum values are without quotes.
- * In addition null values result in an empty string instead of "null".
- */
-template<typename T>
-std::string to_string_value(const T& value) {
-	std::ostringstream stream;
-	ToStringValue visitor(stream);
-	vnx::type<T>().accept(visitor, value);
-	return stream.str();
-}
 
 /// Converts binary value to regular string (same as to_string_value<T>())
 std::string to_string_value(TypeInput& in);

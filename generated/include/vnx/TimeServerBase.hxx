@@ -5,7 +5,7 @@
 #define INCLUDE_vnx_TimeServerBase_HXX_
 
 #include <vnx/package.hxx>
-#include <vnx/Hash64.h>
+#include <vnx/Hash64.hpp>
 #include <vnx/Module.h>
 
 

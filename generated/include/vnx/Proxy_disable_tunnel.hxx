@@ -5,7 +5,7 @@
 #define INCLUDE_vnx_Proxy_disable_tunnel_HXX_
 
 #include <vnx/package.hxx>
-#include <vnx/Hash64.h>
+#include <vnx/Hash64.hpp>
 #include <vnx/Value.h>
 
 

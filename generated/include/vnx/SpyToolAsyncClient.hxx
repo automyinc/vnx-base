@@ -5,7 +5,7 @@
 #define INCLUDE_vnx_SpyTool_ASYNC_CLIENT_HXX_
 
 #include <vnx/AsyncClient.h>
-#include <vnx/Hash64.h>
+#include <vnx/Hash64.hpp>
 #include <vnx/Module.h>
 #include <vnx/TopicInfoList.hxx>
 

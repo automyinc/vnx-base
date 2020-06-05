@@ -5,7 +5,7 @@
 #define INCLUDE_vnx_Return_HXX_
 
 #include <vnx/package.hxx>
-#include <vnx/Hash64.h>
+#include <vnx/Hash64.hpp>
 #include <vnx/Message.hxx>
 #include <vnx/Request.hxx>
 #include <vnx/Value.h>

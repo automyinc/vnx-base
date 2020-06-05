@@ -5,9 +5,9 @@
 #define INCLUDE_vnx_Sample_HXX_
 
 #include <vnx/package.hxx>
-#include <vnx/Hash64.h>
+#include <vnx/Hash64.hpp>
 #include <vnx/Message.hxx>
-#include <vnx/TopicPtr.h>
+#include <vnx/TopicPtr.hpp>
 #include <vnx/Value.h>
 
 

@@ -5,7 +5,7 @@
 #define INCLUDE_vnx_SpyTool_CLIENT_HXX_
 
 #include <vnx/Client.h>
-#include <vnx/Hash64.h>
+#include <vnx/Hash64.hpp>
 #include <vnx/Module.h>
 #include <vnx/TopicInfoList.hxx>
 

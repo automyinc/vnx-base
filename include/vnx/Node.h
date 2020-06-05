@@ -20,6 +20,7 @@
 #include <vnx/Pipe.h>
 
 #include <list>
+#include <atomic>
 
 
 namespace vnx {
@@ -53,7 +54,7 @@ public:
 protected:
 	std::mutex vnx_mutex;
 	
-	volatile bool vnx_do_run = true;			///< If this node should continue to run
+	std::atomic_bool vnx_do_run {true};			///< If this node should continue to run
 	
 	std::shared_ptr<Pipe> vnx_pipe;				///< Pipe through which the last message was read
 	

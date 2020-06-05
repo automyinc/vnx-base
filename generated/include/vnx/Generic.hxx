@@ -6,7 +6,7 @@
 
 #include <vnx/package.hxx>
 #include <vnx/Value.h>
-#include <vnx/Variant.h>
+#include <vnx/Variant.hpp>
 
 
 namespace vnx {

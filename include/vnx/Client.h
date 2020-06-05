@@ -18,11 +18,8 @@
 #define INCLUDE_VNX_CLIENT_H_
 
 #include <vnx/Node.h>
-#include <vnx/exception.h>
-#include <vnx/NoSuchService.hxx>
-#include <vnx/NoSuchMethod.hxx>
-#include <vnx/InternalError.hxx>
-#include <vnx/Binary.h>
+#include <vnx/Type.h>
+#include <vnx/Value.h>
 
 
 namespace vnx {

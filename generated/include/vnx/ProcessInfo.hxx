@@ -5,7 +5,7 @@
 #define INCLUDE_vnx_ProcessInfo_HXX_
 
 #include <vnx/package.hxx>
-#include <vnx/Hash64.h>
+#include <vnx/Hash64.hpp>
 #include <vnx/ModuleInfo.hxx>
 #include <vnx/TopicInfo.hxx>
 #include <vnx/Value.h>

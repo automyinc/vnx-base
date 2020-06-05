@@ -6,7 +6,7 @@
 
 #include <vnx/Type.h>
 #include <vnx/package.hxx>
-#include <vnx/Hash64.h>
+#include <vnx/Hash64.hpp>
 
 
 namespace vnx {
