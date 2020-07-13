@@ -14,3 +14,4 @@ extern Variant = {17};				// {DYNAMIC}
 extern Object = {24};				// {OBJECT}
 extern Buffer = {12, 1};			// {LIST, UINT8}
 extern Memory = {12, 1};			// {LIST, UINT8}
+extern TypeCode = {14};				// {CODE_TYPE_CODE}

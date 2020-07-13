@@ -14,6 +14,7 @@
 #include <vnx/NoSuchService.hxx>
 #include <vnx/NoSuchMethod.hxx>
 #include <vnx/InternalError.hxx>
+#include <vnx/OverflowException.hxx>
 #include <vnx/Return.hxx>
 
 #include <functional>
@@ -21,6 +22,9 @@
 
 namespace vnx {
 
+/**
+ * Note: AsyncClient is NOT thread safe. To be used by the Module's main thread only.
+ */
 class AsyncClient {
 public:
 	/// Creates a client for the specified service address.
@@ -46,6 +50,9 @@ public:
 	/// Sets the node which will receive and process the returns
 	void vnx_set_node(Node* node);
 	
+	/// If \p non_blocking_mode == true requests will throw an exception instead of blocking (default = false)
+	void vnx_set_non_blocking(bool non_blocking_mode);
+
 	/// Called by the receiving node when a return has been received
 	void vnx_callback(std::shared_ptr<const Return> result);
 	
@@ -71,7 +78,7 @@ protected:
 	/// Performs the actual request, non-blocking
 	uint64_t vnx_request(std::shared_ptr<const Value> method);
 	
-	virtual void vnx_purge_request(uint64_t request_id) = 0;
+	virtual void vnx_purge_request(uint64_t request_id, const std::exception& ex) = 0;
 	
 	virtual void vnx_callback_switch(uint64_t request_id, std::shared_ptr<const Value> value) = 0;
 	
@@ -80,6 +87,7 @@ private:
 	Hash64 vnx_src_mac;
 	Hash64 vnx_service_addr;
 	uint64_t vnx_next_id = 0;
+	bool vnx_is_non_blocking = false;
 	
 	std::shared_ptr<Pipe> vnx_service_pipe;
 	std::shared_ptr<Pipe> vnx_return_pipe;

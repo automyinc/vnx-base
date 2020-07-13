@@ -75,10 +75,6 @@ public:
 	/// Seeks to the specified byte position. Will flush output buffer before doing so.
 	void seek_to(int64_t pos);
 	
-	/// Maps given region and returns input stream (length < 0 maps all remaining)
-	/// Make sure to call File::flush() (ie. fflush()) before trying to read recently written data.
-	std::shared_ptr<MappedMemoryInputStream> mmap_read(int64_t offset = 0, int64_t length = -1);
-	
 	/// Calls posix_fadvise() (length <= 0 means all remaining)
 	void fadvise(int advice, int64_t pos = 0, int64_t length = 0);
 	

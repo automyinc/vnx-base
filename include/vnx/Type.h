@@ -74,9 +74,12 @@ typedef bool bool_t;			///< bool type
 typedef float float32_t;		///< 32-bit IEEE float type
 typedef double float64_t;		///< 64-bit IEEE float type
 
+class Buffer;
+class Memory;
 class Visitor;
 class Value;
 class Object;
+class Module;
 class Variant;
 class Topic;
 class TypeCode;
@@ -106,6 +109,9 @@ std::vector<const TypeCode*> get_all_type_codes();
  * @return Pointer to last code element in given \p code. Can be used to compute size of the code.
  */
 const uint16_t* validate_code(const uint16_t* code, const TypeCode* type_code = 0, size_t size = size_t(-1), size_t pos = 0);
+
+/// Converts a code to humand readable format
+std::string code_to_string(const uint16_t* code, const TypeCode* type_code = 0);
 
 /** \brief Codes used by the VNX serialization type system.
  * 
@@ -426,6 +432,8 @@ public:
 	
 	void compile(const TypeCode* type_code);
 	
+	void accept(Visitor& visitor, const TypeCode* type_code = 0) const;
+
 };
 
 /** \brief Represents a VNI struct, class, method or enum.
@@ -437,10 +445,6 @@ class TypeCode {
 public:
 	TypeCode();
 
-	TypeCode(const TypeCode&) = delete;
-	
-	TypeCode& operator=(const TypeCode&) = delete;
-	
 	uint16_t version = 2;	///< Version number
 	
 	Hash64 type_hash;		///< The identity of this type of _any_ version (ie. only depends on the full type name)
@@ -484,6 +488,8 @@ public:
 	 */
 	bool instanceof(Hash64 type_hash_) const;
 	
+	void accept(Visitor& visitor) const;
+
 private:
 	void compile();
 	
@@ -500,8 +506,11 @@ private:
 void read(TypeInput& in, TypeField& field, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const TypeField& field, const TypeCode* type_code, const uint16_t* code); ///< \private
 
-void read(TypeInput& in, TypeCode& type_code); ///< \private
-void write(TypeOutput& out, const TypeCode& type_code); ///< \private
+void read(TypeInput& in, TypeCode& value); ///< \private
+void write(TypeOutput& out, const TypeCode& value); ///< \private
+void read(std::istream& in, TypeCode& value);  ///< \private
+void write(std::ostream& out, const TypeCode& value);  ///< \private
+void accept(Visitor& visitor, const TypeCode& value);  ///< \private
 
 
 /** \brief Wrapper struct to overloaded type functions.

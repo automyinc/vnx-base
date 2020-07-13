@@ -18,20 +18,21 @@
 #define INCLUDE_VNX_MODULE_H_
 
 #include <vnx/Time.h>
+#include <vnx/Task.h>
 #include <vnx/Hash128.h>
 #include <vnx/Publisher.h>
 #include <vnx/Subscriber.h>
 #include <vnx/AsyncClient.h>
+#include <vnx/request_id_t.h>
 #include <vnx/LogMsg.hxx>
+#include <vnx/FlowMessage.hxx>
 
 #include <thread>
 #include <sstream>
+#include <functional>
 
 
 namespace vnx {
-
-/// Unique identifier for a Request (src_mac, request_id)
-typedef std::pair<Hash64, uint64_t> request_id_t;
 
 /** \brief Module is the base class for all user Modules.
  * 
@@ -64,6 +65,7 @@ public:
 	
 	virtual Hash64 get_type_hash() const = 0;
 	virtual const char* get_type_name() const = 0;
+	virtual const TypeCode* get_type_code() const = 0;
 	
 	virtual void read(std::istream& _in) = 0;
 	virtual void write(std::ostream& _out) const = 0;
@@ -77,9 +79,13 @@ public:
 	
 	std::string vnx_get_name();			///< Returns the module name (Module::vnx_name)
 	
+	TypeCode vnx_get_type_code() const;	///< Returns the module's type code
+
 	bool vnx_virtual_time = true;		///< If to use virtual time for timers
 	
 	bool vnx_clean_exit = false;		///< If to process all remaining messages on shutdown
+
+	bool vnx_auto_decompress = true;	///< If to automatically decompress Sample values
 
 	int vnx_log_level = INFO;			///< The display log level of this module (see LogMsg)
 	
@@ -95,6 +101,8 @@ protected:
 	std::shared_ptr<const Request> vnx_request;		///< Current Request being processed (null otherwise)
 	
 	std::shared_ptr<const Return> vnx_return;		///< Current Return being processed (null otherwise)
+	
+	std::shared_ptr<const Task> vnx_task;			///< Current Task being processed (null otherwise)
 	
 	std::map<Hash64, std::shared_ptr<const Endpoint>> vnx_remotes;		///< Map of connected processes (process id => endpoint)
 	
@@ -117,10 +125,17 @@ protected:
 		publisher->publish(value, topic, flags);
 	}
 	
+	/** \brief Adds a task to this modules message queue. [thread-safe]
+	 * 
+	 * The task will be processed in the main() loop like an incoming message.
+	 * Returns false in case of shutdown.
+	 */
+	bool add_task(const std::function<void()>& func) const;
+	
 	/** \brief Publishes log output. [thread-safe]
 	 * 
 	 * Use ERROR, WARN, INFO, DEBUG or custom level.
-	 * Usage: log(level) << "..."; 		// no std::endl needed at the ned
+	 * Usage: log(level) << "..."; 		// no std::endl needed at the end
 	 */
 	LogPublisher log(int level) const {
 		return LogPublisher(publisher, vnx_name, level, vnx_log_level);
@@ -131,22 +146,45 @@ protected:
 	
 	/** \brief Create a new timer.
 	 * 
-	 * Can be started manually using Timer::reset().
+	 * The created timer is not started/activated by this call.
+	 * Can be started manually using Timer::reset() or Timer::set_millis() / Timer::set_micros().
 	 * Can be turned into a repeating timer by setting Timer::is_repeat = true;
 	 * Usage: add_timer(std::bind(&Class::function, this));
 	 */
 	std::shared_ptr<Timer> add_timer(const std::function<void()>& func);
 	
+	/** \brief Creates a temporary timer, for one time use.
+	 *
+	 * The created timer is already started/activated.
+	 * Can be stopped using Timer::stop().
+	 * Can be restarted using Timer::reset() or Timer::set_millis() / Timer::set_micros().
+	 * Usage: set_timeout_micros(interval_us, std::bind(&Class::function, this));
+	 */
+	std::weak_ptr<Timer> set_timeout_micros(int64_t interval_us, const std::function<void()>& func);
+
+	/** \brief Creates a temporary timer, for one time use.
+	 *
+	 * The created timer is already started/activated.
+	 * Can be stopped using Timer::stop().
+	 * Can be restarted using Timer::reset() or Timer::set_millis() / Timer::set_micros().
+	 * Usage: set_timeout_millis(interval_us, std::bind(&Class::function, this));
+	 */
+	std::weak_ptr<Timer> set_timeout_millis(int64_t interval_ms, const std::function<void()>& func);
+
 	/** \brief Create and start a repeating timer.
 	 * 
-	 * Can be stopped using Timer::stop(). Can be restarted using Timer::reset().
+	 * The created timer is already started/activated.
+	 * Can be stopped using Timer::stop().
+	 * Can be restarted using Timer::reset() or Timer::set_millis() / Timer::set_micros().
 	 * Usage: set_timer_micros(interval_us, std::bind(&Class::function, this));
 	 */
 	std::shared_ptr<Timer> set_timer_micros(int64_t interval_us, const std::function<void()>& func);
 	
 	/** \brief Create and start a repeating timer.
 	 * 
-	 * Can be stopped using Timer::stop(). Can be restarted using Timer::reset().
+	 * The created timer is already started/activated.
+	 * Can be stopped using Timer::stop().
+	 * Can be restarted using Timer::reset() or Timer::set_millis() / Timer::set_micros().
 	 * Usage: set_timer_millis(interval_ms, std::bind(&Class::function, this));
 	 */
 	std::shared_ptr<Timer> set_timer_millis(int64_t interval_ms, const std::function<void()>& func);
@@ -187,6 +225,12 @@ protected:
 	/// %Process a Sample (internal use and special cases only)
 	virtual void handle(std::shared_ptr<const Sample> sample);
 	
+	/// %Process a Task (internal use and special cases only)
+	virtual void handle(std::shared_ptr<const Task> task);
+	
+	/// %Process a FlowMessage (internal use and special cases only)
+	virtual void handle(std::shared_ptr<const FlowMessage> msg);
+	
 	/// %Process a Request (internal use and special cases only)
 	virtual std::shared_ptr<const Return> handle(std::shared_ptr<const Request> request);
 	
@@ -197,10 +241,10 @@ protected:
 	virtual void vnx_handle_switch(std::shared_ptr<const Sample> sample) = 0;
 	
 	/// Call service function for a Request (internal use and special cases only)
-	virtual std::shared_ptr<Value> vnx_call_switch(std::shared_ptr<const Value> value, const vnx::request_id_t& request_id) = 0;
+	virtual std::shared_ptr<Value> vnx_call_switch(std::shared_ptr<const Value> method, const vnx::request_id_t& request_id) = 0;
 	
 	/// Sends a Return back to the client [thread-safe]
-	virtual bool vnx_async_callback(const vnx::request_id_t& request_id, std::shared_ptr<Value> return_value) const;
+	virtual bool vnx_async_return(const vnx::request_id_t& request_id, std::shared_ptr<const Value> return_value) const;
 	
 private:
 	void heartbeat();
@@ -220,7 +264,9 @@ private:
 	TimeControl time_state;
 	std::shared_ptr<Publisher> publisher;
 	std::unordered_map<Hash128, uint64_t> seq_map;
-	std::vector<std::shared_ptr<Timer>> timers;
+	std::set<std::shared_ptr<Timer>> timers;
+	std::shared_ptr<Pipe> task_pipe;
+	std::map<std::string, std::string> type_map;
 	
 	mutable std::mutex async_mutex;
 	std::map<Hash64, std::shared_ptr<AsyncClient>> async_clients;
@@ -347,26 +393,6 @@ private:
 };
 
 
-inline bool operator<(const request_id_t& lhs, const request_id_t& rhs) {
-	if(lhs.first == rhs.first) {
-		return lhs.second < rhs.second;
-	}
-	return lhs.first < rhs.first;
-}
-
-inline bool operator==(const request_id_t& lhs, const request_id_t& rhs) {
-	return lhs.first == rhs.first && lhs.second == rhs.second;
-}
-
-
 } // vnx
-
-namespace std {
-	template<> struct hash<vnx::request_id_t> {
-		size_t operator()(const vnx::request_id_t& x) const {
-			return x.first ^ x.second;
-		}
-	};
-} // std
 
 #endif /* INCLUDE_VNX_MODULE_H_ */

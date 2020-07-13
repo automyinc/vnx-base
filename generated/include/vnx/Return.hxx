@@ -29,6 +29,7 @@ public:
 	const char* get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
+	static std::shared_ptr<const ::vnx::Return> create_overflow_return(const std::shared_ptr<const ::vnx::Request>& request);
 	static std::shared_ptr<const ::vnx::Return> create_no_such_service_return(const std::shared_ptr<const ::vnx::Request>& request);
 	
 	static std::shared_ptr<Return> create();

@@ -8,6 +8,8 @@ class Return extends Message {
 	
 	Value* value;
 	
+	static Return* create_overflow_return(Request* request);
+	
 	static Return* create_no_such_service_return(Request* request);
 	
 }

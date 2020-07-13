@@ -18,37 +18,39 @@ public:
 	
 	ProxyClient(vnx::Hash64 service_addr);
 	
-	void disable_export(const std::string& topic_name);
-	
-	void disable_export_async(const std::string& topic_name);
-	
-	void disable_forward(const std::string& service_name);
-	
-	void disable_forward_async(const std::string& service_name);
-	
-	void disable_import(const std::string& topic_name);
-	
-	void disable_import_async(const std::string& topic_name);
-	
-	void disable_tunnel(const ::vnx::Hash64& tunnel_addr);
-	
-	void disable_tunnel_async(const ::vnx::Hash64& tunnel_addr);
-	
-	void enable_export(const std::string& topic_name);
-	
-	void enable_export_async(const std::string& topic_name);
-	
-	void enable_forward(const std::string& service_name, const int32_t& max_queue_ms);
-	
-	void enable_forward_async(const std::string& service_name, const int32_t& max_queue_ms);
+	::vnx::TypeCode vnx_get_type_code();
 	
 	void enable_import(const std::string& topic_name);
 	
 	void enable_import_async(const std::string& topic_name);
 	
+	void disable_import(const std::string& topic_name);
+	
+	void disable_import_async(const std::string& topic_name);
+	
+	void enable_export(const std::string& topic_name);
+	
+	void enable_export_async(const std::string& topic_name);
+	
+	void disable_export(const std::string& topic_name);
+	
+	void disable_export_async(const std::string& topic_name);
+	
+	void enable_forward(const std::string& service_name, const int32_t& max_queue_ms);
+	
+	void enable_forward_async(const std::string& service_name, const int32_t& max_queue_ms);
+	
+	void disable_forward(const std::string& service_name);
+	
+	void disable_forward_async(const std::string& service_name);
+	
 	void enable_tunnel(const ::vnx::Hash64& tunnel_addr, const std::string& service_name, const int32_t& max_queue_ms);
 	
 	void enable_tunnel_async(const ::vnx::Hash64& tunnel_addr, const std::string& service_name, const int32_t& max_queue_ms);
+	
+	void disable_tunnel(const ::vnx::Hash64& tunnel_addr);
+	
+	void disable_tunnel_async(const ::vnx::Hash64& tunnel_addr);
 	
 	void on_connect();
 	

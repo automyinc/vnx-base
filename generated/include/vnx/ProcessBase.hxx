@@ -47,27 +47,25 @@ public:
 	static std::shared_ptr<vnx::TypeCode> static_create_type_code();
 	
 protected:
-	virtual void close() = 0;
 	virtual std::string get_name() const = 0;
-	virtual ::vnx::ProcessInfo get_process_info() const = 0;
 	virtual ::vnx::TimeSync get_sync_time() const = 0;
 	virtual ::vnx::TopicInfoList get_topic_info() const = 0;
+	virtual ::vnx::ProcessInfo get_process_info() const = 0;
+	virtual void pause_log() = 0;
+	virtual void resume_log() = 0;
+	virtual void set_debug(const int32_t& level) = 0;
+	virtual void close() = 0;
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value) {}
-	virtual void handle(std::shared_ptr<const ::vnx::ModuleInfo> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
-	virtual void handle(std::shared_ptr<const ::vnx::ModuleInfo> _value) {}
 	virtual void handle(std::shared_ptr<const ::vnx::TimeControl> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
 	virtual void handle(std::shared_ptr<const ::vnx::TimeControl> _value) {}
 	virtual void handle(std::shared_ptr<const ::vnx::TimeSync> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
 	virtual void handle(std::shared_ptr<const ::vnx::TimeSync> _value) {}
-	virtual void pause_log() = 0;
-	virtual void resume_log() = 0;
-	virtual void set_debug(const int32_t& level) = 0;
+	virtual void handle(std::shared_ptr<const ::vnx::ModuleInfo> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
+	virtual void handle(std::shared_ptr<const ::vnx::ModuleInfo> _value) {}
 	
 	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
-	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _value, const vnx::request_id_t& _request_id) override;
-	
-private:
+	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _method, const vnx::request_id_t& _request_id) override;
 	
 };
 

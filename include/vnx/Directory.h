@@ -41,6 +41,9 @@ public:
 	
 	Directory& operator=(Directory&) = delete;
 	
+	/// Sets a new path without opening it. Closes directory beforehand if still open.
+	void set_path(const std::string& path_);
+
 	/// Opens the directory and resets the path. Closes directory beforehand if still open.
 	void open(const std::string& path_);
 	
@@ -70,14 +73,16 @@ public:
 	/// Returns directory path with trailing "/" at the end if path is not empty.
 	std::string get_path() const;
 	
-	/// Returns directory name without trailing "/"
+	/// Returns directory name without trailing "/", except root directory will return "/".
 	std::string get_name() const;
 	
 	/// Closes the directory. Safe to call multiple times or on an empty object.
 	void close();
 	
 private:
+#ifndef _WIN32
 	::DIR* p_dir = 0;
+#endif
 	std::string path;
 	
 };

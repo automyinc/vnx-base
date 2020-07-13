@@ -24,6 +24,107 @@
 
 namespace vnx {
 
+template<typename T>
+void from_string(const std::string& str, T& value);
+
+template<typename T>
+void from_string(const std::string& str, std::shared_ptr<T>& value);
+
+template<typename T>
+void from_string(const std::string& str, std::shared_ptr<const T>& value);
+
+/** \brief Reads a std::pair from the input stream.
+ *
+ * Compatible with CODE_TUPLE, CODE_LIST and CODE_DYNAMIC.
+ */
+template<typename K, typename V>
+void read(TypeInput& in, std::pair<K, V>& value, const TypeCode* type_code, const uint16_t* code) {
+	switch(code[0]) {
+		case CODE_TUPLE:
+		case CODE_ALT_TUPLE:
+			if((code[0] == CODE_TUPLE && code[1] == 2)
+				|| (code[0] == CODE_ALT_TUPLE && flip_bytes(code[1]) == 2))
+			{
+				vnx::type<K>().read(in, value.first, type_code, code + code[2]);
+				vnx::type<V>().read(in, value.second, type_code, code + code[3]);
+				return;
+			}
+			break;
+		case CODE_LIST:
+		case CODE_ALT_LIST: {
+			std::vector<Variant> list;
+			read(in, list, type_code, code);
+			if(list.size() == 2) {
+				list[0].to(value.first);
+				list[1].to(value.second);
+			}
+			return;
+		}
+		case CODE_DYNAMIC:
+		case CODE_ALT_DYNAMIC:
+			read_dynamic(in, value);
+			return;
+	}
+	skip(in, type_code, code);
+}
+
+/** \brief Reads a dynamically allocated map (AssociativeContainer) from the input stream.
+ *
+ * Compatible with CODE_MAP, CODE_LIST, CODE_OBJECT and CODE_DYNAMIC.
+ */
+template<typename T>
+void read_map(TypeInput& in, T& map, const TypeCode* type_code, const uint16_t* code) {
+	map.clear();
+	uint32_t size = 0;
+	const uint16_t* key_code = code + 2;
+	const uint16_t* value_code = 0;
+	switch(code[0]) {
+		case CODE_MAP:
+			read(in, size);
+			value_code = code + code[1];
+			break;
+		case CODE_ALT_MAP:
+			read(in, size);
+			size = flip_bytes(size);
+			value_code = code + flip_bytes(code[1]);
+			break;
+		case CODE_LIST:
+		case CODE_ALT_LIST: {
+			std::vector<std::pair<typename T::key_type, typename T::mapped_type>> list;
+			read(in, list, type_code, code);
+			for(auto& entry : list) {
+				map.emplace(std::move(entry));
+			}
+			return;
+		}
+		case CODE_OBJECT:
+		case CODE_ALT_OBJECT: {
+			Object tmp;
+			read(in, tmp, type_code, code);
+			for(const auto& entry : tmp.field) {
+				typename T::key_type key;
+				from_string(entry.first, key);
+				entry.second.to(map[key]);
+			}
+			return;
+		}
+		case CODE_DYNAMIC:
+		case CODE_ALT_DYNAMIC: {
+			read_dynamic(in, map);
+			return;
+		}
+		default:
+			skip(in, type_code, code);
+			return;
+	}
+	for(size_t i = 0; i < size; ++i) {
+		typename T::key_type key;
+		vnx::type<typename T::key_type>().read(in, key, type_code, key_code);
+		typename T::mapped_type& value = map[key];
+		vnx::type<typename T::mapped_type>().read(in, value, type_code, value_code);
+	}
+}
+
 /** \brief Reads a Value from the input stream.
  *
  * Same as read(TypeInput& in) but not at top level, ie. this function expects a code.
@@ -56,15 +157,6 @@ void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, c
 			skip(in, type_code, code);
 	}
 }
-
-template<typename T>
-void from_string(const std::string& str, T& value);
-
-template<typename T>
-void from_string(const std::string& str, std::shared_ptr<T>& value);
-
-template<typename T>
-void from_string(const std::string& str, std::shared_ptr<const T>& value);
 
 /** \brief Reads a static array from the JSON stream
  *
@@ -125,21 +217,7 @@ template<typename K, typename V>
 void read(std::istream& in, std::map<K, V>& map) {
 	map.clear();
 	const Variant tmp = read(in);
-	if(tmp.is_list()) {
-		const auto list = tmp.to<std::vector<std::vector<Variant>>>();
-		for(const auto& entry : list) {
-			if(entry.size() == 2) {
-				entry[1].to(map[entry[0].to<K>()]);
-			}
-		}
-	} else if(tmp.is_object()) {
-		const auto object = tmp.to_object();
-		for(const auto& entry : object.field) {
-			K key = K();
-			from_string(entry.first, key);
-			entry.second.to(map[key]);
-		}
-	}
+	tmp.to(map);
 }
 
 /** \brief Reads a matrix from the JSON stream.

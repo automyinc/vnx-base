@@ -1,0 +1,7 @@
+package vnx;
+
+interface ModuleInterface {
+	
+	TypeCode vnx_get_type_code() const;
+	
+}

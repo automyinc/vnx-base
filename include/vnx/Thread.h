@@ -97,7 +97,7 @@ protected:
 	/** \brief Publishes log output. [thread-safe]
 	 *
 	 * Use ERROR, WARN, INFO, DEBUG or custom level.
-	 * Usage: log(level) << "..."; 		// no std::endl needed at the ned
+	 * Usage: log(level) << "..."; 		// no std::endl needed at the end
 	 */
 	LogPublisher log(int level) const {
 		return LogPublisher(publisher, vnx_name, level, vnx_log_level);

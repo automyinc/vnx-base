@@ -41,6 +41,9 @@ public:
 	/// Performs a deep-copy
 	Buffer(const Buffer& other);
 	
+	/// Creates a buffer based on the given memory \p other
+	Buffer(const Memory& other);
+
 	/// Creates a buffer based on the given string \p other
 	Buffer(const std::string& other);
 	
@@ -49,6 +52,9 @@ public:
 	/// Performs a deep-copy
 	Buffer& operator=(const Buffer& other);
 	
+	/// Performs a deep-copy
+	Buffer& operator=(const Memory& other);
+
 	/// Performs a deep-copy
 	Buffer& operator=(const std::string& other);
 	

@@ -22,4 +22,6 @@ class ModuleInfo {
 	
 	map<Hash64, Endpoint*> remotes;		// map of connected processes (process id => endpoint)
 	
+	TypeCode type_code;		// module type code
+	
 }

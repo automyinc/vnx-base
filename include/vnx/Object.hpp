@@ -18,25 +18,6 @@
 #define INCLUDE_VNX_OBJECT_HPP_
 
 #include <vnx/Object.h>
-#include <vnx/Input.hpp>
-#include <vnx/Output.hpp>
 
-
-namespace vnx {
-
-inline
-std::ostream& operator<<(std::ostream& out, const Object& value) {
-	vnx::write(out, value);
-	return out;
-}
-
-inline
-std::istream& operator>>(std::istream& in, Object& value) {
-	vnx::read(in, value);
-	return in;
-}
-
-
-} // vnx
 
 #endif /* INCLUDE_VNX_OBJECT_HPP_ */

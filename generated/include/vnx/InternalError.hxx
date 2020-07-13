@@ -23,6 +23,8 @@ public:
 	const char* get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
+	static std::shared_ptr<const ::vnx::InternalError> from_what(const std::string& what_);
+	
 	static std::shared_ptr<InternalError> create();
 	std::shared_ptr<vnx::Value> clone() const;
 	

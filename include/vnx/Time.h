@@ -86,6 +86,7 @@ public:
 	
 	bool is_repeat = false;			///< If Timer is set on repeat
 	bool is_active = false;			///< If Timer is set to be active
+	bool is_one_shot = false;		///< If to delete Timer after first expired
 	
 	std::function<void()> func;		///< User callback function
 	

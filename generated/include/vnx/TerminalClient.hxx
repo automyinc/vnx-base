@@ -17,13 +17,11 @@ public:
 	
 	TerminalClient(vnx::Hash64 service_addr);
 	
+	::vnx::TypeCode vnx_get_type_code();
+	
 	void command(const std::string& cmd);
 	
 	void command_async(const std::string& cmd);
-	
-	void dump(const std::string& expr);
-	
-	void dump_async(const std::string& expr);
 	
 	void grep(const std::string& expr);
 	
@@ -32,6 +30,10 @@ public:
 	void spy(const std::string& expr);
 	
 	void spy_async(const std::string& expr);
+	
+	void dump(const std::string& expr);
+	
+	void dump_async(const std::string& expr);
 	
 	void topic_info(const std::string& expr);
 	

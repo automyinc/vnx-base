@@ -30,9 +30,13 @@ class Marker;
 class Memory;
 class Message;
 class ModuleInfo;
+class ModuleInterface;
+class ModuleInterface_vnx_get_type_code;
+class ModuleInterface_vnx_get_type_code_return;
 class NoSuchMethod;
 class NoSuchService;
 class Object;
+class OverflowException;
 class PlayerBase;
 class Player_get_info;
 class Player_get_info_return;
@@ -124,10 +128,12 @@ class TimeSync;
 class TopicInfo;
 class TopicInfoList;
 class TopicPtr;
+class TypeCode;
 class UnixEndpoint;
 class Variant;
 class record_index_entry_t;
 class record_topic_info_t;
+class test_enum_e;
 
 extern const vnx::TypeCode* const vnx_native_type_code_Endpoint; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Exception; ///< \private
@@ -138,8 +144,11 @@ extern const vnx::TypeCode* const vnx_native_type_code_LogMsg; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Marker; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Message; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInfo; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_get_type_code; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_get_type_code_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_NoSuchMethod; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_NoSuchService; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_OverflowException; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_PlayerBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Player_get_info; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Player_get_info_return; ///< \private
@@ -233,6 +242,7 @@ extern const vnx::TypeCode* const vnx_native_type_code_TopicInfoList; ///< \priv
 extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_record_index_entry_t; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_record_topic_info_t; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_test_enum_e; ///< \private
 
 } // namespace vnx
 
@@ -252,9 +262,13 @@ void read(TypeInput& in, ::vnx::Marker& value, const TypeCode* type_code, const 
 void read(TypeInput& in, ::vnx::Memory& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Message& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ModuleInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::ModuleInterface& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_type_code& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_type_code_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::NoSuchMethod& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::NoSuchService& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Object& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::OverflowException& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::PlayerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Player_get_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Player_get_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -346,10 +360,12 @@ void read(TypeInput& in, ::vnx::TimeSync& value, const TypeCode* type_code, cons
 void read(TypeInput& in, ::vnx::TopicInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::TopicInfoList& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::TopicPtr& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::TypeCode& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::UnixEndpoint& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Variant& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::record_index_entry_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::record_topic_info_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::test_enum_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 
 void write(TypeOutput& out, const ::vnx::Buffer& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Endpoint& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -364,9 +380,13 @@ void write(TypeOutput& out, const ::vnx::Marker& value, const TypeCode* type_cod
 void write(TypeOutput& out, const ::vnx::Memory& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Message& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ModuleInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::ModuleInterface& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_type_code& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_type_code_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::NoSuchMethod& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::NoSuchService& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Object& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::OverflowException& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::PlayerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Player_get_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Player_get_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -458,10 +478,12 @@ void write(TypeOutput& out, const ::vnx::TimeSync& value, const TypeCode* type_c
 void write(TypeOutput& out, const ::vnx::TopicInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::TopicInfoList& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::TopicPtr& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::TypeCode& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::UnixEndpoint& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Variant& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::record_index_entry_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::record_topic_info_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::test_enum_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 
 void read(std::istream& in, ::vnx::Buffer& value); ///< \private
 void read(std::istream& in, ::vnx::Endpoint& value); ///< \private
@@ -476,9 +498,13 @@ void read(std::istream& in, ::vnx::Marker& value); ///< \private
 void read(std::istream& in, ::vnx::Memory& value); ///< \private
 void read(std::istream& in, ::vnx::Message& value); ///< \private
 void read(std::istream& in, ::vnx::ModuleInfo& value); ///< \private
+void read(std::istream& in, ::vnx::ModuleInterface& value); ///< \private
+void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_type_code& value); ///< \private
+void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_type_code_return& value); ///< \private
 void read(std::istream& in, ::vnx::NoSuchMethod& value); ///< \private
 void read(std::istream& in, ::vnx::NoSuchService& value); ///< \private
 void read(std::istream& in, ::vnx::Object& value); ///< \private
+void read(std::istream& in, ::vnx::OverflowException& value); ///< \private
 void read(std::istream& in, ::vnx::PlayerBase& value); ///< \private
 void read(std::istream& in, ::vnx::Player_get_info& value); ///< \private
 void read(std::istream& in, ::vnx::Player_get_info_return& value); ///< \private
@@ -570,10 +596,12 @@ void read(std::istream& in, ::vnx::TimeSync& value); ///< \private
 void read(std::istream& in, ::vnx::TopicInfo& value); ///< \private
 void read(std::istream& in, ::vnx::TopicInfoList& value); ///< \private
 void read(std::istream& in, ::vnx::TopicPtr& value); ///< \private
+void read(std::istream& in, ::vnx::TypeCode& value); ///< \private
 void read(std::istream& in, ::vnx::UnixEndpoint& value); ///< \private
 void read(std::istream& in, ::vnx::Variant& value); ///< \private
 void read(std::istream& in, ::vnx::record_index_entry_t& value); ///< \private
 void read(std::istream& in, ::vnx::record_topic_info_t& value); ///< \private
+void read(std::istream& in, ::vnx::test_enum_e& value); ///< \private
 
 void write(std::ostream& out, const ::vnx::Buffer& value); ///< \private
 void write(std::ostream& out, const ::vnx::Endpoint& value); ///< \private
@@ -588,9 +616,13 @@ void write(std::ostream& out, const ::vnx::Marker& value); ///< \private
 void write(std::ostream& out, const ::vnx::Memory& value); ///< \private
 void write(std::ostream& out, const ::vnx::Message& value); ///< \private
 void write(std::ostream& out, const ::vnx::ModuleInfo& value); ///< \private
+void write(std::ostream& out, const ::vnx::ModuleInterface& value); ///< \private
+void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_type_code& value); ///< \private
+void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_type_code_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::NoSuchMethod& value); ///< \private
 void write(std::ostream& out, const ::vnx::NoSuchService& value); ///< \private
 void write(std::ostream& out, const ::vnx::Object& value); ///< \private
+void write(std::ostream& out, const ::vnx::OverflowException& value); ///< \private
 void write(std::ostream& out, const ::vnx::PlayerBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::Player_get_info& value); ///< \private
 void write(std::ostream& out, const ::vnx::Player_get_info_return& value); ///< \private
@@ -682,10 +714,12 @@ void write(std::ostream& out, const ::vnx::TimeSync& value); ///< \private
 void write(std::ostream& out, const ::vnx::TopicInfo& value); ///< \private
 void write(std::ostream& out, const ::vnx::TopicInfoList& value); ///< \private
 void write(std::ostream& out, const ::vnx::TopicPtr& value); ///< \private
+void write(std::ostream& out, const ::vnx::TypeCode& value); ///< \private
 void write(std::ostream& out, const ::vnx::UnixEndpoint& value); ///< \private
 void write(std::ostream& out, const ::vnx::Variant& value); ///< \private
 void write(std::ostream& out, const ::vnx::record_index_entry_t& value); ///< \private
 void write(std::ostream& out, const ::vnx::record_topic_info_t& value); ///< \private
+void write(std::ostream& out, const ::vnx::test_enum_e& value); ///< \private
 
 void accept(Visitor& visitor, const ::vnx::Buffer& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Endpoint& value); ///< \private
@@ -700,9 +734,13 @@ void accept(Visitor& visitor, const ::vnx::Marker& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Memory& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Message& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ModuleInfo& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::ModuleInterface& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_type_code& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_type_code_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::NoSuchMethod& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::NoSuchService& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Object& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::OverflowException& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::PlayerBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Player_get_info& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Player_get_info_return& value); ///< \private
@@ -794,10 +832,12 @@ void accept(Visitor& visitor, const ::vnx::TimeSync& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::TopicInfo& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::TopicInfoList& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::TopicPtr& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::TypeCode& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::UnixEndpoint& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Variant& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::record_index_entry_t& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::record_topic_info_t& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::test_enum_e& value); ///< \private
 
 /// \private
 template<>
@@ -1104,6 +1144,75 @@ struct type<::vnx::ModuleInfo> {
 
 /// \private
 template<>
+struct type<::vnx::ModuleInterface> {
+	void read(TypeInput& in, ::vnx::ModuleInterface& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::ModuleInterface& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::ModuleInterface& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::ModuleInterface& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::ModuleInterface& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::ModuleInterface_vnx_get_type_code> {
+	void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_type_code& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_type_code& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_type_code& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_type_code& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_type_code& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::ModuleInterface_vnx_get_type_code_return> {
+	void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_type_code_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_type_code_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_type_code_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_type_code_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_type_code_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
 struct type<::vnx::NoSuchMethod> {
 	void read(TypeInput& in, ::vnx::NoSuchMethod& value, const TypeCode* type_code, const uint16_t* code) {
 		vnx::read(in, value, type_code, code);
@@ -1169,6 +1278,29 @@ struct type<::vnx::Object> {
 	void create_dynamic_code(std::vector<uint16_t>& code) {
 		const std::vector<int> tmp = {24};
 		code.insert(code.end(), tmp.begin(), tmp.end());
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::OverflowException> {
+	void read(TypeInput& in, ::vnx::OverflowException& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::OverflowException& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::OverflowException& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::OverflowException& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::OverflowException& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
 	}
 };
 
@@ -3268,6 +3400,30 @@ struct type<::vnx::TopicPtr> {
 
 /// \private
 template<>
+struct type<::vnx::TypeCode> {
+	void read(TypeInput& in, ::vnx::TypeCode& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::TypeCode& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::TypeCode& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::TypeCode& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::TypeCode& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		const std::vector<int> tmp = {14};
+		code.insert(code.end(), tmp.begin(), tmp.end());
+	}
+};
+
+/// \private
+template<>
 struct type<::vnx::UnixEndpoint> {
 	void read(TypeInput& in, ::vnx::UnixEndpoint& value, const TypeCode* type_code, const uint16_t* code) {
 		vnx::read(in, value, type_code, code);
@@ -3352,6 +3508,29 @@ struct type<::vnx::record_topic_info_t> {
 		vnx::write(out, value);
 	}
 	void accept(Visitor& visitor, const ::vnx::record_topic_info_t& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_ANY);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::test_enum_e> {
+	void read(TypeInput& in, ::vnx::test_enum_e& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::test_enum_e& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::test_enum_e& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::test_enum_e& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::test_enum_e& value) {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code) {

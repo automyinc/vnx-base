@@ -18,14 +18,22 @@
 #define INCLUDE_VNX_CONFIG_H_
 
 #include <vnx/Type.h>
+#include <vnx/Variant.h>
+#include <vnx/Object.h>
 
 
 namespace vnx {
 
-/// Returns config value for key \p key, returns null in case no such key.
-std::shared_ptr<std::string> get_config(const std::string& key);
+/// Returns config value for key \p key, returns empty in case no such key.
+Variant get_config(const std::string& key);
+
+/// Returns a config object for all sub-keys in the given namespace.
+Object get_config_object(const std::string& name_space);
 
 /// Set config value (in-memory)
+void set_config(const std::string& key, const Variant& value);
+
+/// Set config value via JSON string (in-memory)
 void set_config(const std::string& key, const std::string& value);
 
 /// Read config file system tree starting at \p root_path

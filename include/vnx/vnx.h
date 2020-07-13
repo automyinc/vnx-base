@@ -34,10 +34,12 @@
 #include <vnx/Subscriber.h>
 #include <vnx/Struct.h>
 #include <vnx/Time.h>
+#include <vnx/Task.h>
 #include <vnx/Type.h>
 #include <vnx/Topic.h>
 #include <vnx/TopicPtr.h>
 #include <vnx/Thread.h>
+#include <vnx/ThreadPool.h>
 #include <vnx/Util.h>
 #include <vnx/Value.h>
 #include <vnx/Visitor.h>

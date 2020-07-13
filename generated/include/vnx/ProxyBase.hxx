@@ -55,22 +55,20 @@ public:
 	static std::shared_ptr<vnx::TypeCode> static_create_type_code();
 	
 protected:
-	virtual void disable_export(const std::string& topic_name) = 0;
-	virtual void disable_forward(const std::string& service_name) = 0;
-	virtual void disable_import(const std::string& topic_name) = 0;
-	virtual void disable_tunnel(const ::vnx::Hash64& tunnel_addr) = 0;
-	virtual void enable_export(const std::string& topic_name) = 0;
-	virtual void enable_forward(const std::string& service_name, const int32_t& max_queue_ms) = 0;
 	virtual void enable_import(const std::string& topic_name) = 0;
+	virtual void disable_import(const std::string& topic_name) = 0;
+	virtual void enable_export(const std::string& topic_name) = 0;
+	virtual void disable_export(const std::string& topic_name) = 0;
+	virtual void enable_forward(const std::string& service_name, const int32_t& max_queue_ms) = 0;
+	virtual void disable_forward(const std::string& service_name) = 0;
 	virtual void enable_tunnel(const ::vnx::Hash64& tunnel_addr, const std::string& service_name, const int32_t& max_queue_ms) = 0;
+	virtual void disable_tunnel(const ::vnx::Hash64& tunnel_addr) = 0;
 	virtual void on_connect() = 0;
 	virtual void on_disconnect() = 0;
 	virtual void on_remote_connect(const ::vnx::Hash64& process_id) = 0;
 	
 	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
-	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _value, const vnx::request_id_t& _request_id) override;
-	
-private:
+	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _method, const vnx::request_id_t& _request_id) override;
 	
 };
 

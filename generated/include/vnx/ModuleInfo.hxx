@@ -7,6 +7,7 @@
 #include <vnx/package.hxx>
 #include <vnx/Endpoint.hxx>
 #include <vnx/Hash64.hpp>
+#include <vnx/TypeCode.hpp>
 #include <vnx/Value.h>
 
 
@@ -25,6 +26,7 @@ public:
 	std::vector<std::string> sub_topics;
 	std::vector<std::string> pub_topics;
 	std::map<::vnx::Hash64, std::shared_ptr<const ::vnx::Endpoint>> remotes;
+	::vnx::TypeCode type_code;
 	
 	typedef ::vnx::Value Super;
 	

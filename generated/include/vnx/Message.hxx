@@ -16,6 +16,8 @@ public:
 	static const uint16_t BLOCKING = 1;
 	static const uint16_t REPLAY = 2;
 	static const uint16_t NO_RETURN = 4;
+	static const uint16_t NON_BLOCKING = 8;
+	static const uint16_t SHUTDOWN = 16;
 	
 	::vnx::Hash64 stream;
 	uint16_t flags = 0;

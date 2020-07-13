@@ -35,7 +35,7 @@ public:
 	virtual const char* get_type_name() const = 0;
 	virtual const TypeCode* get_type_code() const = 0;
 	
-	static std::shared_ptr<Value> create() { return 0; }
+	static std::shared_ptr<Value> create() { return nullptr; }
 	virtual std::shared_ptr<Value> clone() const = 0;
 	
 	virtual void read(TypeInput& in, const TypeCode* type_code, const uint16_t* code) = 0;
@@ -52,6 +52,8 @@ public:
 	std::string to_string() const;
 	void from_string(const std::string& str);
 	
+	virtual std::shared_ptr<const Value> vnx_decompress() const { return nullptr; }
+
 	friend std::ostream& operator<<(std::ostream& _out, const Value& _value);
 	friend std::istream& operator>>(std::istream& _in, Value& _value);
 	

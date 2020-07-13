@@ -157,31 +157,6 @@ private:
 };
 
 
-/// Input stream for mapped memory, will unmap memory on destruction
-class MappedMemoryInputStream : public PointerInputStream {
-public:
-	/// Constructor will map memory, on failure there is no data to read
-	MappedMemoryInputStream(int fd, uint64_t offset = 0, size_t length = 0);
-	
-	~MappedMemoryInputStream() {
-		release();
-	}
-	
-	/// Returns true if mmap() was successful
-	bool is_valid() const {
-		return map_ptr && map_size;
-	}
-	
-protected:
-	void release();
-	
-private:
-	void* map_ptr = 0;
-	size_t map_size = 0;
-	
-};
-
-
 /// Input stream for binary vector
 class VectorInputStream : public InputStream {
 public:

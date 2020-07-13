@@ -44,17 +44,15 @@ public:
 	
 protected:
 	virtual void command(const std::string& cmd) = 0;
-	virtual void dump(const std::string& expr) = 0;
 	virtual void grep(const std::string& expr) = 0;
+	virtual void spy(const std::string& expr) = 0;
+	virtual void dump(const std::string& expr) = 0;
+	virtual void topic_info(const std::string& expr) = 0;
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value) {}
-	virtual void spy(const std::string& expr) = 0;
-	virtual void topic_info(const std::string& expr) = 0;
 	
 	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
-	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _value, const vnx::request_id_t& _request_id) override;
-	
-private:
+	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _method, const vnx::request_id_t& _request_id) override;
 	
 };
 

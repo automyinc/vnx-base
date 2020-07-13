@@ -54,20 +54,18 @@ public:
 	
 protected:
 	virtual ::vnx::RecordHeader get_info() const = 0;
-	virtual void pause() = 0;
 	virtual void play() = 0;
+	virtual void pause() = 0;
+	virtual void toggle() = 0;
+	virtual void stop() = 0;
+	virtual void set_speed(const vnx::float64_t& speed) = 0;
 	virtual void seek_by_count(const int64_t& delta_count) = 0;
 	virtual void seek_by_time(const int64_t& delta_us) = 0;
 	virtual void seek_to_position(const vnx::float64_t& position) = 0;
 	virtual void seek_to_time(const int64_t& time_us) = 0;
-	virtual void set_speed(const vnx::float64_t& speed) = 0;
-	virtual void stop() = 0;
-	virtual void toggle() = 0;
 	
 	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
-	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _value, const vnx::request_id_t& _request_id) override;
-	
-private:
+	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _method, const vnx::request_id_t& _request_id) override;
 	
 };
 

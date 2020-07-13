@@ -111,8 +111,12 @@ public:
 		*this = object;
 	}
 	
-	/// Returns polymorphic Value (using "__type" field)
-	std::shared_ptr<Value> to_value() const;
+	/** \brief Returns polymorphic Value (using "__type" field)
+	 *
+	 * @param type_map Optional type map for mapping a received type (the key) to another type.
+	 */
+	std::shared_ptr<Value> to_value(
+			const std::map<std::string, std::string>& type_map = std::map<std::string, std::string>()) const;
 
 	friend std::ostream& operator<<(std::ostream& out, const Object& value);
 	

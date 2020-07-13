@@ -18,8 +18,7 @@
 #define INCLUDE_VNX_CONFIG_HPP_
 
 #include <vnx/Config.h>
-#include <vnx/Input.hpp>
-#include <vnx/Output.hpp>
+#include <vnx/Variant.hpp>
 
 
 namespace vnx {
@@ -30,9 +29,9 @@ namespace vnx {
  */
 template<typename T>
 bool read_config(const std::string& key, T& value) {
-	std::shared_ptr<std::string> result = get_config(key);
-	if(result) {
-		from_string(*result, value);
+	const auto tmp = get_config(key);
+	if(!tmp.empty()) {
+		tmp.to(value);
 		return true;
 	}
 	return false;
@@ -41,7 +40,7 @@ bool read_config(const std::string& key, T& value) {
 /// Set config value (in-memory)
 template<typename T>
 void write_config(const std::string& key, const T& value) {
-	set_config(key, to_string(value));
+	set_config(key, Variant(value));
 }
 
 

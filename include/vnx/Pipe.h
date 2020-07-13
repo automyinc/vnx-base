@@ -32,10 +32,10 @@ class Node;
 class Pipe;
 
 /// Open a new pipe known as \p service_name to Node \p node.
-std::shared_ptr<Pipe> open_pipe(const std::string& service_name, Node* node, int max_queue_ms);
+std::shared_ptr<Pipe> open_pipe(const std::string& service_name, Node* node, int max_queue_ms, int max_queue_size = 0);
 
 /// Open a new pipe known by \p mac_addr to Node \p node.
-std::shared_ptr<Pipe> open_pipe(Hash64 mac_addr, Node* node, int max_queue_ms);
+std::shared_ptr<Pipe> open_pipe(Hash64 mac_addr, Node* node, int max_queue_ms, int max_queue_size = 0);
 
 /** \brief Get a pipe to a service called \p service_name.
  * 
@@ -83,7 +83,7 @@ bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<const Message> msg);
 bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<Message> msg, uint16_t flags);
 
 /// Connect a pipe to a node.
-void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms);
+void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size = 0);
 
 /// Unregister service known by \p service_name.
 void remove_pipe(const std::string& service_name);
@@ -116,7 +116,7 @@ void shutdown_pipes();
  */
 class Pipe {
 public:
-	static const int UNLIMITED = 0;		///< Denotes unlimited queue length (max_queue_ms == 0)
+	static const int UNLIMITED = 0;		///< Denotes unlimited queue length (max_queue_ms == 0, max_queue_size == 0)
 	
 	/// Create a private no-name pipe.
 	Pipe();
@@ -135,7 +135,7 @@ public:
 	static std::shared_ptr<Pipe> create();
 	
 	/// Connect a Pipe to a Node. (thread-safe)
-	friend void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms);
+	friend void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size);
 	
 	/// Connect another Pipe to this Pipe, which will be notified if this pipe is closed. (thread-safe)
 	friend bool connect(std::shared_ptr<Pipe> pipe, std::shared_ptr<Pipe> peer, uint16_t flags);
@@ -177,7 +177,7 @@ public:
 	bool is_paused() const;
 	
 private:
-	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms);
+	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms, int max_queue_size);
 	
 	bool connect(std::shared_ptr<Pipe> peer, uint16_t flags);
 	
@@ -196,6 +196,7 @@ private:
 	std::atomic_bool is_shutdown_ {false};
 	
 	int64_t max_queue_us = 0;
+	int64_t max_queue_size = 0;
 	std::queue<std::pair<std::shared_ptr<const Message>, int64_t>> queue;
 	
 	std::map<Hash64, std::shared_ptr<Pipe>> peer_map;

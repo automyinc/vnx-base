@@ -22,46 +22,59 @@ public:
 	
 	ProcessAsyncClient(vnx::Hash64 service_addr);
 	
-	uint64_t close(
-			const std::function<void()>& _callback = std::function<void()>());
+	uint64_t vnx_get_type_code(
+			const std::function<void(::vnx::TypeCode)>& _callback = std::function<void(::vnx::TypeCode)>(),
+			const std::function<void(const std::exception&)>& _error_callback = std::function<void(const std::exception&)>());
 	
 	uint64_t get_name(
-			const std::function<void(std::string)>& _callback = std::function<void(std::string)>());
-	
-	uint64_t get_process_info(
-			const std::function<void(::vnx::ProcessInfo)>& _callback = std::function<void(::vnx::ProcessInfo)>());
+			const std::function<void(std::string)>& _callback = std::function<void(std::string)>(),
+			const std::function<void(const std::exception&)>& _error_callback = std::function<void(const std::exception&)>());
 	
 	uint64_t get_sync_time(
-			const std::function<void(::vnx::TimeSync)>& _callback = std::function<void(::vnx::TimeSync)>());
+			const std::function<void(::vnx::TimeSync)>& _callback = std::function<void(::vnx::TimeSync)>(),
+			const std::function<void(const std::exception&)>& _error_callback = std::function<void(const std::exception&)>());
 	
 	uint64_t get_topic_info(
-			const std::function<void(::vnx::TopicInfoList)>& _callback = std::function<void(::vnx::TopicInfoList)>());
+			const std::function<void(::vnx::TopicInfoList)>& _callback = std::function<void(::vnx::TopicInfoList)>(),
+			const std::function<void(const std::exception&)>& _error_callback = std::function<void(const std::exception&)>());
+	
+	uint64_t get_process_info(
+			const std::function<void(::vnx::ProcessInfo)>& _callback = std::function<void(::vnx::ProcessInfo)>(),
+			const std::function<void(const std::exception&)>& _error_callback = std::function<void(const std::exception&)>());
 	
 	uint64_t pause_log(
-			const std::function<void()>& _callback = std::function<void()>());
+			const std::function<void()>& _callback = std::function<void()>(),
+			const std::function<void(const std::exception&)>& _error_callback = std::function<void(const std::exception&)>());
 	
 	uint64_t resume_log(
-			const std::function<void()>& _callback = std::function<void()>());
+			const std::function<void()>& _callback = std::function<void()>(),
+			const std::function<void(const std::exception&)>& _error_callback = std::function<void(const std::exception&)>());
 	
 	uint64_t set_debug(const int32_t& level, 
-			const std::function<void()>& _callback = std::function<void()>());
+			const std::function<void()>& _callback = std::function<void()>(),
+			const std::function<void(const std::exception&)>& _error_callback = std::function<void(const std::exception&)>());
+	
+	uint64_t close(
+			const std::function<void()>& _callback = std::function<void()>(),
+			const std::function<void(const std::exception&)>& _error_callback = std::function<void(const std::exception&)>());
 	
 	std::vector<uint64_t> vnx_get_pending_ids() const override;
 	
 protected:
-	void vnx_purge_request(uint64_t _request_id) override;
+	void vnx_purge_request(uint64_t _request_id, const std::exception& _ex) override;
 	
 	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Value> _value) override;
 	
 private:
-	std::map<uint64_t, std::function<void()>> vnx_queue_close;
-	std::map<uint64_t, std::function<void(std::string)>> vnx_queue_get_name;
-	std::map<uint64_t, std::function<void(::vnx::ProcessInfo)>> vnx_queue_get_process_info;
-	std::map<uint64_t, std::function<void(::vnx::TimeSync)>> vnx_queue_get_sync_time;
-	std::map<uint64_t, std::function<void(::vnx::TopicInfoList)>> vnx_queue_get_topic_info;
-	std::map<uint64_t, std::function<void()>> vnx_queue_pause_log;
-	std::map<uint64_t, std::function<void()>> vnx_queue_resume_log;
-	std::map<uint64_t, std::function<void()>> vnx_queue_set_debug;
+	std::map<uint64_t, std::pair<std::function<void(::vnx::TypeCode)>, std::function<void(const std::exception&)>>> vnx_queue_vnx_get_type_code;
+	std::map<uint64_t, std::pair<std::function<void(std::string)>, std::function<void(const std::exception&)>>> vnx_queue_get_name;
+	std::map<uint64_t, std::pair<std::function<void(::vnx::TimeSync)>, std::function<void(const std::exception&)>>> vnx_queue_get_sync_time;
+	std::map<uint64_t, std::pair<std::function<void(::vnx::TopicInfoList)>, std::function<void(const std::exception&)>>> vnx_queue_get_topic_info;
+	std::map<uint64_t, std::pair<std::function<void(::vnx::ProcessInfo)>, std::function<void(const std::exception&)>>> vnx_queue_get_process_info;
+	std::map<uint64_t, std::pair<std::function<void()>, std::function<void(const std::exception&)>>> vnx_queue_pause_log;
+	std::map<uint64_t, std::pair<std::function<void()>, std::function<void(const std::exception&)>>> vnx_queue_resume_log;
+	std::map<uint64_t, std::pair<std::function<void()>, std::function<void(const std::exception&)>>> vnx_queue_set_debug;
+	std::map<uint64_t, std::pair<std::function<void()>, std::function<void(const std::exception&)>>> vnx_queue_close;
 	
 };
 

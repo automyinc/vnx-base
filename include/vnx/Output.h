@@ -17,6 +17,7 @@
 #ifndef INCLUDE_VNX_OUTPUT_H_
 #define INCLUDE_VNX_OUTPUT_H_
 
+#include <vnx/Type.h>
 #include <vnx/OutputStream.h>
 
 #include <sstream>

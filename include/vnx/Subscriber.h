@@ -33,6 +33,7 @@ namespace vnx {
  * A preemtive call to unsubscribe() can be used to cancel out a later subscribe().
  * 
  * The Subscriber keeps track of subscriptions. It automatically unsubscribes all topics upon exit. 
+ * [NOT thread safe]
  */
 class Subscriber : public Node {
 public:
@@ -41,7 +42,7 @@ public:
 	~Subscriber();
 	
 protected:
-	std::shared_ptr<Pipe> subscribe(TopicPtr topic, int max_queue_ms = 100);
+	std::shared_ptr<Pipe> subscribe(TopicPtr topic, int max_queue_ms = 100, int max_queue_size = Pipe::UNLIMITED);
 	
 	void unsubscribe(TopicPtr topic);
 	
@@ -55,7 +56,7 @@ protected:
 	
 private:
 	struct subscription_t {
-		int count = 0;
+		ssize_t count = 0;
 		std::shared_ptr<Pipe> pipe;
 	};
 	

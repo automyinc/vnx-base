@@ -22,17 +22,15 @@ public:
 	
 	ProcessClient(vnx::Hash64 service_addr);
 	
-	void close();
-	
-	void close_async();
+	::vnx::TypeCode vnx_get_type_code();
 	
 	std::string get_name();
-	
-	::vnx::ProcessInfo get_process_info();
 	
 	::vnx::TimeSync get_sync_time();
 	
 	::vnx::TopicInfoList get_topic_info();
+	
+	::vnx::ProcessInfo get_process_info();
 	
 	void pause_log();
 	
@@ -45,6 +43,10 @@ public:
 	void set_debug(const int32_t& level);
 	
 	void set_debug_async(const int32_t& level);
+	
+	void close();
+	
+	void close_async();
 	
 };
 

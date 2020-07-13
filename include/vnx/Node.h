@@ -71,7 +71,7 @@ protected:
 	std::shared_ptr<const Message> read_blocking();
 	
 	/**
-	 * Read the next message. Waits timeout_us for one to arrive.
+	 * Read the next message. Waits timeout_us for one to arrive (-1 = infinitely).
 	 * Returns 0 in case of timeout or shutdown is triggered.
 	 */
 	std::shared_ptr<const Message> read_blocking(int64_t timeout_us);

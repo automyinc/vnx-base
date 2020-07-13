@@ -19,6 +19,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include <stdint.h>
 
@@ -48,6 +49,14 @@ std::string to_hex_string(const T& value) {
 		str[(sizeof(T) - i - 1) * 2] = map[(p_value[i] & 0xF0) >> 4];
 		str[(sizeof(T) - i - 1) * 2 + 1] = map[p_value[i] & 0x0F];
 	}
+	return str;
+}
+
+/// Converts ASCII string to lower case
+inline
+std::string ascii_tolower(std::string str)
+{
+	std::transform(str.begin(), str.end(), str.begin(), [](char c){ return std::tolower(c); });
 	return str;
 }
 

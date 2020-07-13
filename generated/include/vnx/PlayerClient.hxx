@@ -18,15 +18,29 @@ public:
 	
 	PlayerClient(vnx::Hash64 service_addr);
 	
+	::vnx::TypeCode vnx_get_type_code();
+	
 	::vnx::RecordHeader get_info();
+	
+	void play();
+	
+	void play_async();
 	
 	void pause();
 	
 	void pause_async();
 	
-	void play();
+	void toggle();
 	
-	void play_async();
+	void toggle_async();
+	
+	void stop();
+	
+	void stop_async();
+	
+	void set_speed(const vnx::float64_t& speed);
+	
+	void set_speed_async(const vnx::float64_t& speed);
 	
 	void seek_by_count(const int64_t& delta_count);
 	
@@ -43,18 +57,6 @@ public:
 	void seek_to_time(const int64_t& time_us);
 	
 	void seek_to_time_async(const int64_t& time_us);
-	
-	void set_speed(const vnx::float64_t& speed);
-	
-	void set_speed_async(const vnx::float64_t& speed);
-	
-	void stop();
-	
-	void stop_async();
-	
-	void toggle();
-	
-	void toggle_async();
 	
 };
 

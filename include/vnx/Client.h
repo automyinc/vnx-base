@@ -36,6 +36,9 @@ public:
 	
 	~Client();
 	
+	/// If \p non_blocking_mode == true requests will throw an exception instead of blocking (default = false)
+	void vnx_set_non_blocking(bool non_blocking_mode);
+
 protected:
 	/// Performs the actual request, blocks in case vnx_is_async == false.
 	std::shared_ptr<const Value> vnx_request(std::shared_ptr<const Value> method);
@@ -47,6 +50,7 @@ private:
 	Hash64 vnx_src_mac;
 	Hash64 vnx_service_addr;
 	uint64_t vnx_next_id = 0;
+	bool vnx_is_non_blocking = false;
 	
 	std::shared_ptr<Pipe> vnx_service_pipe;
 	std::shared_ptr<Pipe> vnx_return_pipe;

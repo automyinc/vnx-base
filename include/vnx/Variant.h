@@ -86,12 +86,14 @@ public:
 	
 	/// Convert value to type T
 	template<typename T>
-	T to() const;
+	void to(T& value) const;
 	
 	/// Convert value to type T
 	template<typename T>
-	void to(T& value) const {
-		value = to<T>();
+	T to() const {
+		T tmp;
+		to(tmp);
+		return tmp;
 	}
 	
 	/** \brief Computes a semantic 64-bit content hash
@@ -238,7 +240,7 @@ private:
 
 /// See bool()
 template<>
-bool Variant::to<bool>() const;
+void Variant::to<bool>(bool& value) const;
 
 inline Variant::operator bool() const {
 	return to<bool>();
@@ -246,7 +248,7 @@ inline Variant::operator bool() const {
 
 /// See char()
 template<>
-char Variant::to<char>() const;
+void Variant::to<char>(char& value) const;
 
 inline Variant::operator char() const {
 	return to<char>();

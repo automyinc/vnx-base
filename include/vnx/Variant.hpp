@@ -36,15 +36,14 @@ Variant& Variant::assign(const T& value) {
 }
 
 template<typename T>
-T Variant::to() const {
+void Variant::to(T& value) const {
 	if(empty()) {
-		return T();
+		value = T();
+	} else {
+		VectorInputStream stream(&data);
+		TypeInput in(&stream);
+		vnx::read_dynamic(in, value);
 	}
-	VectorInputStream stream(&data);
-	TypeInput in(&stream);
-	T value;
-	vnx::read_dynamic(in, value);
-	return value;
 }
 
 inline

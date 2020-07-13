@@ -111,7 +111,8 @@ private:
 	Hash64 remote_tunnel_addr;
 	std::shared_ptr<const Endpoint> endpoint;
 	
-	std::unordered_map<std::string, uint64_t> import_table;
+	std::unordered_map<std::string, ssize_t> import_table;
+	std::unordered_map<std::string, ssize_t> export_table;
 	std::unordered_map<Hash64, uint64_t> forward_table;
 	std::unordered_map<Hash64, Hash64> tunnel_hash_map;
 	std::vector<std::shared_ptr<Pipe>> resume_list;
@@ -125,10 +126,10 @@ private:
 	SocketOutputStream stream_out;
 	TypeOutput out;
 	
-	std::atomic<int64_t> num_samples_send {0};
-	std::atomic<int64_t> num_samples_recv {0};
-	std::atomic<int64_t> num_requests_send {0};
-	std::atomic<int64_t> num_requests_recv {0};
+	std::atomic<size_t> num_samples_send {0};
+	std::atomic<size_t> num_samples_recv {0};
+	std::atomic<size_t> num_requests_send {0};
+	std::atomic<size_t> num_requests_recv {0};
 	
 	// all below shared via mutex
 	std::mutex mutex;
