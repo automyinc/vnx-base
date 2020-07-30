@@ -30,6 +30,9 @@ Variant get_config(const std::string& key);
 /// Returns a config object for all sub-keys in the given namespace.
 Object get_config_object(const std::string& name_space);
 
+/// Returns a list of all config entries (a copy thereof)
+std::vector<std::pair<std::string, Variant>> get_all_configs();
+
 /// Set config value (in-memory)
 void set_config(const std::string& key, const Variant& value);
 

@@ -84,6 +84,8 @@ void read(TypeInput& in, vnx::Binary& binary, const TypeCode* type_code, const u
 
 void write(TypeOutput& out, const vnx::Binary& binary, const TypeCode* type_code, const uint16_t* code);
 
+void write(std::ostream& out, const vnx::Binary& binary);
+
 void accept(Visitor& visitor, const vnx::Binary& binary);
 
 

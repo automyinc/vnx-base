@@ -1,4 +1,12 @@
 
+## [v1.7.1]
+
+- added CODE_BOOL (not forwards compatible)
+
+## [v1.7.0]
+
+- added CODE_STRING (not forwards compatible)
+
 ## [v1.6.0]
 
 - vnxdump do longer does regex matching, will only dump specified topics

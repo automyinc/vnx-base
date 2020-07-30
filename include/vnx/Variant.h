@@ -182,6 +182,9 @@ public:
 	 */
 	bool is_null() const;
 	
+	/// Returns true if value is a bool.
+	bool is_bool() const;
+
 	/// Returns true if value is a signed or unsigned integer.
 	bool is_long() const;
 	

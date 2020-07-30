@@ -19,8 +19,8 @@
 
 #include <vnx/package.hxx>
 #include <vnx/TopicPtr.h>
-#include <vnx/Input.h>
-#include <vnx/Output.h>
+#include <vnx/Input.hpp>
+#include <vnx/Output.hpp>
 #include <vnx/Visitor.h>
 
 

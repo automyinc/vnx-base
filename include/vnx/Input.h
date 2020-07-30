@@ -129,6 +129,7 @@ template<typename T>
 void read_value(const void* buf, T& value, const uint16_t* code) {
 	switch(code[0]) {
 		case CODE_NULL: value = T(); return;
+		case CODE_BOOL:
 		case CODE_UINT8: value = *((const uint8_t*)buf); return;
 		case CODE_UINT16: value = *((const uint16_t*)buf); return;
 		case CODE_UINT32: value = *((const uint32_t*)buf); return;
@@ -139,6 +140,7 @@ void read_value(const void* buf, T& value, const uint16_t* code) {
 		case CODE_INT64: value = *((const int64_t*)buf); return;
 		case CODE_FLOAT: value = *((const float32_t*)buf); return;
 		case CODE_DOUBLE: value = *((const float64_t*)buf); return;
+		case CODE_ALT_BOOL:
 		case CODE_ALT_UINT8: value = flip_bytes(*((const uint8_t*)buf)); return;
 		case CODE_ALT_UINT16: value = flip_bytes(*((const uint16_t*)buf)); return;
 		case CODE_ALT_UINT32: value = flip_bytes(*((const uint32_t*)buf)); return;
@@ -186,6 +188,7 @@ template<typename T>
 void read_value(TypeInput& in, T& value, const TypeCode* type_code, const uint16_t* code) {
 	switch(code[0]) {
 		case CODE_NULL: value = T(); return;
+		case CODE_BOOL:
 		case CODE_UINT8: value = *((const uint8_t*)in.read(sizeof(uint8_t))); return;
 		case CODE_UINT16: value = *((const uint16_t*)in.read(sizeof(uint16_t))); return;
 		case CODE_UINT32: value = *((const uint32_t*)in.read(sizeof(uint32_t))); return;
@@ -196,6 +199,7 @@ void read_value(TypeInput& in, T& value, const TypeCode* type_code, const uint16
 		case CODE_INT64: value = *((const int64_t*)in.read(sizeof(int64_t))); return;
 		case CODE_FLOAT: value = *((const float32_t*)in.read(sizeof(float32_t))); return;
 		case CODE_DOUBLE: value = *((const float64_t*)in.read(sizeof(float64_t))); return;
+		case CODE_ALT_BOOL:
 		case CODE_ALT_UINT8: value = flip_bytes(*((const uint8_t*)in.read(sizeof(uint8_t)))); return;
 		case CODE_ALT_UINT16: value = flip_bytes(*((const uint16_t*)in.read(sizeof(uint16_t)))); return;
 		case CODE_ALT_UINT32: value = flip_bytes(*((const uint32_t*)in.read(sizeof(uint32_t)))); return;
@@ -286,7 +290,7 @@ inline void read(TypeInput& in, float64_t& value, const TypeCode* type_code, con
 
 /** \brief Reads a dynamically allocated string from the input stream.
  * 
- * Directly compatible with {CODE_LIST, CODE_INT8}.
+ * Directly compatible with {CODE_LIST, CODE_INT8} and CODE_STRING.
  * Indirectly compatible with everything by converting to a string via to_string_value().
  */
 void read(TypeInput& in, std::string& string, const TypeCode* type_code, const uint16_t* code);
@@ -332,6 +336,7 @@ void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, c
  * 
  * If there is less elements in the data the remaining elements in \p array will be default assigned.
  * Compatible with CODE_ARRAY, CODE_LIST and CODE_DYNAMIC.
+ * Tries to read a single value if possible otherwise.
  * Works for std::array and pre-allocated std::vector.
  */
 template<typename T>
@@ -339,6 +344,10 @@ void read_array(TypeInput& in, T& array, const TypeCode* type_code, const uint16
 	uint32_t size = 0;
 	const uint16_t* value_code = 0;
 	switch(code[0]) {
+		case CODE_NULL:
+			size = 0;
+			value_code = code;
+			break;
 		case CODE_LIST:
 			read(in, size);
 			value_code = code + 1;
@@ -362,7 +371,8 @@ void read_array(TypeInput& in, T& array, const TypeCode* type_code, const uint16
 			return;
 		}
 		default:
-			skip(in, type_code, code);
+			size = 1;
+			value_code = code;
 	}
 	if(size) {
 		if(is_equivalent<typename T::value_type>(value_code[0]) && size <= array.size()) {
@@ -391,12 +401,16 @@ void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, con
 /** \brief Reads a dynamically allocated array (ContiguousContainer) from the input stream.
  * 
  * Compatible with CODE_ARRAY, CODE_LIST and CODE_DYNAMIC.
+ * Tries to read a single value if possible otherwise.
  */
 template<typename T>
 void read_vector(TypeInput& in, T& vector, const TypeCode* type_code, const uint16_t* code) {
 	uint32_t size = 0;
 	const uint16_t* value_code = 0;
 	switch(code[0]) {
+		case CODE_NULL:
+			vector.clear();
+			return;
 		case CODE_LIST:
 			read(in, size);
 			value_code = code + 1;
@@ -420,9 +434,8 @@ void read_vector(TypeInput& in, T& vector, const TypeCode* type_code, const uint
 			return;
 		}
 		default:
-			vector.clear();
-			skip(in, type_code, code);
-			return;
+			size = 1;
+			value_code = code;
 	}
 	vector.resize(size);
 	if(is_equivalent<typename T::value_type>(value_code[0])) {
@@ -447,6 +460,7 @@ void read(TypeInput& in, std::vector<bool>& vector, const TypeCode* type_code, c
 /** \brief Reads a dynamically allocated list (SequenceContainer) from the input stream.
  * 
  * Compatible with CODE_ARRAY, CODE_LIST and CODE_DYNAMIC.
+ * Tries to read a single value if possible otherwise.
  */
 template<typename T>
 void read_list(TypeInput& in, T& list, const TypeCode* type_code, const uint16_t* code) {
@@ -454,6 +468,8 @@ void read_list(TypeInput& in, T& list, const TypeCode* type_code, const uint16_t
 	uint32_t size = 0;
 	const uint16_t* value_code = 0;
 	switch(code[0]) {
+		case CODE_NULL:
+			return;
 		case CODE_LIST:
 			read(in, size);
 			value_code = code + 1;
@@ -477,8 +493,8 @@ void read_list(TypeInput& in, T& list, const TypeCode* type_code, const uint16_t
 			return;
 		}
 		default:
-			skip(in, type_code, code);
-			return;
+			size = 1;
+			value_code = code;
 	}
 	for(uint32_t i = 0; i < size; ++i) {
 		typename T::value_type value;
@@ -503,6 +519,8 @@ void read_set(TypeInput& in, T& set, const TypeCode* type_code, const uint16_t* 
 	uint32_t size = 0;
 	const uint16_t* value_code = 0;
 	switch(code[0]) {
+		case CODE_NULL:
+			return;
 		case CODE_LIST:
 			read(in, size);
 			value_code = code + 1;
@@ -526,8 +544,8 @@ void read_set(TypeInput& in, T& set, const TypeCode* type_code, const uint16_t* 
 			return;
 		}
 		default:
-			skip(in, type_code, code);
-			return;
+			size = 1;
+			value_code = code;
 	}
 	for(uint32_t i = 0; i < size; ++i) {
 		typename T::value_type key;
@@ -840,7 +858,7 @@ void read(std::istream& in, std::string& value);
  * - unsigned integer (CODE_UINT64)
  * - signed integer (CODE_INT64)
  * - floating-point value (CODE_DOUBLE)
- * - string (CODE_LIST, CODE_INT8)
+ * - string ({CODE_LIST, CODE_INT8} or CODE_STRING)
  * - array (CODE_LIST)
  * - vnx::Object (CODE_OBJECT)
  * - vnx::Value (CODE_TYPE)

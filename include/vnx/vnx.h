@@ -28,6 +28,7 @@
 #include <vnx/File.h>
 #include <vnx/Directory.h>
 #include <vnx/DefaultPrinter.h>
+#include <vnx/ToStringValue.h>
 #include <vnx/PrettyPrinter.h>
 #include <vnx/Process.h>
 #include <vnx/Publisher.h>

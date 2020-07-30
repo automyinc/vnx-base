@@ -31,6 +31,7 @@ public:
 	virtual ~Visitor() {}
 	
 	virtual void visit_null() = 0;
+	virtual void visit(const bool& value) = 0;
 	virtual void visit(const uint8_t& value) = 0;
 	virtual void visit(const uint16_t& value) = 0;
 	virtual void visit(const uint32_t& value) = 0;
@@ -70,6 +71,7 @@ public:
 };
 
 
+inline void accept(Visitor& visitor, const bool& value) { visitor.visit(value); }
 inline void accept(Visitor& visitor, const uint8_t& value) { visitor.visit(value); }
 inline void accept(Visitor& visitor, const uint16_t& value) { visitor.visit(value); }
 inline void accept(Visitor& visitor, const uint32_t& value) { visitor.visit(value); }

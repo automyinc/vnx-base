@@ -129,9 +129,6 @@ void write_dynamic(TypeOutput& out, const float32_t& value);
 void write_dynamic(TypeOutput& out, const float64_t& value);
 /// @}
 
-/// Writes a string dynamically to the stream.
-void write_dynamic(TypeOutput& out, const std::string& string);
-
 /// Writes CODE_NULL to the stream
 inline void write_null(TypeOutput& out) {
 	write(out, uint16_t(CODE_NULL));
@@ -493,7 +490,7 @@ void write(std::ostream& out, const std::map<K, V>& map) {
 }
 
 template<class Iter>
-void write_sequence(std::ostream &out, Iter first, Iter last) {
+void write_sequence(std::ostream& out, Iter first, Iter last) {
 	out << '[';
 	for(Iter it = first; it != last; ++it) {
 		if(it != first) {
@@ -514,13 +511,13 @@ void write(std::ostream& out, std::shared_ptr<T> value) {
 }
 
 template<typename T>
-void write_list(std::ostream &out, const T *data, const size_t size) {
+void write_list(std::ostream& out, const T* data, const size_t size) {
 	out << '[';
 	for(size_t i = 0; i < size; ++i) {
 		if(i > 0) {
 			out << ", ";
 		}
-		out << data[i];
+		vnx::type<T>().write(out, data[i]);
 	}
 	out << ']';
 }

@@ -72,7 +72,7 @@ public:
 	}
 	
 	const TypeCode* get_type_code() const override {
-		return 0;
+		return nullptr;
 	}
 	
 	static std::shared_ptr<Object> create() {

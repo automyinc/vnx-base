@@ -31,6 +31,7 @@ public:
 	DefaultPrinter(std::ostream& out);
 	
 	void visit_null();
+	void visit(const bool& value);
 	void visit(const uint8_t& value);
 	void visit(const uint16_t& value);
 	void visit(const uint32_t& value);
@@ -60,28 +61,6 @@ public:
 protected:
 	std::ostream& out;
 	size_t stack = 0;
-	
-};
-
-
-/** \brief A Visitor that generates JSON string output with some exceptions.
- * 
- * Same as DefaultPrinter except:
- *  - null is an empty string (instead of "{}")
- *  - strings are without quotes
- *  - enum values are without quotes
- * 
- * This Visitor is used when the desired output is a value.
- */
-class ToStringValue : public DefaultPrinter {
-public:
-	ToStringValue(std::ostream& out);
-	
-	void visit_null() override;
-	
-	void visit(const std::string& value) override;
-	
-	void enum_value(uint32_t value, const std::string& name) override;
 	
 };
 

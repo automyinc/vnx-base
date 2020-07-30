@@ -14,29 +14,36 @@
  * from Automy Incorporated.
  */
 
-#ifndef INCLUDE_VNX_OUTPUT_HPP_
-#define INCLUDE_VNX_OUTPUT_HPP_
+#ifndef INCLUDE_VNX_TOSTRINGVALUE_H_
+#define INCLUDE_VNX_TOSTRINGVALUE_H_
 
-#include <vnx/Output.h>
-#include <vnx/ToStringValue.h>
+#include <vnx/DefaultPrinter.h>
 
 
 namespace vnx {
 
-/** \brief Converts value to regular string
+/** \brief A Visitor that generates JSON string output with some exceptions.
  *
- * Same as to_string<T>() except strings and enum values are without quotes.
- * In addition null values result in an empty string instead of "null".
+ * Same as DefaultPrinter except:
+ *  - null is an empty string (instead of "{}")
+ *  - strings are without quotes
+ *  - enum values are without quotes
+ *
+ * This Visitor is used when the desired output is a value.
  */
-template<typename T>
-std::string to_string_value(const T& value) {
-	std::ostringstream stream;
-	ToStringValue visitor(stream);
-	vnx::type<T>().accept(visitor, value);
-	return stream.str();
-}
+class ToStringValue : public DefaultPrinter {
+public:
+	ToStringValue(std::ostream& out);
+
+	void visit_null() override;
+
+	void visit(const std::string& value) override;
+
+	void enum_value(uint32_t value, const std::string& name) override;
+
+};
 
 
 } // vnx
 
-#endif /* INCLUDE_VNX_OUTPUT_HPP_ */
+#endif /* INCLUDE_VNX_TOSTRINGVALUE_H_ */

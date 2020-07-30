@@ -151,7 +151,7 @@ enum {
 	CODE_OBJECT = 24,			///< same as CODE_MAP with {MAP, 4, LIST, INT8, DYNAMIC} but intended to be a dynamically defined type instead of a map
 	
 	CODE_BOOL = 31,				///< 8-bit unsigned integer (0 = false, otherwise = true)
-	CODE_CHAR = 32,				///< 8-bit signed integer (same as CODE_INT8, but different meaning, used to denote a readable character)
+	CODE_STRING = 32,			///< 8-bit signed integer list (same as {CODE_LSIT, CODE_INT8}, but different meaning, used to denote a ASCII/UTF8 string)
 
 	CODE_MAGIC = 0x3713,		///< magic number for VNX to detect binary files containing serialized data
 	CODE_NONE = 0xFFFF,			///< used to detect binary file vs. text file, irrespective of byte order
@@ -186,7 +186,7 @@ enum {
 	CODE_ALT_OBJECT = 0x1800,	///< Same as CODE_OBJECT but with alternate byte order
 	
 	CODE_ALT_BOOL = 0x1F00,		///< Same as CODE_BOOL but with alternate byte order
-	CODE_ALT_CHAR = 0x2000,		///< Same as CODE_CHAR but with alternate byte order
+	CODE_ALT_STRING = 0x2000,	///< Same as CODE_CHAR but with alternate byte order
 
 	CODE_ALT_MAGIC = 0x1337,	///< Same as CODE_MAGIC but with alternate byte order
 	
@@ -199,7 +199,7 @@ uint16_t get_value_code() {
 }
 
 /// \private
-template<> inline uint16_t get_value_code<bool>() { return sizeof(bool) == 1 ? CODE_UINT8 : CODE_NULL; }
+template<> inline uint16_t get_value_code<bool>() { return sizeof(bool) == 1 ? CODE_BOOL : CODE_NULL; }
 /// \private
 template<> inline uint16_t get_value_code<uint8_t>() { return CODE_UINT8; }
 /// \private
@@ -226,6 +226,7 @@ template<> inline uint16_t get_value_code<float64_t>() { return CODE_DOUBLE; }
 /// Returns size of type \p code in bytes + if alternate byte order
 inline size_t get_value_size(uint16_t code, bool& is_alt) {
 	switch(code) {
+		case CODE_BOOL: is_alt = false; return 1;
 		case CODE_UINT8: is_alt = false; return 1;
 		case CODE_UINT16: is_alt = false; return 2;
 		case CODE_UINT32: is_alt = false; return 4;
@@ -236,6 +237,7 @@ inline size_t get_value_size(uint16_t code, bool& is_alt) {
 		case CODE_INT64: is_alt = false; return 8;
 		case CODE_FLOAT: is_alt = false; return 4;
 		case CODE_DOUBLE: is_alt = false; return 8;
+		case CODE_ALT_BOOL: is_alt = true; return 1;
 		case CODE_ALT_UINT8: is_alt = true; return 1;
 		case CODE_ALT_UINT16: is_alt = true; return 2;
 		case CODE_ALT_UINT32: is_alt = true; return 4;
@@ -261,7 +263,7 @@ inline size_t get_value_size(uint16_t code) {
  * 
  * Special cases are:
  * - signed and unsigned integers are equivalent
- * - UINT8 and ALT_UINT8 are equivalent
+ * - BOOL, UINT8 and ALT_UINT8 are equivalent
  * - INT8 and ALT_INT8 are equivalent
  */
 template<typename T>
@@ -273,8 +275,10 @@ bool is_equivalent(uint16_t code) {
 template<>
 inline bool is_equivalent<uint8_t>(uint16_t code) {
 	switch(code) {
+		case CODE_BOOL:
 		case CODE_UINT8:
 		case CODE_INT8:
+		case CODE_ALT_BOOL:
 		case CODE_ALT_UINT8:
 		case CODE_ALT_INT8:
 			return true;
@@ -317,6 +321,15 @@ inline bool is_equivalent<uint64_t>(uint16_t code) {
 
 /// \private
 template<>
+inline bool is_equivalent<bool>(uint16_t code) {
+	if(sizeof(bool) == 1) {
+		return is_equivalent<uint8_t>(code);
+	}
+	return false;
+}
+
+/// \private
+template<>
 inline bool is_equivalent<int8_t>(uint16_t code) {
 	return is_equivalent<uint8_t>(code);
 }
@@ -340,7 +353,7 @@ inline bool is_equivalent<int64_t>(uint16_t code) {
 }
 
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const bool& value) { code.push_back(CODE_UINT8); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const bool& value) { code.push_back(CODE_BOOL); }
 /// \private
 inline void create_dynamic_code(std::vector<uint16_t>& code, const uint8_t& value) { code.push_back(CODE_UINT8); }
 /// \private
@@ -366,8 +379,7 @@ inline void create_dynamic_code(std::vector<uint16_t>& code, const float64_t& va
 
 /// \private
 inline void create_dynamic_code(std::vector<uint16_t>& code, const std::string& value) {
-	code.push_back(CODE_LIST);
-	code.push_back(CODE_INT8);
+	code.push_back(CODE_STRING);
 }
 
 template<typename T, size_t N>
@@ -465,6 +477,8 @@ public:
 	bool is_class = false;			///< If type is a class (ie. inherits from Value)
 	bool is_method = false;			///< If type is a method
 	bool is_return = false;			///< If type is a method return type
+	bool is_const = false;			///< If method is const
+	bool is_async = false;			///< If method is async
 	
 	/*
 	 * The following fields are computed at runtime. They are not serialized.
@@ -489,6 +503,8 @@ public:
 	bool instanceof(Hash64 type_hash_) const;
 	
 	void accept(Visitor& visitor) const;
+
+	void print(std::ostream& out) const;
 
 private:
 	void compile();

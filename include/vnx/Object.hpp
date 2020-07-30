@@ -18,6 +18,8 @@
 #define INCLUDE_VNX_OBJECT_HPP_
 
 #include <vnx/Object.h>
+#include <vnx/Variant.hpp>
+#include <vnx/Hash64.hpp>
 
 
 #endif /* INCLUDE_VNX_OBJECT_HPP_ */

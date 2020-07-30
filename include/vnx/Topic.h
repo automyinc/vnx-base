@@ -54,6 +54,16 @@ std::vector<std::shared_ptr<Topic>> get_all_topics();
  */
 std::vector<std::shared_ptr<Topic>> get_all_topics(std::shared_ptr<Topic> domain);
 
+/** \brief Returns new topic based on the given re-mapping \p map.
+ *
+ * Mappings are applied in longest match first.
+ *
+ * @param topic Topic to be (potentially) re-mapped.
+ * @param map A mapping from source to destination topics / domains.
+ * @return Re-mapped topic, or same as input in case no mapping was found.
+ */
+std::shared_ptr<Topic> remap_topic(std::shared_ptr<Topic> topic, const std::map<TopicPtr, TopicPtr>& map);
+
 
 /** \brief Topic is used to distribute (ie. publish) samples to a number of subscribers.
  * 

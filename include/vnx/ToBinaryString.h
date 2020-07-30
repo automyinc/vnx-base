@@ -31,6 +31,11 @@ public:
 	
 	void visit_null() {}
 	
+	void visit(const bool& value) {
+		vnx::write(out, uint16_t(0xffaa));
+		vnx::write(out, uint64_t(value));
+	}
+
 	void visit(const uint8_t& value) {
 		vnx::write(out, uint16_t(0xffaa));
 		vnx::write(out, uint64_t(value));

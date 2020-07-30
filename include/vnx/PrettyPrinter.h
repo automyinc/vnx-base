@@ -34,6 +34,7 @@ public:
 	PrettyPrinter(std::ostream& out);
 	
 	void visit_null();
+	void visit(const bool& value);
 	void visit(const uint8_t& value);
 	void visit(const uint16_t& value);
 	void visit(const uint32_t& value);
