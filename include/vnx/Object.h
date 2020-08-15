@@ -111,6 +111,14 @@ public:
 		*this = object;
 	}
 	
+	Variant get_field(const std::string& name) const override {
+		return (*this)[name];
+	}
+
+	void set_field(const std::string& name, const Variant& value) override {
+		field[name] = value;
+	}
+
 	/** \brief Returns polymorphic Value (using "__type" field)
 	 *
 	 * @param type_map Optional type map for mapping a received type (the key) to another type.

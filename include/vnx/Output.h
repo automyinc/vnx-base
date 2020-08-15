@@ -411,7 +411,7 @@ void write_image(TypeOutput& out, const T* data, const std::array<size_t, N>& si
 
 template<typename T>
 void write(TypeOutput& out, std::shared_ptr<T> value) {
-	write(out, value, 0, 0);
+	write(out, value, nullptr, nullptr);
 }
 
 template<typename T>

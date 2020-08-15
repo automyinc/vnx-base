@@ -1,4 +1,8 @@
 
+## [v1.7.2]
+
+- added Value get_field() / set_field()
+
 ## [v1.7.1]
 
 - added CODE_BOOL (not forwards compatible)

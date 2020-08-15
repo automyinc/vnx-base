@@ -62,6 +62,9 @@ public:
 	Object to_object() const override;
 	void from_object(const Object& object) override;
 	
+	Variant get_field(const std::string& name) const override;
+	void set_field(const std::string& name, const Variant& value) override;
+
 	void clear();		///< Creates a new object in place
 	
 };

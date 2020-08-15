@@ -18,7 +18,6 @@
 #define INCLUDE_VNX_VALUE_H_
 
 #include <vnx/Type.h>
-#include <vnx/Visitor.h>
 
 
 namespace vnx {
@@ -49,6 +48,9 @@ public:
 	virtual Object to_object() const = 0;
 	virtual void from_object(const Object& object) = 0;
 	
+	virtual Variant get_field(const std::string& name) const = 0;
+	virtual void set_field(const std::string& name, const Variant& value) = 0;
+
 	std::string to_string() const;
 	void from_string(const std::string& str);
 	

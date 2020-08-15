@@ -80,6 +80,14 @@ public:
 		data.from_object(object);
 	}
 	
+	Variant get_field(const std::string& name) const override {
+		return data.get_field(name);
+	}
+
+	void set_field(const std::string& name, const Variant& value) override {
+		data.set_field(name, value);
+	}
+
 	friend std::ostream& operator<<(std::ostream& _out, const Struct& _value) {
 		_out << _value.data;
 		return _out;
