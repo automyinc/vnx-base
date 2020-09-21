@@ -49,11 +49,12 @@ std::shared_ptr<Pipe> get_pipe(const std::string& service_name);
  */
 std::shared_ptr<Pipe> get_pipe(Hash64 mac_addr);
 
-/** \brief Connect \p pipe to \p peer.
+/** \brief Connect \p peer to \p pipe.
  * 
+ * Adds \p peer to \p pipe as a peer, such that \p peer gets notified if \p pipe closes.
  * Returns false in case of failure.
  */
-bool connect(std::shared_ptr<Pipe> pipe, std::shared_ptr<Pipe> peer, uint16_t flags = 0);
+bool connect(std::shared_ptr<Pipe> pipe, std::shared_ptr<Pipe> peer);
 
 /** \brief Disconnect peer from \p pipe.
  * 
@@ -81,6 +82,13 @@ bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<const Message> msg);
  * Applies given flags before sending: msg->flags |= flags;
  */
 bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<Message> msg, uint16_t flags);
+
+/** \brief Sends a FlowMessage OPEN to \p target using the given \p flags, with \p source as the source.
+ *
+ * Used to punch holes, such that messages sent from the other side get routed back to \p source.
+ * Implicitly connects \p target to \p source such that \p target gets notified if \p source closes.
+ */
+bool flow_open(std::shared_ptr<Pipe> target, std::shared_ptr<Pipe> source, uint16_t flags = 0);
 
 /// Connect a pipe to a node.
 void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size = 0);
@@ -137,8 +145,8 @@ public:
 	/// Connect a Pipe to a Node. (thread-safe)
 	friend void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size);
 	
-	/// Connect another Pipe to this Pipe, which will be notified if this pipe is closed. (thread-safe)
-	friend bool connect(std::shared_ptr<Pipe> pipe, std::shared_ptr<Pipe> peer, uint16_t flags);
+	/// Connect another Pipe (peer) to this Pipe, which will be notified if this pipe is closed. (thread-safe)
+	friend bool connect(std::shared_ptr<Pipe> pipe, std::shared_ptr<Pipe> peer);
 	
 	/// Disconnect another Pipe from this Pipe. (thread-safe)
 	friend bool disconnect(std::shared_ptr<Pipe> pipe, Hash64 peer_mac);
@@ -179,7 +187,7 @@ public:
 private:
 	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms, int max_queue_size);
 	
-	bool connect(std::shared_ptr<Pipe> peer, uint16_t flags);
+	bool connect(std::shared_ptr<Pipe> peer);
 	
 	bool disconnect(Hash64 peer_mac);
 	

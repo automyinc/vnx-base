@@ -100,7 +100,7 @@ private:
 	void print_stats();
 	
 	// to be called by read_loop() only
-	std::shared_ptr<Pipe> add_return_pipe(Hash64 src_mac, std::shared_ptr<Pipe> pipe = 0);
+	std::shared_ptr<Pipe> add_return_pipe(Hash64 src_mac, std::shared_ptr<Pipe> pipe, bool reconnect = false);
 	
 	void read_loop(std::shared_ptr<const Endpoint> endpoint);
 	

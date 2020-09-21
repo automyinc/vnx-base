@@ -22,4 +22,19 @@
 #include <vnx/Hash64.hpp>
 
 
+namespace vnx {
+
+template<typename T>
+std::shared_ptr<T> Object::as_value() const {
+	if(auto value = std::dynamic_pointer_cast<T>(to_value())) {
+		return value;
+	}
+	auto tmp = T::create();
+	tmp->from_object(*this);
+	return tmp;
+}
+
+
+} // vnx
+
 #endif /* INCLUDE_VNX_OBJECT_HPP_ */

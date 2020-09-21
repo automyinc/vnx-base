@@ -6,7 +6,13 @@ module Terminal {
 	
 	int max_list_size = 1000;			// max display size of lists and maps, 0 == unlimited
 	
+	string prompt = "> ";				// terminal prompt when waiting for commands
+	
 	void command(string cmd);
+	
+	void read_char(char c);
+	
+	void read_event(terminal_event_e event);
 	
 	void grep(string expr);
 	
@@ -17,5 +23,7 @@ module Terminal {
 	void topic_info(string expr);
 	
 	void handle(LogMsg sample);
+	
+	void handle(ModuleInfo sample);
 	
 }

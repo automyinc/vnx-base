@@ -2,6 +2,18 @@ package vnx;
 
 interface ModuleInterface {
 	
+	Object vnx_get_config_object() const;				// returns entire config
+	
+	Variant vnx_get_config(string name) const;			// return specific field
+	
+	void vnx_set_config_object(Object config);			// sets multiple config values
+	
+	void vnx_set_config(string name, Variant value);	// sets a new config value
+	
 	TypeCode vnx_get_type_code() const;
+	
+	void vnx_restart();		// restarts the module in-place
+	
+	void vnx_close();		// stops and deletes the module
 	
 }

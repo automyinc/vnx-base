@@ -7,6 +7,8 @@
 #include <vnx/Client.h>
 #include <vnx/LogMsg.hxx>
 #include <vnx/Module.h>
+#include <vnx/ModuleInfo.hxx>
+#include <vnx/terminal_event_e.hxx>
 
 
 namespace vnx {
@@ -17,11 +19,39 @@ public:
 	
 	TerminalClient(vnx::Hash64 service_addr);
 	
+	::vnx::Object vnx_get_config_object();
+	
+	::vnx::Variant vnx_get_config(const std::string& name);
+	
+	void vnx_set_config_object(const ::vnx::Object& config);
+	
+	void vnx_set_config_object_async(const ::vnx::Object& config);
+	
+	void vnx_set_config(const std::string& name, const ::vnx::Variant& value);
+	
+	void vnx_set_config_async(const std::string& name, const ::vnx::Variant& value);
+	
 	::vnx::TypeCode vnx_get_type_code();
+	
+	void vnx_restart();
+	
+	void vnx_restart_async();
+	
+	void vnx_close();
+	
+	void vnx_close_async();
 	
 	void command(const std::string& cmd);
 	
 	void command_async(const std::string& cmd);
+	
+	void read_char(const int8_t& c);
+	
+	void read_char_async(const int8_t& c);
+	
+	void read_event(const ::vnx::terminal_event_e& event);
+	
+	void read_event_async(const ::vnx::terminal_event_e& event);
 	
 	void grep(const std::string& expr);
 	

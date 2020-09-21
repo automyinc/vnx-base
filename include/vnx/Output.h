@@ -336,7 +336,7 @@ void write_dynamic_list(TypeOutput& out, const T* data, const size_t size) {
 		out.write(data, size * sizeof(T));
 	} else {
 		for(size_t i = 0; i < size; ++i) {
-			write(out, data[i], 0, value_code);
+			write(out, data[i], nullptr, value_code);
 		}
 	}
 }
@@ -351,7 +351,7 @@ void write_dynamic(TypeOutput& out, const T& value) {
 	std::vector<uint16_t> code;
 	vnx::type<T>().create_dynamic_code(code);
 	write_byte_code(out, code.data(), code.size());
-	vnx::type<T>().write(out, value, 0, code.data());
+	vnx::type<T>().write(out, value, nullptr, code.data());
 }
 
 /** \brief Writes a matrix to the stream
@@ -373,7 +373,7 @@ void write_matrix(TypeOutput& out, const T* data, const std::array<size_t, N>& s
 		out.write(data, total_size * sizeof(T));
 	} else {
 		for(size_t i = 0; i < total_size; ++i) {
-			vnx::type<T>().write(out, data[i], 0, code);
+			vnx::type<T>().write(out, data[i], nullptr, code);
 		}
 	}
 }
@@ -404,7 +404,7 @@ void write_image(TypeOutput& out, const T* data, const std::array<size_t, N>& si
 		out.write(data, total_size * sizeof(T));
 	} else {
 		for(size_t i = 0; i < total_size; ++i) {
-			vnx::type<T>().write(out, data[i], 0, code);
+			vnx::type<T>().write(out, data[i], nullptr, code);
 		}
 	}
 }

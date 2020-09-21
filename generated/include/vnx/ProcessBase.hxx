@@ -11,7 +11,8 @@
 #include <vnx/ProcessInfo.hxx>
 #include <vnx/TimeControl.hxx>
 #include <vnx/TimeSync.hxx>
-#include <vnx/TopicInfoList.hxx>
+#include <vnx/TopicInfo.hxx>
+#include <vnx/Variant.hpp>
 
 
 namespace vnx {
@@ -52,12 +53,15 @@ public:
 protected:
 	virtual std::string get_name() const = 0;
 	virtual ::vnx::TimeSync get_sync_time() const = 0;
-	virtual ::vnx::TopicInfoList get_topic_info() const = 0;
+	virtual std::vector<::vnx::TopicInfo> get_topic_info() const = 0;
+	virtual std::vector<::vnx::ModuleInfo> get_module_info() const = 0;
 	virtual ::vnx::ProcessInfo get_process_info() const = 0;
+	virtual ::vnx::Variant vnx_get_global_config(const std::string& key) const = 0;
+	virtual void vnx_set_global_config(const std::string& key, const ::vnx::Variant& value) = 0;
 	virtual void pause_log() = 0;
 	virtual void resume_log() = 0;
 	virtual void set_debug(const int32_t& level) = 0;
-	virtual void close() = 0;
+	virtual void trigger_shutdown() = 0;
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value) {}
 	virtual void handle(std::shared_ptr<const ::vnx::TimeControl> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }

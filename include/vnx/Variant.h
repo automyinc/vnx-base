@@ -67,8 +67,7 @@ public:
 	
 	/// Assign new value
 	Variant& assign(const Variant& value) {
-		*this = value;
-		return *this;
+		return *this = value;
 	}
 	
 	/// Assign new null terminated string
@@ -80,8 +79,7 @@ public:
 	/// Assign new value
 	template<typename T>
 	Variant& operator=(const T& value) {
-		assign(value);
-		return *this;
+		return assign(value);
 	}
 	
 	/// Convert value to type T

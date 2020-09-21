@@ -28,6 +28,8 @@ namespace vnx {
  * 
  * This is the base class which is inherited from in the generated code for
  * each of the specific clients.
+ *
+ * Client is [thread-safe] now.
  */
 class Client : protected Node {
 public:
@@ -40,21 +42,20 @@ public:
 	void vnx_set_non_blocking(bool non_blocking_mode);
 
 protected:
+	mutable std::mutex vnx_mutex;
+
 	/// Performs the actual request, blocks in case vnx_is_async == false.
-	std::shared_ptr<const Value> vnx_request(std::shared_ptr<const Value> method);
-	
-protected:
-	bool vnx_is_async = false;		///< Flag to indicate if next request should be performed asynchronously
+	std::shared_ptr<const Value> vnx_request(std::shared_ptr<const Value> method, const bool is_async = false);
 	
 private:
 	Hash64 vnx_src_mac;
 	Hash64 vnx_service_addr;
-	uint64_t vnx_next_id = 0;
-	bool vnx_is_non_blocking = false;
+	std::atomic<uint64_t> vnx_next_id {0};
+	std::atomic_bool vnx_is_non_blocking {false};
 	
 	std::shared_ptr<Pipe> vnx_service_pipe;
 	std::shared_ptr<Pipe> vnx_return_pipe;
-	
+
 };
 
 

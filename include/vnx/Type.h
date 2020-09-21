@@ -444,7 +444,7 @@ public:
 	
 	void compile(const TypeCode* type_code);
 	
-	void accept(Visitor& visitor, const TypeCode* type_code = 0) const;
+	void accept(Visitor& visitor, const TypeCode* type_code = nullptr) const;
 
 };
 
@@ -642,12 +642,12 @@ void create_dynamic_code(std::vector<uint16_t>& code, const std::pair<K, V>& val
 
 /// \private
 inline void create_dynamic_code(std::vector<uint16_t>& code, const Value& value) {
-	code.push_back(CODE_ANY);
+	code.push_back(CODE_OBJECT);
 }
 
 /// \private
 inline void create_dynamic_code(std::vector<uint16_t>& code, std::shared_ptr<const Value> value) {
-	code.push_back(CODE_ANY);
+	code.push_back(CODE_OBJECT);
 }
 
 

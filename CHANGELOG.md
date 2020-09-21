@@ -1,4 +1,20 @@
 
+## [v1.7.3]
+
+- TypeCode::accept() fixes
+- added more ModuleInterface functions
+- added Module registry (vnx::get_module(), etc)
+- Client, AsyncClient, GenericClient and GenericAsyncClients are thread-safe now
+- Terminal auto-completion
+- Terminal colors
+- Pipe cleanup and fixes
+- added Buffer::read_file()
+- AsyncClient fixes
+- added Router::forward_map
+- added special topic name "null" which means no topic (TopicPtr = nullptr)
+- set_config() now supports setting multiple values via an Object as value (key = namespace)
+- Values are now dynamically written as Objects (CODE_OBJECT)
+
 ## [v1.7.2]
 
 - added Value get_field() / set_field()

@@ -233,7 +233,7 @@ void read_dynamic(TypeInput& in, T& value) {
 			read_dynamic(in, value);
 			break;
 		default:
-			vnx::type<T>().read(in, value, 0, code);
+			vnx::type<T>().read(in, value, nullptr, code);
 	}
 }
 
@@ -245,7 +245,7 @@ template<typename T>
 void read_dynamic_value(TypeInput& in, T& value) {
 	uint16_t code[VNX_MAX_BYTE_CODE_SIZE];
 	read_byte_code(in, code);
-	read_value(in, value, 0, code);
+	read_value(in, value, nullptr, code);
 }
 
 /// Reads a value of type \p code from the stream.
@@ -650,7 +650,7 @@ void read_matrix(TypeInput& in, T* data, const std::array<size_t, N>& size, cons
 				}
 			} else {
 				for(size_t i = 0; i < total_size; ++i) {
-					vnx::type<T>().read(in, data[i], 0, value_code);
+					vnx::type<T>().read(in, data[i], nullptr, value_code);
 				}
 			}
 			return;
@@ -659,7 +659,7 @@ void read_matrix(TypeInput& in, T* data, const std::array<size_t, N>& size, cons
 	for(size_t i = 0; i < total_size; ++i) {
 		data[i] = T();
 	}
-	skip(in, 0, code);
+	skip(in, nullptr, code);
 }
 
 /** \brief Reads the size of a N-dimensional image from the input stream.
@@ -718,20 +718,20 @@ void read_image_data(TypeInput& in, T* data, const std::array<size_t, N>& size, 
 				in.read((char*)data, total_size * sizeof(T));
 			} else {
 				for(size_t i = 0; i < total_size; ++i) {
-					vnx::type<T>().read(in, data[i], 0, value_code);
+					vnx::type<T>().read(in, data[i], nullptr, value_code);
 				}
 			}
 		} else {
 			if(value_size) {
-				copy_bytes(in, 0, total_size * value_size);
+				copy_bytes(in, nullptr, total_size * value_size);
 			} else {
 				for(size_t i = 0; i < total_size; ++i) {
-					skip(in, 0, value_code);
+					skip(in, nullptr, value_code);
 				}
 			}
 		}
 	} else {
-		skip(in, 0, code);
+		skip(in, nullptr, code);
 	}
 }
 
@@ -780,11 +780,11 @@ void read_dynamic_list_data(TypeInput& in, T* data_, const uint16_t* code_, cons
 		} else {
 			const uint16_t* value_code = code_ + 1;
 			for(uint32_t i = 0; i < size_; ++i) {
-				vnx::type<T>().read(in, data_[i], 0, value_code);
+				vnx::type<T>().read(in, data_[i], nullptr, value_code);
 			}
 		}
 	} else {
-		skip(in, 0, code_);
+		skip(in, nullptr, code_);
 	}
 }
 

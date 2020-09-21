@@ -18,6 +18,7 @@ public:
 	int32_t max_queue_ms = 100;
 	std::map<std::string, std::vector<std::string>> import_map;
 	std::map<std::string, std::vector<std::string>> export_map;
+	std::map<std::string, std::vector<std::string>> forward_map;
 	std::vector<std::string> export_list;
 	
 	typedef ::vnx::Module Super;

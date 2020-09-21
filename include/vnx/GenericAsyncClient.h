@@ -23,22 +23,37 @@
 
 namespace vnx {
 
+/** \brief Used to send generic requests asynchronously.
+ *
+ * GenericAsyncClient is [thread-safe] now.
+ */
 class GenericAsyncClient : public ModuleInterfaceAsyncClient {
 public:
 	GenericAsyncClient(const std::string& service_name);
 
 	GenericAsyncClient(vnx::Hash64 service_addr);
 
+	/** \brief Asynchronous service request.
+	 *
+	 * Does not throw exceptions in any case.
+	 *
+	 * @param method Name of the method to call, either full type name or just the function name.
+	 * @param args Arguments to the function as an Object.
+	 * @param callback Callback which is called from the main thread upon receiving the return.
+	 * @param error_callback Callback which is called from the main thread upon failure.
+	 * @return The request id used for this call.
+	 */
 	uint64_t call(	const std::string& method, const Object& args,
-					const std::function<void(std::shared_ptr<const Value>)>& _callback = std::function<void(std::shared_ptr<const Value>)>(),
-					const std::function<void(const std::exception&)>& _error_callback = std::function<void(const std::exception&)>());
+					const std::function<void(std::shared_ptr<const Value>)>& callback = std::function<void(std::shared_ptr<const Value>)>(),
+					const std::function<void(const std::exception&)>& error_callback = std::function<void(const std::exception&)>());
 
+	/// Returns list of pending request ids.
 	std::vector<uint64_t> vnx_get_pending_ids() const override;
 
 protected:
-	void vnx_purge_request(uint64_t _request_id, const std::exception& _ex) override;
+	void vnx_purge_request(uint64_t request_id, const std::exception& ex) override;
 
-	void vnx_callback_switch(uint64_t _request_id, std::shared_ptr<const vnx::Value> _value) override;
+	void vnx_callback_switch(uint64_t request_id, std::shared_ptr<const vnx::Value> value) override;
 
 private:
 	std::map<uint64_t, std::pair<std::function<void(std::shared_ptr<const Value>)>,

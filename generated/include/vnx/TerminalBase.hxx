@@ -7,6 +7,8 @@
 #include <vnx/package.hxx>
 #include <vnx/LogMsg.hxx>
 #include <vnx/Module.h>
+#include <vnx/ModuleInfo.hxx>
+#include <vnx/terminal_event_e.hxx>
 
 
 namespace vnx {
@@ -16,6 +18,7 @@ public:
 	
 	int32_t max_history = 50;
 	int32_t max_list_size = 1000;
+	std::string prompt = "> ";
 	
 	typedef ::vnx::Module Super;
 	
@@ -47,12 +50,16 @@ public:
 	
 protected:
 	virtual void command(const std::string& cmd) = 0;
+	virtual void read_char(const int8_t& c) = 0;
+	virtual void read_event(const ::vnx::terminal_event_e& event) = 0;
 	virtual void grep(const std::string& expr) = 0;
 	virtual void spy(const std::string& expr) = 0;
 	virtual void dump(const std::string& expr) = 0;
 	virtual void topic_info(const std::string& expr) = 0;
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value) {}
+	virtual void handle(std::shared_ptr<const ::vnx::ModuleInfo> _value, std::shared_ptr<const vnx::Sample> _sample) { handle(_value); }
+	virtual void handle(std::shared_ptr<const ::vnx::ModuleInfo> _value) {}
 	
 	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
 	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _method, const vnx::request_id_t& _request_id) override;

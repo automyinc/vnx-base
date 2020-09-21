@@ -126,6 +126,14 @@ public:
 	std::shared_ptr<Value> to_value(
 			const std::map<std::string, std::string>& type_map = std::map<std::string, std::string>()) const;
 
+	/** \brief Returns polymorphic Value (using "__type" field) or specified type T.
+	 *
+	 * Same as to_value() in case "__type" field is present, plus a dynamic cast.
+	 * Otherwise a value of type T is being created from the object using from_object().
+	 */
+	template<typename T>
+	std::shared_ptr<T> as_value() const;
+
 	friend std::ostream& operator<<(std::ostream& out, const Object& value);
 	
 	friend std::istream& operator>>(std::istream& in, Object& value);

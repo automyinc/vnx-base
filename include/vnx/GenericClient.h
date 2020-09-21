@@ -23,14 +23,32 @@
 
 namespace vnx {
 
+/** \brief Used to send generic requests.
+ *
+ * GenericClient is [thread-safe] now.
+ */
 class GenericClient : public ModuleInterfaceClient {
 public:
 	GenericClient(const std::string& service_name);
 
 	GenericClient(vnx::Hash64 service_addr);
 
+	/** \brief Synchronous service request.
+	 *
+	 * Will throw exceptions in case of failure.
+	 *
+	 * @param method Name of the method to call, either full type name or just the function name.
+	 * @param args Arguments to the function as an Object.
+	 */
 	std::shared_ptr<const Value> call(const std::string& method, const Object& args);
 
+	/** \brief Asynchronous service request.
+	 *
+	 * Does not throw exceptions in any case.
+	 *
+	 * @param method Name of the method to call, either full type name or just the function name.
+	 * @param args Arguments to the function as an Object.
+	 */
 	void call_async(const std::string& method, const Object& args);
 
 };

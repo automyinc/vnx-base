@@ -56,7 +56,11 @@ TopicPtr& TopicPtr::operator=(const char* name_) {
 
 inline
 TopicPtr& TopicPtr::operator=(const std::string& name_) {
-	std::shared_ptr<Topic>::operator=(vnx::get_topic(name_));
+	if(name_ == "null") {
+		reset();
+	} else {
+		std::shared_ptr<Topic>::operator=(vnx::get_topic(name_));
+	}
 	return *this;
 }
 

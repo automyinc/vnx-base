@@ -92,17 +92,23 @@ protected:
 	
 	TimeSync get_sync_time() const override;
 	
-	TopicInfoList get_topic_info() const override;
+	std::vector<TopicInfo> get_topic_info() const override;
+
+	std::vector<ModuleInfo> get_module_info() const override;
 	
 	ProcessInfo get_process_info() const override;
-	
+
+	Variant vnx_get_global_config(const std::string& key) const override;
+
+	void vnx_set_global_config(const std::string& key, const Variant& value) override;
+
 	void pause_log() override;
 	
 	void resume_log() override;
 	
 	void set_debug(const int32_t& level) override;
 	
-	void close() override;
+	void trigger_shutdown() override;
 	
 	void init() override;
 	

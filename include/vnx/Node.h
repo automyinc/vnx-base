@@ -47,6 +47,8 @@ public:
 	
 	/**
 	 * Trigger this node to shut down.
+	 * Will shutdown all pipes, to prevent any new messages from being added to the queues.
+	 * Can be overridden by derived classes but make sure to call this base version also.
 	 * Needs to be thread safe!
 	 */
 	virtual void exit();
@@ -75,7 +77,7 @@ protected:
 	 * Returns 0 in case of timeout or shutdown is triggered.
 	 */
 	std::shared_ptr<const Message> read_blocking(int64_t timeout_us);
-	
+
 	/**
 	 * Close all pipes and clean up.
 	 * Can be overridden by derived classes but make sure to call this base version also.

@@ -20,7 +20,13 @@
 #include <vnx/TerminalBase.hxx>
 #include <vnx/TerminalClient.hxx>
 #include <vnx/ProcessClient.hxx>
+#include <vnx/TerminalInput.h>
 
+#ifdef _WIN32
+typedef unsigned long DWORD;
+#else
+struct termios;
+#endif
 
 namespace vnx {
 
@@ -53,6 +59,10 @@ protected:
 	
 	void command(const std::string& cmd);
 	
+	void read_char(const signed char &c) override;
+
+	void read_event(const terminal_event_e &command) override;
+
 	void grep(const std::string& expr);
 	
 	void spy(const std::string& expr);
@@ -60,21 +70,38 @@ protected:
 	void dump(const std::string& expr);
 	
 	void topic_info(const std::string& expr);
-	
+
 	void handle(std::shared_ptr<const LogMsg> value);
 	
+	void handle(std::shared_ptr<const ModuleInfo> sample) override;
+
 private:
 	static void read_loop(Hash64 service_addr);
+#ifdef _WIN32
+	static DWORD saved_attributes;
+#else
+	static termios saved_attributes;
+#endif
+	static void set_terminal_mode();
+	static void reset_terminal_mode();
 	
+	void write_editline(std::ostream &out);
+
 private:
 	Hash64 service_addr;
 	ProcessClient process;
+	TerminalInput input;
+	std::string line = "";
+	size_t cursor = 0;
+	bool tab_once = false;
+	int64_t last_update_arguments = 0;
 	
 	int state = INACTIVE;
 	std::string grep_filter;
 	Handle<Module> module;
 	std::list<std::shared_ptr<const LogMsg>> error_history;
 	
+	void update_hints();
 };
 
 

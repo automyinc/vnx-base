@@ -22,8 +22,12 @@
 
 namespace vnx {
 
-/**
- * Note: AsyncClient is NOT thread safe. To be used by the Module's main thread only.
+/** \brief Same as Client but asynchronous, callbacks will be executed from the Modules main thread.
+ *
+ * This is the base class which is inherited from in the generated code for
+ * each of the specific clients.
+ *
+ * AsyncClient is [thread-safe] now.
  */
 class AsyncClient {
 public:
@@ -57,41 +61,44 @@ public:
 	void vnx_callback(std::shared_ptr<const Return> result);
 	
 	/// Called by the receiving node when the remote service has closed
-	void vnx_remote_closed();
+	void vnx_shutdown(const std::string& message);
 	
 	/** \brief Register a callback function which will be called when a request fails.
 	 * 
 	 * @param callback Callback function with signature (uint64_t request_id, const std::exception& exception).
 	 */
-	void vnx_set_error_callback(const std::function<void(uint64_t, const std::exception&)>& callback) {
-		vnx_error_callback = callback;
-	}
+	void vnx_set_error_callback(const std::function<void(uint64_t, const std::exception&)>& callback);
 	
 	/// Returns list of pending request ids
 	virtual std::vector<uint64_t> vnx_get_pending_ids() const = 0;
 	
 protected:
-	size_t vnx_num_pending = 0;
+	mutable std::mutex vnx_mutex;
+
+	std::atomic<uint64_t> vnx_next_id {0};
+	std::atomic<size_t> vnx_num_pending {0};
 	
 	std::function<void(uint64_t, const std::exception&)> vnx_error_callback;
 	
-	/// Performs the actual request, non-blocking
-	uint64_t vnx_request(std::shared_ptr<const Value> method);
+	/// Performs the actual request, non-blocking and without exceptions.
+	void vnx_request(std::shared_ptr<const Value> method, const uint64_t request_id);
 	
+	/// Calls error callbacks with given exception
+	void vnx_callback_error(uint64_t request_id, const std::exception& ex);
+
 	virtual void vnx_purge_request(uint64_t request_id, const std::exception& ex) = 0;
 	
 	virtual void vnx_callback_switch(uint64_t request_id, std::shared_ptr<const Value> value) = 0;
 	
 private:
-	Node* vnx_node = 0;
+	Node* vnx_node = nullptr;
 	Hash64 vnx_src_mac;
 	Hash64 vnx_service_addr;
-	uint64_t vnx_next_id = 0;
-	bool vnx_is_non_blocking = false;
+	std::atomic_bool vnx_is_non_blocking {false};
 	
 	std::shared_ptr<Pipe> vnx_service_pipe;
 	std::shared_ptr<Pipe> vnx_return_pipe;
-	
+
 };
 
 

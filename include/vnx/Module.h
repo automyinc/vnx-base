@@ -34,6 +34,25 @@
 
 namespace vnx {
 
+template<typename T>
+class Handle;
+
+/// Adds a module to the global registry (used by vnx::Handle only)
+void add_module(std::shared_ptr<Module> module);
+
+/// Removes a module from the global registry (used by vnx::Handle only)
+void remove_module(std::shared_ptr<Module> module);
+
+/// Returns the latest module handle found for given name.
+Handle<Module> get_module(const std::string& name);
+
+/// Returns all module handles found for the given name.
+std::vector<Handle<Module>> get_modules(const std::string& name);
+
+/// Returns array of all modules.
+std::vector<std::pair<std::string, Handle<Module>>> get_all_modules();
+
+
 /** \brief Module is the base class for all user Modules.
  * 
  * A Module has it's own thread and main() function, just like a normal process.
@@ -69,9 +88,14 @@ public:
 	
 	virtual void read(std::istream& _in) = 0;
 	virtual void write(std::ostream& _out) const = 0;
-	
 	virtual void accept(vnx::Visitor& _visitor) const = 0;
 	
+	virtual Object to_object() const = 0;
+	virtual void from_object(const Object& _object) = 0;
+
+	virtual Variant get_field(const std::string& _name) const = 0;
+	virtual void set_field(const std::string& _name, const Variant& _value) = 0;
+
 	friend std::ostream& operator<<(std::ostream& _out, const Module& _value);
 	friend std::istream& operator>>(std::istream& _in, Module& _value);
 	
@@ -79,6 +103,14 @@ public:
 	
 	std::string vnx_get_name();			///< Returns the module name (Module::vnx_name)
 	
+	Object vnx_get_config_object() const;		///< Returns entire config
+
+	Variant vnx_get_config(const std::string& name);		///< Returns current config value
+
+	void vnx_set_config_object(const Object& config);		///< Sets multiple config values
+
+	void vnx_set_config(const std::string& name, const Variant& value);		///< Sets a new config value
+
 	TypeCode vnx_get_type_code() const;	///< Returns the module's type code
 
 	bool vnx_virtual_time = true;		///< If to use virtual time for timers
@@ -144,6 +176,12 @@ protected:
 	/// Returns false if this module or the process is being shut down. [thread-safe]
 	bool vnx_do_run() const;
 	
+	/// Restarts the Module in-place, calling init() and main() again after clearing state.
+	void vnx_restart();
+
+	/// Stops and deletes the Module, same as Handle::close()
+	void vnx_close();
+
 	/** \brief Create a new timer.
 	 * 
 	 * The created timer is not started/activated by this call.
@@ -249,6 +287,8 @@ protected:
 private:
 	void heartbeat();
 	
+	void setup();
+
 	void entry();
 	
 	void start();
@@ -259,6 +299,8 @@ private:
 	
 	void detach(std::shared_ptr<Module> self_ptr_);
 	
+	std::shared_ptr<Module> attach();
+
 private:
 	Hash64 module_id;
 	TimeControl time_state;
@@ -274,6 +316,7 @@ private:
 	
 	std::thread thread;
 	std::shared_ptr<Module> self_ptr;
+	bool do_restart = false;
 	
 	template<typename T>
 	friend class Handle;
@@ -295,6 +338,11 @@ public:
 		*this = module_;
 	}
 	
+	template<typename S>
+	Handle(const Handle<S>& other) {
+		module = other.shared_ptr();
+	}
+
 	Handle& operator=(T* module_) {
 		module = std::shared_ptr<T>(module_, [](T* m) {
 			if(m) {
@@ -305,7 +353,13 @@ public:
         });
 		return *this;
 	}
-	
+
+	template<typename S>
+	Handle& operator=(const Handle<S>& other) {
+		module = other.shared_ptr();
+		return *this;
+	}
+
 	operator bool() {
 		return bool(module);
 	}
@@ -335,7 +389,13 @@ public:
 	 */
 	void start() {
 		if(module) {
-			module->start();
+			add_module(module);
+			try {
+				module->start();
+			} catch(...) {
+				remove_module(module);
+				throw;
+			}
 		}
 	}
 	
@@ -353,17 +413,26 @@ public:
 	void detach() {
 		if(module) {
 			module->detach(module);
-			module = 0;
+			module = nullptr;
 		}
 	}
 	
+	/**
+	 * Attach to a detached module.
+	 */
+	bool attach(std::shared_ptr<T> module_) {
+		module = module_->attach();
+		return bool(module);
+	}
+
 	/**
 	 * Wait for the module to exit.
 	 */
 	void wait() {
 		if(module) {
 			module->wait();
-			module = 0;
+			remove_module(module);
+			module = nullptr;
 		}
 	}
 	
@@ -380,13 +449,17 @@ public:
 	 * Trigger the module to exit and wait for it to finish.
 	 */
 	void close() {
-		if(module) {
-			module->exit();
-			module->wait();
-			module = 0;
-		}
+		exit();
+		wait();
 	}
 	
+	/**
+	 * Returns a copy of the internal shared_ptr to the module.
+	 */
+	std::shared_ptr<T> shared_ptr() const {
+		return module;
+	}
+
 private:
 	std::shared_ptr<T> module;
 	

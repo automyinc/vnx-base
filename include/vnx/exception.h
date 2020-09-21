@@ -23,7 +23,13 @@ public:
 		:	value_(value)
 	{
 		if(value) {
-			what_ = value->to_string();
+			if(value->what.empty()) {
+				what_ = value->get_type_name();
+			} else {
+				what_ = value->what;
+			}
+		} else {
+			what_ = "unknown exception";
 		}
 	}
 	

@@ -12,6 +12,8 @@ module Router {
 	
 	map<string, vector<string>> export_map;		// map of topics to export (URL => topic list)
 	
+	map<string, vector<string>> forward_map;	// map of services to forward (URL => service list)
+	
 	vector<string> export_list;					// list of topics to export to all TCP and UNIX domain clients
 	
 }

@@ -5,7 +5,7 @@
 #define INCLUDE_vnx_Process_get_topic_info_return_HXX_
 
 #include <vnx/package.hxx>
-#include <vnx/TopicInfoList.hxx>
+#include <vnx/TopicInfo.hxx>
 #include <vnx/Value.h>
 
 
@@ -14,7 +14,7 @@ namespace vnx {
 class Process_get_topic_info_return : public ::vnx::Value {
 public:
 	
-	::vnx::TopicInfoList _ret_0;
+	std::vector<::vnx::TopicInfo> _ret_0;
 	
 	typedef ::vnx::Value Super;
 	

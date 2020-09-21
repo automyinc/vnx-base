@@ -42,7 +42,7 @@ protected:
 	void handle(std::shared_ptr<const ::vnx::TopicInfoList> value) override;
 	
 private:
-	void update(const TopicInfoList& info);
+	void update(const std::vector<TopicInfo>& info);
 	
 private:
 	std::shared_ptr<ProcessClient> process;

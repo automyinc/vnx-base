@@ -11,7 +11,8 @@
 #include <vnx/ProcessInfo.hxx>
 #include <vnx/TimeControl.hxx>
 #include <vnx/TimeSync.hxx>
-#include <vnx/TopicInfoList.hxx>
+#include <vnx/TopicInfo.hxx>
+#include <vnx/Variant.hpp>
 
 
 namespace vnx {
@@ -22,15 +23,43 @@ public:
 	
 	ProcessClient(vnx::Hash64 service_addr);
 	
+	::vnx::Object vnx_get_config_object();
+	
+	::vnx::Variant vnx_get_config(const std::string& name);
+	
+	void vnx_set_config_object(const ::vnx::Object& config);
+	
+	void vnx_set_config_object_async(const ::vnx::Object& config);
+	
+	void vnx_set_config(const std::string& name, const ::vnx::Variant& value);
+	
+	void vnx_set_config_async(const std::string& name, const ::vnx::Variant& value);
+	
 	::vnx::TypeCode vnx_get_type_code();
+	
+	void vnx_restart();
+	
+	void vnx_restart_async();
+	
+	void vnx_close();
+	
+	void vnx_close_async();
 	
 	std::string get_name();
 	
 	::vnx::TimeSync get_sync_time();
 	
-	::vnx::TopicInfoList get_topic_info();
+	std::vector<::vnx::TopicInfo> get_topic_info();
+	
+	std::vector<::vnx::ModuleInfo> get_module_info();
 	
 	::vnx::ProcessInfo get_process_info();
+	
+	::vnx::Variant vnx_get_global_config(const std::string& key);
+	
+	void vnx_set_global_config(const std::string& key, const ::vnx::Variant& value);
+	
+	void vnx_set_global_config_async(const std::string& key, const ::vnx::Variant& value);
 	
 	void pause_log();
 	
@@ -44,9 +73,9 @@ public:
 	
 	void set_debug_async(const int32_t& level);
 	
-	void close();
+	void trigger_shutdown();
 	
-	void close_async();
+	void trigger_shutdown_async();
 	
 };
 

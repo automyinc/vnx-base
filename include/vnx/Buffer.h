@@ -106,6 +106,9 @@ public:
 	/// Returns a string representation of the buffer
 	std::string as_string() const;
 	
+	/// Reads a file into buffer, appending the data.
+	void read_file(const std::string& file_path);
+
 private:
 	void* data_ = 0;
 	size_t size_ = 0;

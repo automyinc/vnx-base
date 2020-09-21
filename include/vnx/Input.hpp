@@ -147,9 +147,9 @@ void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, c
 			break;
 		case CODE_OBJECT:
 		case CODE_ALT_OBJECT: {
-			Object tmp;
-			read(in, tmp, type_code, code);
-			value = std::dynamic_pointer_cast<T>(tmp.to_value());
+			Object obj;
+			read(in, obj, type_code, code);
+			value = obj.as_value<T>();
 			break;
 		}
 		default:

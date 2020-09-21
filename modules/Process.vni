@@ -8,16 +8,22 @@ module Process {
 	
 	TimeSync get_sync_time() const;
 	
-	TopicInfoList get_topic_info() const;
+	vector<TopicInfo> get_topic_info() const;
+	
+	vector<ModuleInfo> get_module_info() const;
 	
 	ProcessInfo get_process_info() const;
+	
+	Variant vnx_get_global_config(string key) const;
+	
+	void vnx_set_global_config(string key, Variant value);
 	
 	void pause_log();							// pause terminal logging output
 	void resume_log();							// resume terminal logging output
 	
 	void set_debug(int level);					// set terminal logging output level
 	
-	void close();								// shutdown whole process
+	void trigger_shutdown();					// shutdown whole process
 	
 	void handle(LogMsg sample);
 	void handle(TimeControl sample);
