@@ -53,25 +53,27 @@ protected:
 		INACTIVE, INPUT, DISPLAY, GREP_RUN, MODULE_RUN
 	};
 	
-	void init();
+	void init() override;
 	
-	void main();
+	void main() override;
 	
-	void command(const std::string& cmd);
+	void command(const std::vector<std::string> &commandline) override;
 	
 	void read_char(const signed char &c) override;
 
 	void read_event(const terminal_event_e &command) override;
 
-	void grep(const std::string& expr);
+	void grep(const std::string& expr) override;
 	
-	void spy(const std::string& expr);
+	void spy(const std::string& expr) override;
 	
-	void dump(const std::string& expr);
+	void dump(const std::string& expr) override;
 	
-	void topic_info(const std::string& expr);
+	void topic_info(const std::string& expr) override;
 
-	void handle(std::shared_ptr<const LogMsg> value);
+	void module_info(const std::string &expr) override;
+
+	void handle(std::shared_ptr<const LogMsg> value) override;
 	
 	void handle(std::shared_ptr<const ModuleInfo> sample) override;
 
@@ -85,6 +87,7 @@ private:
 	static void set_terminal_mode();
 	static void reset_terminal_mode();
 	
+	void get_completion();
 	void write_editline(std::ostream &out);
 
 private:
@@ -92,6 +95,7 @@ private:
 	ProcessClient process;
 	TerminalInput input;
 	std::string line = "";
+	std::pair<std::string, bool> completion = std::make_pair("", false);
 	size_t cursor = 0;
 	bool tab_once = false;
 	int64_t last_update_arguments = 0;
@@ -100,9 +104,37 @@ private:
 	std::string grep_filter;
 	Handle<Module> module;
 	std::list<std::shared_ptr<const LogMsg>> error_history;
+	std::map<vnx::Hash64, std::shared_ptr<const ModuleInfo>> mod_info;
 	
 	void update_hints();
+	template <class Iter>
+	void output_list(std::ostream &out, Iter begin, Iter end, const std::string &none) const;
+	template <class T>
+	void output_value(std::ostream &out, const T &value) const;
 };
+
+
+template <class Iter>
+void Terminal::output_list(std::ostream &out, Iter begin, Iter end, const std::string &none) const{
+	if(begin == end){
+		out << none;
+		return;
+	}
+
+	auto iter = begin;
+	while(iter != end){
+		output_value(out, *iter);
+		iter++;
+		if(iter != end) out << ", ";
+	}
+}
+
+
+template <class T>
+void Terminal::output_value(std::ostream &out, const T &value) const{
+	out << vnx::to_string(value);
+}
+
 
 
 } // vnx

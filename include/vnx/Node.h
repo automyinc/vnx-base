@@ -89,10 +89,12 @@ private:
 	
 	void remove_pipe(Pipe* pipe);					///< remove a pipe from this node
 	
+	std::shared_ptr<Pipe> pop_next();				///< get next pipe and pop it from the queue
+	
 private:
 	std::condition_variable condition;
 	
-	std::queue<std::shared_ptr<Pipe>> notify_queue;		///< list of pipes that have messages available
+	std::map<int, std::queue<std::shared_ptr<Pipe>>> notify_map;	///< ranking of pipes that have messages available
 	
 	std::list<std::shared_ptr<Pipe>> pipe_list;			///< list of pipes that are attached to this node
 	

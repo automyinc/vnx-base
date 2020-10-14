@@ -6,6 +6,7 @@
 
 #include <vnx/Client.h>
 #include <vnx/Module.h>
+#include <vnx/TopicPtr.hpp>
 
 
 namespace vnx {

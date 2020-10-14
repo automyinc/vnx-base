@@ -41,7 +41,7 @@ public:
 	Router(const std::string& _vnx_name = "Router");
 	
 protected:
-	void main();
+	void main() override;
 	
 };
 

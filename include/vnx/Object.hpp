@@ -30,7 +30,9 @@ std::shared_ptr<T> Object::as_value() const {
 		return value;
 	}
 	auto tmp = T::create();
-	tmp->from_object(*this);
+	if(tmp) {
+		tmp->from_object(*this);
+	}
 	return tmp;
 }
 

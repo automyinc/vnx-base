@@ -19,6 +19,9 @@
 
 #include <vnx/Output.h>
 #include <vnx/ToStringValue.h>
+#include <vnx/Directory.h>
+#include <vnx/File.h>
+#include <fstream>
 
 
 namespace vnx {
@@ -35,6 +38,29 @@ std::string to_string_value(const T& value) {
 	vnx::type<T>().accept(visitor, value);
 	return stream.str();
 }
+
+
+template<typename T>
+void write_to_file_json(const std::string& file_name, const T& value){
+	if(file_name.empty()) {
+		return;
+	}
+	size_t slash = file_name.find_last_of("/\\");
+	if(slash != std::string::npos){
+		std::string dir_name = file_name.substr(0, slash);
+		Directory dir(dir_name);
+		dir.create();
+	}
+	const std::string tmp_file_name = file_name + ".tmp";
+	{
+		std::ofstream stream(tmp_file_name);
+		write(stream, value);
+	}
+	if(::rename(tmp_file_name.c_str(), file_name.c_str())) {
+		throw std::runtime_error("rename('" + tmp_file_name + "', '" + file_name + "') failed!");
+	}
+}
+
 
 
 } // vnx

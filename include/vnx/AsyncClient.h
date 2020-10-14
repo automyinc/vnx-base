@@ -67,7 +67,7 @@ public:
 	 * 
 	 * @param callback Callback function with signature (uint64_t request_id, const std::exception& exception).
 	 */
-	void vnx_set_error_callback(const std::function<void(uint64_t, const std::exception&)>& callback);
+	void vnx_set_error_callback(const std::function<void(uint64_t, const vnx::exception&)>& callback);
 	
 	/// Returns list of pending request ids
 	virtual std::vector<uint64_t> vnx_get_pending_ids() const = 0;
@@ -78,15 +78,15 @@ protected:
 	std::atomic<uint64_t> vnx_next_id {0};
 	std::atomic<size_t> vnx_num_pending {0};
 	
-	std::function<void(uint64_t, const std::exception&)> vnx_error_callback;
+	std::function<void(uint64_t, const vnx::exception&)> vnx_error_callback;
 	
 	/// Performs the actual request, non-blocking and without exceptions.
 	void vnx_request(std::shared_ptr<const Value> method, const uint64_t request_id);
 	
 	/// Calls error callbacks with given exception
-	void vnx_callback_error(uint64_t request_id, const std::exception& ex);
+	void vnx_callback_error(uint64_t request_id, const vnx::exception& ex);
 
-	virtual void vnx_purge_request(uint64_t request_id, const std::exception& ex) = 0;
+	virtual void vnx_purge_request(uint64_t request_id, const vnx::exception& ex) = 0;
 	
 	virtual void vnx_callback_switch(uint64_t request_id, std::shared_ptr<const Value> value) = 0;
 	

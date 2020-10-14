@@ -98,9 +98,9 @@ protected:
 	
 	ProcessInfo get_process_info() const override;
 
-	Variant vnx_get_global_config(const std::string& key) const override;
+	Variant get_global_config(const std::string& key) const override;
 
-	void vnx_set_global_config(const std::string& key, const Variant& value) override;
+	void set_global_config(const std::string& key, const Variant& value) override;
 
 	void pause_log() override;
 	

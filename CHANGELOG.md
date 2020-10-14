@@ -1,4 +1,19 @@
 
+## [v1.8.0]
+
+- AsyncClient refactor
+- std::shared_ptr function arguments now by value
+- added optional Pipe priority
+- added TypeCode::get_field_type_code()
+- read_array() and read_vector() now compatible with CODE_MATRIX
+- added from_string_value()
+- Variant::is_array() true also for CODE_MATRIX
+- Terminal auto-completion
+- Terminal module command
+- added VNI set
+- Variant from_string_value() fixes
+- Object::as_value() fix
+
 ## [v1.7.3]
 
 - TypeCode::accept() fixes

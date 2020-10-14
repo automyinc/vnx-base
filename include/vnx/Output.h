@@ -444,7 +444,7 @@ template<typename T>
 void write(std::ostream& out, std::shared_ptr<T> value);
 
 template<class Iter>
-void write_sequence(std::ostream &out, Iter first, Iter last);
+void write_sequence(std::ostream& out, Iter first, Iter last);
 
 template<typename K, typename V>
 void write(std::ostream& out, const std::pair<K, V>& value);
@@ -482,6 +482,11 @@ void write(std::ostream& out, const std::pair<K, V>& value) {
 	out << ", ";
 	vnx::type<V>().write(out, value.second);
 	out << ']';
+}
+
+template<typename T>
+void write(std::ostream& out, const std::set<T>& set) {
+	write_sequence(out, set.begin(), set.end());
 }
 
 template<typename K, typename V>
@@ -592,6 +597,9 @@ void write_to_file(const std::string& file_name, const Value& value);
 
 /// Writes the given value to file in binary format
 void write_to_file(const std::string& file_name, std::shared_ptr<const Value> value);
+
+template<typename T>
+void write_to_file_json(const std::string& file_name, const T& value);
 
 
 } // vnx

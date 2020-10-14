@@ -32,10 +32,12 @@ class Node;
 class Pipe;
 
 /// Open a new pipe known as \p service_name to Node \p node.
-std::shared_ptr<Pipe> open_pipe(const std::string& service_name, Node* node, int max_queue_ms, int max_queue_size = 0);
+std::shared_ptr<Pipe> open_pipe(const std::string& service_name, Node* node,
+								int max_queue_ms, int max_queue_size = 0, int priority = 0);
 
 /// Open a new pipe known by \p mac_addr to Node \p node.
-std::shared_ptr<Pipe> open_pipe(Hash64 mac_addr, Node* node, int max_queue_ms, int max_queue_size = 0);
+std::shared_ptr<Pipe> open_pipe(Hash64 mac_addr, Node* node,
+								int max_queue_ms, int max_queue_size = 0, int priority = 0);
 
 /** \brief Get a pipe to a service called \p service_name.
  * 
@@ -91,7 +93,7 @@ bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<Message> msg, uint16_t
 bool flow_open(std::shared_ptr<Pipe> target, std::shared_ptr<Pipe> source, uint16_t flags = 0);
 
 /// Connect a pipe to a node.
-void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size = 0);
+void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size = 0, int priority = 0);
 
 /// Unregister service known by \p service_name.
 void remove_pipe(const std::string& service_name);
@@ -143,7 +145,7 @@ public:
 	static std::shared_ptr<Pipe> create();
 	
 	/// Connect a Pipe to a Node. (thread-safe)
-	friend void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size);
+	friend void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size, int priority);
 	
 	/// Connect another Pipe (peer) to this Pipe, which will be notified if this pipe is closed. (thread-safe)
 	friend bool connect(std::shared_ptr<Pipe> pipe, std::shared_ptr<Pipe> peer);
@@ -184,8 +186,11 @@ public:
 	/// Returns if pipe is currently paused. (thread-safe)
 	bool is_paused() const;
 	
+	/// Returns true if pipe is closed. (thread-safe)
+	bool is_closed() const;
+
 private:
-	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms, int max_queue_size);
+	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms, int max_queue_size, int priority);
 	
 	bool connect(std::shared_ptr<Pipe> peer);
 	
@@ -203,6 +208,7 @@ private:
 	std::atomic_bool is_paused_ {false};
 	std::atomic_bool is_shutdown_ {false};
 	
+	int priority = 0;
 	int64_t max_queue_us = 0;
 	int64_t max_queue_size = 0;
 	std::queue<std::pair<std::shared_ptr<const Message>, int64_t>> queue;

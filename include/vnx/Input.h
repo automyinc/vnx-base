@@ -331,11 +331,31 @@ void read(TypeInput& in, std::unordered_map<K, V, C>& map, const TypeCode* type_
 template<typename T>
 void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, const uint16_t* code);
 
+/// Returns dimension array and total size of a matrix (CODE_MATRIX)
+size_t get_matrix_size(std::vector<size_t>& dims, const uint16_t* code);
+
+/** \brief Reads a dynamically allocated N-dimensional matrix from the input stream.
+ *
+ * Compatible with CODE_MATRIX.
+ *
+ * @param data Matrix data as an array.
+ * @param dims Dimensions array of the matrix.
+ */
+template<typename T>
+void read_matrix(TypeInput& in, std::vector<T>& data, std::vector<size_t>& dims, const uint16_t* code) {
+	const auto total_size = get_matrix_size(dims, code);
+	data.resize(total_size);
+	const uint16_t* value_code = code + 2 + dims.size();
+	for(size_t i = 0; i < total_size; ++i) {
+		vnx::type<T>().read(in, data[i], nullptr, value_code);
+	}
+}
+
 /**
  * \brief Reads a statically allocated array (ContiguousContainer) from the input stream.
  * 
  * If there is less elements in the data the remaining elements in \p array will be default assigned.
- * Compatible with CODE_ARRAY, CODE_LIST and CODE_DYNAMIC.
+ * Compatible with CODE_ARRAY, CODE_LIST, CODE_MATRIX and CODE_DYNAMIC.
  * Tries to read a single value if possible otherwise.
  * Works for std::array and pre-allocated std::vector.
  */
@@ -365,6 +385,13 @@ void read_array(TypeInput& in, T& array, const TypeCode* type_code, const uint16
 			size = flip_bytes(code[1]);
 			value_code = code + 2;
 			break;
+		case CODE_MATRIX:
+		case CODE_ALT_MATRIX: {
+			std::vector<size_t> dims;
+			size = get_matrix_size(dims, code);
+			value_code = code + 2 + dims.size();
+			break;
+		}
 		case CODE_DYNAMIC:
 		case CODE_ALT_DYNAMIC: {
 			read_dynamic(in, array);
@@ -400,7 +427,7 @@ void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, con
 
 /** \brief Reads a dynamically allocated array (ContiguousContainer) from the input stream.
  * 
- * Compatible with CODE_ARRAY, CODE_LIST and CODE_DYNAMIC.
+ * Compatible with CODE_ARRAY, CODE_LIST, CODE_MATRIX and CODE_DYNAMIC.
  * Tries to read a single value if possible otherwise.
  */
 template<typename T>
@@ -428,6 +455,13 @@ void read_vector(TypeInput& in, T& vector, const TypeCode* type_code, const uint
 			size = flip_bytes(code[1]);
 			value_code = code + 2;
 			break;
+		case CODE_MATRIX:
+		case CODE_ALT_MATRIX: {
+			std::vector<size_t> dims;
+			size = get_matrix_size(dims, code);
+			value_code = code + 2 + dims.size();
+			break;
+		}
 		case CODE_DYNAMIC:
 		case CODE_ALT_DYNAMIC: {
 			read_dynamic(in, vector);

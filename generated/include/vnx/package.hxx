@@ -10,12 +10,12 @@
 
 namespace vnx {
 
-extern std::shared_ptr<vnx::Topic> log_out;
-extern std::shared_ptr<vnx::Topic> module_info;
-extern std::shared_ptr<vnx::Topic> shutdown;
-extern std::shared_ptr<vnx::Topic> time_control;
-extern std::shared_ptr<vnx::Topic> time_sync;
-extern std::shared_ptr<vnx::Topic> topic_info;
+extern vnx::TopicPtr log_out;
+extern vnx::TopicPtr module_info;
+extern vnx::TopicPtr shutdown;
+extern vnx::TopicPtr time_control;
+extern vnx::TopicPtr time_sync;
+extern vnx::TopicPtr topic_info;
 
 class Buffer;
 class Endpoint;
@@ -72,6 +72,8 @@ class Player_toggle;
 class Player_toggle_return;
 class PlayerStatus;
 class ProcessBase;
+class Process_get_global_config;
+class Process_get_global_config_return;
 class Process_get_module_info;
 class Process_get_module_info_return;
 class Process_get_name;
@@ -88,12 +90,10 @@ class Process_resume_log;
 class Process_resume_log_return;
 class Process_set_debug;
 class Process_set_debug_return;
+class Process_set_global_config;
+class Process_set_global_config_return;
 class Process_trigger_shutdown;
 class Process_trigger_shutdown_return;
-class Process_vnx_get_global_config;
-class Process_vnx_get_global_config_return;
-class Process_vnx_set_global_config;
-class Process_vnx_set_global_config_return;
 class ProcessInfo;
 class ProxyBase;
 class Proxy_disable_export;
@@ -136,6 +136,8 @@ class Terminal_dump;
 class Terminal_dump_return;
 class Terminal_grep;
 class Terminal_grep_return;
+class Terminal_module_info;
+class Terminal_module_info_return;
 class Terminal_read_char;
 class Terminal_read_char_return;
 class Terminal_read_event;
@@ -207,6 +209,8 @@ extern const vnx::TypeCode* const vnx_native_type_code_Player_toggle; ///< \priv
 extern const vnx::TypeCode* const vnx_native_type_code_Player_toggle_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_PlayerStatus; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ProcessBase; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Process_get_global_config; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Process_get_global_config_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_get_module_info; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_get_module_info_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_get_name; ///< \private
@@ -223,12 +227,10 @@ extern const vnx::TypeCode* const vnx_native_type_code_Process_resume_log; ///< 
 extern const vnx::TypeCode* const vnx_native_type_code_Process_resume_log_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_set_debug; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_set_debug_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Process_set_global_config; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Process_set_global_config_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_trigger_shutdown; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_trigger_shutdown_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process_vnx_get_global_config; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process_vnx_get_global_config_return; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process_vnx_set_global_config; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_Process_vnx_set_global_config_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ProcessInfo; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ProxyBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_disable_export; ///< \private
@@ -271,6 +273,8 @@ extern const vnx::TypeCode* const vnx_native_type_code_Terminal_dump; ///< \priv
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_dump_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_grep; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_grep_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Terminal_module_info; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Terminal_module_info_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_read_char; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_read_char_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_read_event; ///< \private
@@ -350,6 +354,8 @@ void read(TypeInput& in, ::vnx::Player_toggle& value, const TypeCode* type_code,
 void read(TypeInput& in, ::vnx::Player_toggle_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::PlayerStatus& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ProcessBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_get_global_config& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_get_global_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Process_get_module_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Process_get_module_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Process_get_name& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -366,12 +372,10 @@ void read(TypeInput& in, ::vnx::Process_resume_log& value, const TypeCode* type_
 void read(TypeInput& in, ::vnx::Process_resume_log_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Process_set_debug& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Process_set_debug_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_set_global_config& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_set_global_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Process_trigger_shutdown& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Process_trigger_shutdown_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
-void read(TypeInput& in, ::vnx::Process_vnx_get_global_config& value, const TypeCode* type_code, const uint16_t* code); ///< \private
-void read(TypeInput& in, ::vnx::Process_vnx_get_global_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
-void read(TypeInput& in, ::vnx::Process_vnx_set_global_config& value, const TypeCode* type_code, const uint16_t* code); ///< \private
-void read(TypeInput& in, ::vnx::Process_vnx_set_global_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ProcessInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ProxyBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Proxy_disable_export& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -414,6 +418,8 @@ void read(TypeInput& in, ::vnx::Terminal_dump& value, const TypeCode* type_code,
 void read(TypeInput& in, ::vnx::Terminal_dump_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Terminal_grep& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Terminal_grep_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_module_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_module_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Terminal_read_char& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Terminal_read_char_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Terminal_read_event& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -491,6 +497,8 @@ void write(TypeOutput& out, const ::vnx::Player_toggle& value, const TypeCode* t
 void write(TypeOutput& out, const ::vnx::Player_toggle_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::PlayerStatus& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ProcessBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_get_global_config& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_get_global_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Process_get_module_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Process_get_module_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Process_get_name& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -507,12 +515,10 @@ void write(TypeOutput& out, const ::vnx::Process_resume_log& value, const TypeCo
 void write(TypeOutput& out, const ::vnx::Process_resume_log_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Process_set_debug& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Process_set_debug_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_set_global_config& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_set_global_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Process_trigger_shutdown& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Process_trigger_shutdown_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
-void write(TypeOutput& out, const ::vnx::Process_vnx_get_global_config& value, const TypeCode* type_code, const uint16_t* code); ///< \private
-void write(TypeOutput& out, const ::vnx::Process_vnx_get_global_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
-void write(TypeOutput& out, const ::vnx::Process_vnx_set_global_config& value, const TypeCode* type_code, const uint16_t* code); ///< \private
-void write(TypeOutput& out, const ::vnx::Process_vnx_set_global_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ProcessInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ProxyBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Proxy_disable_export& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -555,6 +561,8 @@ void write(TypeOutput& out, const ::vnx::Terminal_dump& value, const TypeCode* t
 void write(TypeOutput& out, const ::vnx::Terminal_dump_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Terminal_grep& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Terminal_grep_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_module_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_module_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Terminal_read_char& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Terminal_read_char_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Terminal_read_event& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -632,6 +640,8 @@ void read(std::istream& in, ::vnx::Player_toggle& value); ///< \private
 void read(std::istream& in, ::vnx::Player_toggle_return& value); ///< \private
 void read(std::istream& in, ::vnx::PlayerStatus& value); ///< \private
 void read(std::istream& in, ::vnx::ProcessBase& value); ///< \private
+void read(std::istream& in, ::vnx::Process_get_global_config& value); ///< \private
+void read(std::istream& in, ::vnx::Process_get_global_config_return& value); ///< \private
 void read(std::istream& in, ::vnx::Process_get_module_info& value); ///< \private
 void read(std::istream& in, ::vnx::Process_get_module_info_return& value); ///< \private
 void read(std::istream& in, ::vnx::Process_get_name& value); ///< \private
@@ -648,12 +658,10 @@ void read(std::istream& in, ::vnx::Process_resume_log& value); ///< \private
 void read(std::istream& in, ::vnx::Process_resume_log_return& value); ///< \private
 void read(std::istream& in, ::vnx::Process_set_debug& value); ///< \private
 void read(std::istream& in, ::vnx::Process_set_debug_return& value); ///< \private
+void read(std::istream& in, ::vnx::Process_set_global_config& value); ///< \private
+void read(std::istream& in, ::vnx::Process_set_global_config_return& value); ///< \private
 void read(std::istream& in, ::vnx::Process_trigger_shutdown& value); ///< \private
 void read(std::istream& in, ::vnx::Process_trigger_shutdown_return& value); ///< \private
-void read(std::istream& in, ::vnx::Process_vnx_get_global_config& value); ///< \private
-void read(std::istream& in, ::vnx::Process_vnx_get_global_config_return& value); ///< \private
-void read(std::istream& in, ::vnx::Process_vnx_set_global_config& value); ///< \private
-void read(std::istream& in, ::vnx::Process_vnx_set_global_config_return& value); ///< \private
 void read(std::istream& in, ::vnx::ProcessInfo& value); ///< \private
 void read(std::istream& in, ::vnx::ProxyBase& value); ///< \private
 void read(std::istream& in, ::vnx::Proxy_disable_export& value); ///< \private
@@ -696,6 +704,8 @@ void read(std::istream& in, ::vnx::Terminal_dump& value); ///< \private
 void read(std::istream& in, ::vnx::Terminal_dump_return& value); ///< \private
 void read(std::istream& in, ::vnx::Terminal_grep& value); ///< \private
 void read(std::istream& in, ::vnx::Terminal_grep_return& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_module_info& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_module_info_return& value); ///< \private
 void read(std::istream& in, ::vnx::Terminal_read_char& value); ///< \private
 void read(std::istream& in, ::vnx::Terminal_read_char_return& value); ///< \private
 void read(std::istream& in, ::vnx::Terminal_read_event& value); ///< \private
@@ -773,6 +783,8 @@ void write(std::ostream& out, const ::vnx::Player_toggle& value); ///< \private
 void write(std::ostream& out, const ::vnx::Player_toggle_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::PlayerStatus& value); ///< \private
 void write(std::ostream& out, const ::vnx::ProcessBase& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_get_global_config& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_get_global_config_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Process_get_module_info& value); ///< \private
 void write(std::ostream& out, const ::vnx::Process_get_module_info_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Process_get_name& value); ///< \private
@@ -789,12 +801,10 @@ void write(std::ostream& out, const ::vnx::Process_resume_log& value); ///< \pri
 void write(std::ostream& out, const ::vnx::Process_resume_log_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Process_set_debug& value); ///< \private
 void write(std::ostream& out, const ::vnx::Process_set_debug_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_set_global_config& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_set_global_config_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Process_trigger_shutdown& value); ///< \private
 void write(std::ostream& out, const ::vnx::Process_trigger_shutdown_return& value); ///< \private
-void write(std::ostream& out, const ::vnx::Process_vnx_get_global_config& value); ///< \private
-void write(std::ostream& out, const ::vnx::Process_vnx_get_global_config_return& value); ///< \private
-void write(std::ostream& out, const ::vnx::Process_vnx_set_global_config& value); ///< \private
-void write(std::ostream& out, const ::vnx::Process_vnx_set_global_config_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::ProcessInfo& value); ///< \private
 void write(std::ostream& out, const ::vnx::ProxyBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::Proxy_disable_export& value); ///< \private
@@ -837,6 +847,8 @@ void write(std::ostream& out, const ::vnx::Terminal_dump& value); ///< \private
 void write(std::ostream& out, const ::vnx::Terminal_dump_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Terminal_grep& value); ///< \private
 void write(std::ostream& out, const ::vnx::Terminal_grep_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_module_info& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_module_info_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Terminal_read_char& value); ///< \private
 void write(std::ostream& out, const ::vnx::Terminal_read_char_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Terminal_read_event& value); ///< \private
@@ -914,6 +926,8 @@ void accept(Visitor& visitor, const ::vnx::Player_toggle& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Player_toggle_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::PlayerStatus& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ProcessBase& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_get_global_config& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_get_global_config_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Process_get_module_info& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Process_get_module_info_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Process_get_name& value); ///< \private
@@ -930,12 +944,10 @@ void accept(Visitor& visitor, const ::vnx::Process_resume_log& value); ///< \pri
 void accept(Visitor& visitor, const ::vnx::Process_resume_log_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Process_set_debug& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Process_set_debug_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_set_global_config& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_set_global_config_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Process_trigger_shutdown& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Process_trigger_shutdown_return& value); ///< \private
-void accept(Visitor& visitor, const ::vnx::Process_vnx_get_global_config& value); ///< \private
-void accept(Visitor& visitor, const ::vnx::Process_vnx_get_global_config_return& value); ///< \private
-void accept(Visitor& visitor, const ::vnx::Process_vnx_set_global_config& value); ///< \private
-void accept(Visitor& visitor, const ::vnx::Process_vnx_set_global_config_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ProcessInfo& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ProxyBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Proxy_disable_export& value); ///< \private
@@ -978,6 +990,8 @@ void accept(Visitor& visitor, const ::vnx::Terminal_dump& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Terminal_dump_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Terminal_grep& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Terminal_grep_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_module_info& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_module_info_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Terminal_read_char& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Terminal_read_char_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Terminal_read_event& value); ///< \private
@@ -2272,6 +2286,52 @@ struct type<::vnx::ProcessBase> {
 
 /// \private
 template<>
+struct type<::vnx::Process_get_global_config> {
+	void read(TypeInput& in, ::vnx::Process_get_global_config& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_get_global_config& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_get_global_config& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_get_global_config& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_get_global_config& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_get_global_config_return> {
+	void read(TypeInput& in, ::vnx::Process_get_global_config_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_get_global_config_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_get_global_config_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_get_global_config_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_get_global_config_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
 struct type<::vnx::Process_get_module_info> {
 	void read(TypeInput& in, ::vnx::Process_get_module_info& value, const TypeCode* type_code, const uint16_t* code) {
 		vnx::read(in, value, type_code, code);
@@ -2640,6 +2700,52 @@ struct type<::vnx::Process_set_debug_return> {
 
 /// \private
 template<>
+struct type<::vnx::Process_set_global_config> {
+	void read(TypeInput& in, ::vnx::Process_set_global_config& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_set_global_config& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_set_global_config& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_set_global_config& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_set_global_config& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_set_global_config_return> {
+	void read(TypeInput& in, ::vnx::Process_set_global_config_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_set_global_config_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_set_global_config_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_set_global_config_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_set_global_config_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
 struct type<::vnx::Process_trigger_shutdown> {
 	void read(TypeInput& in, ::vnx::Process_trigger_shutdown& value, const TypeCode* type_code, const uint16_t* code) {
 		vnx::read(in, value, type_code, code);
@@ -2677,98 +2783,6 @@ struct type<::vnx::Process_trigger_shutdown_return> {
 		vnx::write(out, value);
 	}
 	void accept(Visitor& visitor, const ::vnx::Process_trigger_shutdown_return& value) {
-		vnx::accept(visitor, value);
-	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
-};
-
-/// \private
-template<>
-struct type<::vnx::Process_vnx_get_global_config> {
-	void read(TypeInput& in, ::vnx::Process_vnx_get_global_config& value, const TypeCode* type_code, const uint16_t* code) {
-		vnx::read(in, value, type_code, code);
-	}
-	void write(TypeOutput& out, const ::vnx::Process_vnx_get_global_config& value, const TypeCode* type_code, const uint16_t* code) {
-		vnx::write(out, value, type_code, code);
-	}
-	void read(std::istream& in, ::vnx::Process_vnx_get_global_config& value) {
-		vnx::read(in, value);
-	}
-	void write(std::ostream& out, const ::vnx::Process_vnx_get_global_config& value) {
-		vnx::write(out, value);
-	}
-	void accept(Visitor& visitor, const ::vnx::Process_vnx_get_global_config& value) {
-		vnx::accept(visitor, value);
-	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
-};
-
-/// \private
-template<>
-struct type<::vnx::Process_vnx_get_global_config_return> {
-	void read(TypeInput& in, ::vnx::Process_vnx_get_global_config_return& value, const TypeCode* type_code, const uint16_t* code) {
-		vnx::read(in, value, type_code, code);
-	}
-	void write(TypeOutput& out, const ::vnx::Process_vnx_get_global_config_return& value, const TypeCode* type_code, const uint16_t* code) {
-		vnx::write(out, value, type_code, code);
-	}
-	void read(std::istream& in, ::vnx::Process_vnx_get_global_config_return& value) {
-		vnx::read(in, value);
-	}
-	void write(std::ostream& out, const ::vnx::Process_vnx_get_global_config_return& value) {
-		vnx::write(out, value);
-	}
-	void accept(Visitor& visitor, const ::vnx::Process_vnx_get_global_config_return& value) {
-		vnx::accept(visitor, value);
-	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
-};
-
-/// \private
-template<>
-struct type<::vnx::Process_vnx_set_global_config> {
-	void read(TypeInput& in, ::vnx::Process_vnx_set_global_config& value, const TypeCode* type_code, const uint16_t* code) {
-		vnx::read(in, value, type_code, code);
-	}
-	void write(TypeOutput& out, const ::vnx::Process_vnx_set_global_config& value, const TypeCode* type_code, const uint16_t* code) {
-		vnx::write(out, value, type_code, code);
-	}
-	void read(std::istream& in, ::vnx::Process_vnx_set_global_config& value) {
-		vnx::read(in, value);
-	}
-	void write(std::ostream& out, const ::vnx::Process_vnx_set_global_config& value) {
-		vnx::write(out, value);
-	}
-	void accept(Visitor& visitor, const ::vnx::Process_vnx_set_global_config& value) {
-		vnx::accept(visitor, value);
-	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
-};
-
-/// \private
-template<>
-struct type<::vnx::Process_vnx_set_global_config_return> {
-	void read(TypeInput& in, ::vnx::Process_vnx_set_global_config_return& value, const TypeCode* type_code, const uint16_t* code) {
-		vnx::read(in, value, type_code, code);
-	}
-	void write(TypeOutput& out, const ::vnx::Process_vnx_set_global_config_return& value, const TypeCode* type_code, const uint16_t* code) {
-		vnx::write(out, value, type_code, code);
-	}
-	void read(std::istream& in, ::vnx::Process_vnx_set_global_config_return& value) {
-		vnx::read(in, value);
-	}
-	void write(std::ostream& out, const ::vnx::Process_vnx_set_global_config_return& value) {
-		vnx::write(out, value);
-	}
-	void accept(Visitor& visitor, const ::vnx::Process_vnx_set_global_config_return& value) {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code) {
@@ -3735,6 +3749,52 @@ struct type<::vnx::Terminal_grep_return> {
 		vnx::write(out, value);
 	}
 	void accept(Visitor& visitor, const ::vnx::Terminal_grep_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_module_info> {
+	void read(TypeInput& in, ::vnx::Terminal_module_info& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_module_info& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_module_info& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_module_info& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_module_info& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_module_info_return> {
+	void read(TypeInput& in, ::vnx::Terminal_module_info_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_module_info_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_module_info_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_module_info_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_module_info_return& value) {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code) {

@@ -208,6 +208,22 @@ void read(std::istream& in, std::pair<K, V>& pair) {
 	}
 }
 
+/** \brief Reads a set from the JSON stream
+ *
+ * Example: [1, 2, 3]
+ */
+template<typename T>
+void read(std::istream& in, std::set<T>& set) {
+	set.clear();
+	std::vector<std::string> tmp;
+	read_array(in, tmp);
+	for(const auto& value : tmp) {
+		T next = T();
+		from_string(value, next);
+		set.emplace(std::move(next));
+	}
+}
+
 /** \brief Reads a map from the JSON stream
  *
  * Example: [[1, 1.234], [123, 5.678]] \n
@@ -291,6 +307,18 @@ void from_string(const std::string& str, T& value) {
 	stream.str(str);
 	vnx::type<T>().read(stream, value);
 }
+
+/// Reads a value of type T from a native string (ie. without quotes)
+template<typename T>
+void from_string_value(const std::string& str, T& value) {
+	from_string(str, value);
+}
+
+template<>
+void from_string_value<std::string>(const std::string& str, std::string& value);
+
+template<>
+void from_string_value<Variant>(const std::string& str, Variant& value);
 
 /// Reads a Value of type T from the JSON stream
 /// If \p value is NULL will attempt to read polymorphic type via "__type" field.

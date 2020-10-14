@@ -41,9 +41,9 @@ public:
 	
 	void vnx_close_async();
 	
-	void command(const std::string& cmd);
+	void command(const std::vector<std::string>& commandline);
 	
-	void command_async(const std::string& cmd);
+	void command_async(const std::vector<std::string>& commandline);
 	
 	void read_char(const int8_t& c);
 	
@@ -68,6 +68,10 @@ public:
 	void topic_info(const std::string& expr);
 	
 	void topic_info_async(const std::string& expr);
+	
+	void module_info(const std::string& expr);
+	
+	void module_info_async(const std::string& expr);
 	
 };
 

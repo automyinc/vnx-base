@@ -34,29 +34,29 @@ public:
 	Player(const std::string& _vnx_name = "Player");
 	
 protected:
-	void init();
+	void init() override;
 	
-	void main();
+	void main() override;
 	
-	RecordHeader get_info() const;
+	RecordHeader get_info() const override;
 	
-	void play();
+	void play() override;
 	
-	void pause();
+	void pause() override;
 	
-	void toggle();
+	void toggle() override;
 	
-	void stop();
+	void stop() override;
 	
-	void seek_by_count(const int64_t& delta_count);
+	void seek_by_count(const int64_t& delta_count) override;
 	
-	void seek_by_time(const int64_t& delta_us);
+	void seek_by_time(const int64_t& delta_us) override;
 	
-	void seek_to_position(const float64_t& position);
+	void seek_to_position(const float64_t& position) override;
 	
-	void seek_to_time(const int64_t& time_us);
+	void seek_to_time(const int64_t& time_us) override;
 	
-	void set_speed(const float64_t& speed);
+	void set_speed(const float64_t& speed) override;
 	
 private:
 	void open();

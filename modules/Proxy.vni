@@ -4,8 +4,8 @@ module Proxy {
 	
 	string address;						// URL to connect to
 	
-	vector<string> import_list;			// list of topics to import (ie. subscribe)
-	vector<string> export_list;			// list of topics to export
+	vector<TopicPtr> import_list;		// list of topics to import (ie. subscribe)
+	vector<TopicPtr> export_list;		// list of topics to export
 	vector<string> forward_list;		// list of services to import (ie. forward requests)
 	
 	map<Hash64, string> tunnel_map;		// service tunnels (local alias -> remote service name)

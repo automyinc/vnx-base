@@ -40,7 +40,7 @@ public:
 	Server(const std::string& name_, std::shared_ptr<const Endpoint> endpoint_ = 0);
 	
 protected:
-	void main();
+	void main() override;
 	
 	void setup();
 	

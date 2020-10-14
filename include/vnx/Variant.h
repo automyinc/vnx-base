@@ -198,10 +198,10 @@ public:
 	/// Returns true if value is a string.
 	bool is_string() const;
 	
-	/// Returns true if value is a static array. (CODE_ARRAY)
+	/// Returns true if value is an array. (CODE_ARRAY, CODE_LIST, CODE_MATRIX)
 	bool is_array() const;
 	
-	/// Returns true if value is a dynamic array/list. (CODE_LIST)
+	/// Returns true if value is a list. (CODE_ARRAY, CODE_LIST, CODE_MATRIX)
 	bool is_list() const;
 	
 	/// Returns true if value is a map. (CODE_MAP)

@@ -29,25 +29,25 @@ public:
 	const char* get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	static std::shared_ptr<const ::vnx::Return> create_overflow_return(const std::shared_ptr<const ::vnx::Request>& request);
-	static std::shared_ptr<const ::vnx::Return> create_no_such_service_return(const std::shared_ptr<const ::vnx::Request>& request);
+	static std::shared_ptr<const ::vnx::Return> create_overflow_return(std::shared_ptr<const ::vnx::Request> request);
+	static std::shared_ptr<const ::vnx::Return> create_no_such_service_return(std::shared_ptr<const ::vnx::Request> request);
 	
 	static std::shared_ptr<Return> create();
-	std::shared_ptr<vnx::Value> clone() const;
+	std::shared_ptr<vnx::Value> clone() const override;
 	
-	void read(vnx::TypeInput& _in, const vnx::TypeCode* _type_code, const uint16_t* _code);
-	void write(vnx::TypeOutput& _out, const vnx::TypeCode* _type_code, const uint16_t* _code) const;
+	void read(vnx::TypeInput& _in, const vnx::TypeCode* _type_code, const uint16_t* _code) override;
+	void write(vnx::TypeOutput& _out, const vnx::TypeCode* _type_code, const uint16_t* _code) const override;
 	
-	void read(std::istream& _in);
-	void write(std::ostream& _out) const;
+	void read(std::istream& _in) override;
+	void write(std::ostream& _out) const override;
 	
-	void accept(vnx::Visitor& _visitor) const;
+	void accept(vnx::Visitor& _visitor) const override;
 	
-	vnx::Object to_object() const;
-	void from_object(const vnx::Object& object);
+	vnx::Object to_object() const override;
+	void from_object(const vnx::Object& object) override;
 	
-	vnx::Variant get_field(const std::string& name) const;
-	void set_field(const std::string& name, const vnx::Variant& value);
+	vnx::Variant get_field(const std::string& name) const override;
+	void set_field(const std::string& name, const vnx::Variant& value) override;
 	
 	friend std::ostream& operator<<(std::ostream& _out, const Return& _value);
 	friend std::istream& operator>>(std::istream& _in, Return& _value);

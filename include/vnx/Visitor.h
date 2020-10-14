@@ -104,6 +104,18 @@ void accept(Visitor& visitor, const std::vector<T>& vector) {
 	visitor.list_end(vector.size());
 }
 
+template<typename T>
+void accept(Visitor& visitor, const std::set<T>& set) {
+	visitor.list_begin(set.size());
+	size_t i = 0;
+	for(const auto& entry : set) {
+		visitor.list_element(i);
+		vnx::type<T>().accept(visitor, entry);
+		i++;
+	}
+	visitor.list_end(set.size());
+}
+
 template<typename K, typename V>
 void accept(Visitor& visitor, const std::map<K, V>& map) {
 	visitor.map_begin(map.size());

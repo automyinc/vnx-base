@@ -45,12 +45,13 @@ public:
 	Recorder(const std::string& _vnx_name = "Recorder");
 	
 protected:
-	void init();
+	void init() override;
 	
-	void main();
+	void main() override;
 	
-	void handle(std::shared_ptr<const Sample> sample);
+	void handle(std::shared_ptr<const Sample> sample) override;
 	
+private:
 	void flush();
 	
 	void print_stats();

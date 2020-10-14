@@ -33,33 +33,33 @@ public:
 	
 	PrettyPrinter(std::ostream& out);
 	
-	void visit_null();
-	void visit(const bool& value);
-	void visit(const uint8_t& value);
-	void visit(const uint16_t& value);
-	void visit(const uint32_t& value);
-	void visit(const uint64_t& value);
-	void visit(const int8_t& value);
-	void visit(const int16_t& value);
-	void visit(const int32_t& value);
-	void visit(const int64_t& value);
-	void visit(const float32_t& value);
-	void visit(const float64_t& value);
-	void visit(const std::string& value);
+	void visit_null() override;
+	void visit(const bool& value) override;
+	void visit(const uint8_t& value) override;
+	void visit(const uint16_t& value) override;
+	void visit(const uint32_t& value) override;
+	void visit(const uint64_t& value) override;
+	void visit(const int8_t& value) override;
+	void visit(const int16_t& value) override;
+	void visit(const int32_t& value) override;
+	void visit(const int64_t& value) override;
+	void visit(const float32_t& value) override;
+	void visit(const float64_t& value) override;
+	void visit(const std::string& value) override;
 	
-	void list_begin(size_t size);
-	void list_element(size_t index);
-	void list_end(size_t size);
+	void list_begin(size_t size) override;
+	void list_element(size_t index) override;
+	void list_end(size_t size) override;
 	
-	void map_begin(size_t size);
-	void map_entry_begin(size_t index);
-	void map_entry_value(size_t index);
-	void map_entry_end(size_t index);
-	void map_end(size_t size);
+	void map_begin(size_t size) override;
+	void map_entry_begin(size_t index) override;
+	void map_entry_value(size_t index) override;
+	void map_entry_end(size_t index) override;
+	void map_end(size_t size) override;
 	
-	void type_begin(size_t num_fields, const std::string& type_name);
-	void type_field(const std::string& field, size_t index);
-	void type_end(size_t num_fields, const std::string& type_name);
+	void type_begin(size_t num_fields, const std::string& type_name) override;
+	void type_field(const std::string& field, size_t index) override;
+	void type_end(size_t num_fields, const std::string& type_name) override;
 
 protected:
 	void add_indentation();

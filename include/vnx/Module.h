@@ -334,28 +334,43 @@ class Handle {
 public:
 	Handle() {}
 	
+	/// Takes ownership of the Module.
 	Handle(T* module_) {
 		*this = module_;
 	}
 	
+	/// Internal use only.
+	Handle(const std::shared_ptr<T>& module_) {
+		*this = module_;
+	}
+
 	template<typename S>
 	Handle(const Handle<S>& other) {
-		module = other.shared_ptr();
+		*this = other;
+	}
+
+	/// Will close the Module if it's not detached and this is the only Handle.
+	~Handle() {
+		if(module && module.use_count() == 1) {
+			close();
+		}
 	}
 
 	Handle& operator=(T* module_) {
-		module = std::shared_ptr<T>(module_, [](T* m) {
-			if(m) {
-				m->exit();
-				m->wait();
-				delete m;
-			}
-        });
+		close();
+		module = std::shared_ptr<T>(module_);
+		return *this;
+	}
+
+	Handle& operator=(const std::shared_ptr<T>& module_) {
+		close();
+		module = module_;
 		return *this;
 	}
 
 	template<typename S>
 	Handle& operator=(const Handle<S>& other) {
+		close();
 		module = other.shared_ptr();
 		return *this;
 	}
@@ -364,9 +379,7 @@ public:
 		return bool(module);
 	}
 	
-	/**
-	 * Access the module. Makes sure it is not already running.
-	 */
+	/// Access the module. Makes sure it is not already running.
 	T& operator*() {
 		if(module->is_running()) {
 			throw std::logic_error("Handle: module already running");
@@ -374,9 +387,7 @@ public:
 		return *module;
 	}
 	
-	/**
-	 * Access the module. Makes sure it is not already running.
-	 */
+	/// Access the module. Makes sure it is not already running.
 	T* operator->() {
 		if(module->is_running()) {
 			throw std::logic_error("Handle: module already running");
@@ -384,8 +395,9 @@ public:
 		return module.get();
 	}
 	
-	/**
-	 * Starts the module in a new thread. Returns after Module::init() is done.
+	/** \brief Starts the module in a new thread.
+	 *
+	 * Returns after Module::init() is done.
 	 */
 	void start() {
 		if(module) {
@@ -399,35 +411,37 @@ public:
 		}
 	}
 	
-	/**
-	 * Starts the module and detaches the handle. Module will self destruct upon exit.
+	/** \brief Starts the module and detaches it.
+	 *
+	 * Module will self destruct upon exit.
 	 */
 	void start_detached() {
 		start();
 		detach();
 	}
 	
-	/**
-	 * Detaches the module. Module will self destruct upon exit.
+	/** \brief Detaches the module.
+	 *
+	 * Module will self destruct upon exit.
 	 */
 	void detach() {
 		if(module) {
 			module->detach(module);
-			module = nullptr;
 		}
 	}
 	
-	/**
-	 * Attach to a detached module.
+	/** \brief Attach to a detached module.
+	 *
+	 * @return If attach was successful, ie. the Module was detached and still running.
 	 */
-	bool attach(std::shared_ptr<T> module_) {
-		module = module_->attach();
-		return bool(module);
+	bool attach() {
+		if(module) {
+			return bool(module->attach());
+		}
+		return false;
 	}
 
-	/**
-	 * Wait for the module to exit.
-	 */
+	/// Wait for the module to exit / finish.
 	void wait() {
 		if(module) {
 			module->wait();
@@ -436,26 +450,20 @@ public:
 		}
 	}
 	
-	/**
-	 * Trigger the module to exit.
-	 */
+	/// Trigger the module to exit.
 	void exit() {
 		if(module) {
 			module->exit();
 		}
 	}
 	
-	/**
-	 * Trigger the module to exit and wait for it to finish.
-	 */
+	/// Trigger the module to exit and wait for it to finish.
 	void close() {
 		exit();
 		wait();
 	}
-	
-	/**
-	 * Returns a copy of the internal shared_ptr to the module.
-	 */
+
+	/// Internal use only.
 	std::shared_ptr<T> shared_ptr() const {
 		return module;
 	}

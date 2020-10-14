@@ -55,11 +55,11 @@ public:
 	
 	::vnx::ProcessInfo get_process_info();
 	
-	::vnx::Variant vnx_get_global_config(const std::string& key);
+	::vnx::Variant get_global_config(const std::string& key);
 	
-	void vnx_set_global_config(const std::string& key, const ::vnx::Variant& value);
+	void set_global_config(const std::string& key, const ::vnx::Variant& value);
 	
-	void vnx_set_global_config_async(const std::string& key, const ::vnx::Variant& value);
+	void set_global_config_async(const std::string& key, const ::vnx::Variant& value);
 	
 	void pause_log();
 	

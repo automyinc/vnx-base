@@ -32,8 +32,12 @@ std::string string_subs(std::string str, const std::string& from, const std::str
 /** \brief Split string into multiple parts based on special char \p sep.
  * 
  * An empty input string results in a vector of size 1 with an empty string as the only element.
+ *
+ * Set \p clean to true to not get any empty strings. This can be useful if \p sep occurs
+ * multiple times in a row and empty array elements are unwanted.
+ * In that case, an empty input string results in an empty vector.
  */
-std::vector<std::string> string_split(const std::string& str, char sep);
+std::vector<std::string> string_split(const std::string& str, char sep, bool clean=false);
 
 /// Returns a very good 64-bit random number. (Initialized with nano-second timestamp)
 uint64_t rand64();

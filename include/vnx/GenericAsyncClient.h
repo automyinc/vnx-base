@@ -45,19 +45,19 @@ public:
 	 */
 	uint64_t call(	const std::string& method, const Object& args,
 					const std::function<void(std::shared_ptr<const Value>)>& callback = std::function<void(std::shared_ptr<const Value>)>(),
-					const std::function<void(const std::exception&)>& error_callback = std::function<void(const std::exception&)>());
+					const std::function<void(const vnx::exception&)>& error_callback = std::function<void(const vnx::exception&)>());
 
 	/// Returns list of pending request ids.
 	std::vector<uint64_t> vnx_get_pending_ids() const override;
 
 protected:
-	void vnx_purge_request(uint64_t request_id, const std::exception& ex) override;
+	void vnx_purge_request(uint64_t request_id, const vnx::exception& ex) override;
 
 	void vnx_callback_switch(uint64_t request_id, std::shared_ptr<const vnx::Value> value) override;
 
 private:
 	std::map<uint64_t, std::pair<std::function<void(std::shared_ptr<const Value>)>,
-			std::function<void(const std::exception&)>>> vnx_queue_generic;
+			std::function<void(const vnx::exception&)>>> vnx_queue_generic;
 
 };
 

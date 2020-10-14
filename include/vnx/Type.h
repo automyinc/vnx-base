@@ -82,6 +82,7 @@ class Object;
 class Module;
 class Variant;
 class Topic;
+class TopicPtr;
 class TypeCode;
 class TypeInput;
 class TypeOutput;
@@ -502,6 +503,12 @@ public:
 	 */
 	bool instanceof(Hash64 type_hash_) const;
 	
+	/**
+	 * Returns type code of given field, if it has one (struct, class, enum).
+	 * Otherwise returns nullptr.
+	 */
+	const TypeCode* get_field_type_code(const std::string& name) const;
+
 	void accept(Visitor& visitor) const;
 
 	void print(std::ostream& out) const;

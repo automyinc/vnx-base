@@ -6,6 +6,7 @@
 
 #include <vnx/package.hxx>
 #include <vnx/Module.h>
+#include <vnx/TopicPtr.hpp>
 
 
 namespace vnx {
@@ -16,10 +17,10 @@ public:
 	int32_t port = 4444;
 	std::string unix_path = ".vnxrouter.sock";
 	int32_t max_queue_ms = 100;
-	std::map<std::string, std::vector<std::string>> import_map;
-	std::map<std::string, std::vector<std::string>> export_map;
+	std::map<std::string, std::vector<::vnx::TopicPtr>> import_map;
+	std::map<std::string, std::vector<::vnx::TopicPtr>> export_map;
 	std::map<std::string, std::vector<std::string>> forward_map;
-	std::vector<std::string> export_list;
+	std::vector<::vnx::TopicPtr> export_list;
 	
 	typedef ::vnx::Module Super;
 	
@@ -28,20 +29,20 @@ public:
 	
 	RouterBase(const std::string& _vnx_name);
 	
-	vnx::Hash64 get_type_hash() const;
-	const char* get_type_name() const;
-	const vnx::TypeCode* get_type_code() const;
+	vnx::Hash64 get_type_hash() const override;
+	const char* get_type_name() const override;
+	const vnx::TypeCode* get_type_code() const override;
 	
-	void read(std::istream& _in);
-	void write(std::ostream& _out) const;
+	void read(std::istream& _in) override;
+	void write(std::ostream& _out) const override;
 	
-	void accept(vnx::Visitor& _visitor) const;
+	void accept(vnx::Visitor& _visitor) const override;
 	
-	vnx::Object to_object() const;
-	void from_object(const vnx::Object& object);
+	vnx::Object to_object() const override;
+	void from_object(const vnx::Object& object) override;
 	
-	vnx::Variant get_field(const std::string& name) const;
-	void set_field(const std::string& name, const vnx::Variant& value);
+	vnx::Variant get_field(const std::string& name) const override;
+	void set_field(const std::string& name, const vnx::Variant& value) override;
 	
 	friend std::ostream& operator<<(std::ostream& _out, const RouterBase& _value);
 	friend std::istream& operator>>(std::istream& _in, RouterBase& _value);

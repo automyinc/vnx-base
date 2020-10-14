@@ -50,6 +50,12 @@ public:
 	/// Opens directory with path given before. Closes directory beforehand if still open.
 	void open();
 	
+	/// Creates the directory and all intermediate directories and resets the path.
+	void create(const std::string &path_);
+
+	/// Creates the directory at the path given before and all intermediate directories.
+	void create();
+
 	/** \brief Returns a list of files in this directory.
 	 * 
 	 * Returned files are not opened.

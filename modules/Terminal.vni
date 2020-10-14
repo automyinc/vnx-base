@@ -8,7 +8,7 @@ module Terminal {
 	
 	string prompt = "> ";				// terminal prompt when waiting for commands
 	
-	void command(string cmd);
+	void command(vector<string> commandline);
 	
 	void read_char(char c);
 	
@@ -21,6 +21,8 @@ module Terminal {
 	void dump(string expr);
 	
 	void topic_info(string expr);
+	
+	void module_info(string expr);
 	
 	void handle(LogMsg sample);
 	

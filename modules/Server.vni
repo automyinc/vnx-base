@@ -4,7 +4,7 @@ module Server {
 	
 	string address;						// URL to bind to
 	
-	vector<string> export_list;			// list of topics to export
+	vector<TopicPtr> export_list;		// list of topics to export
 	
 	int max_queue_ms = 100;
 	

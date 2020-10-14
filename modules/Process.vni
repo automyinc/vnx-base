@@ -14,9 +14,9 @@ module Process {
 	
 	ProcessInfo get_process_info() const;
 	
-	Variant vnx_get_global_config(string key) const;
+	Variant get_global_config(string key) const;
 	
-	void vnx_set_global_config(string key, Variant value);
+	void set_global_config(string key, Variant value);
 	
 	void pause_log();							// pause terminal logging output
 	void resume_log();							// resume terminal logging output
