@@ -67,7 +67,7 @@ private:
 	
 	void update();
 	
-	void print_stats(bool force = true);
+	void update_stats(bool force = true);
 	
 private:
 	std::shared_ptr<MultiRecordReader> reader;

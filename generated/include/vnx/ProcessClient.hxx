@@ -37,19 +37,21 @@ public:
 	
 	::vnx::TypeCode vnx_get_type_code();
 	
+	std::shared_ptr<const ::vnx::ModuleInfo> vnx_get_module_info();
+	
 	void vnx_restart();
 	
 	void vnx_restart_async();
 	
-	void vnx_close();
+	void vnx_stop();
 	
-	void vnx_close_async();
+	void vnx_stop_async();
 	
 	std::string get_name();
 	
 	::vnx::TimeSync get_sync_time();
 	
-	std::vector<::vnx::TopicInfo> get_topic_info();
+	std::vector<::vnx::TopicInfo> get_topic_info(const vnx::bool_t& include_domains);
 	
 	std::vector<::vnx::ModuleInfo> get_module_info();
 	
@@ -60,6 +62,10 @@ public:
 	void set_global_config(const std::string& key, const ::vnx::Variant& value);
 	
 	void set_global_config_async(const std::string& key, const ::vnx::Variant& value);
+	
+	void reload_config();
+	
+	void reload_config_async();
 	
 	void pause_log();
 	

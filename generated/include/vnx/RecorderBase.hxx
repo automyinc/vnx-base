@@ -7,6 +7,7 @@
 #include <vnx/package.hxx>
 #include <vnx/Hash64.hpp>
 #include <vnx/Module.h>
+#include <vnx/TopicPtr.hpp>
 
 
 namespace vnx {
@@ -14,6 +15,7 @@ namespace vnx {
 class RecorderBase : public ::vnx::Module {
 public:
 	
+	::vnx::TopicPtr output_status = "vnx.recorder_status";
 	std::string filename;
 	int32_t max_queue_ms = 1000;
 	int32_t flush_interval_ms = 1000;
@@ -31,7 +33,7 @@ public:
 	RecorderBase(const std::string& _vnx_name);
 	
 	vnx::Hash64 get_type_hash() const override;
-	const char* get_type_name() const override;
+	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
 	void read(std::istream& _in) override;

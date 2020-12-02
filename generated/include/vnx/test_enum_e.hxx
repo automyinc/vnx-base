@@ -12,25 +12,27 @@ namespace vnx {
 
 struct test_enum_e {
 	
-	enum {
-		BAR = 3694613684,
-		FOO = 3118640039,
+	enum enum_t {
+		BAR = 3694613684l,
+		FOO = 3118640039l,
 	};
 	
-	uint32_t value = 0;
+	enum_t value = ::vnx::test_enum_e::enum_t(0);
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
 	test_enum_e() {}
-	test_enum_e(uint32_t _value) { value = _value; }
+	test_enum_e(const enum_t& _value) { value = _value; }
+	test_enum_e(const ::vnx::test_enum_e& _other) { value = _other.value; }
 	
 	vnx::Hash64 get_type_hash() const;
-	const char* get_type_name() const;
+	std::string get_type_name() const;
 	const vnx::TypeCode* get_type_code() const;
 	
-	operator uint32_t() const { return value; }
-	test_enum_e& operator=(uint32_t _value) { value = _value; return *this; }
+	operator enum_t() const { return value; }
+	test_enum_e& operator=(const enum_t& _value) { value = _value; return *this; }
+	test_enum_e& operator=(const ::vnx::test_enum_e& _other) { value = _other.value; return *this; }
 	
 	static std::shared_ptr<test_enum_e> create();
 	std::shared_ptr<test_enum_e> clone() const;
@@ -42,6 +44,13 @@ struct test_enum_e {
 	void write(std::ostream& _out) const;
 	
 	void accept(vnx::Visitor& _visitor) const;
+	
+	std::string to_string() const;
+	std::string to_string_value() const;
+	std::string to_string_value_full() const;
+	
+	void from_string(const std::string& str);
+	void from_string_value(const std::string& name);
 	
 	vnx::Object to_object() const;
 	void from_object(const vnx::Object& object);
@@ -59,5 +68,32 @@ struct test_enum_e {
 
 
 } // namespace vnx
+
+
+namespace vnx {
+
+void read(TypeInput& in, ::vnx::test_enum_e::enum_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+
+void write(TypeOutput& out, const ::vnx::test_enum_e::enum_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+
+template<>
+std::string to_string(const ::vnx::test_enum_e& _value); ///< \private
+
+template<>
+std::string to_string_value(const ::vnx::test_enum_e& _value); ///< \private
+
+template<>
+std::string to_string_value_full(const ::vnx::test_enum_e& _value); ///< \private
+
+template<>
+std::string to_string(const ::vnx::test_enum_e::enum_t& _value); ///< \private
+
+template<>
+std::string to_string_value(const ::vnx::test_enum_e::enum_t& _value); ///< \private
+
+template<>
+std::string to_string_value_full(const ::vnx::test_enum_e::enum_t& _value); ///< \private
+
+} // vnx
 
 #endif // INCLUDE_vnx_test_enum_e_HXX_

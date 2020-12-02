@@ -5,7 +5,9 @@ class Request extends Message {
 	Hash64 src_mac;			// unique id
 	Hash64 dst_mac;			// unique id
 	
-	ulong request_id;		// counter
+	Hash64 session;			// session id
+	
+	ulong request_id;		// sequence counter (starting with 1)
 	
 	Value* method;
 	

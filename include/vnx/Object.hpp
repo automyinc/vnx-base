@@ -36,6 +36,14 @@ std::shared_ptr<T> Object::as_value() const {
 	return tmp;
 }
 
+template<typename T>
+bool Object::instanceof() const {
+	if(const auto* type_code = get_type_code()) {
+		return type_code->instanceof(T::VNX_TYPE_HASH);
+	}
+	return false;
+}
+
 
 } // vnx
 

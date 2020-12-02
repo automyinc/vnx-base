@@ -21,8 +21,10 @@ public:
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
 	vnx::Hash64 get_type_hash() const override;
-	const char* get_type_name() const override;
+	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
+	
+	static std::shared_ptr<const ::vnx::Exception> from_what(const std::string& what);
 	
 	static std::shared_ptr<Exception> create();
 	std::shared_ptr<vnx::Value> clone() const override;

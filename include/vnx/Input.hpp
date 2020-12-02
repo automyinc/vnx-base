@@ -192,6 +192,20 @@ void read(std::istream& in, std::vector<T>& vector) {
 	}
 }
 
+/** \brief Reads a dynamic list from the JSON stream
+ *
+ * Example: [1, 2, 3]
+ */
+template<typename T>
+void read(std::istream& in, std::list<T>& list) {
+	list.clear();
+	std::vector<T> tmp;
+	read(in, tmp);
+	for(auto& value : tmp) {
+		list.emplace_back(std::move(value));
+	}
+}
+
 /** \brief Reads a pair from the JSON stream
  *
  * Example: ["key", "value"]
@@ -215,12 +229,10 @@ void read(std::istream& in, std::pair<K, V>& pair) {
 template<typename T>
 void read(std::istream& in, std::set<T>& set) {
 	set.clear();
-	std::vector<std::string> tmp;
-	read_array(in, tmp);
-	for(const auto& value : tmp) {
-		T next = T();
-		from_string(value, next);
-		set.emplace(std::move(next));
+	std::vector<T> tmp;
+	read(in, tmp);
+	for(auto& value : tmp) {
+		set.emplace(std::move(value));
 	}
 }
 
@@ -250,7 +262,7 @@ void read_matrix(std::istream& in, T* data, const std::array<size_t, N>& size) {
 	bool is_valid = false;
 	std::vector<T> values;
 	const Variant tmp = read(in);
-	if(tmp.is_list()) {
+	if(tmp.is_array()) {
 		is_valid = true;
 		tmp.to(values);
 	} else if(tmp.is_object()) {

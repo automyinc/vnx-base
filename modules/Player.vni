@@ -2,6 +2,8 @@ package vnx;
 
 module Player {
 	
+	TopicPtr output_status = "vnx.player_status";
+	
 	vector<string> files;						// list of record files to play back
 	
 	int interval_ms = 100;						// info publish interval

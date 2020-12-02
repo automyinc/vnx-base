@@ -44,7 +44,7 @@ public:
 	
 	Hash64(const Hash64& A, const Hash64& B);
 	
-	static Hash64 rand();
+	static Hash64 rand();					///< Returns random (non-zero) hash value
 	
 	operator uint64_t() const {
 		return value;

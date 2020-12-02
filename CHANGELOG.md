@@ -1,4 +1,48 @@
 
+## [v1.8.2]
+
+- added Proxy wait_on_connect()
+- Proxy block_until_connect + block_until_reconnect
+- added login option to tools
+- added vnx::to_string_value_full() for enums
+- enums are type safe now
+- Proxy + Server default_access for anonymous clients
+- added vnxpasswd tool
+- Proxy missing socket close fix
+- added Process reload_config()
+- renamed configs vnx_server_map -> vnx.server_map (backwards compatible)
+- added config protection
+- Hash64::rand() returns non-zero value
+- session handling
+- Terminal fix to avoid std::terminate on shutdown
+- Proxy allow NON_BLOCKING for Sample and Return, ignore overflow
+- added authentication
+- added ModuleInterface vnx_get_module_info()
+- added Handle get_id() get_name()
+- added VNI Annotation + TypeCode permission
+- split Module into ModuleBase and Module
+- added Handle is_running()
+- accept fix for CODE_OBJECT
+- write_dynamic() fix for CODE_NULL
+- Object publish support
+- added Message RESEND feature
+- added request_t
+- added vnx_read_fallback(const Variant&)
+
+## [v1.8.1]
+
+- added vnx_shutdown(), changed shutdown procedure
+- Node::notify() fix for nullptr
+- proper Object get_type_name() and get_type_code()
+- added TypeCode::get_method_name()
+- get_type_name() returns std::string now
+- removed obsolete Variant is_list() and is_value()
+- added Module vnx_auto_shutdown
+- only exact topic matches for Terminal commands
+- write_to_file() for windows
+- added nullptr support + dynamic null support
+- added VNI list
+
 ## [v1.8.0]
 
 - AsyncClient refactor

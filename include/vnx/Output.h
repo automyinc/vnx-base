@@ -186,6 +186,8 @@ void write(TypeOutput& out, const std::unordered_map<K, V, C>& map, const TypeCo
 
 void write(TypeOutput& out, const Value& value, const TypeCode* type_code, const uint16_t* code);
 
+void write(TypeOutput& out, const std::nullptr_t& value, const TypeCode* type_code, const uint16_t* code);
+
 void write(TypeOutput& out, std::shared_ptr<const Value> value, const TypeCode* type_code, const uint16_t* code);
 
 template<typename T>
@@ -194,6 +196,8 @@ void write(TypeOutput& out, std::shared_ptr<T> value, const TypeCode* type_code,
 void write(TypeOutput& out, const Value& value);
 
 void write(TypeOutput& out, const Variant& value);
+
+void write(TypeOutput& out, const std::nullptr_t& value);
 
 void write(TypeOutput& out, std::shared_ptr<const Value> value);
 
@@ -349,9 +353,14 @@ void write_dynamic_list(TypeOutput& out, const T* data, const size_t size) {
 template<typename T>
 void write_dynamic(TypeOutput& out, const T& value) {
 	std::vector<uint16_t> code;
-	vnx::type<T>().create_dynamic_code(code);
+	vnx::type<T>().create_dynamic_code(code, value, true);
+	if(code.empty()) {
+		throw std::logic_error("code.empty()");
+	}
 	write_byte_code(out, code.data(), code.size());
-	vnx::type<T>().write(out, value, nullptr, code.data());
+	if(code[0] != CODE_NULL) {
+		vnx::type<T>().write(out, value, nullptr, code.data());
+	}
 }
 
 /** \brief Writes a matrix to the stream
@@ -440,6 +449,8 @@ inline void write(std::ostream& out, const float64_t& value) { out << value; }
 
 void write(std::ostream& out, const std::string& value);
 
+void write(std::ostream& out, const vnx::Value& value);
+
 template<typename T>
 void write(std::ostream& out, std::shared_ptr<T> value);
 
@@ -454,6 +465,9 @@ void write(std::ostream& out, const std::array<T, N>& array);
 
 template<typename T>
 void write(std::ostream& out, const std::vector<T>& vector);
+
+template<typename T>
+void write(std::ostream& out, const std::list<T>& list);
 
 template<typename T, size_t N>
 void write(std::ostream& out, const std::array<T, N>& array) {
@@ -470,6 +484,11 @@ void write(std::ostream& out, const std::array<T, N>& array) {
 template<typename T>
 void write(std::ostream& out, const std::vector<T>& vector) {
 	write_sequence(out, vector.begin(), vector.end());
+}
+
+template<typename T>
+void write(std::ostream& out, const std::list<T>& list) {
+	write_sequence(out, list.begin(), list.end());
 }
 
 template<>

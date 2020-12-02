@@ -39,6 +39,18 @@ std::string to_string_value(const T& value) {
 	return stream.str();
 }
 
+template<> inline
+std::string to_string_value(const std::string& value) {
+	return value;
+}
+
+
+/// Same as to_string_value(), except for enums (will include type name)
+template<typename T>
+std::string to_string_value_full(const T& value) {
+	return to_string_value(value);
+}
+
 
 template<typename T>
 void write_to_file_json(const std::string& file_name, const T& value){
@@ -56,6 +68,9 @@ void write_to_file_json(const std::string& file_name, const T& value){
 		std::ofstream stream(tmp_file_name);
 		write(stream, value);
 	}
+#ifdef _WIN32
+	::remove(file_name.c_str());
+#endif
 	if(::rename(tmp_file_name.c_str(), file_name.c_str())) {
 		throw std::runtime_error("rename('" + tmp_file_name + "', '" + file_name + "') failed!");
 	}

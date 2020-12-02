@@ -19,7 +19,10 @@ public:
 	int64_t begin_time = 0;
 	int64_t end_time = 0;
 	int64_t current_time = 0;
+	vnx::float64_t progress = 0;
 	vnx::float64_t actual_speed = 0;
+	vnx::float64_t bandwidth = 0;
+	vnx::float64_t sample_rate = 0;
 	std::string message;
 	::vnx::TimeControl control;
 	::vnx::RecordHeader info;
@@ -30,7 +33,7 @@ public:
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
 	vnx::Hash64 get_type_hash() const override;
-	const char* get_type_name() const override;
+	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
 	static std::shared_ptr<PlayerStatus> create();

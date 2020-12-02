@@ -12,34 +12,36 @@ namespace vnx {
 
 struct terminal_event_e {
 	
-	enum {
-		KEY_ARROWDOWN = 119472263,
-		KEY_ARROWLEFT = 1701149083,
-		KEY_ARROWRIGHT = 29208993,
-		KEY_ARROWUP = 1010595927,
-		KEY_BACKSPACE = 4017267153,
-		KEY_CR = 1737651535,
-		KEY_DEL = 1927793921,
-		KEY_END = 4000818268,
-		KEY_LF = 3884396404,
-		KEY_POS1 = 1312647358,
-		KEY_TAB = 1321317380,
+	enum enum_t {
+		KEY_ARROWDOWN = 119472263l,
+		KEY_ARROWLEFT = 1701149083l,
+		KEY_ARROWRIGHT = 29208993l,
+		KEY_ARROWUP = 1010595927l,
+		KEY_BACKSPACE = 4017267153l,
+		KEY_CR = 1737651535l,
+		KEY_DEL = 1927793921l,
+		KEY_END = 4000818268l,
+		KEY_LF = 3884396404l,
+		KEY_POS1 = 1312647358l,
+		KEY_TAB = 1321317380l,
 	};
 	
-	uint32_t value = 0;
+	enum_t value = ::vnx::terminal_event_e::enum_t(0);
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
 	terminal_event_e() {}
-	terminal_event_e(uint32_t _value) { value = _value; }
+	terminal_event_e(const enum_t& _value) { value = _value; }
+	terminal_event_e(const ::vnx::terminal_event_e& _other) { value = _other.value; }
 	
 	vnx::Hash64 get_type_hash() const;
-	const char* get_type_name() const;
+	std::string get_type_name() const;
 	const vnx::TypeCode* get_type_code() const;
 	
-	operator uint32_t() const { return value; }
-	terminal_event_e& operator=(uint32_t _value) { value = _value; return *this; }
+	operator enum_t() const { return value; }
+	terminal_event_e& operator=(const enum_t& _value) { value = _value; return *this; }
+	terminal_event_e& operator=(const ::vnx::terminal_event_e& _other) { value = _other.value; return *this; }
 	
 	static std::shared_ptr<terminal_event_e> create();
 	std::shared_ptr<terminal_event_e> clone() const;
@@ -51,6 +53,13 @@ struct terminal_event_e {
 	void write(std::ostream& _out) const;
 	
 	void accept(vnx::Visitor& _visitor) const;
+	
+	std::string to_string() const;
+	std::string to_string_value() const;
+	std::string to_string_value_full() const;
+	
+	void from_string(const std::string& str);
+	void from_string_value(const std::string& name);
 	
 	vnx::Object to_object() const;
 	void from_object(const vnx::Object& object);
@@ -68,5 +77,32 @@ struct terminal_event_e {
 
 
 } // namespace vnx
+
+
+namespace vnx {
+
+void read(TypeInput& in, ::vnx::terminal_event_e::enum_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+
+void write(TypeOutput& out, const ::vnx::terminal_event_e::enum_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+
+template<>
+std::string to_string(const ::vnx::terminal_event_e& _value); ///< \private
+
+template<>
+std::string to_string_value(const ::vnx::terminal_event_e& _value); ///< \private
+
+template<>
+std::string to_string_value_full(const ::vnx::terminal_event_e& _value); ///< \private
+
+template<>
+std::string to_string(const ::vnx::terminal_event_e::enum_t& _value); ///< \private
+
+template<>
+std::string to_string_value(const ::vnx::terminal_event_e::enum_t& _value); ///< \private
+
+template<>
+std::string to_string_value_full(const ::vnx::terminal_event_e::enum_t& _value); ///< \private
+
+} // vnx
 
 #endif // INCLUDE_vnx_terminal_event_e_HXX_

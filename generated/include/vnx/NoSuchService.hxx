@@ -6,6 +6,7 @@
 
 #include <vnx/package.hxx>
 #include <vnx/Exception.hxx>
+#include <vnx/Hash64.hpp>
 
 
 namespace vnx {
@@ -13,7 +14,7 @@ namespace vnx {
 class NoSuchService : public ::vnx::Exception {
 public:
 	
-	uint64_t dst_mac = 0;
+	::vnx::Hash64 dst_mac;
 	
 	typedef ::vnx::Exception Super;
 	
@@ -21,7 +22,7 @@ public:
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
 	vnx::Hash64 get_type_hash() const override;
-	const char* get_type_name() const override;
+	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
 	static std::shared_ptr<NoSuchService> create();

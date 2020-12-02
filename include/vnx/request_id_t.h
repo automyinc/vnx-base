@@ -38,8 +38,14 @@ bool operator==(const request_id_t& lhs, const request_id_t& rhs) {
 	return lhs.first == rhs.first && lhs.second == rhs.second;
 }
 
+inline
+bool operator!(const request_id_t& rhs) {
+	return rhs.first == Hash64() && rhs.second == 0;
+}
+
 
 } // vnx
+
 
 namespace std {
 	template<> struct hash<vnx::request_id_t> {

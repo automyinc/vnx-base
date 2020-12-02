@@ -59,6 +59,10 @@ public:
 		return field.empty();
 	}
 	
+	void erase(const std::string& name) {
+		field.erase(name);
+	}
+
 	void clear() {
 		field.clear();
 	}
@@ -67,13 +71,11 @@ public:
 		return Hash64(get_type_name());
 	}
 	
-	const char* get_type_name() const override {
-		return "vnx.Object";
-	}
+	/// Returns type name if "__type" field is available, otherwise "vnx.Object"
+	std::string get_type_name() const override;
 	
-	const TypeCode* get_type_code() const override {
-		return nullptr;
-	}
+	/// Returns type code if "__type" field is available
+	const TypeCode* get_type_code() const override;
 	
 	static std::shared_ptr<Object> create() {
 		return std::make_shared<Object>();
@@ -133,6 +135,10 @@ public:
 	 */
 	template<typename T>
 	std::shared_ptr<T> as_value() const;
+
+	/// Returns true if this object is an instance of T
+	template<typename T>
+	bool instanceof() const;
 
 	friend std::ostream& operator<<(std::ostream& out, const Object& value);
 	

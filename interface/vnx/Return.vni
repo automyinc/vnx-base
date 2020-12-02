@@ -12,4 +12,6 @@ class Return extends Message {
 	
 	static Return* create_no_such_service_return(Request* request);
 	
+	static Return* create_permission_denied_return(Request *request);
+	
 }

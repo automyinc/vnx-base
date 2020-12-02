@@ -5,7 +5,6 @@
 #define INCLUDE_vnx_RecordHeader_HXX_
 
 #include <vnx/package.hxx>
-#include <vnx/Marker.hxx>
 #include <vnx/Value.h>
 #include <vnx/record_topic_info_t.hxx>
 
@@ -23,9 +22,9 @@ public:
 	int64_t num_bytes = 0;
 	int64_t num_samples = 0;
 	int64_t num_samples_lost = 0;
-	std::vector<uint64_t> type_code_positions;
+	std::vector<int64_t> markers;
+	std::vector<int64_t> type_code_positions;
 	std::vector<::vnx::record_topic_info_t> topics;
-	std::vector<::vnx::Marker> markers;
 	
 	typedef ::vnx::Value Super;
 	
@@ -33,7 +32,7 @@ public:
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
 	vnx::Hash64 get_type_hash() const override;
-	const char* get_type_name() const override;
+	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
 	static std::shared_ptr<RecordHeader> create();

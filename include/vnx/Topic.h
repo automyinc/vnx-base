@@ -43,16 +43,15 @@ std::shared_ptr<Topic> get_topic(const std::string& domain, const std::string& t
 
 /** \brief Get a list of all topics.
  * 
- * Does not include domains (ie. only topics which have no children).
+ * @param include_domains If to include domains (ie. topics which have children)
  */
-std::vector<std::shared_ptr<Topic>> get_all_topics();
+std::vector<std::shared_ptr<Topic>> get_all_topics(bool include_domains = false);
 
-/** \brief Get a list of all topics in domain.
+/** \brief Get a list of all direct sub-topics in given domain.
  * 
- * Does not include sub-domains (ie. only topics which have no children).
- * Does include sub-topics of sub-domains though.
+ * @param include_domains If to include domains (ie. topics which have children)
  */
-std::vector<std::shared_ptr<Topic>> get_all_topics(std::shared_ptr<Topic> domain);
+std::vector<std::shared_ptr<Topic>> get_all_topics(std::shared_ptr<Topic> domain, bool include_domains = false);
 
 /** \brief Returns new topic based on the given re-mapping \p map.
  *
@@ -99,13 +98,13 @@ public:
 	Hash64 get_hash() const { return topic_hash; }
 	
 	/// Returns the topic info for this topic. (thread-safe)
-	TopicInfo get_info();
+	TopicInfo get_info() const;
 	
 	/// Returns a pointer to the parent of this topic (ie. its domain). (thread-safe)
-	std::shared_ptr<Topic> get_parent();
+	std::shared_ptr<Topic> get_parent() const;
 	
 	/// Returns a list of all direct child topics. (thread-safe)
-	std::vector<std::shared_ptr<Topic>> get_children();
+	std::vector<std::shared_ptr<Topic>> get_children() const;
 	
 	/// Add a subscriber to this topic. (thread-safe)
 	void subscribe(std::shared_ptr<Pipe> pipe);
@@ -135,7 +134,7 @@ public:
 	void close();
 	
 private:
-	std::mutex mutex;
+	mutable std::mutex mutex;
 	std::condition_variable condition;
 	
 	std::string topic_name;

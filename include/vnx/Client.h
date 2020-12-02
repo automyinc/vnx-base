@@ -20,6 +20,7 @@
 #include <vnx/Node.h>
 #include <vnx/Type.h>
 #include <vnx/Value.h>
+#include <vnx/request_t.h>
 
 
 namespace vnx {
@@ -38,6 +39,9 @@ public:
 	
 	~Client();
 	
+	/// Sets a custom session to be used for requests.
+	void vnx_set_session(Hash64 id);
+
 	/// If \p non_blocking_mode == true requests will throw an exception instead of blocking (default = false)
 	void vnx_set_non_blocking(bool non_blocking_mode);
 
@@ -50,6 +54,7 @@ protected:
 private:
 	Hash64 vnx_src_mac;
 	Hash64 vnx_service_addr;
+	Hash64 vnx_session_id;
 	std::atomic<uint64_t> vnx_next_id {0};
 	std::atomic_bool vnx_is_non_blocking {false};
 	

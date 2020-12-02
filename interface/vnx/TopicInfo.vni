@@ -7,4 +7,6 @@ class TopicInfo {
 	ulong sample_count;
 	ulong num_subscribers;
 	
+	bool is_domain;				// if topic has sub-topics
+	
 }

@@ -39,11 +39,15 @@ protected:
 	
 	void handle(std::shared_ptr<const Sample> sample) override;
 	
+	void handle_resend(std::shared_ptr<const Sample> sample) override;
+
 	void handle(std::shared_ptr<const ::vnx::TopicInfoList> value) override;
 	
 private:
 	void update(const std::vector<TopicInfo>& info);
-	
+
+	void add_topic(const std::string& name);
+
 private:
 	std::shared_ptr<ProcessClient> process;
 	std::shared_ptr<ProxyClient> proxy;

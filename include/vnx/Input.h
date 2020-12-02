@@ -130,27 +130,27 @@ void read_value(const void* buf, T& value, const uint16_t* code) {
 	switch(code[0]) {
 		case CODE_NULL: value = T(); return;
 		case CODE_BOOL:
-		case CODE_UINT8: value = *((const uint8_t*)buf); return;
-		case CODE_UINT16: value = *((const uint16_t*)buf); return;
-		case CODE_UINT32: value = *((const uint32_t*)buf); return;
-		case CODE_UINT64: value = *((const uint64_t*)buf); return;
-		case CODE_INT8: value = *((const int8_t*)buf); return;
-		case CODE_INT16: value = *((const int16_t*)buf); return;
-		case CODE_INT32: value = *((const int32_t*)buf); return;
-		case CODE_INT64: value = *((const int64_t*)buf); return;
-		case CODE_FLOAT: value = *((const float32_t*)buf); return;
-		case CODE_DOUBLE: value = *((const float64_t*)buf); return;
+		case CODE_UINT8: value = T(*((const uint8_t*)buf)); return;
+		case CODE_UINT16: value = T(*((const uint16_t*)buf)); return;
+		case CODE_UINT32: value = T(*((const uint32_t*)buf)); return;
+		case CODE_UINT64: value = T(*((const uint64_t*)buf)); return;
+		case CODE_INT8: value = T(*((const int8_t*)buf)); return;
+		case CODE_INT16: value = T(*((const int16_t*)buf)); return;
+		case CODE_INT32: value = T(*((const int32_t*)buf)); return;
+		case CODE_INT64: value = T(*((const int64_t*)buf)); return;
+		case CODE_FLOAT: value = T(*((const float32_t*)buf)); return;
+		case CODE_DOUBLE: value = T(*((const float64_t*)buf)); return;
 		case CODE_ALT_BOOL:
-		case CODE_ALT_UINT8: value = flip_bytes(*((const uint8_t*)buf)); return;
-		case CODE_ALT_UINT16: value = flip_bytes(*((const uint16_t*)buf)); return;
-		case CODE_ALT_UINT32: value = flip_bytes(*((const uint32_t*)buf)); return;
-		case CODE_ALT_UINT64: value = flip_bytes(*((const uint64_t*)buf)); return;
-		case CODE_ALT_INT8: value = flip_bytes(*((const int8_t*)buf)); return;
-		case CODE_ALT_INT16: value = flip_bytes(*((const int16_t*)buf)); return;
-		case CODE_ALT_INT32: value = flip_bytes(*((const int32_t*)buf)); return;
-		case CODE_ALT_INT64: value = flip_bytes(*((const int64_t*)buf)); return;
-		case CODE_ALT_FLOAT: value = flip_bytes(*((const float32_t*)buf)); return;
-		case CODE_ALT_DOUBLE: value = flip_bytes(*((const float64_t*)buf)); return;
+		case CODE_ALT_UINT8: value = T(flip_bytes(*((const uint8_t*)buf))); return;
+		case CODE_ALT_UINT16: value = T(flip_bytes(*((const uint16_t*)buf))); return;
+		case CODE_ALT_UINT32: value = T(flip_bytes(*((const uint32_t*)buf))); return;
+		case CODE_ALT_UINT64: value = T(flip_bytes(*((const uint64_t*)buf))); return;
+		case CODE_ALT_INT8: value = T(flip_bytes(*((const int8_t*)buf))); return;
+		case CODE_ALT_INT16: value = T(flip_bytes(*((const int16_t*)buf))); return;
+		case CODE_ALT_INT32: value = T(flip_bytes(*((const int32_t*)buf))); return;
+		case CODE_ALT_INT64: value = T(flip_bytes(*((const int64_t*)buf))); return;
+		case CODE_ALT_FLOAT: value = T(flip_bytes(*((const float32_t*)buf))); return;
+		case CODE_ALT_DOUBLE: value = T(flip_bytes(*((const float64_t*)buf))); return;
 		default: value = T();
 	}
 }
@@ -493,46 +493,15 @@ void read(TypeInput& in, std::vector<bool>& vector, const TypeCode* type_code, c
 
 /** \brief Reads a dynamically allocated list (SequenceContainer) from the input stream.
  * 
- * Compatible with CODE_ARRAY, CODE_LIST and CODE_DYNAMIC.
+ * Compatible with CODE_ARRAY, CODE_LIST, CODE_MATRIX and CODE_DYNAMIC.
  * Tries to read a single value if possible otherwise.
  */
 template<typename T>
 void read_list(TypeInput& in, T& list, const TypeCode* type_code, const uint16_t* code) {
 	list.clear();
-	uint32_t size = 0;
-	const uint16_t* value_code = 0;
-	switch(code[0]) {
-		case CODE_NULL:
-			return;
-		case CODE_LIST:
-			read(in, size);
-			value_code = code + 1;
-			break;
-		case CODE_ALT_LIST:
-			read(in, size);
-			size = flip_bytes(size);
-			value_code = code + 1;
-			break;
-		case CODE_ARRAY:
-			size = code[1];
-			value_code = code + 2;
-			break;
-		case CODE_ALT_ARRAY:
-			size = flip_bytes(code[1]);
-			value_code = code + 2;
-			break;
-		case CODE_DYNAMIC:
-		case CODE_ALT_DYNAMIC: {
-			read_dynamic(in, list);
-			return;
-		}
-		default:
-			size = 1;
-			value_code = code;
-	}
-	for(uint32_t i = 0; i < size; ++i) {
-		typename T::value_type value;
-		vnx::type<typename T::value_type>().read(in, value, type_code, value_code);
+	std::vector<typename T::value_type> tmp;
+	read_vector(in, tmp, type_code, code);
+	for(auto& value : tmp) {
 		list.emplace_back(std::move(value));
 	}
 }
@@ -545,46 +514,15 @@ void read(TypeInput& in, std::list<T>& list, const TypeCode* type_code, const ui
 
 /** \brief Reads a dynamically allocated set (AssociativeContainer) from the input stream.
  * 
- * Compatible with CODE_ARRAY, CODE_LIST and CODE_DYNAMIC.
+ * Compatible with CODE_ARRAY, CODE_LIST, CODE_MATRIX and CODE_DYNAMIC.
  */
 template<typename T>
 void read_set(TypeInput& in, T& set, const TypeCode* type_code, const uint16_t* code) {
 	set.clear();
-	uint32_t size = 0;
-	const uint16_t* value_code = 0;
-	switch(code[0]) {
-		case CODE_NULL:
-			return;
-		case CODE_LIST:
-			read(in, size);
-			value_code = code + 1;
-			break;
-		case CODE_ALT_LIST:
-			read(in, size);
-			size = flip_bytes(size);
-			value_code = code + 1;
-			break;
-		case CODE_ARRAY:
-			size = code[1];
-			value_code = code + 2;
-			break;
-		case CODE_ALT_ARRAY:
-			size = flip_bytes(code[1]);
-			value_code = code + 2;
-			break;
-		case CODE_DYNAMIC:
-		case CODE_ALT_DYNAMIC: {
-			read_dynamic(in, set);
-			return;
-		}
-		default:
-			size = 1;
-			value_code = code;
-	}
-	for(uint32_t i = 0; i < size; ++i) {
-		typename T::value_type key;
-		vnx::type<typename T::value_type>().read(in, key, type_code, value_code);
-		set.emplace(std::move(key));
+	std::vector<typename T::key_type> tmp;
+	read_vector(in, tmp, type_code, code);
+	for(auto& value : tmp) {
+		set.emplace(std::move(value));
 	}
 }
 

@@ -51,6 +51,8 @@ protected:
 	
 	void handle(std::shared_ptr<const Sample> sample) override;
 	
+	void handle_resend(std::shared_ptr<const Sample> sample) override;
+
 private:
 	void flush();
 	

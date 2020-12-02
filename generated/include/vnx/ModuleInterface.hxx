@@ -6,6 +6,7 @@
 
 #include <vnx/Type.h>
 #include <vnx/package.hxx>
+#include <vnx/ModuleInfo.hxx>
 #include <vnx/Object.hpp>
 #include <vnx/TypeCode.hpp>
 #include <vnx/Variant.hpp>

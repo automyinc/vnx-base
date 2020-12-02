@@ -37,7 +37,7 @@ std::string string_subs(std::string str, const std::string& from, const std::str
  * multiple times in a row and empty array elements are unwanted.
  * In that case, an empty input string results in an empty vector.
  */
-std::vector<std::string> string_split(const std::string& str, char sep, bool clean=false);
+std::vector<std::string> string_split(const std::string& str, char sep, bool clean = false);
 
 /// Returns a very good 64-bit random number. (Initialized with nano-second timestamp)
 uint64_t rand64();
@@ -63,6 +63,10 @@ std::string ascii_tolower(std::string str)
 	std::transform(str.begin(), str.end(), str.begin(), [](char c){ return std::tolower(c); });
 	return str;
 }
+
+
+/// Expects one line of input from the user with echoing disabled. During input, process log output is paused.
+std::string input_password(const std::string &prompt="");
 
 
 } // vnx

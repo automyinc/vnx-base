@@ -36,7 +36,7 @@ public:
 		return data.get_type_hash();
 	}
 	
-	const char* get_type_name() const override {
+	std::string get_type_name() const override {
 		return data.get_type_name();
 	}
 	

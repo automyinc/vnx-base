@@ -55,29 +55,32 @@ class Timer {
 public:
 	/// Reset (ie. restart) the timer using \p now [usec] as the current virtual time.
 	void reset(int64_t now) {
+		do_reset = false;
 		is_active = true;
 		deadline = now + interval;
 	}
 	
-	/// Reset (ie. restart) the timer now.
+	/// Reset (ie. restart) the timer as soon as possible.
 	void reset() {
-		reset(get_time_micros());
+		do_reset = true;
+		is_active = false;
 	}
-	
+
 	/// Reset timer with new millisecond interval starting now.
 	void set_millis(int64_t interval_ms) {
 		interval = interval_ms * 1000;
-		reset(get_time_micros());
+		reset();
 	}
 	
 	/// Reset timer with new microsecond interval starting now.
 	void set_micros(int64_t interval_us) {
 		interval = interval_us;
-		reset(get_time_micros());
+		reset();
 	}
 	
 	/// Stop this timer.
 	void stop() {
+		do_reset = false;
 		is_active = false;
 	}
 	
@@ -87,6 +90,7 @@ public:
 	bool is_repeat = false;			///< If Timer is set on repeat
 	bool is_active = false;			///< If Timer is set to be active
 	bool is_one_shot = false;		///< If to delete Timer after first expired
+	bool do_reset = false;			///< If to reset Timer as soon as possible
 	
 	std::function<void()> func;		///< User callback function
 	

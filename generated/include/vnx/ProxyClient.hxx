@@ -7,6 +7,7 @@
 #include <vnx/Client.h>
 #include <vnx/Hash64.hpp>
 #include <vnx/Module.h>
+#include <vnx/Session.hxx>
 #include <vnx/TopicPtr.hpp>
 
 
@@ -32,13 +33,17 @@ public:
 	
 	::vnx::TypeCode vnx_get_type_code();
 	
+	std::shared_ptr<const ::vnx::ModuleInfo> vnx_get_module_info();
+	
 	void vnx_restart();
 	
 	void vnx_restart_async();
 	
-	void vnx_close();
+	void vnx_stop();
 	
-	void vnx_close_async();
+	void vnx_stop_async();
+	
+	std::shared_ptr<const ::vnx::Session> login(const std::string& name, const std::string& password);
 	
 	void enable_import(const std::string& topic_name);
 	
@@ -72,6 +77,8 @@ public:
 	
 	void disable_tunnel_async(const ::vnx::Hash64& tunnel_addr);
 	
+	::vnx::Hash64 wait_on_connect();
+	
 	void on_connect();
 	
 	void on_connect_async();
@@ -83,6 +90,14 @@ public:
 	void on_remote_connect(const ::vnx::Hash64& process_id);
 	
 	void on_remote_connect_async(const ::vnx::Hash64& process_id);
+	
+	void on_login(const std::string& name, const std::string& password);
+	
+	void on_login_async(const std::string& name, const std::string& password);
+	
+	void on_remote_login(std::shared_ptr<const ::vnx::Session> remote_session);
+	
+	void on_remote_login_async(std::shared_ptr<const ::vnx::Session> remote_session);
 	
 };
 

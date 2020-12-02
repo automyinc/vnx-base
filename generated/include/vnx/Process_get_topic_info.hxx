@@ -13,6 +13,7 @@ namespace vnx {
 class Process_get_topic_info : public ::vnx::Value {
 public:
 	
+	vnx::bool_t include_domains = 0;
 	
 	typedef ::vnx::Value Super;
 	
@@ -20,7 +21,7 @@ public:
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
 	vnx::Hash64 get_type_hash() const override;
-	const char* get_type_name() const override;
+	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
 	static std::shared_ptr<Process_get_topic_info> create();

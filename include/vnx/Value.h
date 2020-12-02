@@ -31,7 +31,7 @@ public:
 	virtual ~Value() {}
 	
 	virtual vnx::Hash64 get_type_hash() const = 0;
-	virtual const char* get_type_name() const = 0;
+	virtual std::string get_type_name() const = 0;
 	virtual const TypeCode* get_type_code() const = 0;
 	
 	static std::shared_ptr<Value> create() { return nullptr; }

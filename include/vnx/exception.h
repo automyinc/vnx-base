@@ -9,6 +9,7 @@
 #define INCLUDE_VNX_EXCEPTION_H_
 
 #include <vnx/Exception.hxx>
+#include <vnx/permission_e.hxx>
 
 #include <stdexcept>
 
@@ -19,6 +20,8 @@ class exception : public std::exception {
 public:
 	exception() = default;
 	
+	exception(const std::string& message) : what_(message) {}
+
 	exception(std::shared_ptr<const Exception> value)
 		:	value_(value)
 	{
@@ -46,6 +49,18 @@ private:
 	
 	std::string what_;
 	
+};
+
+
+class permission_denied : public std::runtime_error {
+public:
+	permission_denied(const std::string& perm)
+		:	runtime_error("permission denied (" + perm + ")") {}
+
+	template<typename T>
+	permission_denied(const T& perm)
+		:	runtime_error("permission denied (" + vnx::to_string_value_full(perm) + ")") {}
+
 };
 
 

@@ -31,12 +31,12 @@ class Memory;
 class Message;
 class ModuleInfo;
 class ModuleInterface;
-class ModuleInterface_vnx_close;
-class ModuleInterface_vnx_close_return;
 class ModuleInterface_vnx_get_config;
 class ModuleInterface_vnx_get_config_return;
 class ModuleInterface_vnx_get_config_object;
 class ModuleInterface_vnx_get_config_object_return;
+class ModuleInterface_vnx_get_module_info;
+class ModuleInterface_vnx_get_module_info_return;
 class ModuleInterface_vnx_get_type_code;
 class ModuleInterface_vnx_get_type_code_return;
 class ModuleInterface_vnx_restart;
@@ -45,10 +45,13 @@ class ModuleInterface_vnx_set_config;
 class ModuleInterface_vnx_set_config_return;
 class ModuleInterface_vnx_set_config_object;
 class ModuleInterface_vnx_set_config_object_return;
+class ModuleInterface_vnx_stop;
+class ModuleInterface_vnx_stop_return;
 class NoSuchMethod;
 class NoSuchService;
 class Object;
 class OverflowException;
+class PermissionDenied;
 class PlayerBase;
 class Player_get_info;
 class Player_get_info_return;
@@ -86,6 +89,8 @@ class Process_get_topic_info;
 class Process_get_topic_info_return;
 class Process_pause_log;
 class Process_pause_log_return;
+class Process_reload_config;
+class Process_reload_config_return;
 class Process_resume_log;
 class Process_resume_log_return;
 class Process_set_debug;
@@ -112,14 +117,23 @@ class Proxy_enable_import;
 class Proxy_enable_import_return;
 class Proxy_enable_tunnel;
 class Proxy_enable_tunnel_return;
+class Proxy_login;
+class Proxy_login_return;
 class Proxy_on_connect;
 class Proxy_on_connect_return;
 class Proxy_on_disconnect;
 class Proxy_on_disconnect_return;
+class Proxy_on_login;
+class Proxy_on_login_return;
 class Proxy_on_remote_connect;
 class Proxy_on_remote_connect_return;
+class Proxy_on_remote_login;
+class Proxy_on_remote_login_return;
+class Proxy_wait_on_connect;
+class Proxy_wait_on_connect_return;
 class RecordHeader;
 class RecordIndex;
+class RecordPointer;
 class RecorderBase;
 class RecorderStatus;
 class Request;
@@ -127,6 +141,7 @@ class Return;
 class RouterBase;
 class Sample;
 class ServerBase;
+class Session;
 class SpyToolBase;
 class TcpEndpoint;
 class TerminalBase;
@@ -154,7 +169,10 @@ class TopicInfoList;
 class TopicPtr;
 class TypeCode;
 class UnixEndpoint;
+class User;
 class Variant;
+class access_role_e;
+class permission_e;
 class record_index_entry_t;
 class record_topic_info_t;
 class terminal_event_e;
@@ -169,12 +187,12 @@ extern const vnx::TypeCode* const vnx_native_type_code_LogMsg; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Marker; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Message; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInfo; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_close; ///< \private
-extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_close_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_get_config; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_get_config_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_get_config_object; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_get_config_object_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_get_module_info; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_get_module_info_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_get_type_code; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_get_type_code_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_restart; ///< \private
@@ -183,9 +201,12 @@ extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_set_c
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_set_config_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_set_config_object; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_set_config_object_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_stop; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_ModuleInterface_vnx_stop_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_NoSuchMethod; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_NoSuchService; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_OverflowException; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_PermissionDenied; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_PlayerBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Player_get_info; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Player_get_info_return; ///< \private
@@ -223,6 +244,8 @@ extern const vnx::TypeCode* const vnx_native_type_code_Process_get_topic_info; /
 extern const vnx::TypeCode* const vnx_native_type_code_Process_get_topic_info_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_pause_log; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_pause_log_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Process_reload_config; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Process_reload_config_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_resume_log; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_resume_log_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Process_set_debug; ///< \private
@@ -249,14 +272,23 @@ extern const vnx::TypeCode* const vnx_native_type_code_Proxy_enable_import; ///<
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_enable_import_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_enable_tunnel; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_enable_tunnel_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Proxy_login; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Proxy_login_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_on_connect; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_on_connect_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_on_disconnect; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_on_disconnect_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Proxy_on_login; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Proxy_on_login_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_on_remote_connect; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Proxy_on_remote_connect_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Proxy_on_remote_login; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Proxy_on_remote_login_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Proxy_wait_on_connect; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Proxy_wait_on_connect_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_RecordHeader; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_RecordIndex; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_RecordPointer; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_RecorderBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_RecorderStatus; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Request; ///< \private
@@ -264,6 +296,7 @@ extern const vnx::TypeCode* const vnx_native_type_code_Return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_RouterBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Sample; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ServerBase; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Session; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_SpyToolBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_TcpEndpoint; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_TerminalBase; ///< \private
@@ -289,6 +322,9 @@ extern const vnx::TypeCode* const vnx_native_type_code_TimeSync; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_TopicInfo; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_TopicInfoList; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_UnixEndpoint; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_User; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_access_role_e; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_permission_e; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_record_index_entry_t; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_record_topic_info_t; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_terminal_event_e; ///< \private
@@ -313,12 +349,12 @@ void read(TypeInput& in, ::vnx::Memory& value, const TypeCode* type_code, const 
 void read(TypeInput& in, ::vnx::Message& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ModuleInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ModuleInterface& value, const TypeCode* type_code, const uint16_t* code); ///< \private
-void read(TypeInput& in, ::vnx::ModuleInterface_vnx_close& value, const TypeCode* type_code, const uint16_t* code); ///< \private
-void read(TypeInput& in, ::vnx::ModuleInterface_vnx_close_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_config& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_config_object& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_config_object_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_module_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_module_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_type_code& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_type_code_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ModuleInterface_vnx_restart& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -327,10 +363,13 @@ void read(TypeInput& in, ::vnx::ModuleInterface_vnx_set_config& value, const Typ
 void read(TypeInput& in, ::vnx::ModuleInterface_vnx_set_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ModuleInterface_vnx_set_config_object& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ModuleInterface_vnx_set_config_object_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::ModuleInterface_vnx_stop& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::ModuleInterface_vnx_stop_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::NoSuchMethod& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::NoSuchService& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Object& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::OverflowException& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::PermissionDenied& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::PlayerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Player_get_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Player_get_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -368,6 +407,8 @@ void read(TypeInput& in, ::vnx::Process_get_topic_info& value, const TypeCode* t
 void read(TypeInput& in, ::vnx::Process_get_topic_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Process_pause_log& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Process_pause_log_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_reload_config& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Process_reload_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Process_resume_log& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Process_resume_log_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Process_set_debug& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -394,14 +435,23 @@ void read(TypeInput& in, ::vnx::Proxy_enable_import& value, const TypeCode* type
 void read(TypeInput& in, ::vnx::Proxy_enable_import_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Proxy_enable_tunnel& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Proxy_enable_tunnel_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_login& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_login_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Proxy_on_connect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Proxy_on_connect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Proxy_on_disconnect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Proxy_on_disconnect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_on_login& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_on_login_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Proxy_on_remote_connect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Proxy_on_remote_connect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_on_remote_login& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_on_remote_login_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_wait_on_connect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Proxy_wait_on_connect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::RecordHeader& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::RecordIndex& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::RecordPointer& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::RecorderBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::RecorderStatus& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Request& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -409,6 +459,7 @@ void read(TypeInput& in, ::vnx::Return& value, const TypeCode* type_code, const 
 void read(TypeInput& in, ::vnx::RouterBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Sample& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::ServerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Session& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::SpyToolBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::TcpEndpoint& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::TerminalBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -436,7 +487,10 @@ void read(TypeInput& in, ::vnx::TopicInfoList& value, const TypeCode* type_code,
 void read(TypeInput& in, ::vnx::TopicPtr& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::TypeCode& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::UnixEndpoint& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::User& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Variant& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::access_role_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::permission_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::record_index_entry_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::record_topic_info_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::terminal_event_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -456,12 +510,12 @@ void write(TypeOutput& out, const ::vnx::Memory& value, const TypeCode* type_cod
 void write(TypeOutput& out, const ::vnx::Message& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ModuleInfo& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ModuleInterface& value, const TypeCode* type_code, const uint16_t* code); ///< \private
-void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_close& value, const TypeCode* type_code, const uint16_t* code); ///< \private
-void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_close_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_config& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_config_object& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_config_object_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_module_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_module_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_type_code& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_type_code_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_restart& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -470,10 +524,13 @@ void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_set_config& value, 
 void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_set_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_set_config_object& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_set_config_object_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_stop& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_stop_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::NoSuchMethod& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::NoSuchService& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Object& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::OverflowException& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::PermissionDenied& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::PlayerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Player_get_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Player_get_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -511,6 +568,8 @@ void write(TypeOutput& out, const ::vnx::Process_get_topic_info& value, const Ty
 void write(TypeOutput& out, const ::vnx::Process_get_topic_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Process_pause_log& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Process_pause_log_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_reload_config& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Process_reload_config_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Process_resume_log& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Process_resume_log_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Process_set_debug& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -537,14 +596,23 @@ void write(TypeOutput& out, const ::vnx::Proxy_enable_import& value, const TypeC
 void write(TypeOutput& out, const ::vnx::Proxy_enable_import_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Proxy_enable_tunnel& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Proxy_enable_tunnel_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_login& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_login_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Proxy_on_connect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Proxy_on_connect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Proxy_on_disconnect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Proxy_on_disconnect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_on_login& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_on_login_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Proxy_on_remote_connect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Proxy_on_remote_connect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_on_remote_login& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_on_remote_login_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_wait_on_connect& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Proxy_wait_on_connect_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::RecordHeader& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::RecordIndex& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::RecordPointer& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::RecorderBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::RecorderStatus& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Request& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -552,6 +620,7 @@ void write(TypeOutput& out, const ::vnx::Return& value, const TypeCode* type_cod
 void write(TypeOutput& out, const ::vnx::RouterBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Sample& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::ServerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Session& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::SpyToolBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::TcpEndpoint& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::TerminalBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -579,7 +648,10 @@ void write(TypeOutput& out, const ::vnx::TopicInfoList& value, const TypeCode* t
 void write(TypeOutput& out, const ::vnx::TopicPtr& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::TypeCode& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::UnixEndpoint& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::User& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Variant& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::access_role_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::permission_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::record_index_entry_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::record_topic_info_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::terminal_event_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -599,12 +671,12 @@ void read(std::istream& in, ::vnx::Memory& value); ///< \private
 void read(std::istream& in, ::vnx::Message& value); ///< \private
 void read(std::istream& in, ::vnx::ModuleInfo& value); ///< \private
 void read(std::istream& in, ::vnx::ModuleInterface& value); ///< \private
-void read(std::istream& in, ::vnx::ModuleInterface_vnx_close& value); ///< \private
-void read(std::istream& in, ::vnx::ModuleInterface_vnx_close_return& value); ///< \private
 void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_config& value); ///< \private
 void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_config_return& value); ///< \private
 void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_config_object& value); ///< \private
 void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_config_object_return& value); ///< \private
+void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_module_info& value); ///< \private
+void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_module_info_return& value); ///< \private
 void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_type_code& value); ///< \private
 void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_type_code_return& value); ///< \private
 void read(std::istream& in, ::vnx::ModuleInterface_vnx_restart& value); ///< \private
@@ -613,10 +685,13 @@ void read(std::istream& in, ::vnx::ModuleInterface_vnx_set_config& value); ///< 
 void read(std::istream& in, ::vnx::ModuleInterface_vnx_set_config_return& value); ///< \private
 void read(std::istream& in, ::vnx::ModuleInterface_vnx_set_config_object& value); ///< \private
 void read(std::istream& in, ::vnx::ModuleInterface_vnx_set_config_object_return& value); ///< \private
+void read(std::istream& in, ::vnx::ModuleInterface_vnx_stop& value); ///< \private
+void read(std::istream& in, ::vnx::ModuleInterface_vnx_stop_return& value); ///< \private
 void read(std::istream& in, ::vnx::NoSuchMethod& value); ///< \private
 void read(std::istream& in, ::vnx::NoSuchService& value); ///< \private
 void read(std::istream& in, ::vnx::Object& value); ///< \private
 void read(std::istream& in, ::vnx::OverflowException& value); ///< \private
+void read(std::istream& in, ::vnx::PermissionDenied& value); ///< \private
 void read(std::istream& in, ::vnx::PlayerBase& value); ///< \private
 void read(std::istream& in, ::vnx::Player_get_info& value); ///< \private
 void read(std::istream& in, ::vnx::Player_get_info_return& value); ///< \private
@@ -654,6 +729,8 @@ void read(std::istream& in, ::vnx::Process_get_topic_info& value); ///< \private
 void read(std::istream& in, ::vnx::Process_get_topic_info_return& value); ///< \private
 void read(std::istream& in, ::vnx::Process_pause_log& value); ///< \private
 void read(std::istream& in, ::vnx::Process_pause_log_return& value); ///< \private
+void read(std::istream& in, ::vnx::Process_reload_config& value); ///< \private
+void read(std::istream& in, ::vnx::Process_reload_config_return& value); ///< \private
 void read(std::istream& in, ::vnx::Process_resume_log& value); ///< \private
 void read(std::istream& in, ::vnx::Process_resume_log_return& value); ///< \private
 void read(std::istream& in, ::vnx::Process_set_debug& value); ///< \private
@@ -680,14 +757,23 @@ void read(std::istream& in, ::vnx::Proxy_enable_import& value); ///< \private
 void read(std::istream& in, ::vnx::Proxy_enable_import_return& value); ///< \private
 void read(std::istream& in, ::vnx::Proxy_enable_tunnel& value); ///< \private
 void read(std::istream& in, ::vnx::Proxy_enable_tunnel_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_login& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_login_return& value); ///< \private
 void read(std::istream& in, ::vnx::Proxy_on_connect& value); ///< \private
 void read(std::istream& in, ::vnx::Proxy_on_connect_return& value); ///< \private
 void read(std::istream& in, ::vnx::Proxy_on_disconnect& value); ///< \private
 void read(std::istream& in, ::vnx::Proxy_on_disconnect_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_on_login& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_on_login_return& value); ///< \private
 void read(std::istream& in, ::vnx::Proxy_on_remote_connect& value); ///< \private
 void read(std::istream& in, ::vnx::Proxy_on_remote_connect_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_on_remote_login& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_on_remote_login_return& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_wait_on_connect& value); ///< \private
+void read(std::istream& in, ::vnx::Proxy_wait_on_connect_return& value); ///< \private
 void read(std::istream& in, ::vnx::RecordHeader& value); ///< \private
 void read(std::istream& in, ::vnx::RecordIndex& value); ///< \private
+void read(std::istream& in, ::vnx::RecordPointer& value); ///< \private
 void read(std::istream& in, ::vnx::RecorderBase& value); ///< \private
 void read(std::istream& in, ::vnx::RecorderStatus& value); ///< \private
 void read(std::istream& in, ::vnx::Request& value); ///< \private
@@ -695,6 +781,7 @@ void read(std::istream& in, ::vnx::Return& value); ///< \private
 void read(std::istream& in, ::vnx::RouterBase& value); ///< \private
 void read(std::istream& in, ::vnx::Sample& value); ///< \private
 void read(std::istream& in, ::vnx::ServerBase& value); ///< \private
+void read(std::istream& in, ::vnx::Session& value); ///< \private
 void read(std::istream& in, ::vnx::SpyToolBase& value); ///< \private
 void read(std::istream& in, ::vnx::TcpEndpoint& value); ///< \private
 void read(std::istream& in, ::vnx::TerminalBase& value); ///< \private
@@ -722,7 +809,10 @@ void read(std::istream& in, ::vnx::TopicInfoList& value); ///< \private
 void read(std::istream& in, ::vnx::TopicPtr& value); ///< \private
 void read(std::istream& in, ::vnx::TypeCode& value); ///< \private
 void read(std::istream& in, ::vnx::UnixEndpoint& value); ///< \private
+void read(std::istream& in, ::vnx::User& value); ///< \private
 void read(std::istream& in, ::vnx::Variant& value); ///< \private
+void read(std::istream& in, ::vnx::access_role_e& value); ///< \private
+void read(std::istream& in, ::vnx::permission_e& value); ///< \private
 void read(std::istream& in, ::vnx::record_index_entry_t& value); ///< \private
 void read(std::istream& in, ::vnx::record_topic_info_t& value); ///< \private
 void read(std::istream& in, ::vnx::terminal_event_e& value); ///< \private
@@ -742,12 +832,12 @@ void write(std::ostream& out, const ::vnx::Memory& value); ///< \private
 void write(std::ostream& out, const ::vnx::Message& value); ///< \private
 void write(std::ostream& out, const ::vnx::ModuleInfo& value); ///< \private
 void write(std::ostream& out, const ::vnx::ModuleInterface& value); ///< \private
-void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_close& value); ///< \private
-void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_close_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_config& value); ///< \private
 void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_config_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_config_object& value); ///< \private
 void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_config_object_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_module_info& value); ///< \private
+void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_module_info_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_type_code& value); ///< \private
 void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_type_code_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_restart& value); ///< \private
@@ -756,10 +846,13 @@ void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_set_config& value
 void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_set_config_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_set_config_object& value); ///< \private
 void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_set_config_object_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_stop& value); ///< \private
+void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_stop_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::NoSuchMethod& value); ///< \private
 void write(std::ostream& out, const ::vnx::NoSuchService& value); ///< \private
 void write(std::ostream& out, const ::vnx::Object& value); ///< \private
 void write(std::ostream& out, const ::vnx::OverflowException& value); ///< \private
+void write(std::ostream& out, const ::vnx::PermissionDenied& value); ///< \private
 void write(std::ostream& out, const ::vnx::PlayerBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::Player_get_info& value); ///< \private
 void write(std::ostream& out, const ::vnx::Player_get_info_return& value); ///< \private
@@ -797,6 +890,8 @@ void write(std::ostream& out, const ::vnx::Process_get_topic_info& value); ///< 
 void write(std::ostream& out, const ::vnx::Process_get_topic_info_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Process_pause_log& value); ///< \private
 void write(std::ostream& out, const ::vnx::Process_pause_log_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_reload_config& value); ///< \private
+void write(std::ostream& out, const ::vnx::Process_reload_config_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Process_resume_log& value); ///< \private
 void write(std::ostream& out, const ::vnx::Process_resume_log_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Process_set_debug& value); ///< \private
@@ -823,14 +918,23 @@ void write(std::ostream& out, const ::vnx::Proxy_enable_import& value); ///< \pr
 void write(std::ostream& out, const ::vnx::Proxy_enable_import_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Proxy_enable_tunnel& value); ///< \private
 void write(std::ostream& out, const ::vnx::Proxy_enable_tunnel_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_login& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_login_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Proxy_on_connect& value); ///< \private
 void write(std::ostream& out, const ::vnx::Proxy_on_connect_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Proxy_on_disconnect& value); ///< \private
 void write(std::ostream& out, const ::vnx::Proxy_on_disconnect_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_on_login& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_on_login_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Proxy_on_remote_connect& value); ///< \private
 void write(std::ostream& out, const ::vnx::Proxy_on_remote_connect_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_on_remote_login& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_on_remote_login_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_wait_on_connect& value); ///< \private
+void write(std::ostream& out, const ::vnx::Proxy_wait_on_connect_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::RecordHeader& value); ///< \private
 void write(std::ostream& out, const ::vnx::RecordIndex& value); ///< \private
+void write(std::ostream& out, const ::vnx::RecordPointer& value); ///< \private
 void write(std::ostream& out, const ::vnx::RecorderBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::RecorderStatus& value); ///< \private
 void write(std::ostream& out, const ::vnx::Request& value); ///< \private
@@ -838,6 +942,7 @@ void write(std::ostream& out, const ::vnx::Return& value); ///< \private
 void write(std::ostream& out, const ::vnx::RouterBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::Sample& value); ///< \private
 void write(std::ostream& out, const ::vnx::ServerBase& value); ///< \private
+void write(std::ostream& out, const ::vnx::Session& value); ///< \private
 void write(std::ostream& out, const ::vnx::SpyToolBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::TcpEndpoint& value); ///< \private
 void write(std::ostream& out, const ::vnx::TerminalBase& value); ///< \private
@@ -865,7 +970,10 @@ void write(std::ostream& out, const ::vnx::TopicInfoList& value); ///< \private
 void write(std::ostream& out, const ::vnx::TopicPtr& value); ///< \private
 void write(std::ostream& out, const ::vnx::TypeCode& value); ///< \private
 void write(std::ostream& out, const ::vnx::UnixEndpoint& value); ///< \private
+void write(std::ostream& out, const ::vnx::User& value); ///< \private
 void write(std::ostream& out, const ::vnx::Variant& value); ///< \private
+void write(std::ostream& out, const ::vnx::access_role_e& value); ///< \private
+void write(std::ostream& out, const ::vnx::permission_e& value); ///< \private
 void write(std::ostream& out, const ::vnx::record_index_entry_t& value); ///< \private
 void write(std::ostream& out, const ::vnx::record_topic_info_t& value); ///< \private
 void write(std::ostream& out, const ::vnx::terminal_event_e& value); ///< \private
@@ -885,12 +993,12 @@ void accept(Visitor& visitor, const ::vnx::Memory& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Message& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ModuleInfo& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ModuleInterface& value); ///< \private
-void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_close& value); ///< \private
-void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_close_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_config& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_config_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_config_object& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_config_object_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_module_info& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_module_info_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_type_code& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_type_code_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_restart& value); ///< \private
@@ -899,10 +1007,13 @@ void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_set_config& value
 void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_set_config_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_set_config_object& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_set_config_object_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_stop& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_stop_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::NoSuchMethod& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::NoSuchService& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Object& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::OverflowException& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::PermissionDenied& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::PlayerBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Player_get_info& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Player_get_info_return& value); ///< \private
@@ -940,6 +1051,8 @@ void accept(Visitor& visitor, const ::vnx::Process_get_topic_info& value); ///< 
 void accept(Visitor& visitor, const ::vnx::Process_get_topic_info_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Process_pause_log& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Process_pause_log_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_reload_config& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Process_reload_config_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Process_resume_log& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Process_resume_log_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Process_set_debug& value); ///< \private
@@ -966,14 +1079,23 @@ void accept(Visitor& visitor, const ::vnx::Proxy_enable_import& value); ///< \pr
 void accept(Visitor& visitor, const ::vnx::Proxy_enable_import_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Proxy_enable_tunnel& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Proxy_enable_tunnel_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_login& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_login_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Proxy_on_connect& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Proxy_on_connect_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Proxy_on_disconnect& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Proxy_on_disconnect_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_on_login& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_on_login_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Proxy_on_remote_connect& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Proxy_on_remote_connect_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_on_remote_login& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_on_remote_login_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_wait_on_connect& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Proxy_wait_on_connect_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::RecordHeader& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::RecordIndex& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::RecordPointer& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::RecorderBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::RecorderStatus& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Request& value); ///< \private
@@ -981,6 +1103,7 @@ void accept(Visitor& visitor, const ::vnx::Return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::RouterBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Sample& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::ServerBase& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Session& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::SpyToolBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::TcpEndpoint& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::TerminalBase& value); ///< \private
@@ -1008,7 +1131,10 @@ void accept(Visitor& visitor, const ::vnx::TopicInfoList& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::TopicPtr& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::TypeCode& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::UnixEndpoint& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::User& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Variant& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::access_role_e& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::permission_e& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::record_index_entry_t& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::record_topic_info_t& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::terminal_event_e& value); ///< \private
@@ -1032,7 +1158,8 @@ struct type<::vnx::Buffer> {
 	void accept(Visitor& visitor, const ::vnx::Buffer& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Buffer& value, bool special = false) {
 		const std::vector<int> tmp = {12, 1};
 		code.insert(code.end(), tmp.begin(), tmp.end());
 	}
@@ -1056,7 +1183,8 @@ struct type<::vnx::Endpoint> {
 	void accept(Visitor& visitor, const ::vnx::Endpoint& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Endpoint& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1079,7 +1207,8 @@ struct type<::vnx::Exception> {
 	void accept(Visitor& visitor, const ::vnx::Exception& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Exception& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1102,7 +1231,8 @@ struct type<::vnx::FlowMessage> {
 	void accept(Visitor& visitor, const ::vnx::FlowMessage& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::FlowMessage& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1125,7 +1255,8 @@ struct type<::vnx::Generic> {
 	void accept(Visitor& visitor, const ::vnx::Generic& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Generic& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1148,7 +1279,8 @@ struct type<::vnx::Hash128> {
 	void accept(Visitor& visitor, const ::vnx::Hash128& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Hash128& value, bool special = false) {
 		const std::vector<int> tmp = {11, 2, 4};
 		code.insert(code.end(), tmp.begin(), tmp.end());
 	}
@@ -1172,7 +1304,8 @@ struct type<::vnx::Hash64> {
 	void accept(Visitor& visitor, const ::vnx::Hash64& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Hash64& value, bool special = false) {
 		const std::vector<int> tmp = {4};
 		code.insert(code.end(), tmp.begin(), tmp.end());
 	}
@@ -1196,7 +1329,8 @@ struct type<::vnx::InternalError> {
 	void accept(Visitor& visitor, const ::vnx::InternalError& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::InternalError& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1219,7 +1353,8 @@ struct type<::vnx::LogMsg> {
 	void accept(Visitor& visitor, const ::vnx::LogMsg& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::LogMsg& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1242,7 +1377,8 @@ struct type<::vnx::Marker> {
 	void accept(Visitor& visitor, const ::vnx::Marker& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Marker& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1265,7 +1401,8 @@ struct type<::vnx::Memory> {
 	void accept(Visitor& visitor, const ::vnx::Memory& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Memory& value, bool special = false) {
 		const std::vector<int> tmp = {12, 1};
 		code.insert(code.end(), tmp.begin(), tmp.end());
 	}
@@ -1289,7 +1426,8 @@ struct type<::vnx::Message> {
 	void accept(Visitor& visitor, const ::vnx::Message& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Message& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1312,7 +1450,8 @@ struct type<::vnx::ModuleInfo> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInfo& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInfo& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1335,55 +1474,6 @@ struct type<::vnx::ModuleInterface> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
-};
-
-/// \private
-template<>
-struct type<::vnx::ModuleInterface_vnx_close> {
-	void read(TypeInput& in, ::vnx::ModuleInterface_vnx_close& value, const TypeCode* type_code, const uint16_t* code) {
-		vnx::read(in, value, type_code, code);
-	}
-	void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_close& value, const TypeCode* type_code, const uint16_t* code) {
-		vnx::write(out, value, type_code, code);
-	}
-	void read(std::istream& in, ::vnx::ModuleInterface_vnx_close& value) {
-		vnx::read(in, value);
-	}
-	void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_close& value) {
-		vnx::write(out, value);
-	}
-	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_close& value) {
-		vnx::accept(visitor, value);
-	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
-};
-
-/// \private
-template<>
-struct type<::vnx::ModuleInterface_vnx_close_return> {
-	void read(TypeInput& in, ::vnx::ModuleInterface_vnx_close_return& value, const TypeCode* type_code, const uint16_t* code) {
-		vnx::read(in, value, type_code, code);
-	}
-	void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_close_return& value, const TypeCode* type_code, const uint16_t* code) {
-		vnx::write(out, value, type_code, code);
-	}
-	void read(std::istream& in, ::vnx::ModuleInterface_vnx_close_return& value) {
-		vnx::read(in, value);
-	}
-	void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_close_return& value) {
-		vnx::write(out, value);
-	}
-	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_close_return& value) {
-		vnx::accept(visitor, value);
-	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
 };
 
 /// \private
@@ -1404,7 +1494,8 @@ struct type<::vnx::ModuleInterface_vnx_get_config> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_config& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_get_config& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1427,7 +1518,8 @@ struct type<::vnx::ModuleInterface_vnx_get_config_return> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_config_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_get_config_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1450,7 +1542,8 @@ struct type<::vnx::ModuleInterface_vnx_get_config_object> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_config_object& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_get_config_object& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1473,7 +1566,56 @@ struct type<::vnx::ModuleInterface_vnx_get_config_object_return> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_config_object_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_get_config_object_return& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::ModuleInterface_vnx_get_module_info> {
+	void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_module_info& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_module_info& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_module_info& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_module_info& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_module_info& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_get_module_info& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::ModuleInterface_vnx_get_module_info_return> {
+	void read(TypeInput& in, ::vnx::ModuleInterface_vnx_get_module_info_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_get_module_info_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::ModuleInterface_vnx_get_module_info_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_get_module_info_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_module_info_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_get_module_info_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1496,7 +1638,8 @@ struct type<::vnx::ModuleInterface_vnx_get_type_code> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_type_code& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_get_type_code& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1519,7 +1662,8 @@ struct type<::vnx::ModuleInterface_vnx_get_type_code_return> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_get_type_code_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_get_type_code_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1542,7 +1686,8 @@ struct type<::vnx::ModuleInterface_vnx_restart> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_restart& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_restart& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1565,7 +1710,8 @@ struct type<::vnx::ModuleInterface_vnx_restart_return> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_restart_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_restart_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1588,7 +1734,8 @@ struct type<::vnx::ModuleInterface_vnx_set_config> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_set_config& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_set_config& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1611,7 +1758,8 @@ struct type<::vnx::ModuleInterface_vnx_set_config_return> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_set_config_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_set_config_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1634,7 +1782,8 @@ struct type<::vnx::ModuleInterface_vnx_set_config_object> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_set_config_object& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_set_config_object& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1657,7 +1806,56 @@ struct type<::vnx::ModuleInterface_vnx_set_config_object_return> {
 	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_set_config_object_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_set_config_object_return& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::ModuleInterface_vnx_stop> {
+	void read(TypeInput& in, ::vnx::ModuleInterface_vnx_stop& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_stop& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::ModuleInterface_vnx_stop& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_stop& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_stop& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_stop& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::ModuleInterface_vnx_stop_return> {
+	void read(TypeInput& in, ::vnx::ModuleInterface_vnx_stop_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::ModuleInterface_vnx_stop_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::ModuleInterface_vnx_stop_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::ModuleInterface_vnx_stop_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::ModuleInterface_vnx_stop_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ModuleInterface_vnx_stop_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1680,7 +1878,8 @@ struct type<::vnx::NoSuchMethod> {
 	void accept(Visitor& visitor, const ::vnx::NoSuchMethod& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::NoSuchMethod& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1703,7 +1902,8 @@ struct type<::vnx::NoSuchService> {
 	void accept(Visitor& visitor, const ::vnx::NoSuchService& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::NoSuchService& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1726,7 +1926,8 @@ struct type<::vnx::Object> {
 	void accept(Visitor& visitor, const ::vnx::Object& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Object& value, bool special = false) {
 		const std::vector<int> tmp = {24};
 		code.insert(code.end(), tmp.begin(), tmp.end());
 	}
@@ -1750,7 +1951,32 @@ struct type<::vnx::OverflowException> {
 	void accept(Visitor& visitor, const ::vnx::OverflowException& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::OverflowException& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::PermissionDenied> {
+	void read(TypeInput& in, ::vnx::PermissionDenied& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::PermissionDenied& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::PermissionDenied& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::PermissionDenied& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::PermissionDenied& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::PermissionDenied& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1773,9 +1999,6 @@ struct type<::vnx::PlayerBase> {
 	void accept(Visitor& visitor, const ::vnx::PlayerBase& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
 };
 
 /// \private
@@ -1796,7 +2019,8 @@ struct type<::vnx::Player_get_info> {
 	void accept(Visitor& visitor, const ::vnx::Player_get_info& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_get_info& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1819,7 +2043,8 @@ struct type<::vnx::Player_get_info_return> {
 	void accept(Visitor& visitor, const ::vnx::Player_get_info_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_get_info_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1842,7 +2067,8 @@ struct type<::vnx::Player_pause> {
 	void accept(Visitor& visitor, const ::vnx::Player_pause& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_pause& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1865,7 +2091,8 @@ struct type<::vnx::Player_pause_return> {
 	void accept(Visitor& visitor, const ::vnx::Player_pause_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_pause_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1888,7 +2115,8 @@ struct type<::vnx::Player_play> {
 	void accept(Visitor& visitor, const ::vnx::Player_play& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_play& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1911,7 +2139,8 @@ struct type<::vnx::Player_play_return> {
 	void accept(Visitor& visitor, const ::vnx::Player_play_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_play_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1934,7 +2163,8 @@ struct type<::vnx::Player_seek_by_count> {
 	void accept(Visitor& visitor, const ::vnx::Player_seek_by_count& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_seek_by_count& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1957,7 +2187,8 @@ struct type<::vnx::Player_seek_by_count_return> {
 	void accept(Visitor& visitor, const ::vnx::Player_seek_by_count_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_seek_by_count_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -1980,7 +2211,8 @@ struct type<::vnx::Player_seek_by_time> {
 	void accept(Visitor& visitor, const ::vnx::Player_seek_by_time& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_seek_by_time& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2003,7 +2235,8 @@ struct type<::vnx::Player_seek_by_time_return> {
 	void accept(Visitor& visitor, const ::vnx::Player_seek_by_time_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_seek_by_time_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2026,7 +2259,8 @@ struct type<::vnx::Player_seek_to_position> {
 	void accept(Visitor& visitor, const ::vnx::Player_seek_to_position& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_seek_to_position& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2049,7 +2283,8 @@ struct type<::vnx::Player_seek_to_position_return> {
 	void accept(Visitor& visitor, const ::vnx::Player_seek_to_position_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_seek_to_position_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2072,7 +2307,8 @@ struct type<::vnx::Player_seek_to_time> {
 	void accept(Visitor& visitor, const ::vnx::Player_seek_to_time& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_seek_to_time& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2095,7 +2331,8 @@ struct type<::vnx::Player_seek_to_time_return> {
 	void accept(Visitor& visitor, const ::vnx::Player_seek_to_time_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_seek_to_time_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2118,7 +2355,8 @@ struct type<::vnx::Player_set_speed> {
 	void accept(Visitor& visitor, const ::vnx::Player_set_speed& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_set_speed& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2141,7 +2379,8 @@ struct type<::vnx::Player_set_speed_return> {
 	void accept(Visitor& visitor, const ::vnx::Player_set_speed_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_set_speed_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2164,7 +2403,8 @@ struct type<::vnx::Player_stop> {
 	void accept(Visitor& visitor, const ::vnx::Player_stop& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_stop& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2187,7 +2427,8 @@ struct type<::vnx::Player_stop_return> {
 	void accept(Visitor& visitor, const ::vnx::Player_stop_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_stop_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2210,7 +2451,8 @@ struct type<::vnx::Player_toggle> {
 	void accept(Visitor& visitor, const ::vnx::Player_toggle& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_toggle& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2233,7 +2475,8 @@ struct type<::vnx::Player_toggle_return> {
 	void accept(Visitor& visitor, const ::vnx::Player_toggle_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Player_toggle_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2256,7 +2499,8 @@ struct type<::vnx::PlayerStatus> {
 	void accept(Visitor& visitor, const ::vnx::PlayerStatus& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::PlayerStatus& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2279,9 +2523,6 @@ struct type<::vnx::ProcessBase> {
 	void accept(Visitor& visitor, const ::vnx::ProcessBase& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
 };
 
 /// \private
@@ -2302,7 +2543,8 @@ struct type<::vnx::Process_get_global_config> {
 	void accept(Visitor& visitor, const ::vnx::Process_get_global_config& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_get_global_config& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2325,7 +2567,8 @@ struct type<::vnx::Process_get_global_config_return> {
 	void accept(Visitor& visitor, const ::vnx::Process_get_global_config_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_get_global_config_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2348,7 +2591,8 @@ struct type<::vnx::Process_get_module_info> {
 	void accept(Visitor& visitor, const ::vnx::Process_get_module_info& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_get_module_info& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2371,7 +2615,8 @@ struct type<::vnx::Process_get_module_info_return> {
 	void accept(Visitor& visitor, const ::vnx::Process_get_module_info_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_get_module_info_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2394,7 +2639,8 @@ struct type<::vnx::Process_get_name> {
 	void accept(Visitor& visitor, const ::vnx::Process_get_name& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_get_name& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2417,7 +2663,8 @@ struct type<::vnx::Process_get_name_return> {
 	void accept(Visitor& visitor, const ::vnx::Process_get_name_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_get_name_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2440,7 +2687,8 @@ struct type<::vnx::Process_get_process_info> {
 	void accept(Visitor& visitor, const ::vnx::Process_get_process_info& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_get_process_info& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2463,7 +2711,8 @@ struct type<::vnx::Process_get_process_info_return> {
 	void accept(Visitor& visitor, const ::vnx::Process_get_process_info_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_get_process_info_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2486,7 +2735,8 @@ struct type<::vnx::Process_get_sync_time> {
 	void accept(Visitor& visitor, const ::vnx::Process_get_sync_time& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_get_sync_time& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2509,7 +2759,8 @@ struct type<::vnx::Process_get_sync_time_return> {
 	void accept(Visitor& visitor, const ::vnx::Process_get_sync_time_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_get_sync_time_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2532,7 +2783,8 @@ struct type<::vnx::Process_get_topic_info> {
 	void accept(Visitor& visitor, const ::vnx::Process_get_topic_info& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_get_topic_info& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2555,7 +2807,8 @@ struct type<::vnx::Process_get_topic_info_return> {
 	void accept(Visitor& visitor, const ::vnx::Process_get_topic_info_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_get_topic_info_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2578,7 +2831,8 @@ struct type<::vnx::Process_pause_log> {
 	void accept(Visitor& visitor, const ::vnx::Process_pause_log& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_pause_log& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2601,7 +2855,56 @@ struct type<::vnx::Process_pause_log_return> {
 	void accept(Visitor& visitor, const ::vnx::Process_pause_log_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_pause_log_return& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_reload_config> {
+	void read(TypeInput& in, ::vnx::Process_reload_config& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_reload_config& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_reload_config& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_reload_config& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_reload_config& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_reload_config& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Process_reload_config_return> {
+	void read(TypeInput& in, ::vnx::Process_reload_config_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Process_reload_config_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Process_reload_config_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Process_reload_config_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Process_reload_config_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_reload_config_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2624,7 +2927,8 @@ struct type<::vnx::Process_resume_log> {
 	void accept(Visitor& visitor, const ::vnx::Process_resume_log& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_resume_log& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2647,7 +2951,8 @@ struct type<::vnx::Process_resume_log_return> {
 	void accept(Visitor& visitor, const ::vnx::Process_resume_log_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_resume_log_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2670,7 +2975,8 @@ struct type<::vnx::Process_set_debug> {
 	void accept(Visitor& visitor, const ::vnx::Process_set_debug& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_set_debug& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2693,7 +2999,8 @@ struct type<::vnx::Process_set_debug_return> {
 	void accept(Visitor& visitor, const ::vnx::Process_set_debug_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_set_debug_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2716,7 +3023,8 @@ struct type<::vnx::Process_set_global_config> {
 	void accept(Visitor& visitor, const ::vnx::Process_set_global_config& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_set_global_config& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2739,7 +3047,8 @@ struct type<::vnx::Process_set_global_config_return> {
 	void accept(Visitor& visitor, const ::vnx::Process_set_global_config_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_set_global_config_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2762,7 +3071,8 @@ struct type<::vnx::Process_trigger_shutdown> {
 	void accept(Visitor& visitor, const ::vnx::Process_trigger_shutdown& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_trigger_shutdown& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2785,7 +3095,8 @@ struct type<::vnx::Process_trigger_shutdown_return> {
 	void accept(Visitor& visitor, const ::vnx::Process_trigger_shutdown_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Process_trigger_shutdown_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2808,7 +3119,8 @@ struct type<::vnx::ProcessInfo> {
 	void accept(Visitor& visitor, const ::vnx::ProcessInfo& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::ProcessInfo& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2831,9 +3143,6 @@ struct type<::vnx::ProxyBase> {
 	void accept(Visitor& visitor, const ::vnx::ProxyBase& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
 };
 
 /// \private
@@ -2854,7 +3163,8 @@ struct type<::vnx::Proxy_disable_export> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_disable_export& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_disable_export& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2877,7 +3187,8 @@ struct type<::vnx::Proxy_disable_export_return> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_disable_export_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_disable_export_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2900,7 +3211,8 @@ struct type<::vnx::Proxy_disable_forward> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_disable_forward& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_disable_forward& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2923,7 +3235,8 @@ struct type<::vnx::Proxy_disable_forward_return> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_disable_forward_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_disable_forward_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2946,7 +3259,8 @@ struct type<::vnx::Proxy_disable_import> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_disable_import& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_disable_import& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2969,7 +3283,8 @@ struct type<::vnx::Proxy_disable_import_return> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_disable_import_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_disable_import_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -2992,7 +3307,8 @@ struct type<::vnx::Proxy_disable_tunnel> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_disable_tunnel& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_disable_tunnel& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3015,7 +3331,8 @@ struct type<::vnx::Proxy_disable_tunnel_return> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_disable_tunnel_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_disable_tunnel_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3038,7 +3355,8 @@ struct type<::vnx::Proxy_enable_export> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_enable_export& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_enable_export& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3061,7 +3379,8 @@ struct type<::vnx::Proxy_enable_export_return> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_enable_export_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_enable_export_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3084,7 +3403,8 @@ struct type<::vnx::Proxy_enable_forward> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_enable_forward& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_enable_forward& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3107,7 +3427,8 @@ struct type<::vnx::Proxy_enable_forward_return> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_enable_forward_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_enable_forward_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3130,7 +3451,8 @@ struct type<::vnx::Proxy_enable_import> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_enable_import& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_enable_import& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3153,7 +3475,8 @@ struct type<::vnx::Proxy_enable_import_return> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_enable_import_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_enable_import_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3176,7 +3499,8 @@ struct type<::vnx::Proxy_enable_tunnel> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_enable_tunnel& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_enable_tunnel& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3199,7 +3523,56 @@ struct type<::vnx::Proxy_enable_tunnel_return> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_enable_tunnel_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_enable_tunnel_return& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_login> {
+	void read(TypeInput& in, ::vnx::Proxy_login& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_login& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_login& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_login& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_login& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_login& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_login_return> {
+	void read(TypeInput& in, ::vnx::Proxy_login_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_login_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_login_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_login_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_login_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_login_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3222,7 +3595,8 @@ struct type<::vnx::Proxy_on_connect> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_on_connect& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_on_connect& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3245,7 +3619,8 @@ struct type<::vnx::Proxy_on_connect_return> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_on_connect_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_on_connect_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3268,7 +3643,8 @@ struct type<::vnx::Proxy_on_disconnect> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_on_disconnect& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_on_disconnect& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3291,7 +3667,56 @@ struct type<::vnx::Proxy_on_disconnect_return> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_on_disconnect_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_on_disconnect_return& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_on_login> {
+	void read(TypeInput& in, ::vnx::Proxy_on_login& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_on_login& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_on_login& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_on_login& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_on_login& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_on_login& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_on_login_return> {
+	void read(TypeInput& in, ::vnx::Proxy_on_login_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_on_login_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_on_login_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_on_login_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_on_login_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_on_login_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3314,7 +3739,8 @@ struct type<::vnx::Proxy_on_remote_connect> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_on_remote_connect& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_on_remote_connect& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3337,7 +3763,104 @@ struct type<::vnx::Proxy_on_remote_connect_return> {
 	void accept(Visitor& visitor, const ::vnx::Proxy_on_remote_connect_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_on_remote_connect_return& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_on_remote_login> {
+	void read(TypeInput& in, ::vnx::Proxy_on_remote_login& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_on_remote_login& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_on_remote_login& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_on_remote_login& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_on_remote_login& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_on_remote_login& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_on_remote_login_return> {
+	void read(TypeInput& in, ::vnx::Proxy_on_remote_login_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_on_remote_login_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_on_remote_login_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_on_remote_login_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_on_remote_login_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_on_remote_login_return& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_wait_on_connect> {
+	void read(TypeInput& in, ::vnx::Proxy_wait_on_connect& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_wait_on_connect& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_wait_on_connect& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_wait_on_connect& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_wait_on_connect& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_wait_on_connect& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Proxy_wait_on_connect_return> {
+	void read(TypeInput& in, ::vnx::Proxy_wait_on_connect_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Proxy_wait_on_connect_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Proxy_wait_on_connect_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Proxy_wait_on_connect_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Proxy_wait_on_connect_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Proxy_wait_on_connect_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3360,7 +3883,8 @@ struct type<::vnx::RecordHeader> {
 	void accept(Visitor& visitor, const ::vnx::RecordHeader& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::RecordHeader& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3383,7 +3907,32 @@ struct type<::vnx::RecordIndex> {
 	void accept(Visitor& visitor, const ::vnx::RecordIndex& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::RecordIndex& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::RecordPointer> {
+	void read(TypeInput& in, ::vnx::RecordPointer& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::RecordPointer& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::RecordPointer& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::RecordPointer& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::RecordPointer& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::RecordPointer& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3406,9 +3955,6 @@ struct type<::vnx::RecorderBase> {
 	void accept(Visitor& visitor, const ::vnx::RecorderBase& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
 };
 
 /// \private
@@ -3429,7 +3975,8 @@ struct type<::vnx::RecorderStatus> {
 	void accept(Visitor& visitor, const ::vnx::RecorderStatus& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::RecorderStatus& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3452,7 +3999,8 @@ struct type<::vnx::Request> {
 	void accept(Visitor& visitor, const ::vnx::Request& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Request& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3475,7 +4023,8 @@ struct type<::vnx::Return> {
 	void accept(Visitor& visitor, const ::vnx::Return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3498,9 +4047,6 @@ struct type<::vnx::RouterBase> {
 	void accept(Visitor& visitor, const ::vnx::RouterBase& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
 };
 
 /// \private
@@ -3521,7 +4067,8 @@ struct type<::vnx::Sample> {
 	void accept(Visitor& visitor, const ::vnx::Sample& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Sample& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3544,7 +4091,28 @@ struct type<::vnx::ServerBase> {
 	void accept(Visitor& visitor, const ::vnx::ServerBase& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+};
+
+/// \private
+template<>
+struct type<::vnx::Session> {
+	void read(TypeInput& in, ::vnx::Session& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Session& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Session& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Session& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Session& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Session& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3567,9 +4135,6 @@ struct type<::vnx::SpyToolBase> {
 	void accept(Visitor& visitor, const ::vnx::SpyToolBase& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
 };
 
 /// \private
@@ -3590,7 +4155,8 @@ struct type<::vnx::TcpEndpoint> {
 	void accept(Visitor& visitor, const ::vnx::TcpEndpoint& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::TcpEndpoint& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3613,9 +4179,6 @@ struct type<::vnx::TerminalBase> {
 	void accept(Visitor& visitor, const ::vnx::TerminalBase& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
 };
 
 /// \private
@@ -3636,7 +4199,8 @@ struct type<::vnx::Terminal_command> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_command& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_command& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3659,7 +4223,8 @@ struct type<::vnx::Terminal_command_return> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_command_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_command_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3682,7 +4247,8 @@ struct type<::vnx::Terminal_dump> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_dump& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_dump& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3705,7 +4271,8 @@ struct type<::vnx::Terminal_dump_return> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_dump_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_dump_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3728,7 +4295,8 @@ struct type<::vnx::Terminal_grep> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_grep& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_grep& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3751,7 +4319,8 @@ struct type<::vnx::Terminal_grep_return> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_grep_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_grep_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3774,7 +4343,8 @@ struct type<::vnx::Terminal_module_info> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_module_info& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_module_info& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3797,7 +4367,8 @@ struct type<::vnx::Terminal_module_info_return> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_module_info_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_module_info_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3820,7 +4391,8 @@ struct type<::vnx::Terminal_read_char> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_read_char& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_read_char& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3843,7 +4415,8 @@ struct type<::vnx::Terminal_read_char_return> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_read_char_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_read_char_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3866,7 +4439,8 @@ struct type<::vnx::Terminal_read_event> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_read_event& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_read_event& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3889,7 +4463,8 @@ struct type<::vnx::Terminal_read_event_return> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_read_event_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_read_event_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3912,7 +4487,8 @@ struct type<::vnx::Terminal_spy> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_spy& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_spy& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3935,7 +4511,8 @@ struct type<::vnx::Terminal_spy_return> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_spy_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_spy_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3958,7 +4535,8 @@ struct type<::vnx::Terminal_topic_info> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_topic_info& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_topic_info& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -3981,7 +4559,8 @@ struct type<::vnx::Terminal_topic_info_return> {
 	void accept(Visitor& visitor, const ::vnx::Terminal_topic_info_return& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_topic_info_return& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -4004,7 +4583,8 @@ struct type<::vnx::TimeControl> {
 	void accept(Visitor& visitor, const ::vnx::TimeControl& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::TimeControl& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -4027,9 +4607,6 @@ struct type<::vnx::TimeServerBase> {
 	void accept(Visitor& visitor, const ::vnx::TimeServerBase& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
-		code.push_back(CODE_OBJECT);
-	}
 };
 
 /// \private
@@ -4050,7 +4627,8 @@ struct type<::vnx::TimeSync> {
 	void accept(Visitor& visitor, const ::vnx::TimeSync& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::TimeSync& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -4073,7 +4651,8 @@ struct type<::vnx::TopicInfo> {
 	void accept(Visitor& visitor, const ::vnx::TopicInfo& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::TopicInfo& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -4096,7 +4675,8 @@ struct type<::vnx::TopicInfoList> {
 	void accept(Visitor& visitor, const ::vnx::TopicInfoList& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::TopicInfoList& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -4119,7 +4699,8 @@ struct type<::vnx::TopicPtr> {
 	void accept(Visitor& visitor, const ::vnx::TopicPtr& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::TopicPtr& value, bool special = false) {
 		const std::vector<int> tmp = {12, 5};
 		code.insert(code.end(), tmp.begin(), tmp.end());
 	}
@@ -4143,7 +4724,8 @@ struct type<::vnx::TypeCode> {
 	void accept(Visitor& visitor, const ::vnx::TypeCode& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::TypeCode& value, bool special = false) {
 		const std::vector<int> tmp = {14};
 		code.insert(code.end(), tmp.begin(), tmp.end());
 	}
@@ -4167,7 +4749,32 @@ struct type<::vnx::UnixEndpoint> {
 	void accept(Visitor& visitor, const ::vnx::UnixEndpoint& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::UnixEndpoint& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::User> {
+	void read(TypeInput& in, ::vnx::User& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::User& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::User& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::User& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::User& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::User& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -4190,9 +4797,58 @@ struct type<::vnx::Variant> {
 	void accept(Visitor& visitor, const ::vnx::Variant& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Variant& value, bool special = false) {
 		const std::vector<int> tmp = {17};
 		code.insert(code.end(), tmp.begin(), tmp.end());
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::access_role_e> {
+	void read(TypeInput& in, ::vnx::access_role_e& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::access_role_e& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::access_role_e& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::access_role_e& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::access_role_e& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::access_role_e& value, bool special = false) {
+		code.push_back(CODE_STRING);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::permission_e> {
+	void read(TypeInput& in, ::vnx::permission_e& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::permission_e& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::permission_e& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::permission_e& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::permission_e& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::permission_e& value, bool special = false) {
+		code.push_back(CODE_STRING);
 	}
 };
 
@@ -4214,7 +4870,8 @@ struct type<::vnx::record_index_entry_t> {
 	void accept(Visitor& visitor, const ::vnx::record_index_entry_t& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::record_index_entry_t& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -4237,7 +4894,8 @@ struct type<::vnx::record_topic_info_t> {
 	void accept(Visitor& visitor, const ::vnx::record_topic_info_t& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::record_topic_info_t& value, bool special = false) {
 		code.push_back(CODE_OBJECT);
 	}
 };
@@ -4260,7 +4918,8 @@ struct type<::vnx::terminal_event_e> {
 	void accept(Visitor& visitor, const ::vnx::terminal_event_e& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::terminal_event_e& value, bool special = false) {
 		code.push_back(CODE_STRING);
 	}
 };
@@ -4283,7 +4942,8 @@ struct type<::vnx::test_enum_e> {
 	void accept(Visitor& visitor, const ::vnx::test_enum_e& value) {
 		vnx::accept(visitor, value);
 	}
-	void create_dynamic_code(std::vector<uint16_t>& code) {
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::test_enum_e& value, bool special = false) {
 		code.push_back(CODE_STRING);
 	}
 };

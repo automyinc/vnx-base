@@ -15,8 +15,10 @@ class ServerBase : public ::vnx::Module {
 public:
 	
 	std::string address;
+	vnx::bool_t use_authentication = false;
 	std::vector<::vnx::TopicPtr> export_list;
 	int32_t max_queue_ms = 100;
+	std::string default_access = "DEFAULT";
 	
 	typedef ::vnx::Module Super;
 	
@@ -26,7 +28,7 @@ public:
 	ServerBase(const std::string& _vnx_name);
 	
 	vnx::Hash64 get_type_hash() const override;
-	const char* get_type_name() const override;
+	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
 	void read(std::istream& _in) override;

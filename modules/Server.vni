@@ -4,8 +4,12 @@ module Server {
 	
 	string address;						// URL to bind to
 	
+	bool use_authentication = false;	// if to require authentication from clients
+	
 	vector<TopicPtr> export_list;		// list of topics to export
 	
 	int max_queue_ms = 100;
+	
+	string default_access = "DEFAULT";	// default access role for anonymous clients (if use_authentication == true)
 	
 }

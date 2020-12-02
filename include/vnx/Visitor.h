@@ -105,6 +105,17 @@ void accept(Visitor& visitor, const std::vector<T>& vector) {
 }
 
 template<typename T>
+void accept(Visitor& visitor, const std::list<T>& list) {
+	visitor.list_begin(list.size());
+	auto iter = list.begin();
+	for(size_t i = 0; iter != list.end(); ++i, ++iter) {
+		visitor.list_element(i);
+		vnx::type<T>().accept(visitor, *iter);
+	}
+	visitor.list_end(list.size());
+}
+
+template<typename T>
 void accept(Visitor& visitor, const std::set<T>& set) {
 	visitor.list_begin(set.size());
 	size_t i = 0;

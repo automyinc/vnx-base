@@ -4,25 +4,39 @@ module Process {
 	
 	int topic_info_interval_ms = 500;			// publish interval for vnx.topic_info
 	
+	@Permission(VIEW)
 	string get_name() const;					// get process name
 	
+	@Permission(TIME_SYNC)
 	TimeSync get_sync_time() const;
 	
-	vector<TopicInfo> get_topic_info() const;
+	@Permission(VIEW)
+	vector<TopicInfo> get_topic_info(bool include_domains) const;
 	
+	@Permission(VIEW)
 	vector<ModuleInfo> get_module_info() const;
 	
+	@Permission(VIEW)
 	ProcessInfo get_process_info() const;
 	
+	@Permission(READ_CONFIG)
 	Variant get_global_config(string key) const;
 	
+	@Permission(WRITE_CONFIG)
 	void set_global_config(string key, Variant value);
 	
+	void reload_config();						// reload config trees from file system
+	
+	@Permission(LOCAL)
 	void pause_log();							// pause terminal logging output
+	
+	@Permission(LOCAL)
 	void resume_log();							// resume terminal logging output
 	
+	@Permission(LOCAL)
 	void set_debug(int level);					// set terminal logging output level
 	
+	@Permission(SHUTDOWN)
 	void trigger_shutdown();					// shutdown whole process
 	
 	void handle(LogMsg sample);

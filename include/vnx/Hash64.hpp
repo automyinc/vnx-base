@@ -52,7 +52,11 @@ Hash64::Hash64(const Hash64& A, const Hash64& B) {
 
 inline
 Hash64 Hash64::rand() {
-	return Hash64(rand64());
+	uint64_t hash = 0;
+	while(!hash) {
+		hash = rand64();
+	}
+	return Hash64(hash);
 }
 
 inline

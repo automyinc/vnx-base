@@ -21,6 +21,7 @@
 #include <vnx/ProxyClient.hxx>
 #include <vnx/Endpoint.hxx>
 #include <vnx/TimeServer.h>
+#include <vnx/Authentication.h>
 
 #include <atomic>
 
@@ -60,14 +61,18 @@ protected:
 	
 	void main() override;
 	
-	void handle(std::shared_ptr<const Message> message) override;
-	
+	void login_async(const std::string &name, const std::string &password, const request_id_t& request_id) const override;
+
 	void handle(std::shared_ptr<const Sample> sample) override;
 	
+	void handle_resend(std::shared_ptr<const Sample> sample) override;
+
 	std::shared_ptr<const Return> handle(std::shared_ptr<const Request> request) override;
 	
 	bool handle(std::shared_ptr<const Return> result) override;
 	
+	void handle(std::shared_ptr<const FlowMessage> flow_msg) override;
+
 	void enable_import(const std::string& topic_name) override;
 	
 	void disable_import(const std::string& topic_name) override;
@@ -84,19 +89,25 @@ protected:
 	
 	void disable_tunnel(const Hash64& tunnel_addr) override;
 	
+	void wait_on_connect_async(const request_id_t& request_id) const override;
+
 	void on_connect() override;
 	
 	void on_disconnect() override;
 	
 	void on_remote_connect(const Hash64& process_id) override;
 	
+	void on_login(const std::string &name, const std::string &password) override;
+
+	void on_remote_login(std::shared_ptr<const Session> remote_session) override;
+
 private:
 	void enable_forward(const Hash64& serive_addr, const int32_t& max_queue_ms);
 	
 	void disable_forward(const Hash64& serive_addr);
 	
 	void update_topics();
-	
+
 	void print_stats();
 	
 	// to be called by read_loop() only
@@ -104,25 +115,37 @@ private:
 	
 	void read_loop(std::shared_ptr<const Endpoint> endpoint);
 	
+	void close_socket();
+	
 private:
 	Hash64 service_addr;
 	Hash64 public_service_addr;
 	Hash64 remote_addr;
 	Hash64 remote_tunnel_addr;
+	Hash64 remote_process_id;
 	std::shared_ptr<const Endpoint> endpoint;
 	
-	std::unordered_map<std::string, ssize_t> import_table;
-	std::unordered_map<std::string, ssize_t> export_table;
-	std::unordered_map<Hash64, uint64_t> forward_table;
-	std::unordered_map<Hash64, Hash64> tunnel_hash_map;
-	std::vector<std::shared_ptr<Pipe>> resume_list;
-	std::set<std::pair<Hash64, Hash64>> outgoing;
+	std::unordered_map<std::string, ssize_t> import_table;			// [topic => counter]
+	std::unordered_map<std::string, ssize_t> export_table;			// [topic => counter]
+	std::unordered_map<Hash64, uint64_t> forward_table;				// [service => counter]
+	std::unordered_map<Hash64, std::shared_ptr<Pipe>> request_pipes;	// [service => pipe]
+	std::unordered_map<Hash64, Hash64> tunnel_hash_map;				// [service => service]
+	std::unordered_map<Hash128, uint64_t> channel_map;				// [(src_mac, topic) => seq_num]
+	std::unordered_set<Hash128> outgoing;							// (src_mac, dst_mac)
 	
 	std::shared_ptr<ProxyClient> remote;
 	std::shared_ptr<const TopicInfoList> topic_info;
 	Handle<TimeServer> time_server;
 	
 	bool is_connected = false;
+	bool never_connected = true;
+	std::shared_ptr<const Session> default_session;					// read-only (never modified after start)
+	std::shared_ptr<const Session> internal_session;				// read-only (never modified after start)
+	std::shared_ptr<AuthenticationServer> authentication;
+	mutable std::pair<std::string, std::string> login_credentials;
+	mutable vnx::request_t<std::shared_ptr<const Session>> login_request;
+	mutable std::vector<vnx::request_t<Hash64>> waiting_requests;
+
 	SocketOutputStream stream_out;
 	TypeOutput out;
 	
@@ -134,12 +157,14 @@ private:
 	// all below shared via mutex
 	std::mutex mutex;
 	int socket = -1;
+	std::shared_ptr<const Session> session;		// only main thread modifies
 	std::unordered_map<Hash64, std::map<uint64_t, std::shared_ptr<const Request>>> request_map;
 	
 	// all below belong to read_loop()
 	std::unordered_map<Hash64, std::shared_ptr<Pipe>> return_map;		// to keep track of return pipes
-	std::set<std::pair<Hash64, Hash64>> incoming;						// map of incoming connections
-	
+	std::unordered_map<Hash128, std::shared_ptr<const Sample>> recv_buffer;		// last known sample per channel
+	std::unordered_set<Hash128> incoming;				// map of incoming connections (src_mac, dst_mac)
+
 };
 
 

@@ -15,6 +15,7 @@ namespace vnx {
 class PlayerBase : public ::vnx::Module {
 public:
 	
+	::vnx::TopicPtr output_status = "vnx.player_status";
 	std::vector<std::string> files;
 	int32_t interval_ms = 100;
 	int32_t max_time_gap_ms = 5000;
@@ -35,7 +36,7 @@ public:
 	PlayerBase(const std::string& _vnx_name);
 	
 	vnx::Hash64 get_type_hash() const override;
-	const char* get_type_name() const override;
+	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
 	void read(std::istream& _in) override;

@@ -4,4 +4,7 @@ class Exception {
 	
 	string what;
 	
+	
+	static Exception* from_what(string what);
+	
 }

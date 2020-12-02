@@ -2,6 +2,8 @@ package vnx;
 
 module Recorder {
 	
+	TopicPtr output_status = "vnx.recorder_status";
+	
 	string filename;			// use % as a placeholder for datetime
 	
 	int max_queue_ms = 1000;

@@ -8,20 +8,28 @@ module Terminal {
 	
 	string prompt = "> ";				// terminal prompt when waiting for commands
 	
+	@Permission(LOCAL)
 	void command(vector<string> commandline);
 	
+	@Permission(LOCAL)
 	void read_char(char c);
 	
+	@Permission(LOCAL)
 	void read_event(terminal_event_e event);
 	
+	@Permission(LOCAL)
 	void grep(string expr);
 	
+	@Permission(LOCAL)
 	void spy(string expr);
 	
+	@Permission(LOCAL)
 	void dump(string expr);
 	
+	@Permission(LOCAL)
 	void topic_info(string expr);
 	
+	@Permission(LOCAL)
 	void module_info(string expr);
 	
 	void handle(LogMsg sample);

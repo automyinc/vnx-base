@@ -25,6 +25,8 @@
 namespace vnx {
 
 /// Class to compute 64-bit CRC
+/// algorithm: CRC-64/XZ (alias CRC-64/GO-ECMA)
+/// see: https://reveng.sourceforge.io/crc-catalogue/17plus.htm#crc.cat-bits.64
 class CRC64 {
 public:
 	CRC64() {

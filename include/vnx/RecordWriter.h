@@ -68,7 +68,12 @@ protected:
 	void add_block();
 	
 private:
-	FILE* file = 0;
+	struct channel_t {
+		uint64_t seq_num = 0;
+		int64_t output_pos = -1;
+	};
+
+	FILE* file = nullptr;
 	FileOutputStream stream;
 	TypeOutput out;
 	
@@ -78,11 +83,10 @@ private:
 	std::shared_ptr<RecordIndex> curr_block;
 	int32_t index_pos = 0;
 	int64_t curr_block_pos = -1;
-	int64_t curr_out_pos = -1;
 	int64_t last_sample_time = 0;
 	
-	std::unordered_map<uint64_t, record_topic_info_t> topic_info_map;
-	std::unordered_map<uint64_t, uint64_t> sample_seq_map;
+	std::unordered_map<TopicPtr, record_topic_info_t> topic_map;
+	std::unordered_map<Hash128, channel_t> channel_map;
 	
 };
 

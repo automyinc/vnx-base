@@ -45,6 +45,7 @@
 #include <vnx/Value.h>
 #include <vnx/Visitor.h>
 #include <vnx/CRC64.h>
+#include <vnx/Authentication.h>
 
 #include <vnx/Buffer.hpp>
 #include <vnx/Config.hpp>

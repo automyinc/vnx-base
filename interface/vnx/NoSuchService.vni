@@ -2,6 +2,6 @@ package vnx;
 
 class NoSuchService extends Exception {
 	
-	ulong dst_mac;
+	Hash64 dst_mac;
 	
 }

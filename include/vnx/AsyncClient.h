@@ -16,6 +16,7 @@
 #include <vnx/InternalError.hxx>
 #include <vnx/OverflowException.hxx>
 #include <vnx/Return.hxx>
+#include <vnx/request_t.h>
 
 #include <functional>
 
@@ -54,6 +55,9 @@ public:
 	/// Sets the node which will receive and process the returns
 	void vnx_set_node(Node* node);
 	
+	/// Sets a custom session to be used for requests.
+	void vnx_set_session(Hash64 id);
+
 	/// If \p non_blocking_mode == true requests will throw an exception instead of blocking (default = false)
 	void vnx_set_non_blocking(bool non_blocking_mode);
 
@@ -94,6 +98,7 @@ private:
 	Node* vnx_node = nullptr;
 	Hash64 vnx_src_mac;
 	Hash64 vnx_service_addr;
+	Hash64 vnx_session_id;
 	std::atomic_bool vnx_is_non_blocking {false};
 	
 	std::shared_ptr<Pipe> vnx_service_pipe;

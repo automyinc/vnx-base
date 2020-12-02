@@ -92,7 +92,7 @@ protected:
 	
 	TimeSync get_sync_time() const override;
 	
-	std::vector<TopicInfo> get_topic_info() const override;
+	std::vector<TopicInfo> get_topic_info(const bool_t& include_domains) const override;
 
 	std::vector<ModuleInfo> get_module_info() const override;
 	
@@ -101,6 +101,8 @@ protected:
 	Variant get_global_config(const std::string& key) const override;
 
 	void set_global_config(const std::string& key, const Variant& value) override;
+	
+	void reload_config() override;
 
 	void pause_log() override;
 	
@@ -126,6 +128,7 @@ protected:
 	
 private:
 	int is_log_paused = 0;
+	int log_level = LogMsg::INFO;
 	
 	std::map<Hash64, std::shared_ptr<const ModuleInfo>> module_info_map;
 	

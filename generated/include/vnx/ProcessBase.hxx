@@ -30,7 +30,7 @@ public:
 	ProcessBase(const std::string& _vnx_name);
 	
 	vnx::Hash64 get_type_hash() const override;
-	const char* get_type_name() const override;
+	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
 	void read(std::istream& _in) override;
@@ -53,11 +53,12 @@ public:
 protected:
 	virtual std::string get_name() const = 0;
 	virtual ::vnx::TimeSync get_sync_time() const = 0;
-	virtual std::vector<::vnx::TopicInfo> get_topic_info() const = 0;
+	virtual std::vector<::vnx::TopicInfo> get_topic_info(const vnx::bool_t& include_domains) const = 0;
 	virtual std::vector<::vnx::ModuleInfo> get_module_info() const = 0;
 	virtual ::vnx::ProcessInfo get_process_info() const = 0;
 	virtual ::vnx::Variant get_global_config(const std::string& key) const = 0;
 	virtual void set_global_config(const std::string& key, const ::vnx::Variant& value) = 0;
+	virtual void reload_config() = 0;
 	virtual void pause_log() = 0;
 	virtual void resume_log() = 0;
 	virtual void set_debug(const int32_t& level) = 0;

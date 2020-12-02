@@ -354,74 +354,76 @@ inline bool is_equivalent<int64_t>(uint16_t code) {
 }
 
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const bool& value) { code.push_back(CODE_BOOL); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const bool& value, bool special = false) { code.push_back(CODE_BOOL); }
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const uint8_t& value) { code.push_back(CODE_UINT8); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const uint8_t& value, bool special = false) { code.push_back(CODE_UINT8); }
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const uint16_t& value) { code.push_back(CODE_UINT16); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const uint16_t& value, bool special = false) { code.push_back(CODE_UINT16); }
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const uint32_t& value) { code.push_back(CODE_UINT32); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const uint32_t& value, bool special = false) { code.push_back(CODE_UINT32); }
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const uint64_t& value) { code.push_back(CODE_UINT64); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const uint64_t& value, bool special = false) { code.push_back(CODE_UINT64); }
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const char& value) { code.push_back(CODE_INT8); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const char& value, bool special = false) { code.push_back(CODE_INT8); }
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const int8_t& value) { code.push_back(CODE_INT8); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const int8_t& value, bool special = false) { code.push_back(CODE_INT8); }
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const int16_t& value) { code.push_back(CODE_INT16); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const int16_t& value, bool special = false) { code.push_back(CODE_INT16); }
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const int32_t& value) { code.push_back(CODE_INT32); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const int32_t& value, bool special = false) { code.push_back(CODE_INT32); }
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const int64_t& value) { code.push_back(CODE_INT64); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const int64_t& value, bool special = false) { code.push_back(CODE_INT64); }
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const float32_t& value) { code.push_back(CODE_FLOAT); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const float32_t& value, bool special = false) { code.push_back(CODE_FLOAT); }
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const float64_t& value) { code.push_back(CODE_DOUBLE); }
+inline void create_dynamic_code(std::vector<uint16_t>& code, const float64_t& value, bool special = false) { code.push_back(CODE_DOUBLE); }
 
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const std::string& value) {
+inline void create_dynamic_code(std::vector<uint16_t>& code, const std::string& value, bool special = false) {
 	code.push_back(CODE_STRING);
 }
 
 template<typename T, size_t N>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::array<T, N>& value);
+void create_dynamic_code(std::vector<uint16_t>& code, const std::array<T, N>& value, bool special = false);
 
 template<typename T>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::vector<T>& value);
+void create_dynamic_code(std::vector<uint16_t>& code, const std::vector<T>& value, bool special = false);
 
 template<typename T>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::list<T>& value);
+void create_dynamic_code(std::vector<uint16_t>& code, const std::list<T>& value, bool special = false);
 
 template<typename T>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::set<T>& value);
+void create_dynamic_code(std::vector<uint16_t>& code, const std::set<T>& value, bool special = false);
 
 template<typename T, typename C>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::set<T, C>& value);
+void create_dynamic_code(std::vector<uint16_t>& code, const std::set<T, C>& value, bool special = false);
 
 template<typename T>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_set<T>& value);
+void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_set<T>& value, bool special = false);
 
 template<typename T, typename C>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_set<T, C>& value);
+void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_set<T, C>& value, bool special = false);
 
 template<typename K, typename V>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V>& value);
+void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V>& value, bool special = false);
 
 template<typename K, typename V, typename C>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V, C>& value);
+void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V, C>& value, bool special = false);
 
 template<typename K, typename V>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K, V>& value);
+void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K, V>& value, bool special = false);
 
 template<typename K, typename V, typename C>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K, V, C>& value);
+void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K, V, C>& value, bool special = false);
 
 template<typename K, typename V>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::pair<K, V>& value);
+void create_dynamic_code(std::vector<uint16_t>& code, const std::pair<K, V>& value, bool special = false);
 
-void create_dynamic_code(std::vector<uint16_t>& code, const Value& value); ///< \private
+void create_dynamic_code(std::vector<uint16_t>& code, const std::nullptr_t& value, bool special = false); ///< \private
 
-void create_dynamic_code(std::vector<uint16_t>& code, std::shared_ptr<const Value> value); ///< \private
+void create_dynamic_code(std::vector<uint16_t>& code, const Value& value, bool special = false); ///< \private
+
+void create_dynamic_code(std::vector<uint16_t>& code, std::shared_ptr<const Value> value, bool special = false); ///< \private
 
 
 /// Class for a field in a TypeCode.
@@ -473,6 +475,7 @@ public:
 	std::vector<const TypeCode*> methods;
 	std::map<uint32_t, std::string> enum_map;			///< Map from enum values to their names (only for enum types)
 	std::map<std::string, std::string> alias_map;		///< Map for field matching in case of changed field names
+	std::string permission;								///< Required permission (only for method types)
 	
 	bool is_enum = false;			///< If type is an enum
 	bool is_class = false;			///< If type is a class (ie. inherits from Value)
@@ -503,6 +506,11 @@ public:
 	 */
 	bool instanceof(Hash64 type_hash_) const;
 	
+	/**
+	 * Returns method name, without the type name, only if is_method == true. Otherwise empty string.
+	 */
+	std::string get_method_name() const;
+
 	/**
 	 * Returns type code of given field, if it has one (struct, class, enum).
 	 * Otherwise returns nullptr.
@@ -548,17 +556,17 @@ struct type {
 	void read(std::istream& in, T& value);
 	void write(std::ostream& out, const T& value);
 	void accept(Visitor& visitor, const T& value);
-	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const T& value = T(), bool special = false);
 };
 
 template<typename T>
-void type<T>::create_dynamic_code(std::vector<uint16_t>& code) {
-	vnx::create_dynamic_code(code, T());
+void type<T>::create_dynamic_code(std::vector<uint16_t>& code, const T& value, bool special) {
+	vnx::create_dynamic_code(code, value, special);
 }
 
 /// \private
 template<typename T, size_t N>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::array<T, N>& value) {
+void create_dynamic_code(std::vector<uint16_t>& code, const std::array<T, N>& value, bool special) {
 	if(N > VNX_MAX_STATIC_SIZE) {
 		throw std::invalid_argument("create_dynamic_code(std::array<T, N>): N > VNX_MAX_STATIC_SIZE");
 	}
@@ -569,44 +577,44 @@ void create_dynamic_code(std::vector<uint16_t>& code, const std::array<T, N>& va
 
 /// \private
 template<typename T>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::vector<T>& value) {
+void create_dynamic_code(std::vector<uint16_t>& code, const std::vector<T>& value, bool special) {
 	code.push_back(CODE_LIST);
 	vnx::type<T>().create_dynamic_code(code);
 }
 
 /// \private
 template<typename T>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::list<T>& value) {
+void create_dynamic_code(std::vector<uint16_t>& code, const std::list<T>& value, bool special) {
 	create_dynamic_code(code, std::vector<T>());
 }
 
 /// \private
 template<typename T>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::set<T>& value) {
+void create_dynamic_code(std::vector<uint16_t>& code, const std::set<T>& value, bool special) {
 	create_dynamic_code(code, std::vector<T>());
 }
 
 /// \private
 template<typename T, typename C>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::set<T, C>& value) {
+void create_dynamic_code(std::vector<uint16_t>& code, const std::set<T, C>& value, bool special) {
 	create_dynamic_code(code, std::vector<T>());
 }
 
 /// \private
 template<typename T>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_set<T>& value) {
+void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_set<T>& value, bool special) {
 	create_dynamic_code(code, std::vector<T>());
 }
 
 /// \private
 template<typename T, typename C>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_set<T, C>& value) {
+void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_set<T, C>& value, bool special) {
 	create_dynamic_code(code, std::vector<T>());
 }
 
 /// \private
 template<typename K, typename V>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V>& value) {
+void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V>& value, bool special) {
 	const size_t begin = code.size();
 	code.push_back(CODE_MAP);
 	code.push_back(0);
@@ -617,25 +625,25 @@ void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V>& valu
 
 /// \private
 template<typename K, typename V, typename C>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V, C>& value) {
+void create_dynamic_code(std::vector<uint16_t>& code, const std::map<K, V, C>& value, bool special) {
 	create_dynamic_code(code, std::map<K, V>());
 }
 
 /// \private
 template<typename K, typename V>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K, V>& value) {
+void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K, V>& value, bool special) {
 	create_dynamic_code(code, std::map<K, V>());
 }
 
 /// \private
 template<typename K, typename V, typename C>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K, V>& value) {
+void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K, V>& value, bool special) {
 	create_dynamic_code(code, std::map<K, V>());
 }
 
 /// \private
 template<typename K, typename V>
-void create_dynamic_code(std::vector<uint16_t>& code, const std::pair<K, V>& value) {
+void create_dynamic_code(std::vector<uint16_t>& code, const std::pair<K, V>& value, bool special) {
 	const size_t begin = code.size();
 	code.push_back(CODE_TUPLE);
 	code.push_back(2);
@@ -648,14 +656,35 @@ void create_dynamic_code(std::vector<uint16_t>& code, const std::pair<K, V>& val
 }
 
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, const Value& value) {
+inline void create_dynamic_code(std::vector<uint16_t>& code, const std::nullptr_t& value, bool special) {
+	code.push_back(CODE_NULL);
+}
+
+/// \private
+inline void create_dynamic_code(std::vector<uint16_t>& code, const Value& value, bool special) {
 	code.push_back(CODE_OBJECT);
 }
 
 /// \private
-inline void create_dynamic_code(std::vector<uint16_t>& code, std::shared_ptr<const Value> value) {
-	code.push_back(CODE_OBJECT);
+inline void create_dynamic_code(std::vector<uint16_t>& code, std::shared_ptr<const Value> value, bool special) {
+	if(!special || value) {
+		code.push_back(CODE_OBJECT);
+	} else {
+		code.push_back(CODE_NULL);
+	}
 }
+
+/// Convert value to a JSON string
+template<typename T>
+std::string to_string(const T& value);
+
+/// Convert value to a plain string
+template<typename T>
+std::string to_string_value(const T& value);
+
+/// Convert value to a plain string (with full type name if applicable)
+template<typename T>
+std::string to_string_value_full(const T& value);
 
 
 } // vnx

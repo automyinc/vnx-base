@@ -176,7 +176,7 @@ public:
 	
 	/** \brief Returns true if value is null, ie. CODE_NULL.
 	 * 
-	 * Note: Returns false for empty Variant also.
+	 * Note: Returns true for empty Variant also.
 	 */
 	bool is_null() const;
 	
@@ -201,17 +201,11 @@ public:
 	/// Returns true if value is an array. (CODE_ARRAY, CODE_LIST, CODE_MATRIX)
 	bool is_array() const;
 	
-	/// Returns true if value is a list. (CODE_ARRAY, CODE_LIST, CODE_MATRIX)
-	bool is_list() const;
-	
 	/// Returns true if value is a map. (CODE_MAP)
 	bool is_map() const;
 	
 	/// Returns true if value is an Object. (CODE_OBJECT)
 	bool is_object() const;
-	
-	/// Returns true if value is a Value. (CODE_ANY)
-	bool is_value() const;
 	
 	/// Clear value, ie. make Variant empty.
 	void clear() {

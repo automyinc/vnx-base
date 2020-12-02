@@ -17,9 +17,11 @@ public:
 	
 	std::string proxy_name;
 	std::string topic_expr;
+	vnx::bool_t exact_match = true;
 	vnx::bool_t only_once = false;
 	vnx::bool_t header_only = false;
 	vnx::bool_t pretty_print = true;
+	vnx::bool_t show_resend = false;
 	int32_t max_list_size = 1000;
 	int32_t max_queue_ms = 100;
 	::vnx::Hash64 receive_tunnel;
@@ -32,7 +34,7 @@ public:
 	SpyToolBase(const std::string& _vnx_name);
 	
 	vnx::Hash64 get_type_hash() const override;
-	const char* get_type_name() const override;
+	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
 	void read(std::istream& _in) override;

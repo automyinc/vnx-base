@@ -16,6 +16,7 @@ public:
 	std::string name;
 	uint64_t sample_count = 0;
 	uint64_t num_subscribers = 0;
+	vnx::bool_t is_domain = 0;
 	
 	typedef ::vnx::Value Super;
 	
@@ -23,7 +24,7 @@ public:
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
 	vnx::Hash64 get_type_hash() const override;
-	const char* get_type_name() const override;
+	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
 	static std::shared_ptr<TopicInfo> create();
