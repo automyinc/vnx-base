@@ -258,6 +258,9 @@ protected:
 	/// Will publish a ModuleInfo message on "vnx.module_info"
 	virtual void vnx_heartbeat();
 
+	/// Performs user defined self test (by default returns true)
+	virtual bool_t vnx_self_test() const;
+
 private:
 	Hash64 module_id;
 	TimeControl time_state;

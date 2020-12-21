@@ -20,6 +20,7 @@
 #include <vnx/Type.h>
 
 #include <cstring>
+#include <streambuf>
 #include <unordered_map>
 
 
@@ -259,15 +260,15 @@ public:
 		}
 	}
 	
-	/// Tries to have \p num_bytes ready in the buffer for reading
-	void fetch(size_t num_bytes) {
-		if(num_bytes > VNX_BUFFER_SIZE) {
-			num_bytes = VNX_BUFFER_SIZE;
+	/// Tries to have \p num_bytes ready in the buffer for reading (at least one byte), returns get_num_avail().
+	size_t fetch(size_t num_bytes) {
+		if(num_bytes > end - pos) {
+			if(pos >= VNX_BUFFER_SIZE) {
+				reset();
+			}
+			end += stream->read(buffer + end, VNX_BUFFER_SIZE - end);
 		}
-		if(num_bytes > end) {
-			num_bytes = stream->read(buffer + end, num_bytes - end);
-			end += num_bytes;
-		}
+		return get_num_avail();
 	}
 	
 	/// Resets the buffer, discarding any data left over
@@ -286,6 +287,11 @@ public:
 		return stream->get_input_pos() - get_num_avail();
 	}
 	
+	/// Direct buffer access, relative to current position, see get_num_avail() and fetch().
+	const char& operator[](size_t i) const {
+		return buffer[pos + i];
+	}
+
 private:
 	char buffer[VNX_BUFFER_SIZE];
 	InputStream* stream = 0;
@@ -314,6 +320,37 @@ public:
 	
 	std::unordered_map<Hash64, const TypeCode*> type_code_map;		///< for faster lock-free lookup
 	
+};
+
+
+/** \brief std::streambuf wrapper around InputBuffer
+ */
+class TextInput : public std::streambuf {
+public:
+	TextInput(InputStream* stream_) : buffer(stream_) {}
+
+protected:
+	std::streamsize showmanyc() override;
+
+	std::streamsize xsgetn(char_type* s, std::streamsize n) override;
+
+	int_type underflow() override;
+
+private:
+	InputBuffer buffer;
+
+};
+
+
+/** \brief std::istream wrapper around InputStream
+ */
+class istream : public std::istream {
+public:
+    istream(InputStream* stream_) : std::istream(&buffer), buffer(stream_) {}
+
+private:
+    TextInput buffer;
+
 };
 
 

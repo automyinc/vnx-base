@@ -1,0 +1,8 @@
+package vnx;
+
+
+class JRPC_Response{
+	string jsonrpc;                      // must be "2.0"
+	Variant id;                          // same as in the request
+}
+

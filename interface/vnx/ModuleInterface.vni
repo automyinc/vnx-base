@@ -24,4 +24,7 @@ interface ModuleInterface {
 	@Permission(STOP)
 	void vnx_stop();		// stops and deletes the module
 	
+	@Permission(SELF_TEST)
+	bool vnx_self_test() const;				// performs user defined self test
+	
 }

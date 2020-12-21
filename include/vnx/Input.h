@@ -498,7 +498,6 @@ void read(TypeInput& in, std::vector<bool>& vector, const TypeCode* type_code, c
  */
 template<typename T>
 void read_list(TypeInput& in, T& list, const TypeCode* type_code, const uint16_t* code) {
-	list.clear();
 	std::vector<typename T::value_type> tmp;
 	read_vector(in, tmp, type_code, code);
 	for(auto& value : tmp) {
@@ -518,7 +517,6 @@ void read(TypeInput& in, std::list<T>& list, const TypeCode* type_code, const ui
  */
 template<typename T>
 void read_set(TypeInput& in, T& set, const TypeCode* type_code, const uint16_t* code) {
-	set.clear();
 	std::vector<typename T::key_type> tmp;
 	read_vector(in, tmp, type_code, code);
 	for(auto& value : tmp) {
@@ -718,6 +716,8 @@ void read_image_data(TypeInput& in, T* data, const std::array<size_t, N>& size, 
  * @return The value read from the stream, nullptr in case of CODE_NULL, any derived type in case of CODE_TYPE,
  * 			Object in case of CODE_OBJECT, Generic in case of CODE_DYNAMIC, Struct in case of a struct and
  * 			Binary in case of a non-native (ie. not compiled in or linked in) type.
+ *
+ * 	Throws std::underflow in case of EOF.
  */
 std::shared_ptr<Value> read(TypeInput& in);
 
@@ -760,48 +760,11 @@ void read_dynamic_list_data(TypeInput& in, T* data_, const uint16_t* code_, cons
 	}
 }
 
-/** \brief Reads a value from the JSON stream into \p out. (generic version)
- * 
- * A value is either a:
- * - number: 123 or 123.456
- * - boolean: true or false (without quotes)
- * - null: null (without quotes)
- * - string: "string with quotes"
- * - array: [1, 2, 3]
- * - object: {"key": 123, "foo": "bar"}
- * 
- * @param in JSON stream to read from
- * @param out Output string to copy into, will be cleared beforehand.
- * @param want_string Can be set to true if a string is expected to follow. If true will also read a string without quotes
- * 			until a JSON delimiter is encountered. Any whitespace is ignored.
- */
-bool read_value(std::istream& in, std::string& out, bool want_string = false);
-
-/** \brief Reads an array from the JSON stream. (generic version)
- *
- * (Singular values are read as an array of size 1)
- *
- * Example: [1, 2, 3, "example", [1, 2, 3], {"key": 123}]
- */
-bool read_array(std::istream& in, std::vector<std::string>& array);
-
-/** \brief Reads an object from the JSON stream. (generic version)
- * 
- * Example: {"key": 123, "foo": "bar"}
- */
-bool read_object(std::istream& in, std::map<std::string, std::string>& object);
-
-/** \brief Reads an object from the JSON string. (generic version)
- * 
- * Example: {"key": 123, "foo": "bar"}
- */
-bool read_object(const std::string& str, std::map<std::string, std::string>& object);
-
 /// Reads a value directly from the JSON stream
 /// @{
 inline void read(std::istream& in, bool& value) {
 	std::string tmp;
-	read_value(in, tmp);
+	in >> tmp;
 	value = !(tmp == "false" || tmp == "null" || tmp == "0");
 }
 inline void read(std::istream& in, uint8_t& value) { int tmp; in >> tmp; value = uint8_t(tmp); }
@@ -834,11 +797,13 @@ void read(std::istream& in, std::string& value);
  * - array (CODE_LIST)
  * - vnx::Object (CODE_OBJECT)
  * - vnx::Value (CODE_TYPE)
+ *
+ * Throws std::underflow in case of EOF.
  */
 Variant read(std::istream& in);
 
 /// Reads a TypeCode from the stream
-void read_type_code(TypeInput& in);
+void read_type_code(TypeInput& in, const uint16_t* code);
 
 /** \brief Reads a value from the file given by \p file_name.
  * 

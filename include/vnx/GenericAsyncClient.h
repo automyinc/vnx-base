@@ -47,13 +47,10 @@ public:
 					const std::function<void(std::shared_ptr<const Value>)>& callback = std::function<void(std::shared_ptr<const Value>)>(),
 					const std::function<void(const vnx::exception&)>& error_callback = std::function<void(const vnx::exception&)>());
 
-	/// Returns list of pending request ids.
-	std::vector<uint64_t> vnx_get_pending_ids() const override;
-
 protected:
-	void vnx_purge_request(uint64_t request_id, const vnx::exception& ex) override;
+	int32_t vnx_purge_request(uint64_t request_id, const vnx::exception& ex) override;
 
-	void vnx_callback_switch(uint64_t request_id, std::shared_ptr<const vnx::Value> value) override;
+	int32_t vnx_callback_switch(uint64_t request_id, std::shared_ptr<const vnx::Value> value) override;
 
 private:
 	std::map<uint64_t, std::pair<std::function<void(std::shared_ptr<const Value>)>,

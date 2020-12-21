@@ -31,13 +31,28 @@ namespace vnx {
 class Node;
 class Pipe;
 
+enum {
+	PIPE_PRIORITY_DEFAULT = 0,
+	PIPE_PRIORITY_LOW = 10,
+	PIPE_PRIORITY_HIGH = -10,
+};
+
+enum pipe_mode_e {
+	PIPE_MODE_DEFAULT,		// drop new samples in case queue is full
+	PIPE_MODE_LATEST,		// drop oldest samples in case queue is full
+};
+
 /// Open a new pipe known as \p service_name to Node \p node.
 std::shared_ptr<Pipe> open_pipe(const std::string& service_name, Node* node,
-								int max_queue_ms, int max_queue_size = 0, int priority = 0);
+								int max_queue_ms, int max_queue_size = 0,
+								int priority = PIPE_PRIORITY_DEFAULT,
+								pipe_mode_e mode = PIPE_MODE_DEFAULT);
 
 /// Open a new pipe known by \p mac_addr to Node \p node.
 std::shared_ptr<Pipe> open_pipe(Hash64 mac_addr, Node* node,
-								int max_queue_ms, int max_queue_size = 0, int priority = 0);
+								int max_queue_ms, int max_queue_size = 0,
+								int priority = PIPE_PRIORITY_DEFAULT,
+								pipe_mode_e mode = PIPE_MODE_DEFAULT);
 
 /** \brief Get a pipe to a service called \p service_name.
  * 
@@ -93,7 +108,8 @@ bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<Message> msg, uint16_t
 bool flow_open(std::shared_ptr<Pipe> target, std::shared_ptr<Pipe> source, uint16_t flags = 0);
 
 /// Connect a pipe to a node.
-void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size = 0, int priority = 0);
+void connect(	std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size = 0,
+				int priority = PIPE_PRIORITY_DEFAULT, pipe_mode_e mode = PIPE_MODE_DEFAULT);
 
 /// Unregister service known by \p service_name.
 void remove_pipe(const std::string& service_name);
@@ -144,8 +160,10 @@ public:
 	
 	static std::shared_ptr<Pipe> create();
 	
+	static std::shared_ptr<Pipe> create(Hash64 mac_addr);
+
 	/// Connect a Pipe to a Node. (thread-safe)
-	friend void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size, int priority);
+	friend void connect(std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size, int priority, pipe_mode_e mode);
 	
 	/// Connect another Pipe (peer) to this Pipe, which will be notified if this pipe is closed. (thread-safe)
 	friend bool connect(std::shared_ptr<Pipe> pipe, std::shared_ptr<Pipe> peer);
@@ -190,7 +208,7 @@ public:
 	bool is_closed() const;
 
 private:
-	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms, int max_queue_size, int priority);
+	void connect(std::shared_ptr<Pipe> self, Node* node, int max_queue_ms, int max_queue_size, int priority, pipe_mode_e mode);
 	
 	bool connect(std::shared_ptr<Pipe> peer);
 	
@@ -209,6 +227,8 @@ private:
 	std::atomic_bool is_shutdown_ {false};
 	
 	int priority = 0;
+	pipe_mode_e mode = PIPE_MODE_DEFAULT;
+
 	int64_t max_queue_us = 0;
 	int64_t max_queue_size = 0;
 	std::queue<std::pair<std::shared_ptr<const Message>, int64_t>> queue;

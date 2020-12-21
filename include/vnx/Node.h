@@ -89,7 +89,9 @@ private:
 	
 	void remove_pipe(Pipe* pipe);					///< remove a pipe from this node
 	
-	std::shared_ptr<Pipe> pop_next();				///< get next pipe and pop it from the queue
+	std::shared_ptr<Pipe> pop_next();				///< get next pipe and pop it from the queue (mutex needs to be locked)
+
+	std::shared_ptr<const Message> pop_msg(std::shared_ptr<Pipe> pipe);		///< pops next message from pipe
 	
 private:
 	std::condition_variable condition;

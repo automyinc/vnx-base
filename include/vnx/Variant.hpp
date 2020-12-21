@@ -73,13 +73,6 @@ std::istream& operator>>(std::istream& in, Variant& value) {
 	return in;
 }
 
-inline
-Variant read(std::istream& in) {
-	Variant value;
-	read(in, value);
-	return value;
-}
-
 
 } // vnx
 

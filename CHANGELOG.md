@@ -1,3 +1,21 @@
+## [v1.9.0]
+
+- added Module default pipe on module id
+- added vnx_self_test() to ModuleInterface
+- Visitor refactor
+- RPC calls are now backwards compatible with type name changes
+- added ToObject visitor
+- Variant comparison fixes
+- added Value get/set_field_by_index() + is_void()
+- added Tuple
+- Clients now support Generic return values
+- added Proxy wait_on_disconnect()
+- added JRPC_Proxy
+- VNI Module inheritance support
+- added Pipe mode PIPE_MODE_LATEST
+- config array append feature (name+)
+- added vnx::istream + vnx::ostream
+- JSON parsing overhaul (new api)
 
 ## [v1.8.2]
 

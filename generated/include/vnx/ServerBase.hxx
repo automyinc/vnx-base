@@ -5,22 +5,16 @@
 #define INCLUDE_vnx_ServerBase_HXX_
 
 #include <vnx/package.hxx>
-#include <vnx/Module.h>
-#include <vnx/TopicPtr.hpp>
+#include <vnx/BaseServer.h>
 
 
 namespace vnx {
 
-class ServerBase : public ::vnx::Module {
+class ServerBase : public ::vnx::BaseServer {
 public:
 	
-	std::string address;
-	vnx::bool_t use_authentication = false;
-	std::vector<::vnx::TopicPtr> export_list;
-	int32_t max_queue_ms = 100;
-	std::string default_access = "DEFAULT";
 	
-	typedef ::vnx::Module Super;
+	typedef ::vnx::BaseServer Super;
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;

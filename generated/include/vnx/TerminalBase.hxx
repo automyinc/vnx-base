@@ -7,7 +7,6 @@
 #include <vnx/package.hxx>
 #include <vnx/LogMsg.hxx>
 #include <vnx/Module.h>
-#include <vnx/ModuleInfo.hxx>
 #include <vnx/terminal_event_e.hxx>
 
 
@@ -58,7 +57,6 @@ protected:
 	virtual void topic_info(const std::string& expr) = 0;
 	virtual void module_info(const std::string& expr) = 0;
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value) {}
-	virtual void handle(std::shared_ptr<const ::vnx::ModuleInfo> _value) {}
 	
 	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
 	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _method, const vnx::request_id_t& _request_id) override;

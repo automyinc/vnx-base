@@ -20,7 +20,7 @@ namespace vnx {
 class ProcessBase : public ::vnx::Module {
 public:
 	
-	int32_t topic_info_interval_ms = 500;
+	int32_t update_interval_ms = 500;
 	
 	typedef ::vnx::Module Super;
 	

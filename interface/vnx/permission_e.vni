@@ -22,6 +22,7 @@ enum permission_e{
 	RESTART,                             // Permission to restart a module
 	SHUTDOWN,                            // Permission to shutdown the process
 	HOST_SHUTDOWN,                       // Permission to shutdown the host machine
+	SELF_TEST,                           // Permission to execute self tests
 	
 	LOCAL,                               // Permission to access process local functions (like Terminal input)
 	INTERNAL,                            // Permission to access internal functions (should never be given)

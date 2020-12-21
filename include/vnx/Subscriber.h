@@ -42,7 +42,8 @@ public:
 	~Subscriber();
 	
 protected:
-	std::shared_ptr<Pipe> subscribe(TopicPtr topic, int max_queue_ms = 100, int max_queue_size = Pipe::UNLIMITED);
+	std::shared_ptr<Pipe> subscribe(TopicPtr topic, int max_queue_ms = 100, int max_queue_size = Pipe::UNLIMITED,
+									int priority = PIPE_PRIORITY_DEFAULT, pipe_mode_e mode = PIPE_MODE_DEFAULT);
 	
 	void unsubscribe(TopicPtr topic);
 	

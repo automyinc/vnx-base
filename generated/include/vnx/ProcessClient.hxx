@@ -47,6 +47,8 @@ public:
 	
 	void vnx_stop_async();
 	
+	vnx::bool_t vnx_self_test();
+	
 	std::string get_name();
 	
 	::vnx::TimeSync get_sync_time();

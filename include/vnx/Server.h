@@ -18,41 +18,18 @@
 #define INCLUDE_VNX_SERVER_H_
 
 #include <vnx/ServerBase.hxx>
-#include <vnx/Proxy.h>
-#include <vnx/Endpoint.hxx>
 
 
 namespace vnx {
 
-/** \brief Module to listen on and accept client connections from other processes.
- * 
- * Will spawn a Proxy for every new client connection.
- * 
- * Configuration options:
- * - \b address Address to listen on, when given \p endpoint_ == 0. For example: "0.0.0.0" (default port 4444), "0.0.0.0:1234" or "domain.sock".
- * - \b export_list List of topics to export to every client without them asking for it.
- * - \b max_queue_ms Maximum queue length when subscribing.
- * 
- */
+
 class Server : public ServerBase {
 public:
 	/// Create a Server listening on \p endpoint_, or if null, on \b address
 	Server(const std::string& name_, std::shared_ptr<const Endpoint> endpoint_ = 0);
 	
-protected:
-	void main() override;
-	
-	void setup();
-	
 private:
-	void accept_loop();
-	
-private:
-	int server = -1;
-	std::shared_ptr<const Endpoint> endpoint;
-	std::shared_ptr<Timer> setup_timer;
-	
-	std::thread thread;
+	void spawn_proxy(int socket) override;
 	
 };
 

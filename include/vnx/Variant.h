@@ -249,6 +249,9 @@ inline Variant::operator char() const {
 	return to<char>();
 }
 
+template<>
+void from_string(const std::string& str, Variant& value);
+
 
 } // vnx
 

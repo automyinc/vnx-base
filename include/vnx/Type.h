@@ -449,6 +449,12 @@ public:
 	
 	void accept(Visitor& visitor, const TypeCode* type_code = nullptr) const;
 
+	void from_object(const Object& object);
+
+	static std::shared_ptr<TypeField> create() {
+		return std::make_shared<TypeField>();
+	}
+
 };
 
 /** \brief Represents a VNI struct, class, method or enum.
@@ -467,8 +473,8 @@ public:
 	
 	std::vector<const TypeCode*> parents;		///< The inheritance line (used by instanceof())
 	std::vector<const TypeCode*> depends;		///< The types which are used by this type's fields
-	const vnx::TypeCode* return_type = 0;		///< In case of a method type this is the return type
-	
+	const TypeCode* return_type = nullptr;		///< In case of a method type this is the return type
+
 	std::string name;							///< Full unique name of the type (including the namespace)
 	std::vector<TypeField> fields;
 	std::vector<TypeField> static_fields;		///< ie. constants
@@ -489,7 +495,9 @@ public:
 	 */
 	bool is_native = false;								///< If type is native, ie. corresponds to a C++ class
 	bool is_matched = false;							///< If type is matched to a native C++ type
+	const TypeCode* native = nullptr;					///< Native type code if available (equals "this" in case already native)
 	size_t total_field_size = 0;						///< Total size of all primitive fields [bytes]
+	std::string method_name;							///< Method name (without type prefix) in case of a method
 	std::vector<TypeField*> field_map;					///< Map from primitive field in data to field in native type
 	std::vector<TypeField*> ext_fields;					///< Map from extended field in data to field in native type
 	std::map<std::string, uint32_t> inv_enum_map;		///< Inverse enum map, name to value
@@ -521,23 +529,28 @@ public:
 
 	void print(std::ostream& out) const;
 
+	void from_object(const Object& object);
+
+	static std::shared_ptr<TypeCode> create() {
+		return std::make_shared<TypeCode>();
+	}
+
 private:
 	void compile();
 	
 	void link();
 	
 	/**
-	 * Will try to match this type to a native type.
+	 * Will try to match this type to the native type.
 	 * If successful we can deserialize this type into a native struct or class.
 	 */
-	void match(const TypeCode* native);
+	void match(const TypeCode* native_);
 	
 };
 
 void read(TypeInput& in, TypeField& field, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const TypeField& field, const TypeCode* type_code, const uint16_t* code); ///< \private
 
-void read(TypeInput& in, TypeCode& value); ///< \private
 void write(TypeOutput& out, const TypeCode& value); ///< \private
 void read(std::istream& in, TypeCode& value);  ///< \private
 void write(std::ostream& out, const TypeCode& value);  ///< \private
@@ -685,6 +698,14 @@ std::string to_string_value(const T& value);
 /// Convert value to a plain string (with full type name if applicable)
 template<typename T>
 std::string to_string_value_full(const T& value);
+
+/// Convert a JSON value (string with quotes) to a specific type.
+template<typename T>
+void from_string(const std::string& str, T& value);
+
+/// Convert a string value (without quotes) to a specific type.
+template<typename T>
+void from_string_value(const std::string& str, T& value);
 
 
 } // vnx

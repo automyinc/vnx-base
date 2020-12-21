@@ -1,0 +1,7 @@
+package vnx;
+
+
+class JRPC_Request extends JRPC_Notification{
+	Variant id;                           // String, Number or null (discouraged)
+}
+

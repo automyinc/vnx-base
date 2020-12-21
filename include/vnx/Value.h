@@ -48,11 +48,16 @@ public:
 	virtual Object to_object() const = 0;
 	virtual void from_object(const Object& object) = 0;
 	
-	virtual Variant get_field(const std::string& name) const = 0;
-	virtual void set_field(const std::string& name, const Variant& value) = 0;
+	virtual Variant get_field(const std::string& name) const = 0;				///< returns null if not found
+	virtual void set_field(const std::string& name, const Variant& value) = 0;	///< does nothing if not found
 
-	std::string to_string() const;
-	void from_string(const std::string& str);
+	virtual Variant get_field_by_index(const uint32_t& index) const;				///< starting at index 0, returns null if not found
+	virtual void set_field_by_index(const uint32_t& index, const Variant& value);	///< starting at index 0, does nothing if not found
+	virtual uint32_t get_num_fields() const;										///< returns 0 if unknown
+	virtual bool is_void() const;													///< returns true if get_num_fields() == 0
+
+	virtual std::string to_string() const;
+	virtual void from_string(const std::string& str);
 	
 	virtual std::shared_ptr<const Value> vnx_decompress() const { return nullptr; }
 
@@ -72,11 +77,16 @@ std::shared_ptr<Value> create(const std::string& type_name);
 void read(std::istream& in, Value& value);
 
 template<typename T>
+std::shared_ptr<T> clone(const T& value) {
+	return std::dynamic_pointer_cast<T>(value.clone());
+}
+
+template<typename T>
 std::shared_ptr<T> clone(const std::shared_ptr<T>& value) {
 	if(value) {
 		return std::dynamic_pointer_cast<T>(value->clone());
 	}
-	return 0;
+	return nullptr;
 }
 
 template<typename T>
@@ -84,12 +94,22 @@ std::shared_ptr<T> clone(const std::shared_ptr<const T>& value) {
 	if(value) {
 		return std::dynamic_pointer_cast<T>(value->clone());
 	}
-	return 0;
+	return nullptr;
 }
 
-template<typename T>
-std::shared_ptr<T> clone(const T& value) {
-	return std::dynamic_pointer_cast<T>(value.clone());
+template<typename S, typename T>
+std::shared_ptr<S> convert(const T& value) {
+	auto result = S::create();
+	result->from_object(value.to_object());
+	return result;
+}
+
+template<typename S, typename T>
+std::shared_ptr<S> convert(const std::shared_ptr<T>& value) {
+	if(value) {
+		return convert<S>(*value);
+	}
+	return nullptr;
 }
 
 /* \brief Generic comparison function

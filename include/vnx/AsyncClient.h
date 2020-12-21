@@ -49,7 +49,7 @@ public:
 	
 	/// Returns the number of pending requests
 	size_t vnx_get_num_pending() const {
-		return vnx_num_pending;
+		return vnx_pending.size();
 	}
 	
 	/// Sets the node which will receive and process the returns
@@ -74,14 +74,12 @@ public:
 	void vnx_set_error_callback(const std::function<void(uint64_t, const vnx::exception&)>& callback);
 	
 	/// Returns list of pending request ids
-	virtual std::vector<uint64_t> vnx_get_pending_ids() const = 0;
+	std::vector<uint64_t> vnx_get_pending_ids() const;
 	
 protected:
 	mutable std::mutex vnx_mutex;
-
 	std::atomic<uint64_t> vnx_next_id {0};
-	std::atomic<size_t> vnx_num_pending {0};
-	
+	std::unordered_map<uint64_t, int32_t> vnx_pending;
 	std::function<void(uint64_t, const vnx::exception&)> vnx_error_callback;
 	
 	/// Performs the actual request, non-blocking and without exceptions.
@@ -90,9 +88,9 @@ protected:
 	/// Calls error callbacks with given exception
 	void vnx_callback_error(uint64_t request_id, const vnx::exception& ex);
 
-	virtual void vnx_purge_request(uint64_t request_id, const vnx::exception& ex) = 0;
+	virtual int32_t vnx_purge_request(uint64_t request_id, const vnx::exception& ex) = 0;
 	
-	virtual void vnx_callback_switch(uint64_t request_id, std::shared_ptr<const Value> value) = 0;
+	virtual int32_t vnx_callback_switch(uint64_t request_id, std::shared_ptr<const Value> value) = 0;
 	
 private:
 	Node* vnx_node = nullptr;

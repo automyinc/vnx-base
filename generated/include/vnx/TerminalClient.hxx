@@ -7,7 +7,6 @@
 #include <vnx/Client.h>
 #include <vnx/LogMsg.hxx>
 #include <vnx/Module.h>
-#include <vnx/ModuleInfo.hxx>
 #include <vnx/terminal_event_e.hxx>
 
 
@@ -42,6 +41,8 @@ public:
 	void vnx_stop();
 	
 	void vnx_stop_async();
+	
+	vnx::bool_t vnx_self_test();
 	
 	void command(const std::vector<std::string>& commandline);
 	

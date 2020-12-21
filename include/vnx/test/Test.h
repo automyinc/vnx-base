@@ -19,6 +19,7 @@
 
 #include <vnx/Input.h>
 #include <vnx/Output.h>
+#include <vnx/Variant.h>
 
 extern std::string _vnx_test_name;
 
@@ -42,6 +43,11 @@ void expect(const A& value, const B& expected) {
 	if(!(value == expected)) {
 		throw std::logic_error("expected " + vnx::to_string(expected) + " but got " + vnx::to_string(value));
 	}
+}
+
+template<typename B>
+void expect(const vnx::Variant& value, const B& expected) {
+	expect<B, B>(value.to<B>(), expected);
 }
 
 void init(const std::string& test_domain);

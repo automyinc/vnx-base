@@ -5,8 +5,7 @@
 #define INCLUDE_vnx_Server_CLIENT_HXX_
 
 #include <vnx/Client.h>
-#include <vnx/Module.h>
-#include <vnx/TopicPtr.hpp>
+#include <vnx/BaseServer.h>
 
 
 namespace vnx {
@@ -40,6 +39,8 @@ public:
 	void vnx_stop();
 	
 	void vnx_stop_async();
+	
+	vnx::bool_t vnx_self_test();
 	
 };
 

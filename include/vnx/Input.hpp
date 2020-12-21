@@ -17,15 +17,13 @@
 #ifndef INCLUDE_VNX_INPUT_HPP_
 #define INCLUDE_VNX_INPUT_HPP_
 
+#include <vnx/JSON.h>
 #include <vnx/Input.h>
 #include <vnx/Object.h>
 #include <vnx/Variant.h>
 
 
 namespace vnx {
-
-template<typename T>
-void from_string(const std::string& str, T& value);
 
 template<typename T>
 void from_string(const std::string& str, std::shared_ptr<T>& value);
@@ -164,15 +162,19 @@ void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, c
  * If the input array is smaller than \p array the left-over elements are default initialized.
  */
 template<typename T, size_t N>
-void read(std::istream& in, std::array<T, N>& array) {
-	std::vector<std::string> tmp;
-	read_array(in, tmp);
-	for(size_t i = 0; i < N; ++i) {
-		T next = T();
-		if(i < tmp.size()) {
-			from_string(tmp[i], next);
+void read(std::istream& in, std::array<T, N>& vector) {
+	auto json = read_json(in);
+	if(auto array = std::dynamic_pointer_cast<JSON_Array>(json)) {
+		size_t i = 0;
+		for(auto entry : array->get_values()) {
+			if(i < N) {
+				entry->to_variant().to(vector[i++]);
+			} else {
+				break;
+			}
 		}
-		array[i] = std::move(next);
+	} else if(json && N > 0) {
+		json->to_variant().to(vector[0]);
 	}
 }
 
@@ -182,13 +184,13 @@ void read(std::istream& in, std::array<T, N>& array) {
  */
 template<typename T>
 void read(std::istream& in, std::vector<T>& vector) {
-	vector.clear();
-	std::vector<std::string> tmp;
-	read_array(in, tmp);
-	for(const auto& value : tmp) {
-		T next = T();
-		from_string(value, next);
-		vector.emplace_back(std::move(next));
+	auto json = read_json(in);
+	if(auto array = std::dynamic_pointer_cast<JSON_Array>(json)) {
+		for(auto entry : array->get_values()) {
+			vector.emplace_back(entry->to_variant().to<T>());
+		}
+	} else if(json) {
+		vector.emplace_back(json->to_variant().to<T>());
 	}
 }
 
@@ -198,7 +200,6 @@ void read(std::istream& in, std::vector<T>& vector) {
  */
 template<typename T>
 void read(std::istream& in, std::list<T>& list) {
-	list.clear();
 	std::vector<T> tmp;
 	read(in, tmp);
 	for(auto& value : tmp) {
@@ -212,14 +213,21 @@ void read(std::istream& in, std::list<T>& list) {
  */
 template<typename K, typename V>
 void read(std::istream& in, std::pair<K, V>& pair) {
-	std::vector<std::string> tmp;
-	read_array(in, tmp);
-	if(tmp.size() == 2) {
-		from_string(tmp[0], pair.first);
-		from_string(tmp[1], pair.second);
-	} else {
-		pair = std::pair<K, V>();
+	auto json = read_json(in);
+	if(auto array = std::dynamic_pointer_cast<JSON_Array>(json)) {
+		const auto& entries = array->get_values();
+		if(entries.size() >= 1) {
+			entries[0]->to_variant().to(pair.first);
+		} else {
+			pair.first = K();
+		}
+		if(entries.size() >= 2) {
+			entries[1]->to_variant().to(pair.second);
+		} else {
+			pair.second = V();
+		}
 	}
+	pair = std::pair<K, V>();
 }
 
 /** \brief Reads a set from the JSON stream
@@ -228,7 +236,6 @@ void read(std::istream& in, std::pair<K, V>& pair) {
  */
 template<typename T>
 void read(std::istream& in, std::set<T>& set) {
-	set.clear();
 	std::vector<T> tmp;
 	read(in, tmp);
 	for(auto& value : tmp) {
@@ -243,7 +250,6 @@ void read(std::istream& in, std::set<T>& set) {
  */
 template<typename K, typename V>
 void read(std::istream& in, std::map<K, V>& map) {
-	map.clear();
 	const Variant tmp = read(in);
 	tmp.to(map);
 }
@@ -328,9 +334,6 @@ void from_string_value(const std::string& str, T& value) {
 
 template<>
 void from_string_value<std::string>(const std::string& str, std::string& value);
-
-template<>
-void from_string_value<Variant>(const std::string& str, Variant& value);
 
 /// Reads a Value of type T from the JSON stream
 /// If \p value is NULL will attempt to read polymorphic type via "__type" field.

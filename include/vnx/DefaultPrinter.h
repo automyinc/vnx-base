@@ -48,19 +48,12 @@ public:
 	void list_element(size_t index) override;
 	void list_end(size_t size) override;
 	
-	void map_begin(size_t size) override;
-	void map_entry_begin(size_t index) override;
-	void map_entry_value(size_t index) override;
-	void map_entry_end(size_t index) override;
-	void map_end(size_t size) override;
-	
 	void type_begin(size_t num_fields, const std::string& type_name) override;
 	void type_field(const std::string& field, size_t index) override;
 	void type_end(size_t num_fields, const std::string& type_name) override;
 	
 protected:
 	std::ostream& out;
-	size_t stack = 0;
 	
 };
 

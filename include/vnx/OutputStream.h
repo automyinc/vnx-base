@@ -20,6 +20,7 @@
 #include <vnx/Type.h>
 
 #include <cstring>
+#include <streambuf>
 #include <unordered_map>
 
 
@@ -229,6 +230,37 @@ public:
 	/// To keep track of which type codes have already been written to the stream (and at what byte position)
 	std::unordered_map<Hash64, int64_t> type_code_map;
 	
+};
+
+
+/** \brief std::streambuf wrapper around OutputBuffer
+ */
+class TextOutput : public std::streambuf {
+public:
+	TextOutput(OutputStream* stream_) : buffer(stream_) {}
+
+protected:
+	std::streamsize xsputn(const char_type* s, std::streamsize n) override;
+
+	int_type overflow(int_type c = traits_type::eof()) override;
+
+	int sync() override;
+
+private:
+	OutputBuffer buffer;
+
+};
+
+
+/** \brief std::ostream wrapper around OutputStream
+ */
+class ostream : public std::ostream {
+public:
+    ostream(OutputStream* stream_) : std::ostream(&buffer), buffer(stream_) {}
+
+private:
+    TextOutput buffer;
+
 };
 
 
