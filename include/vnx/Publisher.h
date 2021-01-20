@@ -24,6 +24,7 @@
 #include <vnx/Sample.hxx>
 
 #include <mutex>
+#include <atomic>
 #include <sstream>
 
 
@@ -41,6 +42,9 @@ class Publisher {
 public:
 	Publisher();
 	
+	/// Destructor is not thread-safe!
+	~Publisher();
+
 	Publisher(const Publisher& other) = delete;
 	Publisher& operator=(const Publisher& other) = delete;
 	
@@ -77,9 +81,16 @@ public:
 	/// Returns list of topics that have been published so far
 	std::vector<TopicPtr> get_topics() const;
 	
+	/// Returns true if this publisher is still open.
+	bool is_open() const;
+
+	/// Prevents any further publishes
+	void close();
+
 private:
 	mutable std::mutex mutex;
 	const Hash64 src_mac;
+	std::atomic_bool is_open_ {true};
 	std::unordered_map<std::shared_ptr<Topic>, uint64_t> topic_map;
 	
 };

@@ -212,6 +212,17 @@ void read_value(TypeInput& in, T& value, const TypeCode* type_code, const uint16
 		case CODE_ALT_DOUBLE: value = flip_bytes(*((const float64_t*)in.read(sizeof(float64_t)))); return;
 		case CODE_DYNAMIC:
 		case CODE_ALT_DYNAMIC: read_dynamic_value(in, value); return;
+		case CODE_OPTIONAL:
+		case CODE_ALT_OPTIONAL: {
+			bool flag = false;
+			read(in, flag);
+			if(flag) {
+				read(in, value, type_code, code + 1);
+			} else {
+				value = T();
+			}
+			return;
+		}
 		default:
 			value = T();
 			skip(in, type_code, code);
@@ -330,6 +341,9 @@ void read(TypeInput& in, std::unordered_map<K, V, C>& map, const TypeCode* type_
 
 template<typename T>
 void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, const uint16_t* code);
+
+template<typename T>
+void read(TypeInput& in, vnx::optional<T>& value, const TypeCode* type_code, const uint16_t* code);
 
 /// Returns dimension array and total size of a matrix (CODE_MATRIX)
 size_t get_matrix_size(std::vector<size_t>& dims, const uint16_t* code);
@@ -803,7 +817,7 @@ void read(std::istream& in, std::string& value);
 Variant read(std::istream& in);
 
 /// Reads a TypeCode from the stream
-void read_type_code(TypeInput& in, const uint16_t* code);
+const TypeCode* read_type_code(TypeInput& in, const uint16_t* code);
 
 /** \brief Reads a value from the file given by \p file_name.
  * 

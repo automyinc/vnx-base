@@ -49,7 +49,7 @@ public:
 	}
 	
 	std::string to_string() const override {
-		return data.to_string_value();
+		return data.to_string();
 	}
 
 private:
@@ -138,9 +138,12 @@ private:
 
 /** \brief Reads a JSON value from the stream.
  *
+ * @param until_eof Keep reading until EOF, do not stop on special chars like ":,]}".
+ * @param until_space Stop when encountering whitespace and a value was read.
+ *
  * Returns nullptr in case there is no input.
  */
-std::shared_ptr<JSON_Value> read_json(std::istream& in, bool until_eof = false);
+std::shared_ptr<JSON_Value> read_json(std::istream& in, bool until_eof = false, bool until_space = false);
 
 
 } // vnx

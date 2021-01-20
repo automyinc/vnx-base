@@ -51,20 +51,15 @@ private:
 	template<typename T>
 	void set_value(const T& value);
 
-	void pop_stack();
-
 private:
 	struct entry_t {
-		bool is_key = false;
-		bool is_value = false;
-		size_t index = 0;
 		Variant value;
 		Object object;
 		std::string field;
 		std::vector<Variant> array;
-		std::pair<Variant, Variant> pair;
 
 		entry_t() = default;
+		entry_t(size_t size) : array(size) {}
 		entry_t(const std::string& name) : field(name) {}
 	};
 

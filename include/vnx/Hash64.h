@@ -18,7 +18,7 @@
 #define INCLUDE_VNX_HASH64_H_
 
 #include <string>
-#include <stdint.h>
+#include <cstdint>
 
 
 namespace vnx {

@@ -18,6 +18,7 @@ public:
 	int32_t max_history = 50;
 	int32_t max_list_size = 1000;
 	std::string prompt = "> ";
+	int32_t htop_interval = 3000;
 	
 	typedef ::vnx::Module Super;
 	
@@ -56,6 +57,7 @@ protected:
 	virtual void dump(const std::string& expr) = 0;
 	virtual void topic_info(const std::string& expr) = 0;
 	virtual void module_info(const std::string& expr) = 0;
+	virtual void htop(const vnx::bool_t& order_by_avg) = 0;
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value) {}
 	
 	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;

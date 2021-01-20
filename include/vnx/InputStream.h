@@ -190,6 +190,23 @@ private:
 };
 
 
+/// Input stream for sockets
+class SocketInputStream : public InputStream {
+public:
+	SocketInputStream() = default;
+
+	SocketInputStream(int socket_) : socket(socket_) {}
+
+	size_t read(void* buf, size_t len) override;
+
+	void reset(int socket_) {
+		socket = socket_;
+	}
+private:
+	int socket = -1;
+};
+
+
 /** \brief Input buffer for reading from a InputStream.
  * 
  * Used to speed up reading of small amounts of data, while also allowing

@@ -39,7 +39,7 @@ Handle<Module> get_module(const std::string& name);
 std::vector<Handle<Module>> get_modules(const std::string& name);
 
 /// Returns array of all modules.
-std::vector<std::pair<std::string, Handle<Module>>> get_all_modules();
+std::vector<Handle<Module>> get_all_modules();
 
 
 /** \brief Module is the base class for all user Modules.

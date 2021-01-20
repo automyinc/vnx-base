@@ -25,6 +25,9 @@ module BaseProxy implements ProxyInterface {
 	int max_queue_ms = 100;				// [ms]
 	int max_hop_count = 10;				// to limit network cycles [1]
 	
+	int recv_buffer_size = 0;			// TCP buffer size (0 = default) [bytes]
+	int send_buffer_size = 131072;		// TCP buffer size (0 = default) [bytes]
+	
 	string default_access = "DEFAULT";	// default access role for anonymous clients (if use_authentication == true)
 
 }

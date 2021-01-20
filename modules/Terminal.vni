@@ -8,6 +8,8 @@ module Terminal {
 	
 	string prompt = "> ";				// terminal prompt when waiting for commands
 	
+	int htop_interval = 3000;			// how often to update the ressource load view [ms]
+	
 	@Permission(LOCAL)
 	void command(vector<string> commandline);
 	
@@ -32,8 +34,9 @@ module Terminal {
 	@Permission(LOCAL)
 	void module_info(string expr);
 	
-	void handle(LogMsg sample);
+	@Permission(LOCAL)
+	void htop(bool order_by_avg);
 	
-	void handle(ModuleInfo sample);
+	void handle(LogMsg sample);
 	
 }

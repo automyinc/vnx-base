@@ -127,7 +127,7 @@ void read_map(TypeInput& in, T& map, const TypeCode* type_code, const uint16_t* 
  *
  * Same as read(TypeInput& in) but not at top level, ie. this function expects a code.
  * In case of incompatible data a nullptr will be returned.
- * Compatible with CODE_ANY, CODE_DYNAMIC and CODE_OBJECT.
+ * Compatible with CODE_ANY, CODE_DYNAMIC, CODE_OBJECT and CODE_OPTIONAL.
  */
 template<typename T>
 void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, const uint16_t* code) {
@@ -150,9 +150,52 @@ void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, c
 			value = obj.as_value<T>();
 			break;
 		}
+		case CODE_OPTIONAL:
+		case CODE_ALT_OPTIONAL: {
+			bool flag = false;
+			vnx::read(in, flag);
+			if(flag) {
+				read(in, value, type_code, code + 1);
+			} else {
+				value = nullptr;
+			}
+			break;
+		}
 		default:
-			value = 0;
+			value = nullptr;
 			skip(in, type_code, code);
+	}
+}
+
+/** \brief Reads something optional from the input stream.
+ *
+ * In case of incompatible data a default initialized value will be returned.
+ * Compatible with CODE_OPTIONAL.
+ */
+template<typename T>
+void read(TypeInput& in, vnx::optional<T>& value, const TypeCode* type_code, const uint16_t* code) {
+	if(!code) {
+		throw std::logic_error("!code");
+	}
+	switch(code[0]) {
+		case CODE_NULL:
+			value = nullptr;
+			break;
+		case CODE_OPTIONAL:
+		case CODE_ALT_OPTIONAL: {
+			bool flag = false;
+			vnx::read(in, flag);
+			if(flag) {
+				read(in, value, type_code, code + 1);
+			} else {
+				value = nullptr;
+			}
+			break;
+		}
+		default:
+			std::unique_ptr<T> tmp(new T());
+			vnx::type<T>().read(in, *tmp, type_code, code);
+			value.reset(tmp.release());
 	}
 }
 

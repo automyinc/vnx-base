@@ -50,7 +50,12 @@ public:
 	
 protected:
 	enum {
-		INACTIVE, INPUT, DISPLAY, GREP_RUN, MODULE_RUN
+		INACTIVE,
+		INPUT,
+		DISPLAY,
+		GREP_RUN,
+		HTOP_RUN,
+		MODULE_RUN,
 	};
 	
 	void init() override;
@@ -73,10 +78,10 @@ protected:
 
 	void module_info(const std::string &expr) override;
 
+	void htop(const bool &order_by_avg) override;
+
 	void handle(std::shared_ptr<const LogMsg> value) override;
 	
-	void handle(std::shared_ptr<const ModuleInfo> sample) override;
-
 private:
 	static void read_loop(Hash64 service_addr);
 #ifdef _WIN32
@@ -103,8 +108,8 @@ private:
 	int state = INACTIVE;
 	std::string grep_filter;
 	Handle<Module> module;
+	std::shared_ptr<vnx::Timer> interval;
 	std::list<std::shared_ptr<const LogMsg>> error_history;
-	std::map<vnx::Hash64, std::shared_ptr<const ModuleInfo>> mod_info;
 	
 	void update_hints();
 	template <class Iter>

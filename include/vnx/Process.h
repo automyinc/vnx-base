@@ -53,6 +53,10 @@ namespace vnx {
  */
 void init(const std::string& process_name, int argc, char** argv, std::map<std::string, std::string> options = {});
 
+/// Parses command line arguments
+std::vector<std::pair<std::string, std::vector<Variant>>>
+parse_args(const std::vector<std::string>& args, const std::map<std::string, std::string>& options = {});
+
 /// Returns true if the process should continue to run.
 bool do_run();
 
@@ -124,14 +128,14 @@ protected:
 	
 	void handle(std::shared_ptr<const ModuleInfo> value) override;
 	
-	void update_topic_info();
+	void update();
 	
 private:
 	int is_log_paused = 0;
 	int log_level = LogMsg::INFO;
 	
-	std::map<Hash64, std::shared_ptr<const ModuleInfo>> module_info_map;
-	
+	std::unordered_map<Hash64, std::shared_ptr<const ModuleInfo>> module_info_map;
+
 };
 
 

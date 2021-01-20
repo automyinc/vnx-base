@@ -193,6 +193,9 @@ void write(TypeOutput& out, std::shared_ptr<const Value> value, const TypeCode* 
 template<typename T>
 void write(TypeOutput& out, std::shared_ptr<T> value, const TypeCode* type_code, const uint16_t* code);
 
+template<typename T>
+void write(TypeOutput& out, const vnx::optional<T>& value, const TypeCode* type_code, const uint16_t* code);
+
 void write(TypeOutput& out, const Value& value);
 
 void write(TypeOutput& out, const Variant& value);
@@ -429,6 +432,24 @@ void write(TypeOutput& out, std::shared_ptr<T> value, const TypeCode* type_code,
 }
 
 template<typename T>
+void write(TypeOutput& out, const vnx::optional<T>& value, const TypeCode* type_code, const uint16_t* code) {
+	if(code && code[0] == CODE_NULL) {
+		// nothing to do
+	} else if(code && code[0] == CODE_OPTIONAL) {
+		if(value) {
+			write(out, true);
+			vnx::type<T>().write(out, *value, type_code, code + 1);
+		} else {
+			write(out, false);
+		}
+	} else if(!value) {
+		throw std::logic_error("write(vnx::optional<T>): invalid code");
+	} else {
+		vnx::type<T>().write(out, *value, type_code, code);
+	}
+}
+
+template<typename T>
 void type<T>::write(TypeOutput& out, const T& value, const TypeCode* type_code, const uint16_t* code) {
 	vnx::write(out, value, type_code, code);
 }
@@ -525,12 +546,23 @@ void write_sequence(std::ostream& out, Iter first, Iter last) {
 	out << ']';
 }
 
+void write(std::ostream& out, const std::nullptr_t& value);
+
 template<typename T>
 void write(std::ostream& out, std::shared_ptr<T> value) {
 	if(value) {
 		value->write(out);
 	} else {
-		out << "null";
+		write(out, nullptr);
+	}
+}
+
+template<typename T>
+void write(std::ostream& out, const vnx::optional<T>& value) {
+	if(value) {
+		vnx::type<T>().write(out, *value);
+	} else {
+		write(out, nullptr);
 	}
 }
 

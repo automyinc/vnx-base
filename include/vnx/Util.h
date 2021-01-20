@@ -17,11 +17,10 @@
 #ifndef INCLUDE_VNX_UTIL_H_
 #define INCLUDE_VNX_UTIL_H_
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <algorithm>
-
-#include <stdint.h>
 
 
 namespace vnx {

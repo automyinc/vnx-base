@@ -152,12 +152,23 @@ void accept(Visitor& visitor, const std::pair<K, V>& value) {
 
 void accept(Visitor& visitor, const Value& value);
 
-void accept(Visitor& visitor, TypeInput& in, const TypeCode* type_code = 0, const uint16_t* code = 0);
+void accept(Visitor& visitor, const std::nullptr_t& value);
+
+void accept(Visitor& visitor, TypeInput& in, const TypeCode* type_code = nullptr, const uint16_t* code = nullptr);
 
 template<typename T>
-void accept(Visitor& visitor, const std::shared_ptr<T>& value) {
+void accept(Visitor& visitor, std::shared_ptr<T> value) {
 	if(value) {
 		accept(visitor, *value);
+	} else {
+		visitor.visit_null();
+	}
+}
+
+template<typename T>
+void accept(Visitor& visitor, const vnx::optional<T>& value) {
+	if(value) {
+		vnx::type<T>().accept(visitor, *value);
 	} else {
 		visitor.visit_null();
 	}

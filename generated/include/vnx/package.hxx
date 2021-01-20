@@ -168,6 +168,8 @@ class Terminal_dump;
 class Terminal_dump_return;
 class Terminal_grep;
 class Terminal_grep_return;
+class Terminal_htop;
+class Terminal_htop_return;
 class Terminal_module_info;
 class Terminal_module_info_return;
 class Terminal_read_char;
@@ -195,6 +197,7 @@ class record_index_entry_t;
 class record_topic_info_t;
 class terminal_event_e;
 class test_enum_e;
+class thread_priority_e;
 
 extern const vnx::TypeCode* const vnx_native_type_code_BaseProxyBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_BaseServerBase; ///< \private
@@ -340,6 +343,8 @@ extern const vnx::TypeCode* const vnx_native_type_code_Terminal_dump; ///< \priv
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_dump_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_grep; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_grep_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Terminal_htop; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Terminal_htop_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_module_info; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_module_info_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Terminal_read_char; ///< \private
@@ -364,6 +369,7 @@ extern const vnx::TypeCode* const vnx_native_type_code_record_index_entry_t; ///
 extern const vnx::TypeCode* const vnx_native_type_code_record_topic_info_t; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_terminal_event_e; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_test_enum_e; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_thread_priority_e; ///< \private
 
 } // namespace vnx
 
@@ -521,6 +527,8 @@ void read(TypeInput& in, ::vnx::Terminal_dump& value, const TypeCode* type_code,
 void read(TypeInput& in, ::vnx::Terminal_dump_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Terminal_grep& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Terminal_grep_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_htop& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::Terminal_htop_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Terminal_module_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Terminal_module_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::Terminal_read_char& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -548,6 +556,7 @@ void read(TypeInput& in, ::vnx::record_index_entry_t& value, const TypeCode* typ
 void read(TypeInput& in, ::vnx::record_topic_info_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::terminal_event_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::test_enum_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::thread_priority_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 
 void write(TypeOutput& out, const ::vnx::BaseProxyBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::BaseServerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -700,6 +709,8 @@ void write(TypeOutput& out, const ::vnx::Terminal_dump& value, const TypeCode* t
 void write(TypeOutput& out, const ::vnx::Terminal_dump_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Terminal_grep& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Terminal_grep_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_htop& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::Terminal_htop_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Terminal_module_info& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Terminal_module_info_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::Terminal_read_char& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -727,6 +738,7 @@ void write(TypeOutput& out, const ::vnx::record_index_entry_t& value, const Type
 void write(TypeOutput& out, const ::vnx::record_topic_info_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::terminal_event_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::test_enum_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::thread_priority_e& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 
 void read(std::istream& in, ::vnx::BaseProxyBase& value); ///< \private
 void read(std::istream& in, ::vnx::BaseServerBase& value); ///< \private
@@ -879,6 +891,8 @@ void read(std::istream& in, ::vnx::Terminal_dump& value); ///< \private
 void read(std::istream& in, ::vnx::Terminal_dump_return& value); ///< \private
 void read(std::istream& in, ::vnx::Terminal_grep& value); ///< \private
 void read(std::istream& in, ::vnx::Terminal_grep_return& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_htop& value); ///< \private
+void read(std::istream& in, ::vnx::Terminal_htop_return& value); ///< \private
 void read(std::istream& in, ::vnx::Terminal_module_info& value); ///< \private
 void read(std::istream& in, ::vnx::Terminal_module_info_return& value); ///< \private
 void read(std::istream& in, ::vnx::Terminal_read_char& value); ///< \private
@@ -906,6 +920,7 @@ void read(std::istream& in, ::vnx::record_index_entry_t& value); ///< \private
 void read(std::istream& in, ::vnx::record_topic_info_t& value); ///< \private
 void read(std::istream& in, ::vnx::terminal_event_e& value); ///< \private
 void read(std::istream& in, ::vnx::test_enum_e& value); ///< \private
+void read(std::istream& in, ::vnx::thread_priority_e& value); ///< \private
 
 void write(std::ostream& out, const ::vnx::BaseProxyBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::BaseServerBase& value); ///< \private
@@ -1058,6 +1073,8 @@ void write(std::ostream& out, const ::vnx::Terminal_dump& value); ///< \private
 void write(std::ostream& out, const ::vnx::Terminal_dump_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Terminal_grep& value); ///< \private
 void write(std::ostream& out, const ::vnx::Terminal_grep_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_htop& value); ///< \private
+void write(std::ostream& out, const ::vnx::Terminal_htop_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Terminal_module_info& value); ///< \private
 void write(std::ostream& out, const ::vnx::Terminal_module_info_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::Terminal_read_char& value); ///< \private
@@ -1085,6 +1102,7 @@ void write(std::ostream& out, const ::vnx::record_index_entry_t& value); ///< \p
 void write(std::ostream& out, const ::vnx::record_topic_info_t& value); ///< \private
 void write(std::ostream& out, const ::vnx::terminal_event_e& value); ///< \private
 void write(std::ostream& out, const ::vnx::test_enum_e& value); ///< \private
+void write(std::ostream& out, const ::vnx::thread_priority_e& value); ///< \private
 
 void accept(Visitor& visitor, const ::vnx::BaseProxyBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::BaseServerBase& value); ///< \private
@@ -1237,6 +1255,8 @@ void accept(Visitor& visitor, const ::vnx::Terminal_dump& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Terminal_dump_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Terminal_grep& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Terminal_grep_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_htop& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::Terminal_htop_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Terminal_module_info& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Terminal_module_info_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::Terminal_read_char& value); ///< \private
@@ -1264,6 +1284,7 @@ void accept(Visitor& visitor, const ::vnx::record_index_entry_t& value); ///< \p
 void accept(Visitor& visitor, const ::vnx::record_topic_info_t& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::terminal_event_e& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::test_enum_e& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::thread_priority_e& value); ///< \private
 
 /// \private
 template<>
@@ -4840,6 +4861,54 @@ struct type<::vnx::Terminal_grep_return> {
 
 /// \private
 template<>
+struct type<::vnx::Terminal_htop> {
+	void read(TypeInput& in, ::vnx::Terminal_htop& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_htop& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_htop& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_htop& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_htop& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_htop& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::Terminal_htop_return> {
+	void read(TypeInput& in, ::vnx::Terminal_htop_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::Terminal_htop_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::Terminal_htop_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::Terminal_htop_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::Terminal_htop_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::Terminal_htop_return& value, bool special = false) {
+		code.push_back(CODE_OBJECT);
+	}
+};
+
+/// \private
+template<>
 struct type<::vnx::Terminal_module_info> {
 	void read(TypeInput& in, ::vnx::Terminal_module_info& value, const TypeCode* type_code, const uint16_t* code) {
 		vnx::read(in, value, type_code, code);
@@ -5481,6 +5550,30 @@ struct type<::vnx::test_enum_e> {
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
 	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::test_enum_e& value, bool special = false) {
+		code.push_back(CODE_STRING);
+	}
+};
+
+/// \private
+template<>
+struct type<::vnx::thread_priority_e> {
+	void read(TypeInput& in, ::vnx::thread_priority_e& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::thread_priority_e& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::thread_priority_e& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::thread_priority_e& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::thread_priority_e& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::thread_priority_e& value, bool special = false) {
 		code.push_back(CODE_STRING);
 	}
 };

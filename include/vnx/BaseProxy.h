@@ -141,6 +141,7 @@ protected:
 	std::atomic<size_t> num_requests_recv {0};
 
 	// all below belong to read_loop()
+	bool is_error = false;
 	std::unordered_map<Hash64, std::shared_ptr<Pipe>> return_map;		// to keep track of return pipes
 	std::unordered_map<Hash128, std::shared_ptr<const Sample>> recv_buffer;		// last known sample per channel
 	std::unordered_set<Hash128> incoming;				// map of incoming connections (src_mac, dst_mac)

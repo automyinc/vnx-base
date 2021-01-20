@@ -2,7 +2,7 @@ package vnx;
 
 module Process {
 	
-	int topic_info_interval_ms = 500;			// publish interval for vnx.topic_info
+	int update_interval_ms = 500;				// publish interval for vnx.topic_info, etc
 	
 	@Permission(VIEW)
 	string get_name() const;					// get process name

@@ -26,6 +26,7 @@
 #include <vnx/request_id_t.h>
 #include <vnx/LogMsg.hxx>
 #include <vnx/FlowMessage.hxx>
+#include <vnx/ModuleInfo.hxx>
 
 #include <sstream>
 #include <functional>
@@ -42,6 +43,13 @@ public:
 	typedef Subscriber Super;
 
 	static const int UNLIMITED = Pipe::UNLIMITED;				///< Shortcut to denote unlimited queue length
+
+	static const int PRIORITY_DEFAULT = vnx::PIPE_PRIORITY_DEFAULT;
+	static const int PRIORITY_HIGH = vnx::PIPE_PRIORITY_HIGH;
+	static const int PRIORITY_LOW = vnx::PIPE_PRIORITY_LOW;
+
+	static const pipe_mode_e MODE_DEFAULT = vnx::PIPE_MODE_DEFAULT;
+	static const pipe_mode_e MODE_LATEST = vnx::PIPE_MODE_LATEST;
 
 	static const int BLOCKING = Message::BLOCKING;				///< Flag to send blocking messages
 	static const int NON_BLOCKING = Message::NON_BLOCKING;		///< Flag to send non_blocking messages
@@ -83,22 +91,21 @@ public:
 
 	void vnx_set_config(const std::string& name, const Variant& value);		///< Sets a new config value
 
-	TypeCode vnx_get_type_code() const;	///< Returns the module's type code
+	TypeCode vnx_get_type_code() const;			///< Returns the module's type code
 
 	std::shared_ptr<const ModuleInfo> vnx_get_module_info() const;			///< Returns current module info
 
-	bool vnx_virtual_time = true;		///< If to use virtual time for timers
+	bool vnx_virtual_time = true;				///< If to use virtual time for timers
+	bool vnx_clean_exit = false;				///< If to process all remaining messages on shutdown
+	bool vnx_auto_shutdown = true;				///< If to close Module automatically on shutdown
+	bool vnx_auto_decompress = true;			///< If to automatically decompress Sample values
 
-	bool vnx_clean_exit = false;		///< If to process all remaining messages on shutdown
-
-	bool vnx_auto_shutdown = true;		///< If to close Module automatically on shutdown
-
-	bool vnx_auto_decompress = true;	///< If to automatically decompress Sample values
-
-	int vnx_log_level = INFO;			///< The display log level of this module (see LogMsg)
+	int vnx_log_level = INFO;					///< The display log level of this module (see LogMsg)
+	int vnx_task_priority = -5;					///< Priority for task pipe (see add_task())
+	int vnx_default_queue_ms = 100;				///< Maximum queue length for default pipe (module_id)
+	int vnx_default_queue_size = 1000;			///< Maximum queue size for default pipe (module_id)
 
 	int64_t vnx_time_slice_us = 10000;			///< Maximum time to spend processing messages in a loop [us]
-
 	int64_t vnx_heartbeat_interval_ms = 1000;	///< Interval at which to publish ModuleInfo on vnx.module_info [ms]
 
 protected:
@@ -135,8 +142,8 @@ protected:
 
 	/** \brief Adds a task to this modules message queue. [thread-safe]
 	 *
-	 * The task will be processed in the main() loop like an incoming message.
-	 * Returns false in case of shutdown.
+	 * The task will be processed in the main() loop like an incoming message (see vnx_task_priority).
+	 * Returns false in case of shutdown. Will never block (unlimited queue).
 	 */
 	bool add_task(const std::function<void()>& func) const;
 
@@ -256,13 +263,13 @@ protected:
 	virtual void vnx_restart() = 0;
 
 	/// Will publish a ModuleInfo message on "vnx.module_info"
-	virtual void vnx_heartbeat();
+	virtual void vnx_heartbeat() const;
 
 	/// Performs user defined self test (by default returns true)
 	virtual bool_t vnx_self_test() const;
 
 private:
-	Hash64 module_id;
+	const Hash64 module_id;
 	TimeControl time_state;
 	std::shared_ptr<Publisher> publisher;
 	std::unordered_map<Hash128, uint64_t> seq_map;
@@ -273,6 +280,11 @@ private:
 	mutable std::mutex async_mutex;
 	std::map<Hash64, std::shared_ptr<AsyncClient>> async_clients;
 	mutable std::map<request_id_t, std::shared_ptr<Return>> async_requests;
+
+	mutable int64_t last_time = 0;
+	mutable int64_t time_idle = 0;
+	mutable int64_t time_running = 0;
+	mutable ModuleInfo module_info;
 
 };
 

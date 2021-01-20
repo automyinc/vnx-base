@@ -76,6 +76,10 @@ public:
 	
 	void module_info_async(const std::string& expr);
 	
+	void htop(const vnx::bool_t& order_by_avg);
+	
+	void htop_async(const vnx::bool_t& order_by_avg);
+	
 };
 
 

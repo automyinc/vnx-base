@@ -47,9 +47,11 @@ std::shared_ptr<Topic> get_topic(const std::string& domain, const std::string& t
  */
 std::vector<std::shared_ptr<Topic>> get_all_topics(bool include_domains = false);
 
-/** \brief Get a list of all direct sub-topics in given domain.
+/** \brief Get a list of all sub-topics in given domain (recursive).
  * 
  * @param include_domains If to include domains (ie. topics which have children)
+ *
+ * @return List of all sub-topics, or given domain topic if none.
  */
 std::vector<std::shared_ptr<Topic>> get_all_topics(std::shared_ptr<Topic> domain, bool include_domains = false);
 

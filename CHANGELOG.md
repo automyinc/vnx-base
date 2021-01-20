@@ -1,3 +1,21 @@
+## [v1.9.1]
+
+- Publishers send FlowMessages now
+- vnx::get_all_modules() refactor
+- Proxy send_buffer_size default 128 kB (to limit latency)
+- added vnx_task_priority, vnx_default_queue_ms, vnx_default_queue_size
+- Variant read support for CODE_STRUCT
+- improved command line parsing
+- vnx::read_type_code() returns value now
+- added CODE_OPTIONAL
+- added nullptr_t functions
+- added vnx::optional
+- added CPU load stats
+- added load stats command to terminal
+- added SocketInputStream
+- added 'priority' config to set process priority
+- vnxservice default node localhost:4444
+
 ## [v1.9.0]
 
 - added Module default pipe on module id

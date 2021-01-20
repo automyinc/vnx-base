@@ -23,8 +23,8 @@
 #ifndef INCLUDE_VNX_TYPE_H_
 #define INCLUDE_VNX_TYPE_H_
 
-#include <stdint.h>
-
+#include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
 #include <list>
@@ -36,8 +36,9 @@
 #include <iostream>
 #include <functional>
 #include <stdexcept>
-#include <memory>
+#include <type_traits>
 
+#include <vnx/optional.h>
 #include <vnx/Hash64.h>
 #include <vnx/Util.h>
 
@@ -153,6 +154,7 @@ enum {
 	
 	CODE_BOOL = 31,				///< 8-bit unsigned integer (0 = false, otherwise = true)
 	CODE_STRING = 32,			///< 8-bit signed integer list (same as {CODE_LSIT, CODE_INT8}, but different meaning, used to denote a ASCII/UTF8 string)
+	CODE_OPTIONAL = 33,			///< optional value using 8-bit bool to indicate if data is to follow, code = {33, ...}
 
 	CODE_MAGIC = 0x3713,		///< magic number for VNX to detect binary files containing serialized data
 	CODE_NONE = 0xFFFF,			///< used to detect binary file vs. text file, irrespective of byte order
@@ -188,6 +190,7 @@ enum {
 	
 	CODE_ALT_BOOL = 0x1F00,		///< Same as CODE_BOOL but with alternate byte order
 	CODE_ALT_STRING = 0x2000,	///< Same as CODE_CHAR but with alternate byte order
+	CODE_ALT_OPTIONAL = 0x2100,	///< Same as CODE_OPTIONAL but with alternate byte order
 
 	CODE_ALT_MAGIC = 0x1337,	///< Same as CODE_MAGIC but with alternate byte order
 	
@@ -424,6 +427,9 @@ void create_dynamic_code(std::vector<uint16_t>& code, const std::nullptr_t& valu
 void create_dynamic_code(std::vector<uint16_t>& code, const Value& value, bool special = false); ///< \private
 
 void create_dynamic_code(std::vector<uint16_t>& code, std::shared_ptr<const Value> value, bool special = false); ///< \private
+
+template<typename T>
+void create_dynamic_code(std::vector<uint16_t>& code, const vnx::optional<T>& value, bool special = false); ///< \private
 
 
 /// Class for a field in a TypeCode.
@@ -682,6 +688,16 @@ inline void create_dynamic_code(std::vector<uint16_t>& code, const Value& value,
 inline void create_dynamic_code(std::vector<uint16_t>& code, std::shared_ptr<const Value> value, bool special) {
 	if(!special || value) {
 		code.push_back(CODE_OBJECT);
+	} else {
+		code.push_back(CODE_NULL);
+	}
+}
+
+/// \private
+template<typename T>
+void create_dynamic_code(std::vector<uint16_t>& code, const vnx::optional<T>& value, bool special) {
+	if(value) {
+		vnx::type<T>().create_dynamic_code(code);
 	} else {
 		code.push_back(CODE_NULL);
 	}

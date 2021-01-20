@@ -54,7 +54,7 @@ public:
 	virtual void exit();
 	
 protected:
-	std::mutex vnx_mutex;
+	mutable std::mutex vnx_mutex;
 	
 	std::atomic_bool vnx_do_run {true};			///< If this node should continue to run
 	
