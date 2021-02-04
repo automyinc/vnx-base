@@ -37,11 +37,12 @@ Variant& Variant::assign(const T& value) {
 
 template<typename T>
 void Variant::to(T& value) const {
-	if(empty()) {
-		value = T();
+	VectorInputStream stream(&data);
+	TypeInput in(&stream);
+	if(data.empty()) {
+		const uint16_t code = CODE_NULL;
+		vnx::type<T>().read(in, value, nullptr, &code);
 	} else {
-		VectorInputStream stream(&data);
-		TypeInput in(&stream);
 		vnx::read_dynamic(in, value);
 	}
 }

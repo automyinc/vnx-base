@@ -6,6 +6,4 @@ struct record_index_entry_t {
 	
 	long time;					// [usec]
 	
-	Hash64 topic;
-	
 }

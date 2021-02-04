@@ -22,6 +22,7 @@
 #include <vnx/Publisher.h>
 #include <vnx/ProcessBase.hxx>
 #include <vnx/LogMsg.hxx>
+#include <vnx/ModuleInterfaceAsyncClient.hxx>
 
 #include <mutex>
 #include <condition_variable>
@@ -78,6 +79,9 @@ void trigger_shutdown();
 /// Force the process to exit, without waiting for modules to shut down. Returns immediately.
 void force_shutdown();
 
+/// Shuts down the host system
+void shutdown_host();
+
 
 /** \brief A Module that handles process specific tasks.
  * 
@@ -114,8 +118,18 @@ protected:
 	
 	void set_debug(const int32_t& level) override;
 	
+	void show_error_log() override;
+
+	void grep_log(const std::string &expr) override;
+
+	void dmesg_log(const std::string &expr) override;
+
+	void ungrep_log() override;
+
 	void trigger_shutdown() override;
 	
+	void self_test_all_async(const request_id_t& req_id) override;
+
 	void init() override;
 	
 	void main() override;
@@ -131,10 +145,39 @@ protected:
 	void update();
 	
 private:
+	struct module_t {
+		std::shared_ptr<const ModuleInfo> info;
+		std::shared_ptr<ModuleInterfaceAsyncClient> client_async;
+	};
+
+	struct self_test_job_t {
+		int passed = 0;
+		int failed = 0;
+		int remaining = 0;
+		request_id_t req_id;
+	};
+
 	int is_log_paused = 0;
 	int log_level = LogMsg::INFO;
+	std::string grep_filter = "";
+	std::list<std::shared_ptr<const LogMsg>> log_history;
+	std::list<std::shared_ptr<const LogMsg>> error_history;
 	
-	std::unordered_map<Hash64, std::shared_ptr<const ModuleInfo>> module_info_map;
+	std::unordered_map<Hash64, module_t> module_map;
+
+	void self_test_callback(std::shared_ptr<self_test_job_t> job, const std::string& module, const vnx::bool_t& result) const;
+
+	void self_test_failed(std::shared_ptr<self_test_job_t> job, const std::string& module, const vnx::exception& ex) const;
+
+	void self_test_check(std::shared_ptr<self_test_job_t> job) const;
+
+	bool is_grep_match(std::shared_ptr<const LogMsg> message) const;
+
+	bool is_grep_match(std::shared_ptr<const LogMsg> message, const std::string &filter) const;
+
+	bool is_visible(std::shared_ptr<const LogMsg> message) const;
+
+	void show_log_message(std::shared_ptr<const LogMsg> message);
 
 };
 

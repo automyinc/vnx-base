@@ -95,9 +95,16 @@ protected:
 
 	using Super::handle; // brings the other overloads into scope
 
+protected:
+	// thread-safe copy of session
+	std::shared_ptr<const Session> get_session();
+	
 	// to be called by read_loop() only
 	std::shared_ptr<Pipe> add_return_pipe(Hash64 src_mac, std::shared_ptr<Pipe> pipe, bool reconnect = false);
 
+	// to be called by read_loop() only
+	void process(std::shared_ptr<Frame> frame) noexcept;
+	
 	// to be called by read_loop() only
 	void process(std::shared_ptr<Request> request, std::shared_ptr<const Session> session, std::shared_ptr<Pipe> service_pipe) noexcept;
 
@@ -106,17 +113,22 @@ protected:
 
 	// to be called by read_loop() only
 	void process(std::shared_ptr<Return> return_msg) noexcept;
+	
+	// to be called by read_loop() only
+	void process(std::shared_ptr<FlowMessage> flow_msg) noexcept;
 
 	std::shared_ptr<const Endpoint> endpoint;
 	SocketOutputStream stream_out;
 	std::mutex mutex_socket;
 	int socket = -1;				// only read loop modifies (after setup)
+	
 	std::mutex mutex_session;
-	std::shared_ptr<const Session> session;		// only main thread modifies
-	std::shared_ptr<const Session> default_session;					// read-only (never modified after start)
-	std::shared_ptr<const Session> internal_session;				// read-only (never modified after start)
-	bool is_connected = false;
-	bool never_connected = true;
+	std::shared_ptr<const Session> session;					// only main thread modifies
+	std::shared_ptr<const Session> default_session;			// read-only (never modified after start)
+	std::shared_ptr<const Session> internal_session;		// read-only (never modified after start)
+	
+	bool is_connected = false;				// only main thread modifies / reads
+	bool never_connected = true;			// only main thread modifies / reads
 
 	Hash64 remote_addr;
 	Hash64 service_addr;
@@ -132,6 +144,7 @@ protected:
 	std::unordered_map<Hash64, std::shared_ptr<Pipe>> request_pipes;	// [service => pipe]
 	std::unordered_map<Hash64, Hash64> tunnel_hash_map;				// [service => service]
 	std::unordered_set<Hash128> outgoing;							// (src_mac, dst_mac)
+	
 	std::mutex mutex_request_map;
 	std::unordered_map<Hash64, std::map<uint64_t, std::shared_ptr<const Request>>> request_map;  // [src_mac => [request_id => Request]]
 
@@ -144,6 +157,7 @@ protected:
 	bool is_error = false;
 	std::unordered_map<Hash64, std::shared_ptr<Pipe>> return_map;		// to keep track of return pipes
 	std::unordered_map<Hash128, std::shared_ptr<const Sample>> recv_buffer;		// last known sample per channel
+	std::unordered_map<Hash128, uint64_t> channel_map;					// for topics [(src_mac, topic) => seq_num]
 	std::unordered_set<Hash128> incoming;				// map of incoming connections (src_mac, dst_mac)
 
 private:
@@ -163,16 +177,16 @@ private:
 	void close_socket() noexcept;
 	
 	// called by main thread
-	virtual void send_outgoing(std::shared_ptr<const Sample> sample) = 0;
+	virtual void send_outgoing(std::shared_ptr<Sample> sample) = 0;
 
 	// called by main thread
-	virtual void send_outgoing(std::shared_ptr<const Request> request, const Hash64 &original_dst_mac) = 0;
+	virtual void send_outgoing(std::shared_ptr<Request> request, const Hash64 &original_dst_mac) = 0;
 
-	// called by main thread
-	virtual void clear_outputs() = 0;
+	// called by main thread upon connect
+	virtual void connect_reset() {}
 
-	// called by main thread
-	virtual void disconnect_cleanup() = 0;
+	// called by main thread upon disconnect
+	virtual void disconnect_cleanup() {}
 
 	// called by read_loop()
 	virtual void read_socket_until_error(std::shared_ptr<Pipe> service_pipe) = 0;

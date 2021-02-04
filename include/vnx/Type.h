@@ -24,6 +24,7 @@
 #define INCLUDE_VNX_TYPE_H_
 
 #include <cstdint>
+#include <utility>
 #include <memory>
 #include <string>
 #include <vector>
@@ -31,6 +32,7 @@
 #include <array>
 #include <map>
 #include <set>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 #include <iostream>
@@ -196,165 +198,236 @@ enum {
 	
 };
 
-/// Returns code of type T, CODE_NONE in case T is not a primitive.
-template<typename T>
-uint16_t get_value_code() {
-	return CODE_NONE;
-}
-
-/// \private
-template<> inline uint16_t get_value_code<bool>() { return sizeof(bool) == 1 ? CODE_BOOL : CODE_NULL; }
-/// \private
-template<> inline uint16_t get_value_code<uint8_t>() { return CODE_UINT8; }
-/// \private
-template<> inline uint16_t get_value_code<uint16_t>() { return CODE_UINT16; }
-/// \private
-template<> inline uint16_t get_value_code<uint32_t>() { return CODE_UINT32; }
-/// \private
-template<> inline uint16_t get_value_code<uint64_t>() { return CODE_UINT64; }
-/// \private
-template<> inline uint16_t get_value_code<char>() { return CODE_INT8; }
-/// \private
-template<> inline uint16_t get_value_code<int8_t>() { return CODE_INT8; }
-/// \private
-template<> inline uint16_t get_value_code<int16_t>() { return CODE_INT16; }
-/// \private
-template<> inline uint16_t get_value_code<int32_t>() { return CODE_INT32; }
-/// \private
-template<> inline uint16_t get_value_code<int64_t>() { return CODE_INT64; }
-/// \private
-template<> inline uint16_t get_value_code<float32_t>() { return CODE_FLOAT; }
-/// \private
-template<> inline uint16_t get_value_code<float64_t>() { return CODE_DOUBLE; }
-
-/// Returns size of type \p code in bytes + if alternate byte order
-inline size_t get_value_size(uint16_t code, bool& is_alt) {
-	switch(code) {
-		case CODE_BOOL: is_alt = false; return 1;
-		case CODE_UINT8: is_alt = false; return 1;
-		case CODE_UINT16: is_alt = false; return 2;
-		case CODE_UINT32: is_alt = false; return 4;
-		case CODE_UINT64: is_alt = false; return 8;
-		case CODE_INT8: is_alt = false; return 1;
-		case CODE_INT16: is_alt = false; return 2;
-		case CODE_INT32: is_alt = false; return 4;
-		case CODE_INT64: is_alt = false; return 8;
-		case CODE_FLOAT: is_alt = false; return 4;
-		case CODE_DOUBLE: is_alt = false; return 8;
-		case CODE_ALT_BOOL: is_alt = true; return 1;
-		case CODE_ALT_UINT8: is_alt = true; return 1;
-		case CODE_ALT_UINT16: is_alt = true; return 2;
-		case CODE_ALT_UINT32: is_alt = true; return 4;
-		case CODE_ALT_UINT64: is_alt = true; return 8;
-		case CODE_ALT_INT8: is_alt = true; return 1;
-		case CODE_ALT_INT16: is_alt = true; return 2;
-		case CODE_ALT_INT32: is_alt = true; return 4;
-		case CODE_ALT_INT64: is_alt = true; return 8;
-		case CODE_ALT_FLOAT: is_alt = true; return 4;
-		case CODE_ALT_DOUBLE: is_alt = true; return 8;
-	}
-	is_alt = false;
-	return 0;
-}
-
 /// Returns size of type \p code in bytes
-inline size_t get_value_size(uint16_t code) {
-	bool dummy;
-	return get_value_size(code, dummy);
-}
+size_t get_value_size(const uint16_t* code, const TypeCode* type_code);
 
-/** \brief Returns true if T is equivalent to \p code
+/** \brief Returns true if T is memcpy() equivalent to \p code
  * 
  * Special cases are:
  * - signed and unsigned integers are equivalent
  * - BOOL, UINT8 and ALT_UINT8 are equivalent
  * - INT8 and ALT_INT8 are equivalent
+ * - CODE_ARRAY
+ * - CODE_TUPLE
+ * - CODE_STRUCT
  */
 template<typename T>
-bool is_equivalent(uint16_t code) {
-	return get_value_code<T>() == code;
-}
-
-/// \private
-template<>
-inline bool is_equivalent<uint8_t>(uint16_t code) {
-	switch(code) {
-		case CODE_BOOL:
-		case CODE_UINT8:
-		case CODE_INT8:
-		case CODE_ALT_BOOL:
-		case CODE_ALT_UINT8:
-		case CODE_ALT_INT8:
-			return true;
+struct is_equivalent {
+	bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		return false;
 	}
-	return false;
-}
+};
 
 /// \private
 template<>
-inline bool is_equivalent<uint16_t>(uint16_t code) {
-	switch(code) {
-		case CODE_UINT16:
-		case CODE_INT16:
-			return true;
+struct is_equivalent<uint8_t> {
+	inline bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		switch(code[0]) {
+			case CODE_BOOL:
+				if(sizeof(vnx::bool_t) != 1) {
+					break;
+				}
+				/* no break */
+			case CODE_UINT8:
+			case CODE_INT8:
+			case CODE_ALT_BOOL:
+			case CODE_ALT_UINT8:
+			case CODE_ALT_INT8:
+				return true;
+		}
+		return false;
 	}
-	return false;
-}
+};
 
 /// \private
 template<>
-inline bool is_equivalent<uint32_t>(uint16_t code) {
-	switch(code) {
-		case CODE_UINT32:
-		case CODE_INT32:
-			return true;
+struct is_equivalent<uint16_t> {
+	inline bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		switch(code[0]) {
+			case CODE_UINT16:
+			case CODE_INT16:
+				return true;
+		}
+		return false;
 	}
-	return false;
-}
+};
 
 /// \private
 template<>
-inline bool is_equivalent<uint64_t>(uint16_t code) {
-	switch(code) {
-		case CODE_UINT64:
-		case CODE_INT64:
-			return true;
+struct is_equivalent<uint32_t> {
+	inline bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		switch(code[0]) {
+			case CODE_UINT32:
+			case CODE_INT32:
+				return true;
+		}
+		return false;
 	}
-	return false;
-}
+};
 
 /// \private
 template<>
-inline bool is_equivalent<bool>(uint16_t code) {
-	if(sizeof(bool) == 1) {
-		return is_equivalent<uint8_t>(code);
+struct is_equivalent<uint64_t> {
+	inline bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		switch(code[0]) {
+			case CODE_UINT64:
+			case CODE_INT64:
+				return true;
+		}
+		return false;
 	}
-	return false;
-}
+};
 
 /// \private
 template<>
-inline bool is_equivalent<int8_t>(uint16_t code) {
-	return is_equivalent<uint8_t>(code);
-}
+struct is_equivalent<float32_t> {
+	inline bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		switch(code[0]) {
+			case CODE_FLOAT:
+				return true;
+		}
+		return false;
+	}
+};
 
 /// \private
 template<>
-inline bool is_equivalent<int16_t>(uint16_t code) {
-	return is_equivalent<uint16_t>(code);
-}
+struct is_equivalent<float64_t> {
+	inline bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		switch(code[0]) {
+			case CODE_DOUBLE:
+				return true;
+		}
+		return false;
+	}
+};
 
 /// \private
 template<>
-inline bool is_equivalent<int32_t>(uint16_t code) {
-	return is_equivalent<uint32_t>(code);
-}
+struct is_equivalent<int8_t> {
+	inline bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		return is_equivalent<uint8_t>{}(code, type_code);
+	}
+};
 
 /// \private
 template<>
-inline bool is_equivalent<int64_t>(uint16_t code) {
-	return is_equivalent<uint64_t>(code);
-}
+struct is_equivalent<int16_t> {
+	inline bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		return is_equivalent<uint16_t>{}(code, type_code);
+	}
+};
+
+/// \private
+template<>
+struct is_equivalent<int32_t> {
+	inline bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		return is_equivalent<uint32_t>{}(code, type_code);
+	}
+};
+
+/// \private
+template<>
+struct is_equivalent<int64_t> {
+	inline bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		return is_equivalent<uint64_t>{}(code, type_code);
+	}
+};
+
+/// \private
+template<>
+struct is_equivalent<bool> {
+	inline bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		if(sizeof(bool) == 1) {
+			return is_equivalent<uint8_t>{}(code, type_code);
+		}
+		return false;
+	}
+};
+
+/// \private
+template<>
+struct is_equivalent<char> {
+	inline bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		if(sizeof(char) == 1) {
+			return is_equivalent<int8_t>{}(code, type_code);
+		}
+		return false;
+	}
+};
+
+/// \private
+template<typename T, size_t N>
+struct is_equivalent<std::array<T, N>> {
+	bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		switch(code[0]) {
+			case CODE_ARRAY:
+				if(code[1] == N) {
+					return is_equivalent<T>{}(code + 2, type_code);
+				}
+				break;
+		}
+		return false;
+	}
+};
+
+/// \private
+template<typename K, typename V>
+struct is_equivalent<std::pair<K, V>> {
+	bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		switch(code[0]) {
+			case CODE_TUPLE:
+				if(code[1] == 2) {
+					const uint16_t* key_code = code + code[2];
+					const uint16_t* value_code = code + code[3];
+					return is_equivalent<K>{}(key_code, type_code) && is_equivalent<V>{}(value_code, type_code)
+						&& sizeof(std::pair<K, V>) == (get_value_size(key_code, type_code) + get_value_size(value_code, type_code));
+				}
+				break;
+		}
+		return false;
+	}
+};
+
+template<typename... T>
+struct tuple_is_equivalent;
+
+template<>
+struct tuple_is_equivalent<> {
+	bool operator()(const uint16_t* code, const TypeCode* type_code, size_t index) {
+		return true;
+	}
+};
+
+template<typename F, typename... T>
+struct tuple_is_equivalent<F, T...> {
+	bool operator()(const uint16_t* code, const TypeCode* type_code, size_t index) {
+		const uint16_t* value_code = code + code[2 + index];
+		return is_equivalent<F>{}(value_code, type_code) && tuple_is_equivalent<T...>{}(code, type_code, index + 1);
+	}
+};
+
+/// \private
+template<typename... T>
+struct is_equivalent<std::tuple<T...>> {
+	bool operator()(const uint16_t* code, const TypeCode* type_code) {
+		switch(code[0]) {
+			case CODE_TUPLE:
+				if(code[1] == std::tuple_size<T...>::value) {
+					size_t value_size = 0;
+					for(size_t i = 0; i < sizeof...(T); i++) {
+						value_size += get_value_size(code + code[2 + i], type_code);
+					}
+					return tuple_is_equivalent<T...>{}(code, type_code, 0) && value_size == sizeof(std::tuple<T...>);
+				}
+				break;
+		}
+		return false;
+	}
+};
+
+/// Same as is_equivalent but based on two codes (does not consider native padding)
+bool is_equivalent_code(const uint16_t* code_lhs, const uint16_t* code_rhs);
 
 /// \private
 inline void create_dynamic_code(std::vector<uint16_t>& code, const bool& value, bool special = false) { code.push_back(CODE_BOOL); }
@@ -422,6 +495,9 @@ void create_dynamic_code(std::vector<uint16_t>& code, const std::unordered_map<K
 template<typename K, typename V>
 void create_dynamic_code(std::vector<uint16_t>& code, const std::pair<K, V>& value, bool special = false);
 
+template<typename... T>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::tuple<T...>& value, bool special = false);
+
 void create_dynamic_code(std::vector<uint16_t>& code, const std::nullptr_t& value, bool special = false); ///< \private
 
 void create_dynamic_code(std::vector<uint16_t>& code, const Value& value, bool special = false); ///< \private
@@ -440,6 +516,7 @@ public:
 	std::string name;				///< Field name
 	std::string value;				///< Default value in JSON format
 	std::vector<uint16_t> code;		///< Field code
+	uint16_t data_size = 0;			///< Serialized data size
 	bool is_extended = false;		///< Extended means dynamic size
 	
 	/*
@@ -447,7 +524,6 @@ public:
 	 */
 	size_t index = 0;				///< Field index in the original TypeCode::fields array
 	size_t offset = 0;				///< Byte offset in the original static data section
-	size_t size = 0;				///< Size in bytes
 	
 	int32_t native_index = -1;		///< Field index in the native TypeCode::fields array
 	
@@ -501,7 +577,10 @@ public:
 	 */
 	bool is_native = false;								///< If type is native, ie. corresponds to a C++ class
 	bool is_matched = false;							///< If type is matched to a native C++ type
+	bool is_equivalent = false;							///< If type is memory equivalent to native C++ type (memcpy() is possible)
+	const TypeCode* super = nullptr;					///< Direct parent type if any
 	const TypeCode* native = nullptr;					///< Native type code if available (equals "this" in case already native)
+	size_t native_size = 0;								///< Native struct size in bytes (sizeof(...))
 	size_t total_field_size = 0;						///< Total size of all primitive fields [bytes]
 	std::string method_name;							///< Method name (without type prefix) in case of a method
 	std::vector<TypeField*> field_map;					///< Map from primitive field in data to field in native type
@@ -672,6 +751,29 @@ void create_dynamic_code(std::vector<uint16_t>& code, const std::pair<K, V>& val
 	vnx::type<K>().create_dynamic_code(code);
 	code[begin + 3] = uint16_t(code.size() - begin);
 	vnx::type<V>().create_dynamic_code(code);
+}
+
+template<typename... T>
+typename std::enable_if<sizeof...(T)==0, void>::type
+create_dynamic_code_tuple(std::vector<uint16_t>& code, size_t begin, size_t index) {}
+
+template<typename F, typename... T>
+void create_dynamic_code_tuple(std::vector<uint16_t>& code, size_t begin, size_t index) {
+	code[begin + index] = uint16_t(code.size() - begin);
+	vnx::type<F>().create_dynamic_code(code);
+	create_dynamic_code_tuple<T...>(code, begin, index + 1);
+}
+
+/// \private
+template<typename... T>
+void create_dynamic_code(std::vector<uint16_t>& code, const std::tuple<T...>& value, bool special) {
+	const size_t begin = code.size();
+	code.push_back(CODE_TUPLE);
+	code.push_back(sizeof...(T));
+	for(size_t i = 0; i < sizeof...(T); i++){
+		code.push_back(0);
+	}
+	create_dynamic_code_tuple<T...>(code, begin, 2);
 }
 
 /// \private

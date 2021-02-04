@@ -34,16 +34,11 @@ public:
 	Variant() = default;
 	
 	/// Performs deep-copy
-	Variant(const Variant& other) {
-		*this = other;
-	}
-	
+	Variant(const Variant& other) = default;
+
 	/// Move constructor (deep-move)
-	Variant(Variant&& other)
-		:	data(std::move(other.data))
-	{
-	}
-	
+	Variant(Variant&& other) = default;
+
 	/// Create Variant with given value
 	template<typename T>
 	explicit Variant(const T& value) {
@@ -57,10 +52,19 @@ public:
 	static std::shared_ptr<Variant> create(const Variant& other) {
 		return std::make_shared<Variant>(other);
 	}
-	
+
 	/// Performs deep-copy
 	Variant& operator=(const Variant& other) = default;
-	
+
+	/// Performs deep-move
+	Variant& operator=(Variant&& other) = default;
+
+	/// Assign new value
+	template<typename T>
+	Variant& operator=(const T& value) {
+		return assign(value);
+	}
+
 	/// Assign new value
 	template<typename T>
 	Variant& assign(const T& value);
@@ -75,12 +79,6 @@ public:
 	
 	/// Assign new string with given length
 	Variant& assign(const char* str, size_t len);
-	
-	/// Assign new value
-	template<typename T>
-	Variant& operator=(const T& value) {
-		return assign(value);
-	}
 	
 	/// Convert value to type T
 	template<typename T>
@@ -98,7 +96,6 @@ public:
 	 * 
 	 * This hash is invariant against different byte order, different integer size and type,
 	 * different array types and different list types.
-	 * Internally ToBinaryString is used to transform the data before computing the hash.
 	 */
 	Hash64 get_hash() const;
 	
@@ -108,10 +105,8 @@ public:
 	/// Returns type code of current value + size of code
 	const uint16_t* get_code(uint16_t& code_size) const;
 	
-	/// Checks for equality using ToBinaryString
 	bool operator==(const Variant& other) const;
 	
-	/// Checks for inequality using ToBinaryString
 	bool operator!=(const Variant& other) const;
 	
 	bool operator<(const Variant& other) const;
@@ -126,7 +121,9 @@ public:
 	 * 
 	 * CODE_NULL == false, otherwise normal C++ conversion applies.
 	 */
-	operator bool() const;
+	operator bool() const {
+		return to<bool>();
+	}
 	
 	operator uint8_t() const {
 		return to<uint8_t>();
@@ -143,8 +140,6 @@ public:
 	operator uint64_t() const {
 		return to<uint64_t>();
 	}
-	
-	operator char() const;
 	
 	operator int8_t() const {
 		return to<int8_t>();
@@ -229,25 +224,9 @@ public:
 	
 private:
 	static const Variant empty_instance;
-	
+
 };
 
-
-/// See bool()
-template<>
-void Variant::to<bool>(bool& value) const;
-
-inline Variant::operator bool() const {
-	return to<bool>();
-}
-
-/// See char()
-template<>
-void Variant::to<char>(char& value) const;
-
-inline Variant::operator char() const {
-	return to<char>();
-}
 
 template<>
 void from_string(const std::string& str, Variant& value);

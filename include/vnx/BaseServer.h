@@ -14,7 +14,6 @@
 
 namespace vnx {
 
-
 /** \brief Module to listen on and accept client connections from other processes.
  *
  * Will spawn a Proxy for every new client connection.
@@ -27,9 +26,7 @@ namespace vnx {
  */
 class BaseServer : public BaseServerBase {
 public:
-
 	using BaseServerBase::BaseServerBase;
-
 
 protected:
 	void main() override;
@@ -37,15 +34,16 @@ protected:
 	void setup();
 	
 	std::shared_ptr<const Endpoint> endpoint;
-	
 
 private:
 	void accept_loop();
+	
 	virtual void spawn_proxy(int socket) = 0;
 
 	int server = -1;
 	std::shared_ptr<Timer> setup_timer;
 	std::thread thread;
+	
 };
 
 

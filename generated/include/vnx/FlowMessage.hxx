@@ -26,6 +26,8 @@ public:
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
+	static constexpr uint64_t VNX_TYPE_ID = 0x496b887fb39119c2ull;
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
@@ -57,5 +59,10 @@ public:
 
 
 } // namespace vnx
+
+
+namespace vnx {
+
+} // vnx
 
 #endif // INCLUDE_vnx_FlowMessage_HXX_

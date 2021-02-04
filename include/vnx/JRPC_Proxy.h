@@ -30,15 +30,13 @@ protected:
 	void select_service(const std::string &service_name) override;
 
 private:
-	void send_outgoing(std::shared_ptr<const Sample> sample) override;
+	void send_outgoing(std::shared_ptr<Sample> sample) override;
 
-	void send_outgoing(std::shared_ptr<const Request> request, const Hash64 &original_dst_mac) override;
+	void send_outgoing(std::shared_ptr<Request> request, const Hash64 &original_dst_mac) override;
 
-	void clear_outputs() override;
+	void connect_reset() override;
 
 	void read_socket_until_error(std::shared_ptr<Pipe> service_pipe) override;
-
-	void disconnect_cleanup() override;
 
 	Object map_parameters(const Hash64 &service, const std::string &method, const std::vector<Variant> &parameters);
 

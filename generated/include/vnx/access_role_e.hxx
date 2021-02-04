@@ -12,7 +12,7 @@ namespace vnx {
 
 struct access_role_e {
 	
-	enum enum_t {
+	enum enum_t : uint32_t {
 		ADMIN = 2100538712l,
 		DEFAULT = 490312487l,
 		INSTALLER = 455339260l,
@@ -22,10 +22,12 @@ struct access_role_e {
 		VIEWER = 2077878907l,
 	};
 	
-	enum_t value = ::vnx::access_role_e::enum_t(0);
+	::vnx::access_role_e::enum_t value = ::vnx::access_role_e::enum_t(0);
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
+	
+	static constexpr uint64_t VNX_TYPE_ID = 0x915660c6100c6c6eull;
 	
 	access_role_e() {}
 	access_role_e(const enum_t& _value) { value = _value; }
@@ -98,6 +100,11 @@ std::string to_string_value(const ::vnx::access_role_e::enum_t& _value); ///< \p
 
 template<>
 std::string to_string_value_full(const ::vnx::access_role_e::enum_t& _value); ///< \private
+
+template<>
+struct is_equivalent<::vnx::access_role_e> {
+	bool operator()(const uint16_t* code, const TypeCode* type_code);
+};
 
 } // vnx
 

@@ -1,8 +1,0 @@
-package vnx;
-
-enum test_enum_e {
-	
-	FOO,
-	BAR
-	
-}

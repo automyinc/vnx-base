@@ -150,6 +150,25 @@ void accept(Visitor& visitor, const std::pair<K, V>& value) {
 	visitor.list_end(2);
 }
 
+template<size_t index, typename... T>
+typename std::enable_if<index == sizeof...(T), void>::type
+visit_tuple(Visitor& visitor, const std::tuple<T...>& value) {}
+
+template<size_t index, typename... T>
+typename std::enable_if<index < sizeof...(T), void>::type
+visit_tuple(Visitor& visitor, const std::tuple<T...>& value) {
+	visitor.list_element(index);
+	vnx::type<typename std::tuple_element<index, std::tuple<T...>>::type>().accept(visitor, std::get<index>(value));
+	visit_tuple<index+1>(visitor, value);
+}
+
+template<typename... T>
+void accept(Visitor& visitor, const std::tuple<T...>& value) {
+	visitor.list_begin(sizeof...(T));
+	visit_tuple<0>(visitor, value);
+	visitor.list_end(sizeof...(T));
+}
+
 void accept(Visitor& visitor, const Value& value);
 
 void accept(Visitor& visitor, const std::nullptr_t& value);

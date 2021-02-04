@@ -6,7 +6,6 @@
 
 #include <vnx/Type.h>
 #include <vnx/package.hxx>
-#include <vnx/Hash64.hpp>
 
 
 namespace vnx {
@@ -16,10 +15,11 @@ struct record_index_entry_t {
 	
 	int64_t pos = -1;
 	int64_t time = 0;
-	::vnx::Hash64 topic;
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
+	
+	static constexpr uint64_t VNX_TYPE_ID = 0x84d2685378679269ull;
 	
 	vnx::Hash64 get_type_hash() const;
 	std::string get_type_name() const;
@@ -52,5 +52,15 @@ struct record_index_entry_t {
 
 
 } // namespace vnx
+
+
+namespace vnx {
+
+template<>
+struct is_equivalent<::vnx::record_index_entry_t> {
+	bool operator()(const uint16_t* code, const TypeCode* type_code);
+};
+
+} // vnx
 
 #endif // INCLUDE_vnx_record_index_entry_t_HXX_

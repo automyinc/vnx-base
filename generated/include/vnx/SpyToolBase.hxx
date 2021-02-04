@@ -31,6 +31,8 @@ public:
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
+	static constexpr uint64_t VNX_TYPE_ID = 0x908abf18434bf596ull;
+	
 	SpyToolBase(const std::string& _vnx_name);
 	
 	vnx::Hash64 get_type_hash() const override;
@@ -55,14 +57,21 @@ public:
 	static std::shared_ptr<vnx::TypeCode> static_create_type_code();
 	
 protected:
+	using Super::handle;
+	
 	virtual void handle(std::shared_ptr<const ::vnx::TopicInfoList> _value) {}
 	
-	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
+	void vnx_handle_switch(std::shared_ptr<const vnx::Value> _value) override;
 	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _method, const vnx::request_id_t& _request_id) override;
 	
 };
 
 
 } // namespace vnx
+
+
+namespace vnx {
+
+} // vnx
 
 #endif // INCLUDE_vnx_SpyToolBase_HXX_

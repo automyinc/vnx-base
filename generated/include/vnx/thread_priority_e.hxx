@@ -12,7 +12,7 @@ namespace vnx {
 
 struct thread_priority_e {
 	
-	enum enum_t {
+	enum enum_t : uint32_t {
 		HIGH = 3488385431l,
 		LOW = 289856195l,
 		NORMAL = 658629154l,
@@ -20,10 +20,12 @@ struct thread_priority_e {
 		VERY_LOW = 253285142l,
 	};
 	
-	enum_t value = ::vnx::thread_priority_e::enum_t(0);
+	::vnx::thread_priority_e::enum_t value = ::vnx::thread_priority_e::enum_t(0);
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
+	
+	static constexpr uint64_t VNX_TYPE_ID = 0x2718d6bed61ee41cull;
 	
 	thread_priority_e() {}
 	thread_priority_e(const enum_t& _value) { value = _value; }
@@ -96,6 +98,11 @@ std::string to_string_value(const ::vnx::thread_priority_e::enum_t& _value); ///
 
 template<>
 std::string to_string_value_full(const ::vnx::thread_priority_e::enum_t& _value); ///< \private
+
+template<>
+struct is_equivalent<::vnx::thread_priority_e> {
+	bool operator()(const uint16_t* code, const TypeCode* type_code);
+};
 
 } // vnx
 

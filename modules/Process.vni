@@ -3,6 +3,8 @@ package vnx;
 module Process {
 	
 	int update_interval_ms = 500;				// publish interval for vnx.topic_info, etc
+	uint log_history_size = 10000;				// max number of log messages to hold in history
+	uint error_history_size = 100;				// max number of error messages to hold in history
 	
 	@Permission(VIEW)
 	string get_name() const;					// get process name
@@ -36,8 +38,23 @@ module Process {
 	@Permission(LOCAL)
 	void set_debug(int level);					// set terminal logging output level
 	
+	@Permission(LOCAL)
+	void show_error_log();
+	
+	@Permission(LOCAL)
+	void grep_log(string expr);
+	
+	@Permission(LOCAL)
+	void dmesg_log(string expr);
+	
+	@Permission(LOCAL)
+	void ungrep_log();
+	
 	@Permission(SHUTDOWN)
 	void trigger_shutdown();					// shutdown whole process
+	
+	@Permission(SELF_TEST)
+	void self_test_all() async;
 	
 	void handle(LogMsg sample);
 	void handle(TimeControl sample);

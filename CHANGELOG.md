@@ -1,3 +1,18 @@
+## [v1.9.2]
+
+- Variant null copy fix
+- added Terminal dmesg command
+- added vnx::shutdown_host()
+- added JRPC_Client
+- added Process self_test_all()
+- extended is_equivalent() to cover std::pair, std::tuple, std::array and structs
+- forced enum_t to be 32-bit
+- added std::tuple support (tuple<> in VNI)
+- added Frame + Stream
+- added VNX_TYPE_ID
+- using switch() when possible instead of std::dynamic_pointer_cast()
+- pair and tuple are now always serialized as "extended" fields for backwards compatibility
+
 ## [v1.9.1]
 
 - Publishers send FlowMessages now

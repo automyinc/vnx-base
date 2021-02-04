@@ -12,7 +12,7 @@ namespace vnx {
 
 struct permission_e {
 	
-	enum enum_t {
+	enum enum_t : uint32_t {
 		CONST_REQUEST = 1076482563l,
 		HOST_SHUTDOWN = 1124463389l,
 		INTERNAL = 1861063121l,
@@ -35,10 +35,12 @@ struct permission_e {
 		WRITE_CONFIG = 212794352l,
 	};
 	
-	enum_t value = ::vnx::permission_e::enum_t(0);
+	::vnx::permission_e::enum_t value = ::vnx::permission_e::enum_t(0);
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
+	
+	static constexpr uint64_t VNX_TYPE_ID = 0xb22885dc987a7be3ull;
 	
 	permission_e() {}
 	permission_e(const enum_t& _value) { value = _value; }
@@ -111,6 +113,11 @@ std::string to_string_value(const ::vnx::permission_e::enum_t& _value); ///< \pr
 
 template<>
 std::string to_string_value_full(const ::vnx::permission_e::enum_t& _value); ///< \private
+
+template<>
+struct is_equivalent<::vnx::permission_e> {
+	bool operator()(const uint16_t* code, const TypeCode* type_code);
+};
 
 } // vnx
 

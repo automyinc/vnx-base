@@ -39,23 +39,70 @@ template<typename K, typename V>
 void read(TypeInput& in, std::pair<K, V>& value, const TypeCode* type_code, const uint16_t* code) {
 	switch(code[0]) {
 		case CODE_TUPLE:
-		case CODE_ALT_TUPLE:
-			if((code[0] == CODE_TUPLE && code[1] == 2)
-				|| (code[0] == CODE_ALT_TUPLE && flip_bytes(code[1]) == 2))
-			{
+		case CODE_ALT_TUPLE: {
+			const int N = code[0] == CODE_TUPLE ? code[1] : flip_bytes(code[1]);
+			if(N >= 1) {
 				vnx::type<K>().read(in, value.first, type_code, code + code[2]);
-				vnx::type<V>().read(in, value.second, type_code, code + code[3]);
-				return;
+			} else {
+				value.first = K();
 			}
-			break;
+			if(N >= 2) {
+				vnx::type<V>().read(in, value.second, type_code, code + code[3]);
+			} else {
+				value.second = V();
+			}
+			for(int i = 2; i < N; ++i) {
+				skip(in, type_code, code + code[2 + i]);
+			}
+			return;
+		}
 		case CODE_LIST:
 		case CODE_ALT_LIST: {
 			std::vector<Variant> list;
 			read(in, list, type_code, code);
-			if(list.size() == 2) {
+			if(list.size() >= 2) {
 				list[0].to(value.first);
 				list[1].to(value.second);
 			}
+			return;
+		}
+		case CODE_DYNAMIC:
+		case CODE_ALT_DYNAMIC:
+			read_dynamic(in, value);
+			return;
+	}
+	skip(in, type_code, code);
+}
+
+template<size_t index, typename... T>
+typename std::enable_if<index == sizeof...(T), void>::type
+read_tuple(TypeInput& in, std::tuple<T...>& tuple, unsigned int N, const TypeCode* type_code, const uint16_t* code) {}
+
+template<size_t index, typename... T>
+typename std::enable_if<index < sizeof...(T), void>::type
+read_tuple(TypeInput& in, std::tuple<T...>& tuple, unsigned int N, const TypeCode* type_code, const uint16_t* code) {
+	const uint16_t* value_code = code + code[2 + index];
+	if(index < N) {
+		vnx::type<typename std::tuple_element<index, std::tuple<T...>>::type>().read(
+				in, std::get<index>(tuple), type_code, value_code);
+	} else {
+		std::get<index>(tuple) = typename std::tuple_element<index, std::tuple<T...>>::type();
+		skip(in, type_code, value_code);
+	}
+	read_tuple<index+1>(in, tuple, N, type_code, code);
+}
+
+/** \brief Reads a std::tuple from the input stream.
+ *
+ * Compatible with CODE_TUPLE and CODE_DYNAMIC.
+ */
+template<typename... T>
+void read(TypeInput& in, std::tuple<T...>& value, const TypeCode* type_code, const uint16_t* code) {
+	switch(code[0]) {
+		case CODE_TUPLE:
+		case CODE_ALT_TUPLE: {
+			const unsigned int N = code[0] == CODE_TUPLE ? code[1] : flip_bytes(code[1]);
+			read_tuple<0>(in, value, N, type_code, code);
 			return;
 		}
 		case CODE_DYNAMIC:
@@ -75,7 +122,7 @@ void read_map(TypeInput& in, T& map, const TypeCode* type_code, const uint16_t* 
 	map.clear();
 	uint32_t size = 0;
 	const uint16_t* key_code = code + 2;
-	const uint16_t* value_code = 0;
+	const uint16_t* value_code = nullptr;
 	switch(code[0]) {
 		case CODE_MAP:
 			read(in, size);
@@ -101,7 +148,7 @@ void read_map(TypeInput& in, T& map, const TypeCode* type_code, const uint16_t* 
 			read(in, tmp, type_code, code);
 			for(const auto& entry : tmp.field) {
 				typename T::key_type key;
-				from_string(entry.first, key);
+				from_string_value(entry.first, key);
 				entry.second.to(map[key]);
 			}
 			return;
@@ -269,8 +316,40 @@ void read(std::istream& in, std::pair<K, V>& pair) {
 		} else {
 			pair.second = V();
 		}
+	} else {
+		pair = std::pair<K, V>();
 	}
-	pair = std::pair<K, V>();
+}
+
+template<size_t index, typename... T>
+typename std::enable_if<index == sizeof...(T), void>::type
+convert_to_tuple(std::tuple<T...>& tuple, const std::vector<std::shared_ptr<JSON_Value>>& data) {
+}
+
+template<size_t index, typename... T>
+typename std::enable_if<index < sizeof...(T), void>::type
+convert_to_tuple(std::tuple<T...>& tuple, const std::vector<std::shared_ptr<JSON_Value>>& data) {
+	if(index < data.size()){
+		data[index]->to_variant().to(std::get<index>(tuple));
+		convert_to_tuple<index+1>(tuple, data);
+	} else {
+		std::get<index>(tuple) = typename std::tuple_element<index, std::tuple<T...>>::type();
+	}
+}
+
+/** \brief Reads a tuple from the JSON stream
+ *
+ * Example: [1, "value", 11.3]
+ */
+template<typename... T>
+void read(std::istream& in, std::tuple<T...>& tuple) {
+	auto json = read_json(in);
+	if(auto array = std::dynamic_pointer_cast<JSON_Array>(json)) {
+		const auto& entries = array->get_values();
+		convert_to_tuple<0>(tuple, entries);
+	} else {
+		tuple = std::tuple<T...>();
+	}
 }
 
 /** \brief Reads a set from the JSON stream

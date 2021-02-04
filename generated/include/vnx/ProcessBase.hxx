@@ -21,11 +21,15 @@ class ProcessBase : public ::vnx::Module {
 public:
 	
 	int32_t update_interval_ms = 500;
+	uint32_t log_history_size = 10000;
+	uint32_t error_history_size = 100;
 	
 	typedef ::vnx::Module Super;
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
+	
+	static constexpr uint64_t VNX_TYPE_ID = 0x149355fa43209cb1ull;
 	
 	ProcessBase(const std::string& _vnx_name);
 	
@@ -51,6 +55,8 @@ public:
 	static std::shared_ptr<vnx::TypeCode> static_create_type_code();
 	
 protected:
+	using Super::handle;
+	
 	virtual std::string get_name() const = 0;
 	virtual ::vnx::TimeSync get_sync_time() const = 0;
 	virtual std::vector<::vnx::TopicInfo> get_topic_info(const vnx::bool_t& include_domains) const = 0;
@@ -62,18 +68,29 @@ protected:
 	virtual void pause_log() = 0;
 	virtual void resume_log() = 0;
 	virtual void set_debug(const int32_t& level) = 0;
+	virtual void show_error_log() = 0;
+	virtual void grep_log(const std::string& expr) = 0;
+	virtual void dmesg_log(const std::string& expr) = 0;
+	virtual void ungrep_log() = 0;
 	virtual void trigger_shutdown() = 0;
+	virtual void self_test_all_async(const vnx::request_id_t& _request_id) = 0;
+	void self_test_all_async_return(const vnx::request_id_t& _request_id) const;
 	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value) {}
 	virtual void handle(std::shared_ptr<const ::vnx::TimeControl> _value) {}
 	virtual void handle(std::shared_ptr<const ::vnx::TimeSync> _value) {}
 	virtual void handle(std::shared_ptr<const ::vnx::ModuleInfo> _value) {}
 	
-	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
+	void vnx_handle_switch(std::shared_ptr<const vnx::Value> _value) override;
 	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _method, const vnx::request_id_t& _request_id) override;
 	
 };
 
 
 } // namespace vnx
+
+
+namespace vnx {
+
+} // vnx
 
 #endif // INCLUDE_vnx_ProcessBase_HXX_

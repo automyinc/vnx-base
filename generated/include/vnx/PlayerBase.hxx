@@ -33,6 +33,8 @@ public:
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
+	static constexpr uint64_t VNX_TYPE_ID = 0x18af8c0a3c1bbcull;
+	
 	PlayerBase(const std::string& _vnx_name);
 	
 	vnx::Hash64 get_type_hash() const override;
@@ -57,6 +59,8 @@ public:
 	static std::shared_ptr<vnx::TypeCode> static_create_type_code();
 	
 protected:
+	using Super::handle;
+	
 	virtual ::vnx::RecordHeader get_info() const = 0;
 	virtual void play() = 0;
 	virtual void pause() = 0;
@@ -68,12 +72,17 @@ protected:
 	virtual void seek_to_position(const vnx::float64_t& position) = 0;
 	virtual void seek_to_time(const int64_t& time_us) = 0;
 	
-	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
+	void vnx_handle_switch(std::shared_ptr<const vnx::Value> _value) override;
 	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _method, const vnx::request_id_t& _request_id) override;
 	
 };
 
 
 } // namespace vnx
+
+
+namespace vnx {
+
+} // vnx
 
 #endif // INCLUDE_vnx_PlayerBase_HXX_

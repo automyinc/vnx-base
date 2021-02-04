@@ -32,30 +32,26 @@ public:
 	 * @param endpoint_ Endpoint to connect to and re-connect in case of failure, optional
 	 * @param socket_ Already connected socket, optional
 	 */
-	Proxy(const std::string& name_, std::shared_ptr<const Endpoint> endpoint_ = 0, int socket_ = -1);
+	Proxy(const std::string& name_, std::shared_ptr<const Endpoint> endpoint_ = nullptr, int socket_ = -1);
 
 protected:
+	void handle(std::shared_ptr<const Frame> frame) override;
+	
 	bool handle(std::shared_ptr<const Return> result) override;
 
 	void handle(std::shared_ptr<const FlowMessage> flow_msg) override;
 
 private:
-	void send_outgoing(std::shared_ptr<const Sample> sample) override;
+	void send_outgoing(std::shared_ptr<Sample> sample) override;
 
-	void send_outgoing(std::shared_ptr<const Request> request, const Hash64 &original_dst_mac) override;
+	void send_outgoing(std::shared_ptr<Request> request, const Hash64 &original_dst_mac) override;
 
-	void clear_outputs() override;
+	void connect_reset() override;
 
 	void read_socket_until_error(std::shared_ptr<Pipe> service_pipe) override;
 
-	void disconnect_cleanup() override;
-
-	using Super::process; // brings the other overloads into scope
-
-	void process(std::shared_ptr<FlowMessage> flow_msg) noexcept;
-
+private:
 	TypeOutput out;
-	std::unordered_map<Hash128, uint64_t> channel_map;				// [(src_mac, topic) => seq_num]
 
 };
 

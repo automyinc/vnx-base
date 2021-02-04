@@ -53,7 +53,7 @@ std::string to_string_value_full(const T& value) {
 
 
 template<typename T>
-void write_to_file_json(const std::string& file_name, const T& value){
+void write_to_file_json(const std::string& file_name, const T& value) {
 	if(file_name.empty()) {
 		return;
 	}

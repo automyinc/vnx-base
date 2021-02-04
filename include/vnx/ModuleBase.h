@@ -27,6 +27,7 @@
 #include <vnx/LogMsg.hxx>
 #include <vnx/FlowMessage.hxx>
 #include <vnx/ModuleInfo.hxx>
+#include <vnx/Frame.hxx>
 
 #include <sstream>
 #include <functional>
@@ -111,6 +112,8 @@ public:
 protected:
 	const std::string vnx_name;			///< Name of the module
 
+	std::shared_ptr<const Frame> vnx_frame;			///< Current Frame being processed (null otherwise)
+	
 	std::shared_ptr<const Sample> vnx_sample;		///< Current Sample being processed (null otherwise)
 
 	std::shared_ptr<const Request> vnx_request;		///< Current Request being processed (null otherwise)
@@ -213,9 +216,15 @@ protected:
 	 */
 	void rem_async_client(std::shared_ptr<AsyncClient> client);
 
+	/// %Process a Value (internal use and special cases only)
+	virtual void handle(std::shared_ptr<const Value> value);
+
 	/// %Process a Message (internal use and special cases only)
 	virtual void handle(std::shared_ptr<const Message> msg);
 
+	/// %Process a Frame (internal use and special cases only)
+	virtual void handle(std::shared_ptr<const Frame> frame);
+	
 	/// %Process a Sample (internal use and special cases only)
 	virtual void handle(std::shared_ptr<const Sample> sample);
 
@@ -235,7 +244,7 @@ protected:
 	virtual void handle_resend(std::shared_ptr<const Sample> sample) {}
 
 	/// Call handle() function for a Sample (internal use and special cases only)
-	virtual void vnx_handle_switch(std::shared_ptr<const Sample> sample) = 0;
+	virtual void vnx_handle_switch(std::shared_ptr<const Value> value) = 0;
 
 	/// Call service function for a Request (internal use and special cases only)
 	virtual std::shared_ptr<Value> vnx_call_switch(std::shared_ptr<const Value> method, const vnx::request_id_t& request_id) = 0;

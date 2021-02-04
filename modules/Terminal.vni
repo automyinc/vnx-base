@@ -2,8 +2,6 @@ package vnx;
 
 module Terminal {
 	
-	int max_history = 50;				// max number of messages to hold in history
-	
 	int max_list_size = 1000;			// max display size of lists and maps, 0 == unlimited
 	
 	string prompt = "> ";				// terminal prompt when waiting for commands
@@ -20,9 +18,6 @@ module Terminal {
 	void read_event(terminal_event_e event);
 	
 	@Permission(LOCAL)
-	void grep(string expr);
-	
-	@Permission(LOCAL)
 	void spy(string expr);
 	
 	@Permission(LOCAL)
@@ -36,7 +31,5 @@ module Terminal {
 	
 	@Permission(LOCAL)
 	void htop(bool order_by_avg);
-	
-	void handle(LogMsg sample);
 	
 }

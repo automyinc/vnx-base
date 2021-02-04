@@ -67,8 +67,6 @@ protected:
 	void read_char(const signed char &c) override;
 
 	void read_event(const terminal_event_e &command) override;
-
-	void grep(const std::string& expr) override;
 	
 	void spy(const std::string& expr) override;
 	
@@ -79,8 +77,6 @@ protected:
 	void module_info(const std::string &expr) override;
 
 	void htop(const bool &order_by_avg) override;
-
-	void handle(std::shared_ptr<const LogMsg> value) override;
 	
 private:
 	static void read_loop(Hash64 service_addr);
@@ -103,13 +99,10 @@ private:
 	std::pair<std::string, bool> completion = std::make_pair("", false);
 	size_t cursor = 0;
 	bool tab_once = false;
-	int64_t last_update_arguments = 0;
 	
 	int state = INACTIVE;
-	std::string grep_filter;
 	Handle<Module> module;
 	std::shared_ptr<vnx::Timer> interval;
-	std::list<std::shared_ptr<const LogMsg>> error_history;
 	
 	void update_hints();
 	template <class Iter>

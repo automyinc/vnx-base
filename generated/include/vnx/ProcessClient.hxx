@@ -81,9 +81,29 @@ public:
 	
 	void set_debug_async(const int32_t& level);
 	
+	void show_error_log();
+	
+	void show_error_log_async();
+	
+	void grep_log(const std::string& expr);
+	
+	void grep_log_async(const std::string& expr);
+	
+	void dmesg_log(const std::string& expr);
+	
+	void dmesg_log_async(const std::string& expr);
+	
+	void ungrep_log();
+	
+	void ungrep_log_async();
+	
 	void trigger_shutdown();
 	
 	void trigger_shutdown_async();
+	
+	void self_test_all();
+	
+	void self_test_all_async();
 	
 };
 

@@ -12,7 +12,7 @@ namespace vnx {
 
 struct terminal_event_e {
 	
-	enum enum_t {
+	enum enum_t : uint32_t {
 		KEY_ARROWDOWN = 119472263l,
 		KEY_ARROWLEFT = 1701149083l,
 		KEY_ARROWRIGHT = 29208993l,
@@ -26,10 +26,12 @@ struct terminal_event_e {
 		KEY_TAB = 1321317380l,
 	};
 	
-	enum_t value = ::vnx::terminal_event_e::enum_t(0);
+	::vnx::terminal_event_e::enum_t value = ::vnx::terminal_event_e::enum_t(0);
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
+	
+	static constexpr uint64_t VNX_TYPE_ID = 0x13b5a20b72babf0dull;
 	
 	terminal_event_e() {}
 	terminal_event_e(const enum_t& _value) { value = _value; }
@@ -102,6 +104,11 @@ std::string to_string_value(const ::vnx::terminal_event_e::enum_t& _value); ///<
 
 template<>
 std::string to_string_value_full(const ::vnx::terminal_event_e::enum_t& _value); ///< \private
+
+template<>
+struct is_equivalent<::vnx::terminal_event_e> {
+	bool operator()(const uint16_t* code, const TypeCode* type_code);
+};
 
 } // vnx
 

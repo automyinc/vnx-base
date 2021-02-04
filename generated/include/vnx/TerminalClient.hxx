@@ -5,7 +5,6 @@
 #define INCLUDE_vnx_Terminal_CLIENT_HXX_
 
 #include <vnx/Client.h>
-#include <vnx/LogMsg.hxx>
 #include <vnx/Module.h>
 #include <vnx/terminal_event_e.hxx>
 
@@ -55,10 +54,6 @@ public:
 	void read_event(const ::vnx::terminal_event_e& event);
 	
 	void read_event_async(const ::vnx::terminal_event_e& event);
-	
-	void grep(const std::string& expr);
-	
-	void grep_async(const std::string& expr);
 	
 	void spy(const std::string& expr);
 	

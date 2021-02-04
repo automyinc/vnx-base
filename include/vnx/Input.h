@@ -126,33 +126,34 @@ inline void read_value(const void* buf, Hash64& value) { value = Hash64(*((uint6
  * If no conversion is possible \p value is default initialized.
  */
 template<typename T>
-void read_value(const void* buf, T& value, const uint16_t* code) {
+int read_value(const void* buf, T& value, const uint16_t* code) {
 	switch(code[0]) {
-		case CODE_NULL: value = T(); return;
+		case CODE_NULL: value = T(); return 0;
 		case CODE_BOOL:
-		case CODE_UINT8: value = T(*((const uint8_t*)buf)); return;
-		case CODE_UINT16: value = T(*((const uint16_t*)buf)); return;
-		case CODE_UINT32: value = T(*((const uint32_t*)buf)); return;
-		case CODE_UINT64: value = T(*((const uint64_t*)buf)); return;
-		case CODE_INT8: value = T(*((const int8_t*)buf)); return;
-		case CODE_INT16: value = T(*((const int16_t*)buf)); return;
-		case CODE_INT32: value = T(*((const int32_t*)buf)); return;
-		case CODE_INT64: value = T(*((const int64_t*)buf)); return;
-		case CODE_FLOAT: value = T(*((const float32_t*)buf)); return;
-		case CODE_DOUBLE: value = T(*((const float64_t*)buf)); return;
+		case CODE_UINT8: value = T(*((const uint8_t*)buf)); return 1;
+		case CODE_UINT16: value = T(*((const uint16_t*)buf)); return 2;
+		case CODE_UINT32: value = T(*((const uint32_t*)buf)); return 4;
+		case CODE_UINT64: value = T(*((const uint64_t*)buf)); return 8;
+		case CODE_INT8: value = T(*((const int8_t*)buf)); return 1;
+		case CODE_INT16: value = T(*((const int16_t*)buf)); return 2;
+		case CODE_INT32: value = T(*((const int32_t*)buf)); return 4;
+		case CODE_INT64: value = T(*((const int64_t*)buf)); return 8;
+		case CODE_FLOAT: value = T(*((const float32_t*)buf)); return 4;
+		case CODE_DOUBLE: value = T(*((const float64_t*)buf)); return 8;
 		case CODE_ALT_BOOL:
-		case CODE_ALT_UINT8: value = T(flip_bytes(*((const uint8_t*)buf))); return;
-		case CODE_ALT_UINT16: value = T(flip_bytes(*((const uint16_t*)buf))); return;
-		case CODE_ALT_UINT32: value = T(flip_bytes(*((const uint32_t*)buf))); return;
-		case CODE_ALT_UINT64: value = T(flip_bytes(*((const uint64_t*)buf))); return;
-		case CODE_ALT_INT8: value = T(flip_bytes(*((const int8_t*)buf))); return;
-		case CODE_ALT_INT16: value = T(flip_bytes(*((const int16_t*)buf))); return;
-		case CODE_ALT_INT32: value = T(flip_bytes(*((const int32_t*)buf))); return;
-		case CODE_ALT_INT64: value = T(flip_bytes(*((const int64_t*)buf))); return;
-		case CODE_ALT_FLOAT: value = T(flip_bytes(*((const float32_t*)buf))); return;
-		case CODE_ALT_DOUBLE: value = T(flip_bytes(*((const float64_t*)buf))); return;
+		case CODE_ALT_UINT8: value = T(flip_bytes(*((const uint8_t*)buf))); return 1;
+		case CODE_ALT_UINT16: value = T(flip_bytes(*((const uint16_t*)buf))); return 2;
+		case CODE_ALT_UINT32: value = T(flip_bytes(*((const uint32_t*)buf))); return 4;
+		case CODE_ALT_UINT64: value = T(flip_bytes(*((const uint64_t*)buf))); return 8;
+		case CODE_ALT_INT8: value = T(flip_bytes(*((const int8_t*)buf))); return 1;
+		case CODE_ALT_INT16: value = T(flip_bytes(*((const int16_t*)buf))); return 2;
+		case CODE_ALT_INT32: value = T(flip_bytes(*((const int32_t*)buf))); return 4;
+		case CODE_ALT_INT64: value = T(flip_bytes(*((const int64_t*)buf))); return 8;
+		case CODE_ALT_FLOAT: value = T(flip_bytes(*((const float32_t*)buf))); return 4;
+		case CODE_ALT_DOUBLE: value = T(flip_bytes(*((const float64_t*)buf))); return 8;
 		default: value = T();
 	}
+	return 0;
 }
 
 /** \brief Reads a static array from the buffer.
@@ -160,20 +161,30 @@ void read_value(const void* buf, T& value, const uint16_t* code) {
  * Directly compatible with CODE_ARRAY.
  */
 template<typename T, size_t N>
-void read_value(const char* buf, std::array<T, N>& array, const uint16_t* code) {
+int read_value(const char* buf, std::array<T, N>& array, const uint16_t* code) {
 	size_t size = 0;
 	switch(code[0]) {
 		case CODE_ARRAY: size = code[1]; break;
 		case CODE_ALT_ARRAY: size = flip_bytes(code[1]); break;
 	}
-	size = size <= N ? size : N;
-	const size_t value_size = get_value_size(code[2]);
-	for(size_t i = 0; i < size; ++i) {
-		read_value(buf + i * value_size, array[i], code + 2);
+	int offset = 0;
+	const uint16_t* value_code = code + 2;
+	if(size == N && is_equivalent<T>{}(value_code, nullptr)) {
+		::memcpy(&array, buf, sizeof(array));
+		offset += sizeof(array);
+	} else {
+		for(size_t i = 0; i < size && i < N; ++i) {
+			offset += read_value(buf + offset, array[i], value_code);
+		}
+		for(size_t i = N; i < size; ++i) {
+			T dummy;
+			offset += read_value(buf + offset, dummy, value_code);
+		}
+		for(size_t i = size; i < N; ++i) {
+			array[i] = T();
+		}
 	}
-	for(size_t i = size; i < N; ++i) {
-		array[i] = T();
-	}
+	return offset;
 }
 
 template<typename T>
@@ -306,38 +317,11 @@ inline void read(TypeInput& in, float64_t& value, const TypeCode* type_code, con
  */
 void read(TypeInput& in, std::string& string, const TypeCode* type_code, const uint16_t* code);
 
-template<typename T, size_t N>
-void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, const uint16_t* code);
-
-template<typename T>
-void read(TypeInput& in, std::vector<T>& vector, const TypeCode* type_code, const uint16_t* code);
-
-template<typename T>
-void read(TypeInput& in, std::list<T>& list, const TypeCode* type_code, const uint16_t* code);
-
-template<typename T>
-void read(TypeInput& in, std::set<T>& set, const TypeCode* type_code, const uint16_t* code);
-
-template<typename T, typename C>
-void read(TypeInput& in, std::set<T, C>& set, const TypeCode* type_code, const uint16_t* code);
-
-template<typename T>
-void read(TypeInput& in, std::unordered_set<T>& set, const TypeCode* type_code, const uint16_t* code);
-
-template<typename T, typename C>
-void read(TypeInput& in, std::unordered_set<T, C>& set, const TypeCode* type_code, const uint16_t* code);
-
 template<typename K, typename V>
-void read(TypeInput& in, std::map<K, V>& map, const TypeCode* type_code, const uint16_t* code);
+void read(TypeInput& in, std::pair<K, V>& value, const TypeCode* type_code, const uint16_t* code);
 
-template<typename K, typename V, typename C>
-void read(TypeInput& in, std::map<K, V, C>& map, const TypeCode* type_code, const uint16_t* code);
-
-template<typename K, typename V>
-void read(TypeInput& in, std::unordered_map<K, V>& map, const TypeCode* type_code, const uint16_t* code);
-
-template<typename K, typename V, typename C>
-void read(TypeInput& in, std::unordered_map<K, V, C>& map, const TypeCode* type_code, const uint16_t* code);
+template<typename... T>
+void read(TypeInput& in, std::tuple<T...>& value, const TypeCode* type_code, const uint16_t* code);
 
 template<typename T>
 void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, const uint16_t* code);
@@ -376,7 +360,7 @@ void read_matrix(TypeInput& in, std::vector<T>& data, std::vector<size_t>& dims,
 template<typename T>
 void read_array(TypeInput& in, T& array, const TypeCode* type_code, const uint16_t* code) {
 	uint32_t size = 0;
-	const uint16_t* value_code = 0;
+	const uint16_t* value_code = nullptr;
 	switch(code[0]) {
 		case CODE_NULL:
 			size = 0;
@@ -415,16 +399,14 @@ void read_array(TypeInput& in, T& array, const TypeCode* type_code, const uint16
 			size = 1;
 			value_code = code;
 	}
-	if(size) {
-		if(is_equivalent<typename T::value_type>(value_code[0]) && size <= array.size()) {
-			in.read((char*)array.data(), size * sizeof(typename T::value_type));
-		} else {
-			for(size_t i = 0; i < size; ++i) {
-				if(i < array.size()) {
-					vnx::type<typename T::value_type>().read(in, array[i], type_code, value_code);
-				} else {
-					skip(in, type_code, value_code);
-				}
+	if(size && size <= array.size() && is_equivalent<typename T::value_type>{}(value_code, type_code)) {
+		in.read((char*)array.data(), size * sizeof(typename T::value_type));
+	} else {
+		for(size_t i = 0; i < size; ++i) {
+			if(i < array.size()) {
+				vnx::type<typename T::value_type>().read(in, array[i], type_code, value_code);
+			} else {
+				skip(in, type_code, value_code);
 			}
 		}
 	}
@@ -447,7 +429,7 @@ void read(TypeInput& in, std::array<T, N>& array, const TypeCode* type_code, con
 template<typename T>
 void read_vector(TypeInput& in, T& vector, const TypeCode* type_code, const uint16_t* code) {
 	uint32_t size = 0;
-	const uint16_t* value_code = 0;
+	const uint16_t* value_code = nullptr;
 	switch(code[0]) {
 		case CODE_NULL:
 			vector.clear();
@@ -486,7 +468,7 @@ void read_vector(TypeInput& in, T& vector, const TypeCode* type_code, const uint
 			value_code = code;
 	}
 	vector.resize(size);
-	if(is_equivalent<typename T::value_type>(value_code[0])) {
+	if(is_equivalent<typename T::value_type>{}(value_code, type_code)) {
 		in.read((char*)vector.data(), size * sizeof(typename T::value_type));
 	} else {
 		for(uint32_t i = 0; i < size; ++i) {
@@ -589,9 +571,6 @@ void read(TypeInput& in, std::unordered_map<K, V, C>& map, const TypeCode* type_
 	read_map(in, map, type_code, code);
 }
 
-template<typename K, typename V>
-void read(TypeInput& in, std::pair<K, V>& value, const TypeCode* type_code, const uint16_t* code);
-
 /** \brief Reads a statically allocated N-dimensional matrix from the input stream.
  * 
  * The matrix in the data needs to match the exact size requested with \p size,
@@ -607,7 +586,7 @@ void read_matrix(TypeInput& in, T* data, const std::array<size_t, N>& size, cons
 	for(size_t i = 0; i < N; ++i) {
 		total_size *= size[i];
 	}
-	if((code[0] == CODE_MATRIX && code[1] == N)
+	if(    (code[0] == CODE_MATRIX && code[1] == N)
 		|| (code[0] == CODE_ALT_MATRIX && flip_bytes(code[1]) == N))
 	{
 		bool is_same = true;
@@ -622,16 +601,8 @@ void read_matrix(TypeInput& in, T* data, const std::array<size_t, N>& size, cons
 		}
 		if(is_same) {
 			const uint16_t* value_code = code + 2 + N;
-			const size_t value_size = get_value_size(value_code[0]);
-			if(value_size) {
-				if(is_equivalent<T>(value_code[0])) {
-					in.read((char*)data, total_size * sizeof(T));
-				} else {
-					const char* buf = in.read(total_size * value_size);
-					for(size_t i = 0; i < total_size; ++i) {
-						read_value(buf + i * value_size, data[i], value_code);
-					}
-				}
+			if(is_equivalent<T>{}(value_code, nullptr)) {
+				in.read((char*)data, total_size * sizeof(T));
 			} else {
 				for(size_t i = 0; i < total_size; ++i) {
 					vnx::type<T>().read(in, data[i], nullptr, value_code);
@@ -655,7 +626,7 @@ void read_matrix(TypeInput& in, T* data, const std::array<size_t, N>& size, cons
  * @param size Size of the image in the following data.
  */
 template<size_t N>
-void read_image_size(TypeInput& in, std::array<size_t, N>& size, const uint16_t* code) {
+bool read_image_size(TypeInput& in, std::array<size_t, N>& size, const uint16_t* code) {
 	if(	(code[0] == CODE_IMAGE && code[1] == N)
 		|| (code[0] == CODE_ALT_IMAGE && flip_bytes(code[1]) == N))
 	{
@@ -669,11 +640,11 @@ void read_image_size(TypeInput& in, std::array<size_t, N>& size, const uint16_t*
 				size[i] = flip_bytes(size_);
 			}
 		}
-	} else {
-		for(size_t i = 0; i < N; ++i) {
-			size[i] = 0;
-		}
+		return true;
 	}
+	size.fill(0);
+	skip(in, nullptr, code);
+	return false;
 }
 
 /** \brief Reads the data of a N-dimensional image from the input stream.
@@ -688,34 +659,28 @@ void read_image_size(TypeInput& in, std::array<size_t, N>& size, const uint16_t*
  */
 template<typename T, size_t N>
 void read_image_data(TypeInput& in, T* data, const std::array<size_t, N>& size, const uint16_t* code) {
-	if(	(code[0] == CODE_IMAGE && code[1] == N)
-		|| (code[0] == CODE_ALT_IMAGE && flip_bytes(code[1]) == N))
-	{
-		size_t total_size = 1;
-		for(size_t i = 0; i < N; ++i) {
-			total_size *= size[i];
-		}
-		const uint16_t* value_code = code + 2;
-		const size_t value_size = get_value_size(value_code[0]);
-		if(data) {
-			if(get_value_code<T>() == value_code[0] && sizeof(T) == value_size) {
-				in.read((char*)data, total_size * sizeof(T));
-			} else {
-				for(size_t i = 0; i < total_size; ++i) {
-					vnx::type<T>().read(in, data[i], nullptr, value_code);
-				}
-			}
+	size_t total_size = 1;
+	for(size_t i = 0; i < N; ++i) {
+		total_size *= size[i];
+	}
+	const uint16_t* value_code = code + 2;
+	if(data) {
+		if(is_equivalent<T>{}(value_code, nullptr)) {
+			in.read((char*)data, total_size * sizeof(T));
 		} else {
-			if(value_size) {
-				copy_bytes(in, nullptr, total_size * value_size);
-			} else {
-				for(size_t i = 0; i < total_size; ++i) {
-					skip(in, nullptr, value_code);
-				}
+			for(size_t i = 0; i < total_size; ++i) {
+				vnx::type<T>().read(in, data[i], nullptr, value_code);
 			}
 		}
 	} else {
-		skip(in, nullptr, code);
+		if(const auto value_size = get_value_size(value_code, nullptr)) {
+			copy_bytes(in, nullptr, total_size * value_size);
+		} else {
+			T dummy;
+			for(size_t i = 0; i < total_size; ++i) {
+				vnx::type<T>().read(in, dummy, nullptr, value_code);
+			}
+		}
 	}
 }
 
@@ -747,30 +712,29 @@ void type<T>::read(TypeInput& in, T& value, const TypeCode* type_code, const uin
 }
 
 template<typename T>
-void read_dynamic_list_size(TypeInput& in, uint16_t* code_, size_t& size_) {
-	uint32_t size = 0;
-	read_byte_code(in, code_);
-	switch(code_[0]) {
-		case CODE_LIST: read(in, size); break;
-		case CODE_ALT_LIST: read(in, size); size = flip_bytes(size); break;
+void read_dynamic_list_size(TypeInput& in, uint16_t* code, size_t& size) {
+	uint32_t size_ = 0;
+	read_byte_code(in, code);
+	switch(code[0]) {
+		case CODE_LIST: read(in, size_); break;
+		case CODE_ALT_LIST: read(in, size_); size_ = flip_bytes(size_); break;
 	}
-	size_ = size;
+	size = size_;
 }
 
 template<typename T>
-void read_dynamic_list_data(TypeInput& in, T* data_, const uint16_t* code_, const size_t& size_) {
-	if((code_[0] == CODE_LIST || code_[0] == CODE_ALT_LIST) && data_) {
-		const size_t value_size = get_value_size(code_[1]);
-		if(get_value_code<T>() == code_[1] && sizeof(T) == value_size) {
-			in.read((char*)data_, size_ * sizeof(T));
+void read_dynamic_list_data(TypeInput& in, T* data, const uint16_t* code, const size_t& size) {
+	if((code[0] == CODE_LIST || code[0] == CODE_ALT_LIST) && data) {
+		const uint16_t* value_code = code + 1;
+		if(is_equivalent<T>{}(value_code, nullptr)) {
+			in.read((char*)data, size * sizeof(T));
 		} else {
-			const uint16_t* value_code = code_ + 1;
-			for(uint32_t i = 0; i < size_; ++i) {
-				vnx::type<T>().read(in, data_[i], nullptr, value_code);
+			for(uint32_t i = 0; i < size; ++i) {
+				vnx::type<T>().read(in, data[i], nullptr, value_code);
 			}
 		}
 	} else {
-		skip(in, nullptr, code_);
+		skip(in, nullptr, code);
 	}
 }
 

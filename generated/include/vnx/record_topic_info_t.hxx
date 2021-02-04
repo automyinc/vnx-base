@@ -21,6 +21,8 @@ struct record_topic_info_t {
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
+	static constexpr uint64_t VNX_TYPE_ID = 0x39c9255966eebda0ull;
+	
 	vnx::Hash64 get_type_hash() const;
 	std::string get_type_name() const;
 	const vnx::TypeCode* get_type_code() const;
@@ -52,5 +54,15 @@ struct record_topic_info_t {
 
 
 } // namespace vnx
+
+
+namespace vnx {
+
+template<>
+struct is_equivalent<::vnx::record_topic_info_t> {
+	bool operator()(const uint16_t* code, const TypeCode* type_code);
+};
+
+} // vnx
 
 #endif // INCLUDE_vnx_record_topic_info_t_HXX_

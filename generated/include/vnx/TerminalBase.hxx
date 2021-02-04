@@ -5,7 +5,6 @@
 #define INCLUDE_vnx_TerminalBase_HXX_
 
 #include <vnx/package.hxx>
-#include <vnx/LogMsg.hxx>
 #include <vnx/Module.h>
 #include <vnx/terminal_event_e.hxx>
 
@@ -15,7 +14,6 @@ namespace vnx {
 class TerminalBase : public ::vnx::Module {
 public:
 	
-	int32_t max_history = 50;
 	int32_t max_list_size = 1000;
 	std::string prompt = "> ";
 	int32_t htop_interval = 3000;
@@ -24,6 +22,8 @@ public:
 	
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
+	
+	static constexpr uint64_t VNX_TYPE_ID = 0xa4ce75801916357bull;
 	
 	TerminalBase(const std::string& _vnx_name);
 	
@@ -49,23 +49,28 @@ public:
 	static std::shared_ptr<vnx::TypeCode> static_create_type_code();
 	
 protected:
+	using Super::handle;
+	
 	virtual void command(const std::vector<std::string>& commandline) = 0;
 	virtual void read_char(const int8_t& c) = 0;
 	virtual void read_event(const ::vnx::terminal_event_e& event) = 0;
-	virtual void grep(const std::string& expr) = 0;
 	virtual void spy(const std::string& expr) = 0;
 	virtual void dump(const std::string& expr) = 0;
 	virtual void topic_info(const std::string& expr) = 0;
 	virtual void module_info(const std::string& expr) = 0;
 	virtual void htop(const vnx::bool_t& order_by_avg) = 0;
-	virtual void handle(std::shared_ptr<const ::vnx::LogMsg> _value) {}
 	
-	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
+	void vnx_handle_switch(std::shared_ptr<const vnx::Value> _value) override;
 	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _method, const vnx::request_id_t& _request_id) override;
 	
 };
 
 
 } // namespace vnx
+
+
+namespace vnx {
+
+} // vnx
 
 #endif // INCLUDE_vnx_TerminalBase_HXX_

@@ -19,7 +19,7 @@
 
 #include <vnx/package.hxx>
 #include <vnx/Hash64.h>
-#include <vnx/Hash128.hpp>
+#include <vnx/Hash128.h>
 #include <vnx/Util.h>
 #include <vnx/Input.hpp>
 #include <vnx/Output.hpp>
@@ -104,7 +104,7 @@ void read(TypeInput& in, Hash64& value, const TypeCode* type_code, const uint16_
 }
 
 inline
-void write(TypeOutput& out, const Hash64& value, const TypeCode* type_code, const uint16_t* code) {
+void write(TypeOutput& out, const Hash64& value, const TypeCode* type_code = nullptr, const uint16_t* code = nullptr) {
 	write(out, value.value, type_code, code);
 }
 

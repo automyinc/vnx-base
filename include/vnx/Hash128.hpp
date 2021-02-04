@@ -19,6 +19,7 @@
 
 #include <vnx/package.hxx>
 #include <vnx/Hash128.h>
+#include <vnx/Hash64.h>
 #include <vnx/Util.h>
 #include <vnx/Input.hpp>
 #include <vnx/Output.hpp>

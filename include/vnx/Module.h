@@ -102,6 +102,8 @@ protected:
 	 */
 	virtual bool vnx_shutdown();
 
+	using Super::handle;
+
 private:
 	void vnx_entry();
 	

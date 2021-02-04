@@ -41,6 +41,8 @@ public:
 	static const vnx::Hash64 VNX_TYPE_HASH;
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
+	static constexpr uint64_t VNX_TYPE_ID = 0xd8241ff9082104f5ull;
+	
 	BaseProxyBase(const std::string& _vnx_name);
 	
 	vnx::Hash64 get_type_hash() const override;
@@ -65,6 +67,8 @@ public:
 	static std::shared_ptr<vnx::TypeCode> static_create_type_code();
 	
 protected:
+	using Super::handle;
+	
 	virtual void login_async(const std::string& name, const std::string& password, const vnx::request_id_t& _request_id) const = 0;
 	void login_async_return(const vnx::request_id_t& _request_id, const std::shared_ptr<const ::vnx::Session>& _ret_0) const;
 	virtual void enable_import(const std::string& topic_name) = 0;
@@ -85,12 +89,17 @@ protected:
 	virtual void on_login(const std::string& name, const std::string& password) = 0;
 	virtual void on_remote_login(std::shared_ptr<const ::vnx::Session> remote_session) = 0;
 	
-	void vnx_handle_switch(std::shared_ptr<const vnx::Sample> _sample) override;
+	void vnx_handle_switch(std::shared_ptr<const vnx::Value> _value) override;
 	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _method, const vnx::request_id_t& _request_id) override;
 	
 };
 
 
 } // namespace vnx
+
+
+namespace vnx {
+
+} // vnx
 
 #endif // INCLUDE_vnx_BaseProxyBase_HXX_

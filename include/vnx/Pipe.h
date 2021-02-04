@@ -105,7 +105,7 @@ bool send_msg(std::shared_ptr<Pipe> pipe, std::shared_ptr<Message> msg, uint16_t
  * Used to punch holes, such that messages sent from the other side get routed back to \p source.
  * Implicitly connects \p target to \p source such that \p target gets notified if \p source closes.
  */
-bool flow_open(std::shared_ptr<Pipe> target, std::shared_ptr<Pipe> source, uint16_t flags = 0);
+bool open_flow(std::shared_ptr<Pipe> target, std::shared_ptr<Pipe> source, uint16_t flags = 0);
 
 /// Connect a pipe to a node.
 void connect(	std::shared_ptr<Pipe> pipe, Node* node, int max_queue_ms, int max_queue_size = 0,
