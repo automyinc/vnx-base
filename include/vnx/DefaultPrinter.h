@@ -54,7 +54,9 @@ public:
 	
 protected:
 	std::ostream& out;
-	
+
+	int stack = 0;
+
 };
 
 

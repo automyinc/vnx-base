@@ -515,9 +515,7 @@ template<typename T>
 void read_set(TypeInput& in, T& set, const TypeCode* type_code, const uint16_t* code) {
 	std::vector<typename T::key_type> tmp;
 	read_vector(in, tmp, type_code, code);
-	for(auto& value : tmp) {
-		set.emplace(std::move(value));
-	}
+	set = T(tmp.begin(), tmp.end());
 }
 
 /// Same as read_set<T>() with T = std::set<T>

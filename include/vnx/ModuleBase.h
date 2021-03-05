@@ -19,6 +19,7 @@
 
 #include <vnx/Time.h>
 #include <vnx/Task.h>
+#include <vnx/Stream.h>
 #include <vnx/Hash128.h>
 #include <vnx/Publisher.h>
 #include <vnx/Subscriber.h>

@@ -70,7 +70,7 @@ protected:
 	virtual void set_debug(const int32_t& level) = 0;
 	virtual void show_error_log() = 0;
 	virtual void grep_log(const std::string& expr) = 0;
-	virtual void dmesg_log(const std::string& expr) = 0;
+	virtual void journal_log(const std::string& expr) = 0;
 	virtual void ungrep_log() = 0;
 	virtual void trigger_shutdown() = 0;
 	virtual void self_test_all_async(const vnx::request_id_t& _request_id) = 0;

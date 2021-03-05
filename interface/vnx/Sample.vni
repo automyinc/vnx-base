@@ -6,7 +6,7 @@ class Sample extends Message {
 	
 	ulong seq_num;				// first sequence number is at least 1
 	
-	long recv_time;				// timestmap when it was received in process
+	long recv_time;				// timestamp when it was received in process (sync time) [usec]
 	
 	TopicPtr topic;				// topic
 	

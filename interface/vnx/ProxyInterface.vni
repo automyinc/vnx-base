@@ -1,7 +1,6 @@
 package vnx;
 
-
-interface ProxyInterface{
+interface ProxyInterface {
 
 	@Permission(LOCAL)
 	Session* login(string name, string password) const async;
@@ -19,13 +18,13 @@ interface ProxyInterface{
 	void disable_export(string topic_name);
 	
 	@Permission(PROXY_FORWARD)
-	void enable_forward(string service_name, int max_queue_ms);
+	void enable_forward(string service_name, int max_queue_ms, int max_queue_size);
 	
 	@Permission(PROXY_FORWARD)
 	void disable_forward(string service_name);
 	
 	@Permission(PROXY_FORWARD)
-	void enable_tunnel(Hash64 tunnel_addr, string service_name, int max_queue_ms);
+	void enable_tunnel(Hash64 tunnel_addr, int max_queue_ms, int max_queue_size);
 	
 	@Permission(PROXY_FORWARD)
 	void disable_tunnel(Hash64 tunnel_addr);

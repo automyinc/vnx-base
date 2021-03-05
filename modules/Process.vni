@@ -45,7 +45,7 @@ module Process {
 	void grep_log(string expr);
 	
 	@Permission(LOCAL)
-	void dmesg_log(string expr);
+	void journal_log(string expr);
 	
 	@Permission(LOCAL)
 	void ungrep_log();

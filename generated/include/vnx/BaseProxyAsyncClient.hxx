@@ -23,15 +23,15 @@ public:
 			const std::function<void(const ::vnx::Object&)>& _callback = std::function<void(const ::vnx::Object&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t vnx_get_config(const std::string& name, 
+	uint64_t vnx_get_config(const std::string& name = "", 
 			const std::function<void(const ::vnx::Variant&)>& _callback = std::function<void(const ::vnx::Variant&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t vnx_set_config_object(const ::vnx::Object& config, 
+	uint64_t vnx_set_config_object(const ::vnx::Object& config = ::vnx::Object(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t vnx_set_config(const std::string& name, const ::vnx::Variant& value, 
+	uint64_t vnx_set_config(const std::string& name = "", const ::vnx::Variant& value = ::vnx::Variant(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
@@ -55,39 +55,39 @@ public:
 			const std::function<void(const vnx::bool_t&)>& _callback = std::function<void(const vnx::bool_t&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t login(const std::string& name, const std::string& password, 
+	uint64_t login(const std::string& name = "", const std::string& password = "", 
 			const std::function<void(std::shared_ptr<const ::vnx::Session>)>& _callback = std::function<void(std::shared_ptr<const ::vnx::Session>)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t enable_import(const std::string& topic_name, 
+	uint64_t enable_import(const std::string& topic_name = "", 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t disable_import(const std::string& topic_name, 
+	uint64_t disable_import(const std::string& topic_name = "", 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t enable_export(const std::string& topic_name, 
+	uint64_t enable_export(const std::string& topic_name = "", 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t disable_export(const std::string& topic_name, 
+	uint64_t disable_export(const std::string& topic_name = "", 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t enable_forward(const std::string& service_name, const int32_t& max_queue_ms, 
+	uint64_t enable_forward(const std::string& service_name = "", const int32_t& max_queue_ms = 0, const int32_t& max_queue_size = 0, 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t disable_forward(const std::string& service_name, 
+	uint64_t disable_forward(const std::string& service_name = "", 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t enable_tunnel(const ::vnx::Hash64& tunnel_addr, const std::string& service_name, const int32_t& max_queue_ms, 
+	uint64_t enable_tunnel(const ::vnx::Hash64& tunnel_addr = ::vnx::Hash64(), const int32_t& max_queue_ms = 0, const int32_t& max_queue_size = 0, 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t disable_tunnel(const ::vnx::Hash64& tunnel_addr, 
+	uint64_t disable_tunnel(const ::vnx::Hash64& tunnel_addr = ::vnx::Hash64(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
@@ -107,15 +107,15 @@ public:
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t on_remote_connect(const ::vnx::Hash64& process_id, 
+	uint64_t on_remote_connect(const ::vnx::Hash64& process_id = ::vnx::Hash64(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t on_login(const std::string& name, const std::string& password, 
+	uint64_t on_login(const std::string& name = "", const std::string& password = "", 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t on_remote_login(std::shared_ptr<const ::vnx::Session> remote_session, 
+	uint64_t on_remote_login(std::shared_ptr<const ::vnx::Session> remote_session = nullptr, 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	

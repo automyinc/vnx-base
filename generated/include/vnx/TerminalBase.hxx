@@ -58,6 +58,7 @@ protected:
 	virtual void dump(const std::string& expr) = 0;
 	virtual void topic_info(const std::string& expr) = 0;
 	virtual void module_info(const std::string& expr) = 0;
+	virtual void show_config(const std::string& expr) = 0;
 	virtual void htop(const vnx::bool_t& order_by_avg) = 0;
 	
 	void vnx_handle_switch(std::shared_ptr<const vnx::Value> _value) override;

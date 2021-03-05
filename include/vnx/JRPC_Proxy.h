@@ -18,11 +18,11 @@ class JRPC_Proxy : public JRPC_ProxyBase {
 public:
 	/** \brief Create new Proxy instance.
 	 *
-	 * @param name_ Name of the module
-	 * @param endpoint_ Endpoint to connect to and re-connect in case of failure, optional
-	 * @param socket_ Already connected socket, optional
+	 * @param name Name of the module
+	 * @param endpoint Endpoint to connect to and re-connect in case of failure, optional
+	 * @param socket Already connected socket, optional
 	 */
-	JRPC_Proxy(const std::string& name_, std::shared_ptr<const Endpoint> endpoint_ = nullptr, int socket_ = -1);
+	JRPC_Proxy(const std::string& name, std::shared_ptr<const Endpoint> endpoint = nullptr, int socket = -1);
 
 protected:
 	bool handle(std::shared_ptr<const Return> result) override;
@@ -32,7 +32,7 @@ protected:
 private:
 	void send_outgoing(std::shared_ptr<Sample> sample) override;
 
-	void send_outgoing(std::shared_ptr<Request> request, const Hash64 &original_dst_mac) override;
+	void send_outgoing(std::shared_ptr<Request> request) override;
 
 	void connect_reset() override;
 

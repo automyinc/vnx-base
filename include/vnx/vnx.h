@@ -47,6 +47,9 @@
 #include <vnx/Visitor.h>
 #include <vnx/CRC64.h>
 #include <vnx/Authentication.h>
+#include <vnx/Stream.h>
+#include <vnx/GenericClient.h>
+#include <vnx/GenericAsyncClient.h>
 
 #include <vnx/Buffer.hpp>
 #include <vnx/Config.hpp>

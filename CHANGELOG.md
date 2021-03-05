@@ -1,3 +1,19 @@
+## [v1.9.3]
+
+- renamed dmsg command to journal
+- addedd Client/AsyncClient tunnel feature
+- ToStringValue fixes
+- added vnx_jrpc_server_map config
+- added TypeCode::to_object()
+- added create_dynamic_code() support for TypeCode
+- added BaseServer max_queue_size
+- client functions have default params now
+- Endpoint empty url = nullptr
+- Proxy refactor, enable_tunnel() has changed, Clients do tunneling now
+- JSON double locale parsing fix
+- added config terminal command
+- read_set() fix
+
 ## [v1.9.2]
 
 - Variant null copy fix

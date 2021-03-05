@@ -25,15 +25,15 @@ public:
 	
 	::vnx::Object vnx_get_config_object();
 	
-	::vnx::Variant vnx_get_config(const std::string& name);
+	::vnx::Variant vnx_get_config(const std::string& name = "");
 	
-	void vnx_set_config_object(const ::vnx::Object& config);
+	void vnx_set_config_object(const ::vnx::Object& config = ::vnx::Object());
 	
-	void vnx_set_config_object_async(const ::vnx::Object& config);
+	void vnx_set_config_object_async(const ::vnx::Object& config = ::vnx::Object());
 	
-	void vnx_set_config(const std::string& name, const ::vnx::Variant& value);
+	void vnx_set_config(const std::string& name = "", const ::vnx::Variant& value = ::vnx::Variant());
 	
-	void vnx_set_config_async(const std::string& name, const ::vnx::Variant& value);
+	void vnx_set_config_async(const std::string& name = "", const ::vnx::Variant& value = ::vnx::Variant());
 	
 	::vnx::TypeCode vnx_get_type_code();
 	
@@ -53,17 +53,17 @@ public:
 	
 	::vnx::TimeSync get_sync_time();
 	
-	std::vector<::vnx::TopicInfo> get_topic_info(const vnx::bool_t& include_domains);
+	std::vector<::vnx::TopicInfo> get_topic_info(const vnx::bool_t& include_domains = 0);
 	
 	std::vector<::vnx::ModuleInfo> get_module_info();
 	
 	::vnx::ProcessInfo get_process_info();
 	
-	::vnx::Variant get_global_config(const std::string& key);
+	::vnx::Variant get_global_config(const std::string& key = "");
 	
-	void set_global_config(const std::string& key, const ::vnx::Variant& value);
+	void set_global_config(const std::string& key = "", const ::vnx::Variant& value = ::vnx::Variant());
 	
-	void set_global_config_async(const std::string& key, const ::vnx::Variant& value);
+	void set_global_config_async(const std::string& key = "", const ::vnx::Variant& value = ::vnx::Variant());
 	
 	void reload_config();
 	
@@ -77,21 +77,21 @@ public:
 	
 	void resume_log_async();
 	
-	void set_debug(const int32_t& level);
+	void set_debug(const int32_t& level = 0);
 	
-	void set_debug_async(const int32_t& level);
+	void set_debug_async(const int32_t& level = 0);
 	
 	void show_error_log();
 	
 	void show_error_log_async();
 	
-	void grep_log(const std::string& expr);
+	void grep_log(const std::string& expr = "");
 	
-	void grep_log_async(const std::string& expr);
+	void grep_log_async(const std::string& expr = "");
 	
-	void dmesg_log(const std::string& expr);
+	void journal_log(const std::string& expr = "");
 	
-	void dmesg_log_async(const std::string& expr);
+	void journal_log_async(const std::string& expr = "");
 	
 	void ungrep_log();
 	

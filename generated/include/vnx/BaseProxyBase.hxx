@@ -20,7 +20,7 @@ public:
 	std::vector<::vnx::TopicPtr> import_list;
 	std::vector<::vnx::TopicPtr> export_list;
 	std::vector<std::string> forward_list;
-	std::map<::vnx::Hash64, std::string> tunnel_map;
+	std::vector<::vnx::Hash64> tunnel_list;
 	std::map<::vnx::TopicPtr, ::vnx::TopicPtr> import_map;
 	std::map<::vnx::TopicPtr, ::vnx::TopicPtr> export_map;
 	::vnx::Hash64 receive_tunnel;
@@ -31,6 +31,7 @@ public:
 	vnx::bool_t block_until_connect = true;
 	vnx::bool_t block_until_reconnect = false;
 	int32_t max_queue_ms = 100;
+	int32_t max_queue_size = 1000;
 	int32_t max_hop_count = 10;
 	int32_t recv_buffer_size = 0;
 	int32_t send_buffer_size = 131072;
@@ -75,9 +76,9 @@ protected:
 	virtual void disable_import(const std::string& topic_name) = 0;
 	virtual void enable_export(const std::string& topic_name) = 0;
 	virtual void disable_export(const std::string& topic_name) = 0;
-	virtual void enable_forward(const std::string& service_name, const int32_t& max_queue_ms) = 0;
+	virtual void enable_forward(const std::string& service_name, const int32_t& max_queue_ms, const int32_t& max_queue_size) = 0;
 	virtual void disable_forward(const std::string& service_name) = 0;
-	virtual void enable_tunnel(const ::vnx::Hash64& tunnel_addr, const std::string& service_name, const int32_t& max_queue_ms) = 0;
+	virtual void enable_tunnel(const ::vnx::Hash64& tunnel_addr, const int32_t& max_queue_ms, const int32_t& max_queue_size) = 0;
 	virtual void disable_tunnel(const ::vnx::Hash64& tunnel_addr) = 0;
 	virtual void wait_on_connect_async(const vnx::request_id_t& _request_id) const = 0;
 	void wait_on_connect_async_return(const vnx::request_id_t& _request_id, const ::vnx::Hash64& _ret_0) const;

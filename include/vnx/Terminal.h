@@ -76,6 +76,8 @@ protected:
 
 	void module_info(const std::string &expr) override;
 
+	void show_config(const std::string &expr) override;
+
 	void htop(const bool &order_by_avg) override;
 	
 private:

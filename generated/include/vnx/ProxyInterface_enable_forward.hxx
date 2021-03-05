@@ -15,6 +15,7 @@ public:
 	
 	std::string service_name;
 	int32_t max_queue_ms = 0;
+	int32_t max_queue_size = 0;
 	
 	typedef ::vnx::Value Super;
 	

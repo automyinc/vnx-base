@@ -18,6 +18,7 @@ public:
 	vnx::bool_t use_authentication = false;
 	std::vector<::vnx::TopicPtr> export_list;
 	int32_t max_queue_ms = 100;
+	int32_t max_queue_size = 1000;
 	int32_t recv_buffer_size = 0;
 	int32_t send_buffer_size = 131072;
 	std::string default_access = "DEFAULT";

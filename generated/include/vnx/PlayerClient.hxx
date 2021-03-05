@@ -20,15 +20,15 @@ public:
 	
 	::vnx::Object vnx_get_config_object();
 	
-	::vnx::Variant vnx_get_config(const std::string& name);
+	::vnx::Variant vnx_get_config(const std::string& name = "");
 	
-	void vnx_set_config_object(const ::vnx::Object& config);
+	void vnx_set_config_object(const ::vnx::Object& config = ::vnx::Object());
 	
-	void vnx_set_config_object_async(const ::vnx::Object& config);
+	void vnx_set_config_object_async(const ::vnx::Object& config = ::vnx::Object());
 	
-	void vnx_set_config(const std::string& name, const ::vnx::Variant& value);
+	void vnx_set_config(const std::string& name = "", const ::vnx::Variant& value = ::vnx::Variant());
 	
-	void vnx_set_config_async(const std::string& name, const ::vnx::Variant& value);
+	void vnx_set_config_async(const std::string& name = "", const ::vnx::Variant& value = ::vnx::Variant());
 	
 	::vnx::TypeCode vnx_get_type_code();
 	
@@ -62,25 +62,25 @@ public:
 	
 	void stop_async();
 	
-	void set_speed(const vnx::float64_t& speed);
+	void set_speed(const vnx::float64_t& speed = 0);
 	
-	void set_speed_async(const vnx::float64_t& speed);
+	void set_speed_async(const vnx::float64_t& speed = 0);
 	
-	void seek_by_count(const int64_t& delta_count);
+	void seek_by_count(const int64_t& delta_count = 0);
 	
-	void seek_by_count_async(const int64_t& delta_count);
+	void seek_by_count_async(const int64_t& delta_count = 0);
 	
-	void seek_by_time(const int64_t& delta_us);
+	void seek_by_time(const int64_t& delta_us = 0);
 	
-	void seek_by_time_async(const int64_t& delta_us);
+	void seek_by_time_async(const int64_t& delta_us = 0);
 	
-	void seek_to_position(const vnx::float64_t& position);
+	void seek_to_position(const vnx::float64_t& position = 0);
 	
-	void seek_to_position_async(const vnx::float64_t& position);
+	void seek_to_position_async(const vnx::float64_t& position = 0);
 	
-	void seek_to_time(const int64_t& time_us);
+	void seek_to_time(const int64_t& time_us = 0);
 	
-	void seek_to_time_async(const int64_t& time_us);
+	void seek_to_time_async(const int64_t& time_us = 0);
 	
 };
 

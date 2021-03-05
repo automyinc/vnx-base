@@ -502,6 +502,8 @@ void create_dynamic_code(std::vector<uint16_t>& code, const std::nullptr_t& valu
 
 void create_dynamic_code(std::vector<uint16_t>& code, const Value& value, bool special = false); ///< \private
 
+void create_dynamic_code(std::vector<uint16_t>& code, const TypeCode& value, bool special = false); ///< \private
+
 void create_dynamic_code(std::vector<uint16_t>& code, std::shared_ptr<const Value> value, bool special = false); ///< \private
 
 template<typename T>
@@ -613,6 +615,8 @@ public:
 	void accept(Visitor& visitor) const;
 
 	void print(std::ostream& out) const;
+
+	Object to_object() const;
 
 	void from_object(const Object& object);
 
@@ -784,6 +788,11 @@ inline void create_dynamic_code(std::vector<uint16_t>& code, const std::nullptr_
 /// \private
 inline void create_dynamic_code(std::vector<uint16_t>& code, const Value& value, bool special) {
 	code.push_back(CODE_OBJECT);
+}
+
+/// \private
+inline void create_dynamic_code(std::vector<uint16_t>& code, const TypeCode& value, bool special) {
+	code.push_back(CODE_TYPE_CODE);
 }
 
 /// \private

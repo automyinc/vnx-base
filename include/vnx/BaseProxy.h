@@ -71,11 +71,13 @@ protected:
 	
 	void disable_export(const std::string& topic_name) override;
 	
-	void enable_forward(const std::string& service_name, const int32_t& max_queue_ms) override;
+	void enable_forward(const std::string& service_name,
+						const int32_t& max_queue_ms, const int32_t& max_queue_size) override;
 	
 	void disable_forward(const std::string& service_name) override;
 	
-	void enable_tunnel(const Hash64& tunnel_addr, const std::string& serive_name, const int32_t& max_queue_ms) override;
+	void enable_tunnel(	const Hash64& tunnel_addr,
+						const int32_t& max_queue_ms, const int32_t& max_queue_size) override;
 	
 	void disable_tunnel(const Hash64& tunnel_addr) override;
 	
@@ -100,16 +102,20 @@ protected:
 	std::shared_ptr<const Session> get_session();
 	
 	// to be called by read_loop() only
-	std::shared_ptr<Pipe> add_return_pipe(Hash64 src_mac, std::shared_ptr<Pipe> pipe, bool reconnect = false);
+	std::shared_ptr<Pipe> add_return_pipe(	Hash64 src_mac, std::shared_ptr<Pipe> pipe,
+											int max_queue_ms, int max_queue_size, bool reconnect);
 
 	// to be called by read_loop() only
 	void process(std::shared_ptr<Frame> frame) noexcept;
 	
 	// to be called by read_loop() only
-	void process(std::shared_ptr<Request> request, std::shared_ptr<const Session> session, std::shared_ptr<Pipe> service_pipe) noexcept;
+	void process(	std::shared_ptr<Request> request,
+					std::shared_ptr<const Session> session,
+					std::shared_ptr<Pipe> service_pipe) noexcept;
 
 	// to be called by read_loop() only
-	void process(std::shared_ptr<Sample> sample, std::shared_ptr<const Session> session) noexcept;
+	void process(	std::shared_ptr<Sample> sample,
+					std::shared_ptr<const Session> session) noexcept;
 
 	// to be called by read_loop() only
 	void process(std::shared_ptr<Return> return_msg) noexcept;
@@ -134,7 +140,6 @@ protected:
 	Hash64 service_addr;
 	Hash64 public_service_addr;
 	Hash64 remote_process_id;
-	Hash64 remote_tunnel_addr;
 	std::shared_ptr<ProxyInterfaceClient> remote;
 
 	std::unordered_map<std::string, ssize_t> import_table;			// [topic => counter]
@@ -142,12 +147,13 @@ protected:
 	std::unordered_map<Hash64, uint64_t> forward_table;				// [service => counter]
 	std::map<Hash64, std::string> forward_names;					// [dst_mac => service name]
 	std::unordered_map<Hash64, std::shared_ptr<Pipe>> request_pipes;	// [service => pipe]
-	std::unordered_map<Hash64, Hash64> tunnel_hash_map;				// [service => service]
 	std::unordered_set<Hash128> outgoing;							// (src_mac, dst_mac)
 	
 	std::mutex mutex_request_map;
 	std::unordered_map<Hash64, std::map<uint64_t, std::shared_ptr<const Request>>> request_map;  // [src_mac => [request_id => Request]]
 
+	std::atomic<size_t> num_frames_send {0};
+	std::atomic<size_t> num_frames_recv {0};
 	std::atomic<size_t> num_samples_send {0};
 	std::atomic<size_t> num_samples_recv {0};
 	std::atomic<size_t> num_requests_send {0};
@@ -161,10 +167,6 @@ protected:
 	std::unordered_set<Hash128> incoming;				// map of incoming connections (src_mac, dst_mac)
 
 private:
-	void enable_forward(const Hash64& serive_addr, const int32_t& max_queue_ms);
-	
-	void disable_forward(const Hash64& serive_addr);
-	
 	void update_topics();
 
 	void print_stats();
@@ -180,7 +182,7 @@ private:
 	virtual void send_outgoing(std::shared_ptr<Sample> sample) = 0;
 
 	// called by main thread
-	virtual void send_outgoing(std::shared_ptr<Request> request, const Hash64 &original_dst_mac) = 0;
+	virtual void send_outgoing(std::shared_ptr<Request> request) = 0;
 
 	// called by main thread upon connect
 	virtual void connect_reset() {}
@@ -194,7 +196,7 @@ private:
 	Handle<TimeServer> time_server;
 	std::shared_ptr<const TopicInfoList> topic_info;
 	
-	std::shared_ptr<AuthenticationServer> authentication;
+	std::shared_ptr<AuthenticationServer> auth_server;
 	mutable std::pair<std::string, std::string> login_credentials;
 	mutable vnx::request_t<std::shared_ptr<const Session>> login_request;
 	mutable std::vector<vnx::request_t<Hash64>> waiting_on_connect;

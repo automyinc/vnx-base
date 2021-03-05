@@ -82,6 +82,9 @@ void force_shutdown();
 /// Shuts down the host system
 void shutdown_host();
 
+/// Sets the priority of the current process. May not work with insufficient permissions.
+void set_current_process_priority(const thread_priority_e &priority);
+
 
 /** \brief A Module that handles process specific tasks.
  * 
@@ -122,7 +125,7 @@ protected:
 
 	void grep_log(const std::string &expr) override;
 
-	void dmesg_log(const std::string &expr) override;
+	void journal_log(const std::string &expr) override;
 
 	void ungrep_log() override;
 
@@ -175,7 +178,9 @@ private:
 
 	bool is_grep_match(std::shared_ptr<const LogMsg> message, const std::string &filter) const;
 
-	bool is_visible(std::shared_ptr<const LogMsg> message) const;
+	bool is_visible_in_log(std::shared_ptr<const LogMsg> message) const;
+
+	bool is_visible_in_grep(std::shared_ptr<const LogMsg> message) const;
 
 	void show_log_message(std::shared_ptr<const LogMsg> message);
 

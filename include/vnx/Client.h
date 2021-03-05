@@ -36,12 +36,18 @@ class Client : protected Node {
 public:
 	/// Creates a client for the specified service address.
 	Client(Hash64 service_addr);
-	
+
 	~Client();
 	
 	/// Sets a custom session to be used for requests.
 	void vnx_set_session(Hash64 id);
 
+	/// Sets a tunnel address for sending requests to.
+	void vnx_set_tunnel(Hash64 tunnel_addr);
+
+	/// Sets a tunnel name for sending requests to.
+	void vnx_set_tunnel(const std::string& tunnel_name);
+	
 	/// If \p non_blocking_mode == true requests will throw an exception instead of blocking (default = false)
 	void vnx_set_non_blocking(bool non_blocking_mode);
 
@@ -53,6 +59,7 @@ protected:
 	
 private:
 	Hash64 vnx_src_mac;
+	Hash64 vnx_tunnel_addr;
 	Hash64 vnx_service_addr;
 	Hash64 vnx_session_id;
 	std::atomic<uint64_t> vnx_next_id {0};

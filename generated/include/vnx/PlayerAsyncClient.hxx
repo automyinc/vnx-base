@@ -22,15 +22,15 @@ public:
 			const std::function<void(const ::vnx::Object&)>& _callback = std::function<void(const ::vnx::Object&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t vnx_get_config(const std::string& name, 
+	uint64_t vnx_get_config(const std::string& name = "", 
 			const std::function<void(const ::vnx::Variant&)>& _callback = std::function<void(const ::vnx::Variant&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t vnx_set_config_object(const ::vnx::Object& config, 
+	uint64_t vnx_set_config_object(const ::vnx::Object& config = ::vnx::Object(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t vnx_set_config(const std::string& name, const ::vnx::Variant& value, 
+	uint64_t vnx_set_config(const std::string& name = "", const ::vnx::Variant& value = ::vnx::Variant(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
@@ -74,23 +74,23 @@ public:
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t set_speed(const vnx::float64_t& speed, 
+	uint64_t set_speed(const vnx::float64_t& speed = 0, 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t seek_by_count(const int64_t& delta_count, 
+	uint64_t seek_by_count(const int64_t& delta_count = 0, 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t seek_by_time(const int64_t& delta_us, 
+	uint64_t seek_by_time(const int64_t& delta_us = 0, 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t seek_to_position(const vnx::float64_t& position, 
+	uint64_t seek_to_position(const vnx::float64_t& position = 0, 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t seek_to_time(const int64_t& time_us, 
+	uint64_t seek_to_time(const int64_t& time_us = 0, 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
