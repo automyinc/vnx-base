@@ -17,6 +17,7 @@ class BaseProxyBase : public ::vnx::Module {
 public:
 	
 	std::string address;
+	std::pair<std::string, std::string> auto_login;
 	std::vector<::vnx::TopicPtr> import_list;
 	std::vector<::vnx::TopicPtr> export_list;
 	std::vector<std::string> forward_list;

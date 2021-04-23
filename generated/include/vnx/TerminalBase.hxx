@@ -60,6 +60,7 @@ protected:
 	virtual void module_info(const std::string& expr) = 0;
 	virtual void show_config(const std::string& expr) = 0;
 	virtual void htop(const vnx::bool_t& order_by_avg) = 0;
+	virtual void exec(const std::string& module, const std::string& method, const std::vector<std::string>& args, const vnx::bool_t& async) = 0;
 	
 	void vnx_handle_switch(std::shared_ptr<const vnx::Value> _value) override;
 	std::shared_ptr<vnx::Value> vnx_call_switch(std::shared_ptr<const vnx::Value> _method, const vnx::request_id_t& _request_id) override;

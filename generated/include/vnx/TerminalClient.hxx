@@ -79,6 +79,10 @@ public:
 	
 	void htop_async(const vnx::bool_t& order_by_avg = 0);
 	
+	void exec(const std::string& module = "", const std::string& method = "", const std::vector<std::string>& args = {}, const vnx::bool_t& async = 0);
+	
+	void exec_async(const std::string& module = "", const std::string& method = "", const std::vector<std::string>& args = {}, const vnx::bool_t& async = 0);
+	
 };
 
 
