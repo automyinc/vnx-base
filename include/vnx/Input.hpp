@@ -71,6 +71,7 @@ void read(TypeInput& in, std::pair<K, V>& value, const TypeCode* type_code, cons
 			read_dynamic(in, value);
 			return;
 	}
+	value = std::pair<K, V>();
 	skip(in, type_code, code);
 }
 
@@ -110,6 +111,7 @@ void read(TypeInput& in, std::tuple<T...>& value, const TypeCode* type_code, con
 			read_dynamic(in, value);
 			return;
 	}
+	value = std::tuple<T...>();
 	skip(in, type_code, code);
 }
 
@@ -185,17 +187,17 @@ void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, c
 		case CODE_ANY:
 		case CODE_ALT_ANY:
 			value = std::dynamic_pointer_cast<T>(read(in));
-			break;
+			return;
 		case CODE_DYNAMIC:
 		case CODE_ALT_DYNAMIC:
 			read_dynamic(in, value);
-			break;
+			return;
 		case CODE_OBJECT:
 		case CODE_ALT_OBJECT: {
 			Object obj;
 			read(in, obj, type_code, code);
 			value = obj.as_value<T>();
-			break;
+			return;
 		}
 		case CODE_OPTIONAL:
 		case CODE_ALT_OPTIONAL: {
@@ -206,12 +208,11 @@ void read(TypeInput& in, std::shared_ptr<T>& value, const TypeCode* type_code, c
 			} else {
 				value = nullptr;
 			}
-			break;
+			return;
 		}
-		default:
-			value = nullptr;
-			skip(in, type_code, code);
 	}
+	value = nullptr;
+	skip(in, type_code, code);
 }
 
 /** \brief Reads something optional from the input stream.
@@ -227,7 +228,7 @@ void read(TypeInput& in, vnx::optional<T>& value, const TypeCode* type_code, con
 	switch(code[0]) {
 		case CODE_NULL:
 			value = nullptr;
-			break;
+			return;
 		case CODE_OPTIONAL:
 		case CODE_ALT_OPTIONAL: {
 			bool flag = false;
@@ -237,13 +238,12 @@ void read(TypeInput& in, vnx::optional<T>& value, const TypeCode* type_code, con
 			} else {
 				value = nullptr;
 			}
-			break;
+			return;
 		}
-		default:
-			std::unique_ptr<T> tmp(new T());
-			vnx::type<T>().read(in, *tmp, type_code, code);
-			value.reset(tmp.release());
 	}
+	std::unique_ptr<T> tmp(new T());
+	vnx::type<T>().read(in, *tmp, type_code, code);
+	value.reset(tmp.release());
 }
 
 /** \brief Reads a static array from the JSON stream

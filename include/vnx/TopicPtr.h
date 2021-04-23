@@ -39,6 +39,8 @@ public:
 	
 	TopicPtr& operator=(const std::shared_ptr<Topic>& topic_);
 	
+	static const std::string empty;		///< "null"
+
 };
 
 
@@ -48,7 +50,7 @@ public:
 namespace std {
 	template<> struct hash<vnx::TopicPtr> {
 		size_t operator()(const vnx::TopicPtr& x) const {
-			return std::hash<std::shared_ptr<vnx::Topic>>()((const std::shared_ptr<vnx::Topic>&)x);
+			return std::hash<std::shared_ptr<vnx::Topic>>()(x);
 		}
 	};
 } // std

@@ -80,6 +80,8 @@ protected:
 
 	void htop(const bool &order_by_avg) override;
 	
+	void exec(const std::string &module, const std::string &method, const std::vector<std::string> &args, const bool &async) override;
+
 private:
 	static void read_loop(Hash64 service_addr);
 #ifdef _WIN32

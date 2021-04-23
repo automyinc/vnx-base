@@ -103,7 +103,7 @@ public:
 	bool vnx_auto_decompress = true;			///< If to automatically decompress Sample values
 
 	int vnx_log_level = INFO;					///< The display log level of this module (see LogMsg)
-	int vnx_task_priority = -5;					///< Priority for task pipe (see add_task())
+	int vnx_task_priority = PRIORITY_DEFAULT;	///< Priority for task pipe (see add_task())
 	int vnx_default_queue_ms = 100;				///< Maximum queue length for default pipe (module_id)
 	int vnx_default_queue_size = 1000;			///< Maximum queue size for default pipe (module_id)
 
@@ -251,7 +251,13 @@ protected:
 	virtual std::shared_ptr<Value> vnx_call_switch(std::shared_ptr<const Value> method, const vnx::request_id_t& request_id) = 0;
 
 	/// Sends a Return back to the client [thread-safe]
-	virtual bool vnx_async_return(const vnx::request_id_t& request_id, std::shared_ptr<const Value> return_value) const;
+	virtual bool vnx_async_return(const vnx::request_id_t& request_id, std::shared_ptr<const Value> value) const;
+
+	/// Sends an Exception back to the client [thread-safe]
+	virtual bool vnx_async_return_ex(const vnx::request_id_t& request_id, const std::exception& ex) const;
+
+	/// Sends an Exception back to the client [thread-safe]
+	virtual bool vnx_async_return_ex_what(const vnx::request_id_t& request_id, const std::string& ex_what) const;
 
 	/// Needs to be called by Module implementation before processing any messages.
 	virtual void vnx_setup();

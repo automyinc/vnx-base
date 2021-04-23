@@ -25,9 +25,9 @@ public:
 	Stream(const Stream& other) = delete;
 	Stream& operator=(const Stream& other) = delete;
 	
-	bool open();
+	void open();
 	
-	bool connect(	Node* node,
+	void connect(	Node* node,
 					int max_queue_ms, int max_queue_size = 0,
 					int priority = PIPE_PRIORITY_DEFAULT);
 	

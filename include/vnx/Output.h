@@ -448,8 +448,9 @@ inline void write(std::ostream& out, const int8_t& value) { out << int(value); }
 inline void write(std::ostream& out, const int16_t& value) { out << value; }
 inline void write(std::ostream& out, const int32_t& value) { out << value; }
 inline void write(std::ostream& out, const int64_t& value) { out << value; }
-inline void write(std::ostream& out, const float32_t& value) { out << value; }
-inline void write(std::ostream& out, const float64_t& value) { out << value; }
+
+void write(std::ostream& out, const float32_t& value);
+void write(std::ostream& out, const float64_t& value);
 
 void write(std::ostream& out, const std::string& value);
 

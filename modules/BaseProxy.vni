@@ -3,6 +3,7 @@ package vnx;
 module BaseProxy implements ProxyInterface {
 
 	string address;						// URL to connect to
+	pair<string, string> auto_login;	// login credentials to use automatically after connect
 	
 	vector<TopicPtr> import_list;		// list of topics to import (ie. subscribe)
 	vector<TopicPtr> export_list;		// list of topics to export

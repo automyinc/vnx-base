@@ -52,13 +52,13 @@ Buffer& Buffer::operator=(const Buffer& other) {
 inline
 Buffer& Buffer::operator=(const std::string& other) {
 	resize(other.size());
-	::memcpy(data_, other.data(), capacity_);
+	::memcpy(data_, other.data(), other.size());
 	return *this;
 }
 
 inline
 void Buffer::release() {
-	data_ = 0;
+	data_ = nullptr;
 	size_ = 0;
 	capacity_ = 0;
 }
@@ -70,11 +70,11 @@ void Buffer::clear() {
 
 inline
 void Buffer::reset() {
-	clear();
 	if(data_) {
 		::free(data_);
 	}
-	data_ = 0;
+	data_ = nullptr;
+	clear();
 	capacity_ = 0;
 }
 

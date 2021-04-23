@@ -44,6 +44,9 @@ public:
 	/// Returns number of pending tasks (ie. which are in the queue)
 	size_t get_num_pending() const;
 	
+	/// Returns number of active non-idle threads (ie. which are doing some work)
+	size_t get_num_running() const;
+	
 	/// Trigger all threads to exit. (thread-safe)
 	void exit();
 	
@@ -70,6 +73,7 @@ private:
 	int num_threads = 0;
 	int max_queue_size = 0;
 	int64_t next_thread_id = 0;
+	std::atomic<size_t> num_running {0};
 	
 };
 

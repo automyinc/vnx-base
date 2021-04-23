@@ -27,12 +27,15 @@ namespace vnx {
  * Same as DefaultPrinter except:
  *  - strings are without quotes (at the top level)
  *  - enum values are without quotes (at the top level)
+ *  - null is an empty string
  *
  * This Visitor is used when the desired output is a value.
  */
 class ToStringValue : public DefaultPrinter {
 public:
 	ToStringValue(std::ostream& out);
+
+	void visit_null() override;
 
 	void visit(const std::string& value) override;
 

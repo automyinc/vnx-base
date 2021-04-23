@@ -110,7 +110,7 @@ public:
 	void read_file(const std::string& file_path);
 
 private:
-	void* data_ = 0;
+	void* data_ = nullptr;
 	size_t size_ = 0;
 	size_t capacity_ = 0;
 	
@@ -125,7 +125,7 @@ public:
 	size_t read(void* buf, size_t len) override;
 
 private:
-	const Buffer* data = 0;
+	const Buffer* data = nullptr;
 	size_t pos = 0;
 	
 };

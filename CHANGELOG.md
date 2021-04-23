@@ -1,3 +1,26 @@
+## [v1.9.4]
+
+- added ModuleBase vnx_async_return_ex() + vnx_async_return_ex_what()
+- ignore config files with starting or ending dot + txt files as string
+- adde File::get_name(bool with_ext = true)
+- added *.jary + *.lst config files
+- JSON input/output fix, escaping \n, etc
+- windows shutdown fix
+- get_config_object_internal() fix
+- terminal output with escape sequences
+- added auto login parameter for proxies
+- JSON output fix for null + inf
+- to_string_value() fix for null
+- BaseProxy import_map fix
+- added exec/call terminal commands
+- added enum is_valid() + serialize invalid values as CODE_UINT32
+- set default vnx_task_priority to PRIORITY_DEFAULT
+- added ThreadPool get_num_running()
+- Stream open() + connect() exceptions
+- added vnxreadcsv
+- TopicPtr null fix
+- create_dynamic_code() fix for enum arrays
+
 ## [v1.9.3]
 
 - renamed dmsg command to journal

@@ -35,4 +35,7 @@ module Terminal {
 	@Permission(LOCAL)
 	void htop(bool order_by_avg);
 	
+	@Permission(LOCAL)
+	void exec(string module, string method, vector<string> args, bool async);
+	
 }

@@ -56,7 +56,7 @@ TopicPtr& TopicPtr::operator=(const char* name_) {
 
 inline
 TopicPtr& TopicPtr::operator=(const std::string& name_) {
-	if(name_ == "null") {
+	if(name_ == TopicPtr::empty) {
 		reset();
 	} else {
 		std::shared_ptr<Topic>::operator=(vnx::get_topic(name_));
@@ -82,8 +82,7 @@ void write(TypeOutput& out, const TopicPtr& value, const TypeCode* type_code, co
 	if(value) {
 		write(out, value->get_name(), type_code, code);
 	} else {
-		std::string empty;
-		write(out, empty, type_code, code);
+		write(out, TopicPtr::empty, type_code, code);
 	}
 }
 
@@ -99,8 +98,7 @@ void write(std::ostream& out, const TopicPtr& value) {
 	if(value) {
 		write(out, value->get_name());
 	} else {
-		std::string empty;
-		write(out, empty);
+		write(out, nullptr);
 	}
 }
 
@@ -109,8 +107,7 @@ void accept(Visitor& visitor, const TopicPtr& value) {
 	if(value) {
 		accept(visitor, value->get_name());
 	} else {
-		std::string empty;
-		accept(visitor, empty);
+		accept(visitor, nullptr);
 	}
 }
 

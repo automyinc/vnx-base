@@ -182,7 +182,7 @@ private:
 
 	bool is_visible_in_grep(std::shared_ptr<const LogMsg> message) const;
 
-	void show_log_message(std::shared_ptr<const LogMsg> message);
+	void show_log_message(std::shared_ptr<const LogMsg> message) const;
 
 };
 

@@ -84,7 +84,7 @@ public:
 	}
 	
 	/// Returns file name without any directories and without trailing "/"
-	std::string get_name() const;
+	std::string get_name(bool with_ext = true) const;
 	
 	/// Returns file extension including the last ".". Returns empty string if it has no extension.
 	std::string get_extension() const;
