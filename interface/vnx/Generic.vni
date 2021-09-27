@@ -5,6 +5,6 @@ class Generic {
 	Variant data;
 	
 	
-	static Generic* create(Variant data);
+	static Generic* from_data(Variant data);
 	
 }

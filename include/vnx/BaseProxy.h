@@ -149,22 +149,12 @@ protected:
 	std::unordered_map<Hash64, std::shared_ptr<Pipe>> request_pipes;	// [service => pipe]
 	std::unordered_set<Hash128> outgoing;							// (src_mac, dst_mac)
 	
-	std::mutex mutex_request_map;
-	std::unordered_map<Hash64, std::map<uint64_t, std::shared_ptr<const Request>>> request_map;  // [src_mac => [request_id => Request]]
-
 	std::atomic<size_t> num_frames_send {0};
 	std::atomic<size_t> num_frames_recv {0};
 	std::atomic<size_t> num_samples_send {0};
 	std::atomic<size_t> num_samples_recv {0};
 	std::atomic<size_t> num_requests_send {0};
 	std::atomic<size_t> num_requests_recv {0};
-
-	// all below belong to read_loop()
-	bool is_error = false;
-	std::unordered_map<Hash64, std::shared_ptr<Pipe>> return_map;		// to keep track of return pipes
-	std::unordered_map<Hash128, std::shared_ptr<const Sample>> recv_buffer;		// last known sample per channel
-	std::unordered_map<Hash128, uint64_t> channel_map;					// for topics [(src_mac, topic) => seq_num]
-	std::unordered_set<Hash128> incoming;				// map of incoming connections (src_mac, dst_mac)
 
 private:
 	void update_topics();
@@ -201,6 +191,17 @@ private:
 	mutable vnx::request_t<std::shared_ptr<const Session>> login_request;
 	mutable std::vector<vnx::request_t<Hash64>> waiting_on_connect;
 	mutable std::vector<vnx::request_t<Hash64>> waiting_on_disconnect;
+
+	std::unordered_map<Hash128, uint64_t> channel_map;							// for topics [(src_mac, topic) => seq_num]
+
+	std::mutex mutex_request_map;
+	std::unordered_map<Hash64, std::map<uint64_t, std::shared_ptr<const Request>>> request_map;  // [src_mac => [request_id => Request]]
+
+	// all below belong to read_loop()
+	bool is_error = false;
+	std::unordered_set<Hash128> incoming;										// map of incoming connections (src_mac, dst_mac)
+	std::unordered_map<Hash64, std::shared_ptr<Pipe>> return_map;				// to keep track of return pipes
+	std::unordered_map<Hash128, std::shared_ptr<const Sample>> recv_buffer;		// last known sample per channel
 
 };
 

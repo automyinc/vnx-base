@@ -21,6 +21,8 @@
 #include <vnx/Value.h>
 #include <vnx/Variant.h>
 
+#include <initializer_list>
+
 
 namespace vnx {
 
@@ -33,6 +35,15 @@ class Object : public Value {
 public:
 	std::map<std::string, Variant> field;		///< Data fields (name => value)
 	
+	Object() = default;
+	Object(const Object&) = default;
+	Object(std::initializer_list<std::pair<const std::string, Variant>> entries);
+
+	Object& operator=(const Object&) = default;
+
+	/// Clears the object and sets the given fields
+	Object& operator=(std::initializer_list<std::pair<const std::string, Variant>> entries);
+
 	/// Returns reference to field value
 	Variant& operator[](const std::string& name) {
 		return field[name];
@@ -55,6 +66,9 @@ public:
 		return field != other.field;
 	}
 	
+	/// Sets the given fields, without clearing the object first.
+	Object& insert(std::initializer_list<std::pair<const std::string, Variant>> entries);
+
 	bool empty() const {
 		return field.empty();
 	}

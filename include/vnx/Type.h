@@ -112,10 +112,11 @@ std::vector<const TypeCode*> get_all_type_codes();
  * 
  * @return Pointer to last code element in given \p code. Can be used to compute size of the code.
  */
-const uint16_t* validate_code(const uint16_t* code, const TypeCode* type_code = 0, size_t size = size_t(-1), size_t pos = 0);
+const uint16_t* validate_code(const uint16_t* code, const TypeCode* type_code = nullptr, size_t size = size_t(-1), size_t pos = 0);
 
 /// Converts a code to humand readable format
-std::string code_to_string(const uint16_t* code, const TypeCode* type_code = 0);
+std::string code_to_string(const uint16_t* code, const TypeCode* type_code = nullptr);
+std::string code_to_string(const std::vector<uint16_t>& code, const TypeCode* type_code = nullptr);
 
 /** \brief Codes used by the VNX serialization type system.
  * 

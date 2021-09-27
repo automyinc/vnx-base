@@ -74,6 +74,11 @@ public:
 		return capacity_;
 	}
 	
+	/// Same as std::vector<>::empty()
+	bool empty() const {
+		return size_ == 0;
+	}
+
 	/// Same as std::vector<>::data()
 	void* data() {
 		return data_;

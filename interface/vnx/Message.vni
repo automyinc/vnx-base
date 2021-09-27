@@ -8,6 +8,7 @@ class Message {
 	static const ushort NON_BLOCKING = 8;		// throw exception if blocked / not connected / etc
 	static const ushort SHUTDOWN = 16;			// shutdown node
 	static const ushort RESEND = 32;			// same data as previous (same sequence number)
+	static const ushort FORWARD = 64;			// only reply when forwarding fails
 	
 	Hash64 stream;			// stream id (tunnel mac, or proxy mac, or pipe mac)
 	

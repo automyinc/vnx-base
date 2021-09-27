@@ -14,6 +14,11 @@
 
 namespace vnx {
 
+/** \brief Stream is used to send vnx::Frame messages.
+ *
+ * Messages are sent with BLOCKING flag enabled and wrapped inside a vnx::Frame value,
+ * similar to a publish with vnx::Sample, only with a Stream there is just one receiver.
+ */
 class Stream {
 public:
 	Stream(const Hash64& dst_mac_);
@@ -22,6 +27,10 @@ public:
 	
 	~Stream();
 	
+	static std::shared_ptr<Stream> create(const Hash64& dst_mac_);
+
+	static std::shared_ptr<Stream> create(const std::string& service);
+
 	Stream(const Stream& other) = delete;
 	Stream& operator=(const Stream& other) = delete;
 	
@@ -31,12 +40,12 @@ public:
 					int max_queue_ms, int max_queue_size = 0,
 					int priority = PIPE_PRIORITY_DEFAULT);
 	
-	bool send(const Value& value, uint16_t flags = 0);
+	pipe_code_e send(const Value& value, uint16_t flags = 0);
 	
-	bool send(std::shared_ptr<const Value> value, uint16_t flags = 0);
+	pipe_code_e send(std::shared_ptr<const Value> value, uint16_t flags = 0);
 	
 	template<typename T>
-	bool send(std::shared_ptr<T> value, uint16_t flags = 0) {
+	pipe_code_e send(std::shared_ptr<T> value, uint16_t flags = 0) {
 		return send(std::shared_ptr<const Value>(value), flags);
 	}
 	

@@ -117,7 +117,8 @@ private:
 	std::thread thread;
 	std::shared_ptr<Module> self_ptr;
 	std::atomic<size_t> ref_count {0};
-	std::atomic_bool do_restart {false};
+	bool do_restart = false;
+	bool is_waiting = false;
 	
 	template<typename T>
 	friend class Handle;

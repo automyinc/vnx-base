@@ -168,6 +168,9 @@ private:
 	
 	std::unordered_map<Hash64, module_t> module_map;
 
+	std::ofstream log_file;
+	std::string curr_log_file_name;
+
 	void self_test_callback(std::shared_ptr<self_test_job_t> job, const std::string& module, const vnx::bool_t& result) const;
 
 	void self_test_failed(std::shared_ptr<self_test_job_t> job, const std::string& module, const vnx::exception& ex) const;
@@ -183,6 +186,8 @@ private:
 	bool is_visible_in_grep(std::shared_ptr<const LogMsg> message) const;
 
 	void show_log_message(std::shared_ptr<const LogMsg> message) const;
+
+	void open_log_file();
 
 };
 

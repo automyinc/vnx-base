@@ -9,33 +9,9 @@ module Terminal {
 	int htop_interval = 3000;			// how often to update the ressource load view [ms]
 	
 	@Permission(LOCAL)
-	void command(vector<string> commandline);
-	
-	@Permission(LOCAL)
 	void read_char(char c);
 	
 	@Permission(LOCAL)
 	void read_event(terminal_event_e event);
-	
-	@Permission(LOCAL)
-	void spy(string expr);
-	
-	@Permission(LOCAL)
-	void dump(string expr);
-	
-	@Permission(LOCAL)
-	void topic_info(string expr);
-	
-	@Permission(LOCAL)
-	void module_info(string expr);
-	
-	@Permission(LOCAL)
-	void show_config(string expr);
-	
-	@Permission(LOCAL)
-	void htop(bool order_by_avg);
-	
-	@Permission(LOCAL)
-	void exec(string module, string method, vector<string> args, bool async);
 	
 }

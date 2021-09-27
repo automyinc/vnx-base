@@ -241,7 +241,7 @@ public:
 			}
 			end += num_bytes;
 		}
-		char* res = buffer + pos;
+		const char* res = buffer + pos;
 		pos += len;
 		return res;
 	}

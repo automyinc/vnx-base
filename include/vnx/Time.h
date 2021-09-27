@@ -38,7 +38,7 @@ int64_t get_wall_time_nanos();			///< Returns current wall time in nano-seconds
 std::string get_date_string(bool UTC = false, int64_t time_secs = -1);
 
 /// Returns date string in given format
-std::string get_date_string_ex(const char* format, bool UTC = false, int64_t time_secs = -1);
+std::string get_date_string_ex(const std::string& format, bool UTC = false, int64_t time_secs = -1);
 
 /// Get current time control state
 TimeControl get_time_control();

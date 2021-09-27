@@ -20,6 +20,7 @@
 #include <vnx/TerminalBase.hxx>
 #include <vnx/TerminalClient.hxx>
 #include <vnx/ProcessClient.hxx>
+#include <vnx/GenericAsyncClient.h>
 #include <vnx/TerminalInput.h>
 
 #ifdef _WIN32
@@ -56,31 +57,16 @@ protected:
 		GREP_RUN,
 		HTOP_RUN,
 		MODULE_RUN,
+		EXEC_RUN,
 	};
 	
 	void init() override;
 	
 	void main() override;
 	
-	void command(const std::vector<std::string> &commandline) override;
-	
 	void read_char(const signed char &c) override;
 
 	void read_event(const terminal_event_e &command) override;
-	
-	void spy(const std::string& expr) override;
-	
-	void dump(const std::string& expr) override;
-	
-	void topic_info(const std::string& expr) override;
-
-	void module_info(const std::string &expr) override;
-
-	void show_config(const std::string &expr) override;
-
-	void htop(const bool &order_by_avg) override;
-	
-	void exec(const std::string &module, const std::string &method, const std::vector<std::string> &args, const bool &async) override;
 
 private:
 	static void read_loop(Hash64 service_addr);
@@ -95,7 +81,18 @@ private:
 	void get_completion();
 	void write_editline(std::ostream &out);
 
-private:
+	void command(const std::vector<std::string> &commandline);
+	void spy(const std::string& expr);
+	void dump(const std::string& expr);
+	void topic_info(const std::string& expr);
+	void module_info(const std::string &expr);
+	void show_config(const std::string &expr);
+	void htop(const bool &order_by_avg);
+	int exec(const std::string &module, const std::string &method, const std::vector<std::string> &args, const bool &async);
+	void exec_return(std::shared_ptr<const Value> result);
+	void exec_err(const vnx::exception &err);
+
+
 	Hash64 service_addr;
 	ProcessClient process;
 	TerminalInput input;
@@ -106,6 +103,7 @@ private:
 	
 	int state = INACTIVE;
 	Handle<Module> module;
+	std::shared_ptr<GenericAsyncClient> exec_client;
 	std::shared_ptr<vnx::Timer> interval;
 	
 	void update_hints();

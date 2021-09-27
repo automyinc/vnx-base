@@ -64,6 +64,12 @@ public:
 	/// Sets a tunnel name for sending requests to.
 	void vnx_set_tunnel(const std::string& tunnel_name);
 
+	/// Sets a gateway address for sending requests to.
+	void vnx_set_gateway(Hash64 gateway_addr);
+
+	/// Sets a gateway name for sending requests to.
+	void vnx_set_gateway(const std::string& gateway_name);
+
 	/// If \p non_blocking_mode == true requests will throw an exception instead of blocking (default = false)
 	void vnx_set_non_blocking(bool non_blocking_mode);
 
@@ -102,6 +108,7 @@ private:
 	Node* vnx_node = nullptr;
 	Hash64 vnx_src_mac;
 	Hash64 vnx_tunnel_addr;
+	Hash64 vnx_gateway_addr;
 	Hash64 vnx_service_addr;
 	Hash64 vnx_session_id;
 	std::atomic_bool vnx_is_non_blocking {false};

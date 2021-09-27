@@ -2,9 +2,18 @@ package vnx;
 
 module Process {
 	
+	int log_file_level = 2;						// log level for file logging
 	int update_interval_ms = 500;				// publish interval for vnx.topic_info, etc
+	
 	uint log_history_size = 10000;				// max number of log messages to hold in history
 	uint error_history_size = 100;				// max number of error messages to hold in history
+	
+	string log_file_name;						// optional file to write log messages to
+	string log_file_name_suffix = "_%Y_%m_%d.txt";			// optional suffix for log file name
+	string log_file_entry_prefix = "%Y-%m-%d %H:%M:%S ";	// timestamp format for log file
+	
+	bool log_file_auto_restart = true;			// if to start new log file when name changes
+	
 	
 	@Permission(VIEW)
 	string get_name() const;					// get process name
