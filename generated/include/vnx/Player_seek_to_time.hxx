@@ -22,6 +22,8 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0x31e33676e70bdfaull;
 	
+	Player_seek_to_time() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;

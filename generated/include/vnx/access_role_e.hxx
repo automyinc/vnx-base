@@ -30,6 +30,7 @@ struct access_role_e {
 	static constexpr uint64_t VNX_TYPE_ID = 0x915660c6100c6c6eull;
 	
 	access_role_e() {}
+	
 	access_role_e(const enum_t& _value) { value = _value; }
 	access_role_e(const ::vnx::access_role_e& _other) { value = _other.value; }
 	

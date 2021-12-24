@@ -27,13 +27,15 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0x941aec28b3f42d7dull;
 	
+	Return() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	static std::shared_ptr<const ::vnx::Return> create_overflow_return(std::shared_ptr<const ::vnx::Request> request);
-	static std::shared_ptr<const ::vnx::Return> create_no_such_service_return(std::shared_ptr<const ::vnx::Request> request);
-	static std::shared_ptr<const ::vnx::Return> create_permission_denied_return(std::shared_ptr<const ::vnx::Request> request);
+	static std::shared_ptr<const ::vnx::Return> create_overflow_return(std::shared_ptr<const ::vnx::Request> request = nullptr);
+	static std::shared_ptr<const ::vnx::Return> create_no_such_service_return(std::shared_ptr<const ::vnx::Request> request = nullptr);
+	static std::shared_ptr<const ::vnx::Return> create_permission_denied_return(std::shared_ptr<const ::vnx::Request> request = nullptr);
 	
 	static std::shared_ptr<Return> create();
 	std::shared_ptr<vnx::Value> clone() const override;

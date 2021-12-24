@@ -23,12 +23,14 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0xd0f5f12fbf08b4b1ull;
 	
+	Tuple() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	virtual ::vnx::Variant get_field_by_index(const uint32_t& index) const;
-	virtual void set_field_by_index(const uint32_t& index, const ::vnx::Variant& value);
+	virtual ::vnx::Variant get_field_by_index(const uint32_t& index = 0) const;
+	virtual void set_field_by_index(const uint32_t& index = 0, const ::vnx::Variant& value = ::vnx::Variant());
 	virtual uint32_t get_num_fields() const;
 	
 	static std::shared_ptr<Tuple> create();

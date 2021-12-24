@@ -18,6 +18,7 @@ module BaseProxy implements ProxyInterface {
 	
 	bool auto_import = false;			// import all topics that are currently subscribed
 	bool time_sync = false;				// if to sync time with remote process
+	bool allow_login = true;			// if to allow logins to gain more access (for use_authentication == true)
 	bool use_authentication = false;	// if to require authentication from client
 	bool block_until_connect = true;	// block request pipes until first successful connect
 	bool block_until_reconnect = false;	// block request pipes until next successful re-connect

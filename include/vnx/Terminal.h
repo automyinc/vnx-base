@@ -69,7 +69,9 @@ protected:
 	void read_event(const terminal_event_e &command) override;
 
 private:
-	static void read_loop(Hash64 service_addr);
+	static void read_loop(Hash64 service_addr) noexcept;
+	static void read_loop_impl(Hash64 service_addr);
+
 #ifdef _WIN32
 	static DWORD saved_attributes;
 #else
@@ -79,7 +81,11 @@ private:
 	static void reset_terminal_mode();
 	
 	void get_completion();
-	void write_editline(std::ostream &out);
+	void write_editline(std::ostream &out) const;
+	void write_editline_ansi(std::ostream &out) const;
+#ifdef _WIN32
+	void write_editline_winapi(std::ostream &out) const;
+#endif
 
 	void command(const std::vector<std::string> &commandline);
 	void spy(const std::string& expr);
@@ -92,10 +98,13 @@ private:
 	void exec_return(std::shared_ptr<const Value> result);
 	void exec_err(const vnx::exception &err);
 
-
 	Hash64 service_addr;
 	ProcessClient process;
 	TerminalInput input;
+
+#ifdef _WIN32
+	bool use_ansi_escape = true;
+#endif
 	std::string line = "";
 	std::pair<std::string, bool> completion = std::make_pair("", false);
 	size_t cursor = 0;

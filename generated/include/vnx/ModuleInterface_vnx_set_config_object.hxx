@@ -23,6 +23,8 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0xca30f814f17f322full;
 	
+	ModuleInterface_vnx_set_config_object() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;

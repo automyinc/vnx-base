@@ -23,11 +23,13 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0x18b78df58e8b9cfeull;
 	
+	Generic() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	static std::shared_ptr<const ::vnx::Generic> create(const ::vnx::Variant& data);
+	static std::shared_ptr<const ::vnx::Generic> from_data(const ::vnx::Variant& data = ::vnx::Variant());
 	
 	static std::shared_ptr<Generic> create();
 	std::shared_ptr<vnx::Value> clone() const override;

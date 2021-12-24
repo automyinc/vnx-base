@@ -28,6 +28,7 @@ struct thread_priority_e {
 	static constexpr uint64_t VNX_TYPE_ID = 0x2718d6bed61ee41cull;
 	
 	thread_priority_e() {}
+	
 	thread_priority_e(const enum_t& _value) { value = _value; }
 	thread_priority_e(const ::vnx::thread_priority_e& _other) { value = _other.value; }
 	

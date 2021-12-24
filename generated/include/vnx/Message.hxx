@@ -19,6 +19,7 @@ public:
 	static const uint16_t NON_BLOCKING = 8;
 	static const uint16_t SHUTDOWN = 16;
 	static const uint16_t RESEND = 32;
+	static const uint16_t FORWARD = 64;
 	
 	::vnx::Hash64 stream;
 	uint16_t flags = 0;
@@ -30,6 +31,8 @@ public:
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0xff12a5be92ae4dafull;
+	
+	Message() {}
 	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;

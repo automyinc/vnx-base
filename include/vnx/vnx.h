@@ -61,6 +61,7 @@
 #include <vnx/Output.hpp>
 #include <vnx/TopicPtr.hpp>
 #include <vnx/Variant.hpp>
+#include <vnx/Util.hpp>
 
 
 #endif /* INCLUDE_VNX_VNX_H_ */

@@ -23,6 +23,8 @@ struct ModuleInterface {
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0xe189eb244fe14948ull;
 	
+	ModuleInterface() {}
+	
 };
 
 

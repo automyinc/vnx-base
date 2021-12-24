@@ -67,6 +67,12 @@ std::string ascii_tolower(std::string str)
 /// Expects one line of input from the user with echoing disabled. During input, process log output is paused.
 std::string input_password(const std::string &prompt="");
 
+/// Sets a socket into non-blocking mode
+void set_socket_nonblocking(int fd);
+
+/// Get error text for last errno
+std::string get_socket_error_text();
+
 
 } // vnx
 

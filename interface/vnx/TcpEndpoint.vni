@@ -11,13 +11,15 @@ class TcpEndpoint extends Endpoint {
 	
 	static int default_port = 4444;
 	
-	static TcpEndpoint* create(string host_name, int port);
+	static TcpEndpoint* create_ex(string host_name, int port);
 	static TcpEndpoint* from_url(string url);
 	
 	int open() const;
+	void close(int socket) const;
 	void bind(int socket) const;
 	void connect(int socket) const;
 	void listen(int socket) const;
+	void set_options(int socket) const;
 	int accept(int socket) const;
 	
 	string to_url() const;

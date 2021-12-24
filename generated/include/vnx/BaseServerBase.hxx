@@ -15,6 +15,7 @@ class BaseServerBase : public ::vnx::Module {
 public:
 	
 	std::string address;
+	vnx::bool_t allow_login = true;
 	vnx::bool_t use_authentication = false;
 	std::vector<::vnx::TopicPtr> export_list;
 	int32_t max_queue_ms = 100;

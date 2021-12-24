@@ -27,13 +27,15 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0xe7e70e14f9c9db05ull;
 	
+	Session() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
 	virtual vnx::bool_t is_anonymous() const;
-	virtual vnx::bool_t has_permission(const std::string& perm) const;
-	virtual vnx::bool_t has_permission_vnx(const ::vnx::permission_e& perm) const;
+	virtual vnx::bool_t has_permission(const std::string& perm = "") const;
+	virtual vnx::bool_t has_permission_vnx(const ::vnx::permission_e& perm = ::vnx::permission_e()) const;
 	
 	static std::shared_ptr<Session> create();
 	std::shared_ptr<vnx::Value> clone() const override;

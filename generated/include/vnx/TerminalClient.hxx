@@ -43,45 +43,13 @@ public:
 	
 	vnx::bool_t vnx_self_test();
 	
-	void command(const std::vector<std::string>& commandline = {});
-	
-	void command_async(const std::vector<std::string>& commandline = {});
-	
 	void read_char(const int8_t& c = 0);
 	
 	void read_char_async(const int8_t& c = 0);
 	
-	void read_event(const ::vnx::terminal_event_e& event);
+	void read_event(const ::vnx::terminal_event_e& event = ::vnx::terminal_event_e());
 	
-	void read_event_async(const ::vnx::terminal_event_e& event);
-	
-	void spy(const std::string& expr = "");
-	
-	void spy_async(const std::string& expr = "");
-	
-	void dump(const std::string& expr = "");
-	
-	void dump_async(const std::string& expr = "");
-	
-	void topic_info(const std::string& expr = "");
-	
-	void topic_info_async(const std::string& expr = "");
-	
-	void module_info(const std::string& expr = "");
-	
-	void module_info_async(const std::string& expr = "");
-	
-	void show_config(const std::string& expr = "");
-	
-	void show_config_async(const std::string& expr = "");
-	
-	void htop(const vnx::bool_t& order_by_avg = 0);
-	
-	void htop_async(const vnx::bool_t& order_by_avg = 0);
-	
-	void exec(const std::string& module = "", const std::string& method = "", const std::vector<std::string>& args = {}, const vnx::bool_t& async = 0);
-	
-	void exec_async(const std::string& module = "", const std::string& method = "", const std::vector<std::string>& args = {}, const vnx::bool_t& async = 0);
+	void read_event_async(const ::vnx::terminal_event_e& event = ::vnx::terminal_event_e());
 	
 };
 

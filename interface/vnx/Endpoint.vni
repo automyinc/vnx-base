@@ -5,6 +5,7 @@ class Endpoint {
 	int send_buffer_size = 0;
 	int receive_buffer_size = 0;
 	int listen_queue_size = 10;
+	bool non_blocking = false;
 	
 	int open() const;
 	void bind(int socket) const;

@@ -39,8 +39,8 @@ public:
 		
 	public:
 		chunk_t() {
-			data_ = 0;
-			next_ = 0;
+			data_ = nullptr;
+			next_ = nullptr;
 		}
 		
 		size_t size() const { return size_ & ~SHORT_BIT; }
@@ -95,7 +95,7 @@ public:
 	bool operator>(const Memory& other) const;
 	
 	bool empty() const {
-		return front_ == 0;
+		return front_ == nullptr;
 	}
 	
 	/// Returns pointer to first chunk
@@ -125,7 +125,7 @@ public:
 	std::string as_string() const;
 	
 private:
-	chunk_t* front_ = 0;
+	chunk_t* front_ = nullptr;
 	
 	union {
 		chunk_t first_;
@@ -152,7 +152,7 @@ public:
 	}
 	
 private:
-	Memory* data = 0;
+	Memory* data = nullptr;
 	size_t pos = 0;
 	
 };
@@ -161,7 +161,7 @@ private:
 /// Used to read from a Memory object
 class MemoryInputStream : public InputStream {
 public:
-	MemoryInputStream(const Memory* data_) {
+	MemoryInputStream(const Memory* data_) : data(data_) {
 		chunk = data_->front();
 	}
 	
@@ -169,21 +169,39 @@ public:
 		if(!chunk) {
 			return 0;
 		}
-		const size_t left = chunk->size() - pos;
+		const size_t left = chunk->size() - offset;
 		if(len > left) {
 			len = left;
 		}
-		::memcpy(buf, chunk->data() + pos, len);
-		pos += len;
-		if(pos >= chunk->size()) {
+		::memcpy(buf, chunk->data() + offset, len);
+		offset += len;
+		if(offset >= chunk->size()) {
 			chunk = chunk->next();
-			pos = 0;
+			pos += offset;
+			offset = 0;
 		}
 		return int64_t(len);
 	}
-	
+
+	int64_t get_input_pos() const override {
+		return int64_t(pos + offset);
+	}
+
+	void reset(const Memory* data_) {
+		data = data_;
+		reset();
+	}
+
+	void reset() {
+		chunk = data->front();
+		offset = 0;
+		pos = 0;
+	}
+
 private:
-	const Memory::chunk_t* chunk = 0;
+	const Memory* data = nullptr;
+	const Memory::chunk_t* chunk = nullptr;
+	size_t offset = 0;
 	size_t pos = 0;
 	
 };

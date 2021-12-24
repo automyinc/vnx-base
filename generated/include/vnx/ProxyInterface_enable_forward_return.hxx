@@ -21,6 +21,8 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0x419247bc55d00571ull;
 	
+	ProxyInterface_enable_forward_return() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;

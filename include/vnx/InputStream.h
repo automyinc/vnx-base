@@ -202,8 +202,10 @@ public:
 	void reset(int socket_) {
 		socket = socket_;
 	}
+
 private:
 	int socket = -1;
+
 };
 
 

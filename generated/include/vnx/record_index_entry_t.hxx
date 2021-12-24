@@ -21,6 +21,8 @@ struct record_index_entry_t {
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0x84d2685378679269ull;
 	
+	record_index_entry_t() {}
+	
 	vnx::Hash64 get_type_hash() const;
 	std::string get_type_name() const;
 	const vnx::TypeCode* get_type_code() const;

@@ -21,6 +21,8 @@ struct ProxyInterface {
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0xa03443ba28431859ull;
 	
+	ProxyInterface() {}
+	
 };
 
 

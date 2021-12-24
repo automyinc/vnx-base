@@ -22,17 +22,21 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0x8007f4ae5d6628e5ull;
 	
+	UnixEndpoint() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	static std::shared_ptr<const ::vnx::UnixEndpoint> create(const std::string& domain_path);
-	static std::shared_ptr<const ::vnx::UnixEndpoint> from_url(const std::string& url);
+	static std::shared_ptr<const ::vnx::UnixEndpoint> create_ex(const std::string& domain_path = "");
+	static std::shared_ptr<const ::vnx::UnixEndpoint> from_url(const std::string& url = "");
 	virtual int32_t open() const override;
-	virtual void bind(const int32_t& socket) const override;
-	virtual void connect(const int32_t& socket) const override;
-	virtual void listen(const int32_t& socket) const override;
-	virtual int32_t accept(const int32_t& socket) const override;
+	virtual void close(const int32_t& socket = 0) const;
+	virtual void bind(const int32_t& socket = 0) const override;
+	virtual void connect(const int32_t& socket = 0) const override;
+	virtual void listen(const int32_t& socket = 0) const override;
+	virtual void set_options(const int32_t& socket = 0) const;
+	virtual int32_t accept(const int32_t& socket = 0) const override;
 	virtual std::string to_url() const override;
 	
 	static std::shared_ptr<UnixEndpoint> create();

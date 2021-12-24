@@ -160,6 +160,9 @@ private:
 		request_id_t req_id;
 	};
 
+#ifdef _WIN32
+	bool use_ansi_escape = true;
+#endif
 	int is_log_paused = 0;
 	int log_level = LogMsg::INFO;
 	std::string grep_filter = "";
@@ -186,6 +189,12 @@ private:
 	bool is_visible_in_grep(std::shared_ptr<const LogMsg> message) const;
 
 	void show_log_message(std::shared_ptr<const LogMsg> message) const;
+
+	void show_log_message_ansi(std::shared_ptr<const LogMsg> message) const;
+
+#ifdef _WIN32
+	void show_log_message_winapi(std::shared_ptr<const LogMsg> message) const;
+#endif
 
 	void open_log_file();
 

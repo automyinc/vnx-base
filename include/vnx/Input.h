@@ -704,6 +704,9 @@ void read(TypeInput& in, std::shared_ptr<T>& value) {
 	value = std::dynamic_pointer_cast<T>(read(in));
 }
 
+/// Reads a Variant at top level
+void read(TypeInput& in, Variant& value);
+
 template<typename T>
 void type<T>::read(TypeInput& in, T& value, const TypeCode* type_code, const uint16_t* code) {
 	vnx::read(in, value, type_code, code);
@@ -736,6 +739,15 @@ void read_dynamic_list_data(TypeInput& in, T* data, const uint16_t* code, const 
 	}
 }
 
+template<typename T>
+void read_float(std::istream& in, T& value) {
+	std::string tmp;
+	in >> tmp;
+	std::replace(tmp.begin(), tmp.end(), ',', '.');
+	std::stringstream ss(tmp);
+	ss >> value;
+}
+
 /// Reads a value directly from the JSON stream
 /// @{
 inline void read(std::istream& in, bool& value) {
@@ -752,8 +764,8 @@ inline void read(std::istream& in, int8_t& value) { int tmp; in >> tmp; value = 
 inline void read(std::istream& in, int16_t& value) { in >> value; }
 inline void read(std::istream& in, int32_t& value) { in >> value; }
 inline void read(std::istream& in, int64_t& value) { in >> value; }
-inline void read(std::istream& in, float32_t& value) { in >> value; }
-inline void read(std::istream& in, float64_t& value) { in >> value; }
+inline void read(std::istream& in, float32_t& value) { read_float(in, value); }
+inline void read(std::istream& in, float64_t& value) { read_float(in, value); }
 /// @}
 
 /** \brief Reads a string from the JSON stream.

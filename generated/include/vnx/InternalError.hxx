@@ -21,11 +21,13 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0xe3a5c8a7193b8c49ull;
 	
+	InternalError() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	static std::shared_ptr<const ::vnx::InternalError> from_what(const std::string& what_);
+	static std::shared_ptr<const ::vnx::InternalError> from_what(const std::string& what_ = "");
 	
 	static std::shared_ptr<InternalError> create();
 	std::shared_ptr<vnx::Value> clone() const override;

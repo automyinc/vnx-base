@@ -329,7 +329,7 @@ convert_to_tuple(std::tuple<T...>& tuple, const std::vector<std::shared_ptr<JSON
 template<size_t index, typename... T>
 typename std::enable_if<index < sizeof...(T), void>::type
 convert_to_tuple(std::tuple<T...>& tuple, const std::vector<std::shared_ptr<JSON_Value>>& data) {
-	if(index < data.size()){
+	if(index < data.size()) {
 		data[index]->to_variant().to(std::get<index>(tuple));
 		convert_to_tuple<index+1>(tuple, data);
 	} else {

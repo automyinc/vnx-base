@@ -171,8 +171,9 @@ void write_array(TypeOutput& out, const T& array, const TypeCode* type_code, con
 	if(array.size() > VNX_MAX_STATIC_SIZE) {
 		throw std::invalid_argument("write_array(): size > VNX_MAX_STATIC_SIZE");
 	}
+	const uint16_t* value_code = code + 2;
 	for(const auto& elem : array) {
-		vnx::type<typename T::value_type>().write(out, elem, type_code, code);
+		vnx::type<typename T::value_type>().write(out, elem, type_code, value_code);
 	}
 }
 
@@ -342,6 +343,13 @@ void write_dynamic(TypeOutput& out, const T& value) {
 	if(code[0] != CODE_NULL) {
 		vnx::type<T>().write(out, value, nullptr, code.data());
 	}
+}
+
+/// Generic fall-back to writing at top level
+template<typename T>
+void write_generic(TypeOutput& out, const T& value) {
+	write(out, uint16_t(CODE_DYNAMIC));
+	write_dynamic(out, value);
 }
 
 /** \brief Writes a matrix to the stream

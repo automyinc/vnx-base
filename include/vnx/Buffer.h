@@ -129,6 +129,19 @@ public:
 	
 	size_t read(void* buf, size_t len) override;
 
+	int64_t get_input_pos() const override {
+		return int64_t(pos);
+	}
+
+	void reset(const Buffer* data_) {
+		data = data_;
+		reset();
+	}
+
+	void reset() {
+		pos = 0;
+	}
+
 private:
 	const Buffer* data = nullptr;
 	size_t pos = 0;

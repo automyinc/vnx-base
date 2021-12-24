@@ -72,7 +72,7 @@ void write_to_file_json(const std::string& file_name, const T& value) {
 	::remove(file_name.c_str());
 #endif
 	if(::rename(tmp_file_name.c_str(), file_name.c_str())) {
-		throw std::runtime_error("rename('" + tmp_file_name + "', '" + file_name + "') failed!");
+		throw std::runtime_error("rename('" + tmp_file_name + "', '" + file_name + "') failed with: " + std::string(strerror(errno)));
 	}
 }
 

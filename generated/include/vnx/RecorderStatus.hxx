@@ -28,6 +28,8 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0xc79edae794af8704ull;
 	
+	RecorderStatus() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;

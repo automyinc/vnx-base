@@ -28,6 +28,7 @@ public:
 	::vnx::Hash64 request_tunnel;
 	vnx::bool_t auto_import = false;
 	vnx::bool_t time_sync = false;
+	vnx::bool_t allow_login = true;
 	vnx::bool_t use_authentication = false;
 	vnx::bool_t block_until_connect = true;
 	vnx::bool_t block_until_reconnect = false;

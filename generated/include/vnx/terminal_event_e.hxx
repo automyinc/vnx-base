@@ -34,6 +34,7 @@ struct terminal_event_e {
 	static constexpr uint64_t VNX_TYPE_ID = 0x13b5a20b72babf0dull;
 	
 	terminal_event_e() {}
+	
 	terminal_event_e(const enum_t& _value) { value = _value; }
 	terminal_event_e(const ::vnx::terminal_event_e& _other) { value = _other.value; }
 	
